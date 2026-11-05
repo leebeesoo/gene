@@ -13,7 +13,7 @@
   function closeDrawer(){document.getElementById("drawer").hidden=true;document.getElementById("scrim").hidden=true}
   function go(key,params){location.hash=key+(params?"-"+params:"")}
   function render(){
-    const raw=(location.hash||"#home").slice(1); const [key,...rest]=raw.split("-"); const scr=screens[key]||screens.home; if(!scr)return;
+    const raw=decodeURIComponent((location.hash||"#home").slice(1)); const [key,...rest]=raw.split("-"); const scr=screens[key]||screens.home; if(!scr)return;
     document.querySelectorAll(".nav a").forEach(a=>a.classList.toggle("on",a.dataset.k===(screens[key]?key:"home")));
     document.getElementById("pageTitle").textContent=scr.title;
     const el=document.getElementById("view"); el.innerHTML=""; closeDrawer(); scr.render(el,rest.join("-")||null); updateBadges();

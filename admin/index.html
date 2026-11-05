@@ -57,6 +57,7 @@ input,select,textarea{font:inherit;font-size:13px;border:1px solid var(--line);b
 #drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--surface);border-left:1px solid var(--line);z-index:21;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-right:env(safe-area-inset-right,0px)}
 #drawerClose{position:absolute;top:calc(10px + env(safe-area-inset-top,0px));right:calc(10px + env(safe-area-inset-right,0px))}
 .drawer-body{overflow:auto;padding:20px;flex:1}
+#drawer[hidden],#scrim[hidden],#toast[hidden]{display:none}
 #toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:8px;z-index:30;font-size:13px}
 </style>
 </head>
