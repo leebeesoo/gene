@@ -1,0 +1,228 @@
+[
+  {
+    "platform": "Thumbtack Pro",
+    "platform_ko": "썸택 프로",
+    "audience": "partner/pro",
+    "screen": "리드 인박스(태블릿)",
+    "file": "thumbtack-leads-inbox.jpg",
+    "source_url": "https://apps.apple.com/us/app/thumbtack-for-professionals/id908795016",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/1a/b1/57/1ab15781-93f8-9d7f-8a7c-7dc9673da9b9/iPad_Pro_12.9inch__U00282nd_Gen_U0029_2.jpg/1600x0w.jpg",
+    "layout": "상단 Leads/Opportunities 2탭과 미읽음 배지, 흰 카드형 리드 리스트에 고객명·서비스·지역과 컬러 칩(Exact match·Paid·Only picked you), '3:55까지 응답' 마감 라벨을 둔 저밀도 구조.",
+    "patterns": [
+      "카드형 리드 리스트",
+      "상태 칩/배지",
+      "응답 마감 SLA 라벨",
+      "탭 분류(직접리드/기회)",
+      "미읽음 카운트"
+    ],
+    "fit_score": 5,
+    "fit_reason": "매칭 요청을 파트너에게 넘길 때 '정확 매칭·유료·응답 기한'을 칩으로 한눈에 보여주는 방식이라 우리 배정/수락 화면과 운영자 매칭 대기열에 그대로 적용 가능."
+  },
+  {
+    "platform": "Thumbtack Pro",
+    "platform_ko": "썸택 프로",
+    "audience": "partner/pro",
+    "screen": "서비스 지역 지도 + 주간 예산 설정",
+    "file": "thumbtack-targeting-map-budget.jpg",
+    "source_url": "https://apps.apple.com/us/app/thumbtack-for-professionals/id908795016",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/9a/04/3a/9a043a92-2b1f-15b9-b35c-9889a23bc201/iPad_Pro_12.9inch__U00282nd_Gen_U0029_3.jpg/1600x0w.jpg | https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/03/62/3c/03623c9d-fb08-595b-e1ea-b9e07a28ad7a/iPad_Pro_12.9inch__U00282nd_Gen_U0029_4.jpg/1600x0w.jpg",
+    "layout": "좌: 지도 위 폴리곤으로 서비스 권역을 칠하고 하단 시트에서 '거리 반경/지역 목록' 토글과 슬라이더, 우: 라디오 카드로 예산 무제한/주간 한도 입력과 팁 박스를 둔 단계형 설정 화면.",
+    "patterns": [
+      "지도 기반 권역 선택",
+      "반경 슬라이더",
+      "바텀시트",
+      "라디오 카드 선택",
+      "인라인 팁"
+    ],
+    "fit_score": 4,
+    "fit_reason": "파트너 활동 지역 설정에 지도+목록 이중 입력이 유용하며, 주간 예산 대신 '주간 최대 수락 건수/가용 시간'으로 바꿔 쓰기 좋음."
+  },
+  {
+    "platform": "Thumbtack Pro",
+    "platform_ko": "썸택 프로",
+    "audience": "partner/pro",
+    "screen": "온보딩 진행률 + 추천 액션",
+    "file": "thumbtack-setup-recommendations.jpg",
+    "source_url": "https://apps.apple.com/us/app/thumbtack-for-professionals/id908795016",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/20/81/59/20815982-f175-5bae-3dae-832f400725b8/iPad_Pro_12.9inch__U00282nd_Gen_U0029_6.jpg/1600x0w.jpg",
+    "layout": "상단 원형 진행률 배너('설정 2단계 남음')와 Finish setup CTA, 닫을 수 있는 추천 카드(캘린더 연동·사진 추가), 서비스별 경고 아이콘과 '타겟팅 추가' 버튼 리스트.",
+    "patterns": [
+      "온보딩 진행률 배너",
+      "닫기 가능한 추천 카드",
+      "경고 아이콘 체크리스트",
+      "주요 CTA 강조"
+    ],
+    "fit_score": 4,
+    "fit_reason": "신규 파트너 입점 시 서류·교육·서비스 지역 등 미완료 항목을 진행률과 체크리스트로 유도하는 패턴으로 파트너 온보딩에 적합."
+  },
+  {
+    "platform": "Angi for Pros",
+    "platform_ko": "앤지 프로",
+    "audience": "partner/pro",
+    "screen": "대시보드 + 작업 유형/우편번호 타겟팅",
+    "file": "angi-pro-dashboard-targeting.jpg",
+    "source_url": "https://apps.apple.com/us/app/angi-for-pros/id437003175",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/d5/8c/b2/d58cb279-6da2-59cd-75b7-9996da3020d7/Screenshot_1.jpg/800x0w.jpg | https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/84/da/3e/84da3e21-a18b-3540-d920-c748f1c6902f/Screenshot_2__U00281_U0029.jpg/800x0w.jpg | https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/87/76/a0/8776a00c-d28d-e682-54fc-e1efbdd89504/Screenshot_3.jpg/800x0w.jpg",
+    "layout": "진남색 헤더의 'Your business' 홈에 신규 리드·추천 액션 섹션(View all), 알파벳 그룹 작업 목록과 ZIP 코드별 토글 스위치 리스트를 둔 모바일 설정 구조.",
+    "patterns": [
+      "홈 요약 섹션",
+      "추천 액션 카드",
+      "대량 토글 리스트",
+      "전체 켜기 일괄 액션",
+      "지도+리스트 지역 설정"
+    ],
+    "fit_score": 4,
+    "fit_reason": "서비스 카테고리·지역을 토글 리스트로 대량 on/off 하는 방식은 파트너 취급 서비스·권역 관리와 운영자의 파트너 설정 편집에 바로 쓸 수 있음."
+  },
+  {
+    "platform": "Angi for Pros",
+    "platform_ko": "앤지 프로",
+    "audience": "partner/pro",
+    "screen": "리드 상세 + 자동응답 인박스",
+    "file": "angi-pro-lead-detail-automation.jpg",
+    "source_url": "https://apps.apple.com/us/app/angi-for-pros/id437003175",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/22/f3/fb/22f3fbb1-7643-620a-bd4e-88571a18e98d/Screenshot_4.jpg/800x0w.jpg | https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/27/ef/45/27ef45ab-90b5-b0f8-50b1-157746b18793/Screenshot_5.jpg/800x0w.jpg | https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/24/5e/6e/245e6ef3-829e-167b-3f9f-f978c76ab88a/Screenshot_6.jpg/800x0w.jpg",
+    "layout": "리드 상세(주소 지도, 프로젝트 질문/답변, 하단 Message/Call 고정 버튼), Inbox/Automations 탭과 자동 메시지 템플릿 토글, 채팅 스레드로 이어지는 흐름.",
+    "patterns": [
+      "하단 고정 액션 버튼",
+      "질문-답변 상세 블록",
+      "인박스/자동화 탭",
+      "메시지 템플릿",
+      "채팅 스레드"
+    ],
+    "fit_score": 5,
+    "fit_reason": "고객 요청서(평수·일정 등 문답)를 상세에 정리하고 자동 첫 응답 템플릿을 두는 구조는 매칭 후 파트너-고객 커뮤니케이션과 CS 부담 감소에 직접 적합."
+  },
+  {
+    "platform": "Angi Services for Pros (구 Handy Pro)",
+    "platform_ko": "앤지 서비스 프로(구 핸디 프로)",
+    "audience": "partner/pro",
+    "screen": "일정·가용 작업·작업 상세",
+    "file": "angi-services-schedule-jobs.jpg",
+    "source_url": "https://apps.apple.com/us/app/angi-services-for-pros/id1533132556",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource126/v4/37/00/f4/3700f411-0c68-543a-6f2d-d7eba5eab526/a0ba9e8e-0737-4b75-8ba1-03b3026a03f0_3.png/800x0w.jpg | https://is1-ssl.mzstatic.com/image/thumb/PurpleSource116/v4/3b/71/13/3b7113f6-4dfb-09e8-4d9b-7a006f829290/9c7c069e-9116-43d5-8ce0-c694e7a4b77b_4.png/800x0w.jpg | https://is1-ssl.mzstatic.com/image/thumb/PurpleSource126/v4/e0/eb/77/e0eb77c0-ee6b-dbbe-4ec8-2192b2d62598/f8d3ef0a-298f-486d-8382-673119bb7ade_5.png/800x0w.jpg",
+    "layout": "청록 헤더의 주간 날짜 스트립 아래 Instant Book 가용 시간과 배정 작업 카드(작업명·시간·거리·금액), 날짜별 가용 작업 리스트와 금액·지도 포함 작업 상세.",
+    "patterns": [
+      "주간 날짜 스트립",
+      "작업 카드(금액·거리)",
+      "즉시예약 배지",
+      "작업 클레임(가져가기)",
+      "지도 미리보기"
+    ],
+    "fit_score": 5,
+    "fit_reason": "플랫폼이 가격을 정하고 파트너가 날짜별 공개 작업을 '클레임'하는 Handy 모델은 청소·수리 정액형 홈서비스 중개와 가장 유사해 파트너 앱/콘솔의 기준 모델로 적합."
+  },
+  {
+    "platform": "Angi Services for Pros (구 Handy Pro)",
+    "platform_ko": "앤지 서비스 프로(구 핸디 프로)",
+    "audience": "partner/pro",
+    "screen": "고객 채팅 + 주간 가용시간 설정",
+    "file": "angi-services-chat-availability.jpg",
+    "source_url": "https://apps.apple.com/us/app/angi-services-for-pros/id1533132556",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource126/v4/00/18/60/001860dc-0736-6a65-1a0a-a3e1d827db85/767bdbd8-0161-42f0-9f73-a4e6bfa6c7b3_6.png/800x0w.jpg | https://is1-ssl.mzstatic.com/image/thumb/PurpleSource116/v4/da/b3/dd/dab3dd0e-8fb7-fab4-4787-eaad18166680/488f5718-31c3-4214-981b-ca7972848788_7.png/800x0w.jpg",
+    "layout": "좌: 고객과의 1:1 말풍선 채팅(타임스탬프), 우: 요일별 행에 가용 시간대·Instant Book 상태 점을 표시하고 화살표로 상세 편집하는 리스트.",
+    "patterns": [
+      "1:1 채팅",
+      "요일별 가용시간 리스트",
+      "상태 점 표시",
+      "드릴다운 편집"
+    ],
+    "fit_score": 4,
+    "fit_reason": "파트너 가용시간을 요일 단위로 받아 자동 배정(즉시예약)에 쓰는 구조로, 우리 자동 매칭의 입력 데이터 화면으로 적합."
+  },
+  {
+    "platform": "TaskRabbit Tasker",
+    "platform_ko": "태스크래빗 태스커",
+    "audience": "partner/pro",
+    "screen": "홈 + 캘린더(Get Hired)",
+    "file": "taskrabbit-tasker-home-calendar.jpg",
+    "source_url": "https://apps.apple.com/us/app/tasker-by-taskrabbit/id1455415833",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/a7/c7/4b/a7c74bcc-a7a1-fb65-e8dc-7688a7e8a96e/cb3b2aea-8396-4e68-8b63-006b4bea421c_3._Storefront.png/800x0w.jpg | https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/4d/c6/6d/4dc66d59-67ee-611c-37ba-cb139f376018/8887fa9e-712e-4599-b8df-1dbb11fccb15_4._Schedule.png/800x0w.jpg",
+    "layout": "진녹색 헤더 인사말·알림 배지, 공지 배너(교육 워크숍), 당일 작업 수신 상태 칩, 오늘의 작업 리스트와 Calendar/Map 탭의 시간축 블록 캘린더(가용 블록 vs 확정 작업).",
+    "patterns": [
+      "오늘의 작업 요약",
+      "공지/교육 배너",
+      "수신 상태 칩",
+      "시간축 캘린더 블록",
+      "캘린더/지도 탭 전환"
+    ],
+    "fit_score": 5,
+    "fit_reason": "가용 시간과 확정 예약을 같은 타임라인에 색으로 구분하는 방식은 파트너 일정 관리와 운영자의 배정 현황(디스패치) 화면 모두에 유용."
+  },
+  {
+    "platform": "TaskRabbit Tasker",
+    "platform_ko": "태스크래빗 태스커",
+    "audience": "partner/pro",
+    "screen": "단가 설정 + 성과 대시보드",
+    "file": "taskrabbit-tasker-rates-performance.jpg",
+    "source_url": "https://apps.apple.com/us/app/tasker-by-taskrabbit/id1455415833",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/cc/3f/cb/cc3fcb22-6500-0082-ffc2-f01aafc9c885/7a208df8-d35c-4e7c-a842-2f98d0934a2f_5._Rate.png/800x0w.jpg | https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/be/6b/3e/be6b3eb3-cf15-b5ef-5319-86311e30e37c/46a0f5a2-a7c2-418a-8bad-86a0d092c070_6._Performance.png/800x0w.jpg",
+    "layout": "스킬별 시급을 원형 캐러셀로 제안(시장 수요 기반 추천가)하는 편집 화면과, 월 수입·작업 수·평점·활성 스킬·Elite 진행도 카드를 세로 나열한 Performance 화면.",
+    "patterns": [
+      "추천 단가 제시",
+      "성과 KPI 카드",
+      "평점 별점 요약",
+      "등급(Elite) 진행도",
+      "드릴다운 행"
+    ],
+    "fit_score": 4,
+    "fit_reason": "파트너 정산 금액·완료 건수·평점·등급을 한 화면 카드로 묶는 구조는 파트너 성과/정산 요약과 운영자의 파트너 평가 화면에 적합."
+  },
+  {
+    "platform": "Bark",
+    "platform_ko": "바크(Bark)",
+    "audience": "partner/pro",
+    "screen": "매칭 리드 목록(태블릿)",
+    "file": "bark-leads-list.jpg",
+    "source_url": "https://apps.apple.com/us/app/bark-for-professionals/id1206370169",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/95/da/f7/95daf761-b5fc-3f32-96c3-65cf28517d9a/f37fd462-5e3d-4679-90ec-bf0556239043_3_iPad_12.9_Display.png/1600x0w.jpg",
+    "layout": "진남색 요약 바('540 matching leads · 2 services · 1 location' + Edit), 필터 바, 리드 카드에 의도·전화인증 칩, 요청 요약, 크레딧 비용과 '응답 1/5' 경쟁 현황 막대, 하단 4탭(Leads/Map/Responses/Settings).",
+    "patterns": [
+      "필터 요약 헤더",
+      "신뢰 칩(전화 인증)",
+      "비용/크레딧 표시",
+      "경쟁 응답 수 인디케이터",
+      "하단 탭 내비"
+    ],
+    "fit_score": 4,
+    "fit_reason": "리드당 비용과 '몇 명이 이미 응답했는지'를 함께 보여 견적 경쟁형 매칭에 적합; 정액 배정형이면 비용 대신 예상 정산액을 표시하도록 변형 필요."
+  },
+  {
+    "platform": "Bark",
+    "platform_ko": "바크(Bark)",
+    "audience": "partner/pro",
+    "screen": "리드 상세(연락·상태)",
+    "file": "bark-lead-detail.jpg",
+    "source_url": "https://apps.apple.com/us/app/bark-for-professionals/id1206370169",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/83/af/40/83af40a1-298a-8b2f-533c-7b85542389fc/465d9a46-d2a2-42bf-8e8b-5bbbec8014d4_5_iPad_12.9_Display.png/1600x0w.jpg",
+    "layout": "헤더에 고객·서비스·상태 드롭다운(Pending), Contact/Activity/Details/Notes 4탭, 응답 현황 바, 전화·WhatsApp·이메일·SMS·견적 보내기 아코디언 액션 리스트.",
+    "patterns": [
+      "상태 드롭다운",
+      "상세 4탭(연락/활동/상세/메모)",
+      "아코디언 액션",
+      "활동 이력",
+      "메모"
+    ],
+    "fit_score": 5,
+    "fit_reason": "건별 상태 변경·활동 로그·내부 메모를 탭으로 분리한 구조는 운영자 CS 콘솔의 예약 상세 화면 템플릿으로 그대로 쓰기 좋음."
+  },
+  {
+    "platform": "Yelp for Business",
+    "platform_ko": "옐프 포 비즈니스",
+    "audience": "merchant",
+    "screen": "활동 요약·조회수 추이·메시지 응답",
+    "file": "yelp-biz-activity-inbox.jpg",
+    "source_url": "https://apps.apple.com/us/app/yelp-for-business-app/id936983378",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/Purple118/v4/77/6c/59/776c5953-f65f-3a37-f86e-f6ed58d951b7/mzl.qurioxsw.png/800x0w.jpg | https://is1-ssl.mzstatic.com/image/thumb/Purple128/v4/ae/2d/2f/ae2d2f72-d96a-0004-9ee9-1585e05b7580/mzl.nukmvkfg.png/800x0w.jpg | https://is1-ssl.mzstatic.com/image/thumb/Purple128/v4/40/65/ef/4065ef22-97cb-78da-e6dc-c8d878146538/mzl.rfkboclm.png/800x0w.jpg",
+    "layout": "빨간 헤더+햄버거 메뉴, Messages(미읽음 배지)/Reviews 진입, 30일 지표(조회수·고객 리드) 스파크라인과 최근 활동 피드, 일자별 조회수 표+라인차트, 문의 답장 화면(구버전 UI).",
+    "patterns": [
+      "KPI 스파크라인",
+      "최근 활동 피드",
+      "미읽음 배지",
+      "일자별 표+차트",
+      "메시지 답장"
+    ],
+    "fit_score": 3,
+    "fit_reason": "리드/조회 추이와 활동 피드 패턴은 참고할 만하나 구버전이고 견적요청 인박스 자체는 보이지 않아 예약·정산 관리 적합도는 중간."
+  }
+]
