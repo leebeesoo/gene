@@ -1,5 +1,8 @@
-import { TYPES, QUESTIONS, REGIONS, ELEMENTS, EL_ORDER, FATES, DAILY, CLAN_STORIES, DOUBLE_SURNAMES, ERA_LIST } from './data.js';
+// 근본 공식 엔진 — 모든 결과 문장은 아래 입력(퀴즈·사주·출생 시대/지역·성씨 통계)으로 거슬러 올라갈 수 있어야 함.
+import { TYPES, ELEMENTS, EL_ORDER, DAILY, DOUBLE_SURNAMES, ERA_LIST, ERA_FACTS, CODE_LETTERS, NICKNAMES, MBTI_MAP, COHORTS, REGIONS, AXES } from './data.js';
 import { computeSaju, elRelation, branchRelation, todayPillar, STEM_EL, STEMS_K, BRANCHES_K } from './saju.js';
+import { QUESTION_SETS, stageOf } from './questions.js';
+import { SURNAMES, BONGWAN_STATS, TOP10_BONGWAN, POP_2015, STATUS_DAEGU, EVENTS, FUTURE } from './facts.js';
 
 export function hash(str) {
   let h = 2166136261 >>> 0;
@@ -11,6 +14,7 @@ export function rng(seed) {
   return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
 }
 const pick = (r, arr) => arr[Math.floor(r() * arr.length)];
+const clamp = (v, a = -1, b = 1) => Math.max(a, Math.min(b, v));
 
 export function splitName(full) {
   const n = (full || '').replace(/\s+/g, '');
@@ -19,11 +23,18 @@ export function splitName(full) {
 }
 
 export const typeBits = i => [(i >> 3) & 1, (i >> 2) & 1, (i >> 1) & 1, i & 1];
+export const typeFromBits = b => b[0] * 8 + b[1] * 4 + b[2] * 2 + b[3];
+export const codeOf = id => typeBits(id).map((b, k) => CODE_LETTERS[k][b]).join('');
+export const mbtiOf = id => { const b = typeBits(id); return [MBTI_MAP[3][b[3]], MBTI_MAP[0][b[0]], MBTI_MAP[2][b[2]], MBTI_MAP[1][b[1]]].join(''); };
+export const nickOf = id => NICKNAMES[id];
 
-export function axisScores(answers) {
-  // option deltas are centered per question so that no axis is biased by the option set
+/* ---------------- 근본 공식 ---------------- */
+export const WEIGHTS = { quiz: 0.6, saju: 0.25, era: 0.15 };
+
+/** 퀴즈: 질문마다 선택지 평균을 빼서(중심화) 합하고, 축별 최대 가능 폭으로 나눔 → −1~1 */
+export function quizAxes(set, answers) {
   const s = [0, 0, 0, 0], reach = [0, 0, 0, 0];
-  QUESTIONS.forEach((q, qi) => {
+  set.forEach((q, qi) => {
     for (let k = 0; k < 4; k++) {
       const mean = q.opts.reduce((a, o) => a + o.v[k], 0) / q.opts.length;
       reach[k] += Math.max(...q.opts.map(o => Math.abs(o.v[k] - mean)));
@@ -31,129 +42,146 @@ export function axisScores(answers) {
       if (a !== undefined && a !== null && q.opts[a]) s[k] += q.opts[a].v[k] - mean;
     }
   });
-  return s.map((v, k) => Math.max(-1, Math.min(1, v / (reach[k] * 0.5))));
+  return s.map((v, k) => clamp(v / (reach[k] * 0.55)));
+}
+
+/** 사주: 오행 상징을 축에 대응 (기대 비율을 빼서 중심화). 해석 근거는 화면의 '어떻게 계산했나요?'에 그대로 표시. */
+export function sajuAxes(S) {
+  const d = S.dist;
+  return [
+    S.yang ? -0.6 : 0.6, // 일간 양(陽)=움직임 → 行, 음(陰)=고요 → 思
+    clamp(((d.earth - 0.267) + (d.metal - 0.183) - (d.wood - 0.183) - (d.water - 0.183)) * 2.5), // 土·金(굳힘) ↔ 木·水(뻗음·흐름)
+    clamp(((d.metal + d.water) - (d.fire + d.wood)) * 2.5), // 金·水(냉철) ↔ 火·木(따뜻함)
+    clamp((d.water - d.fire) * 3), // 水(갈무리) ↔ 火(퍼짐)
+  ];
+}
+export const SAJU_RULES = [
+  '일간이 양(甲丙戊庚壬)이면 行, 음(乙丁己辛癸)이면 思 쪽으로 0.6',
+  '土·金 비중이 높으면 守, 木·水가 높으면 遊 (평균 비율 대비)',
+  '金·水가 높으면 理, 火·木이 높으면 情',
+  '水가 높으면 獨, 火가 높으면 群',
+];
+
+export const cohortOf = by => COHORTS.find(c => by >= c.from && by <= c.to) || COHORTS[COHORTS.length - 1];
+export function eraAxes(by, region) {
+  const c = cohortOf(by); const r = REGIONS.find(x => x.t === region) || { v: [0, 0, 0, 0] };
+  return c.v.map((v, k) => clamp(v + r.v[k]));
+}
+
+export function parseBirth(pf) {
+  const [y, m, d] = String(pf.birth || '').split('-').map(Number);
+  return { y, m, d };
+}
+export function sajuOf(pf) {
+  const { y, m, d } = parseBirth(pf);
+  const hk = pf.hour !== '' && pf.hour !== null && pf.hour !== undefined;
+  return computeSaju(y, m, d, hk ? +pf.hour : null, hk ? +(pf.minute || 0) : 0, { lunar: pf.cal === 'lunar', leap: !!pf.leap });
 }
 
 export function computeResult(profile, answers) {
-  const [y, m, d] = profile.birth.split('-').map(Number);
-  const saju = computeSaju(y, m, d, profile.hour);
+  const saju = sajuOf(profile);
+  if (!saju) return null;
+  const by = saju.solar.y;
+  const stage = profile.stage || stageOf(by).key;
+  const set = QUESTION_SETS[stage] || QUESTION_SETS.young;
   const seed = hash(`${profile.name}|${profile.birth}|${profile.hour}|${profile.bongwan || ''}`);
-  const ax = axisScores(answers);
-  // tie-breakers from saju when an axis is neutral
-  const tb = [
-    saju.yang ? -0.08 : 0.08,
-    (saju.dist.earth + saju.dist.metal) - (saju.dist.wood + saju.dist.water) >= 0 ? 0.06 : -0.06,
-    (saju.dist.metal + saju.dist.water) - (saju.dist.fire + saju.dist.wood) >= 0 ? 0.06 : -0.06,
-    (seed & 1) ? 0.05 : -0.05,
-  ];
-  const s = ax.map((v, k) => Math.abs(v) < 0.04 ? tb[k] : v);
-  const region = REGIONS.find(r => r.t === profile.region);
-  const scores = TYPES.map((t, i) => {
-    const bits = typeBits(i);
-    let aff = 0;
-    bits.forEach((b, k) => { const sign = b ? -1 : 1; aff += (1 + s[k] * sign) / 2; });
-    aff += 0.9 * (saju.dist[t.el] - (t.el === 'earth' ? 0.267 : 0.183));
-    if (STEM_EL[saju.dayMaster] === t.el) aff += 0.12;
-    if (region && region.bonus.includes(i)) aff += 0.12;
-    return { id: i, aff };
-  }).sort((a, b) => b.aff - a.aff);
-  const top = scores.slice(0, 3);
-  const k = 3.2;
-  const w = top.map(t => Math.exp(k * t.aff));
-  const sum = w.reduce((a, b) => a + b, 0);
-  let pcts = w.map(x => Math.round((x / sum) * 100));
-  // keep it lively: primary between 38~68
-  pcts[0] = Math.min(68, Math.max(38, pcts[0]));
-  const rest = 100 - pcts[0];
-  const r2 = w[1] / (w[1] + w[2]);
-  pcts[1] = Math.max(Math.ceil(rest / 2), Math.round(rest * r2));
-  pcts[2] = 100 - pcts[0] - pcts[1];
-  if (pcts[2] < 6) { pcts[2] = 6; pcts[1] = rest - 6; }
-  if (pcts[1] > pcts[0]) { pcts[1] = pcts[0] - 1; pcts[2] = 100 - pcts[0] - pcts[1]; }
-  const blend = top.map((t, j) => ({ id: t.id, pct: pcts[j] }));
-  return { typeId: blend[0].id, blend, saju, axes: s, seed };
-}
-
-// 상상 가계도
-export function buildTree(profile, result) {
-  const r = rng(result.seed ^ 0x9e3779b9);
-  const by = +profile.birth.slice(0, 4);
-  const weighted = [];
-  result.blend.forEach(b => { for (let i = 0; i < Math.round(b.pct / 5); i++) weighted.push(b.id); });
-  const pickType = () => r() < 0.78 ? pick(r, weighted) : Math.floor(r() * 16);
-  const decade = yr => `${Math.floor(yr / 10) * 10}년대생`;
-  const near = [
-    { rel: '아버지', side: '부계', yr: by - 29 - Math.floor(r() * 5) },
-    { rel: '어머니', side: '모계', yr: by - 27 - Math.floor(r() * 5) },
-    { rel: '친할아버지', side: '부계', yr: by - 58 - Math.floor(r() * 6) },
-    { rel: '친할머니', side: '부계', yr: by - 56 - Math.floor(r() * 6) },
-    { rel: '외할아버지', side: '모계', yr: by - 57 - Math.floor(r() * 6) },
-    { rel: '외할머니', side: '모계', yr: by - 55 - Math.floor(r() * 6) },
-  ].map(n => {
-    const id = pickType();
-    return { ...n, id, era: decade(n.yr), gift: pick(r, TYPES[id].keywords) };
+  const q = quizAxes(set, answers), s = sajuAxes(saju), e = eraAxes(by, profile.region);
+  const axes = q.map((v, k) => {
+    const x = WEIGHTS.quiz * v + WEIGHTS.saju * s[k] + WEIGHTS.era * e[k];
+    return Math.abs(x) < 1e-9 ? ((seed >> k) & 1 ? 0.001 : -0.001) : x;
   });
-  // 부모 2명은 상위 2개 혈통을 확실히 물려주도록
-  near[0].id = result.blend[0].id; near[0].gift = TYPES[near[0].id].keywords[0];
-  near[1].id = result.blend[1].id; near[1].gift = TYPES[near[1].id].keywords[0];
-  const eraPts = [
-    { y: by - 90, label: '증조부모', eraName: eraLabel(by - 90) },
-    { y: by - 120, label: '고조부모', eraName: eraLabel(by - 120) },
-    { y: 1720 + Math.floor(r() * 50), eraName: '조선 후기' },
-    { y: 1480 + Math.floor(r() * 60), eraName: '조선 전기' },
-    { y: 1150 + Math.floor(r() * 80), eraName: '고려' },
-    { y: 560 + Math.floor(r() * 80), eraName: '삼국시대' },
-  ];
-  const usedT = new Set(), usedL = new Set();
-  const uniq = (rr, arr, used) => { const free = arr.filter(x => !used.has(x)); const v = pick(rr, free.length ? free : arr); used.add(v); return v; };
-  const deep = eraPts.map((e, i) => {
-    const id = i === eraPts.length - 1 ? result.blend[0].id : pickType();
-    const gen = Math.max(3, Math.round((by - e.y) / 30));
-    const t = TYPES[id];
-    return {
-      id, gen, era: `${Math.floor(e.y / 10) * 10}년대 · ${e.eraName}`,
-      rel: e.label || `${gen}대조`, role: uniq(r, t.titles, usedT), line: uniq(r, t.lines, usedL),
-    };
-  });
-  return { near, deep };
-}
-function eraLabel(y) {
-  if (y >= 1945) return '현대';
-  if (y >= 1910) return '일제강점기';
-  if (y >= 1876) return '개항기';
-  if (y >= 1800) return '조선 말기';
-  return '조선 후기';
-}
-
-export function clanStory(profile) {
-  const bon = String(profile.bongwan || '').replace(/\s+/g, '').slice(0, 14);
-  if (!bon) return null;
-  const sur = profile.surname || '';
-  let place = bon, s = sur;
-  if (sur && bon.endsWith(sur + '씨')) place = bon.slice(0, -(sur.length + 1));
-  else if (bon.endsWith('씨') && bon.length >= 3) { s = bon.slice(-2, -1); place = bon.slice(0, -2); }
-  else if (sur && bon.endsWith(sur) && bon.length > sur.length) place = bon.slice(0, -sur.length);
-  if (!place) return null;
-  const story = CLAN_STORIES[`${place} ${s}`];
+  const typeId = typeFromBits(axes.map(x => (x > 0 ? 0 : 1)));
+  // 축별 비율(%) — 앞 글자(思·守·理·獨) 쪽 비율
+  const posPct = axes.map(x => Math.round(50 + 50 * clamp(x)));
+  // 16유형 확률 = 축별 비율의 곱 → 상위 3개를 100으로 다시 나눔
+  const probs = TYPES.map((_, i) => typeBits(i).reduce((p, b, k) => p * (b ? 1 - posPct[k] / 100 : posPct[k] / 100), 1));
+  const top = probs.map((p, i) => ({ id: i, p })).sort((a, b) => b.p - a.p).slice(0, 3);
+  const sum = top.reduce((a, b) => a + b.p, 0) || 1;
+  const blend = top.map(t => ({ id: t.id, pct: Math.round((t.p / sum) * 100) }));
+  blend[0].pct = 100 - blend[1].pct - blend[2].pct;
   return {
-    title: `${place} ${s}씨`,
-    text: story || `${place} 땅에 뿌리를 둔 ${s}씨 가문이에요. 그 고장의 산과 물, 이름 없이 흘러간 수백 년의 하루하루가 쌓여 지금의 당신에게 닿았습니다.`,
-    known: !!story,
+    typeId, blend, saju, axes, posPct, parts: { quiz: q, saju: s, era: e }, seed, stage, by,
+    code: codeOf(typeId), nick: nickOf(typeId), mbti: mbtiOf(typeId), cohort: cohortOf(by),
   };
 }
 
+/* ---------------- 성씨·본관 (2015 인구주택총조사) ---------------- */
+const SUR_ALIAS = { 류: '유', 유: '류', 리: '이', 림: '임', 라: '나', 로: '노' };
+export function surnameStat(sur) {
+  const s = SURNAMES.find(x => x.s === sur);
+  return s ? { ...s, share: (s.n / POP_2015) * 100 } : null;
+}
+export function parseBongwan(text, surname) {
+  const t = String(text || '').replace(/\s+/g, '').replace(/씨$/, '');
+  if (!t) return null;
+  let place = t;
+  const sur = surname || '';
+  if (sur && t.endsWith(sur) && t.length > sur.length) place = t.slice(0, -sur.length);
+  else if (SUR_ALIAS[sur] && t.endsWith(SUR_ALIAS[sur]) && t.length > 1) place = t.slice(0, -1);
+  else if (t.length >= 3) { const maybe = t.slice(-1); if (SURNAMES.some(x => x.s === maybe)) place = t.slice(0, -1); }
+  return place || null;
+}
+export function bongwanStat(place, sur) {
+  if (!place) return null;
+  const cand = BONGWAN_STATS.filter(b => b.place === place && (b.s === sur || b.s === SUR_ALIAS[sur]));
+  if (!cand.length) return null;
+  const b = cand[0];
+  const top = TOP10_BONGWAN.indexOf(`${b.place} ${b.s}`);
+  return { ...b, share: (b.n / POP_2015) * 100, rank: top >= 0 ? top + 1 : null };
+}
+export const bongwanOptions = sur => BONGWAN_STATS.filter(b => b.s === sur || b.s === SUR_ALIAS[sur]).map(b => `${b.place} ${b.s}씨`);
+
+/* ---------------- 조상 타임라인 ---------------- */
+export const GEN_YEARS = 30;
+export function eraNameOf(y) {
+  if (y < 918) return '삼국·남북국 시대';
+  if (y < 1392) return '고려';
+  if (y < 1592) return '조선 전기';
+  if (y < 1800) return '조선 후기';
+  if (y < 1876) return '조선 말기';
+  if (y < 1910) return '개항기·대한제국';
+  if (y < 1945) return '일제강점기';
+  return '대한민국';
+}
+export const genLabel = n => ({ 1: '부모', 2: '조부모', 3: '증조부모', 4: '고조부모' }[n] || `${n}대조`);
+export function ancestorGens(by, gens = [4, 5, 6, 7, 8, 10, 12, 15]) {
+  return gens.map(n => {
+    const born = by - GEN_YEARS * n;
+    const ev = EVENTS.filter(([y]) => y >= born + 12 && y <= born + 55);
+    // 고르게 최대 3개
+    const pickEv = ev.length <= 3 ? ev : [ev[0], ev[Math.floor(ev.length / 2)], ev[ev.length - 1]];
+    return { n, label: genLabel(n), born, decade: Math.floor(born / 10) * 10, era: eraNameOf(born + 20), count: 2 ** n, events: pickEv };
+  });
+}
+/** 1690년 무렵 태어난 세대(대구 호적 1690 비율)를 기준으로 한 단순 기대값 */
+export function statusEstimate(by) {
+  const st = STATUS_DAEGU[0];
+  const n = Math.max(1, Math.round((by - st.year) / GEN_YEARS));
+  const slots = 2 ** n;
+  return { n, slots, year: st.year, yangban: Math.round(slots * st.yangban / 100), sangmin: Math.round(slots * st.sangmin / 100), nobi: Math.round(slots * st.nobi / 100), st, st2: STATUS_DAEGU[1], st3: STATUS_DAEGU[2] };
+}
+/** 앞으로 태어날(현재 연도 이후) 자손 세대 3개 — 이미 태어났을 수 있는 세대는 건너뜀 */
+export function descendants(by, now = new Date().getFullYear()) {
+  const names = ['자녀', '손주', '증손주', '고손주', '5대손', '6대손', '7대손'];
+  let n = 1; while (by + 31 * n <= now) n++;
+  return [n, n + 1, n + 2].map(k => {
+    const born = by + 31 * k;
+    return { label: names[k - 1] || `${k}대손`, n: k, born, thirty: born + 30, inProjection: born <= 2072 };
+  });
+}
+export { FUTURE };
+
+/* ---------------- 시대별 인생 ---------------- */
 export function eraLives(result) {
-  const r = rng(result.seed ^ 0x51ed);
   const order = [result.blend[0].id, result.blend[1].id, result.blend[0].id, result.blend[2].id, result.blend[0].id, result.blend[1].id];
-  const fates = [...FATES].sort(() => r() - 0.5);
   return ERA_LIST.map((e, i) => {
-    const id = i === 4 ? result.blend[0].id : order[(i + (result.seed % 3)) % 6];
+    const id = order[i];
     const [role, story] = TYPES[id].eras[i];
-    return { ...e, id, role, story, fate: fates[i] };
+    return { ...e, id, role, story, fact: ERA_FACTS[i] };
   });
 }
 
-// 궁합
+/* ---------------- 궁합 ---------------- */
 export function compat(a, b) {
   // a, b: { typeId, el, yearBranch? }
   const rel = elRelation(a.el, b.el);
@@ -177,7 +205,7 @@ export function compat(a, b) {
     br = branchRelation(a.yearBranch, b.yearBranch);
     brScore = { same: 78, liuhe: 96, sanhe: 90, chong: 52, none: 72 }[br];
     brText = {
-      same: '같은 띠 — 취향과 리듬이 닮았어요', liuhe: '육합(六合) — 서로 끌어당기는 찰떡 띠',
+      same: '같은 띠 — 취향과 리듬이 닮았어요', liuhe: '육합(六合) — 서로 끌어당기는 띠',
       sanhe: '삼합(三合) — 함께하면 일이 커지는 띠', chong: '충(沖) — 부딪히지만 그만큼 불꽃 튀는 띠',
       none: '무난한 띠 — 큰 충돌 없이 편안한 사이',
     }[br];
@@ -192,44 +220,39 @@ export function compatStory(aName, a, bName, b, score) {
   const ja = ta.eras[2][0], jb = tb.eras[2][0];
   const tier = score >= 88 ? 0 : score >= 75 ? 1 : score >= 62 ? 2 : 3;
   const endings = [
-    ['두 집안의 잔치는 사흘 밤낮 이어졌고, 그 후손들은 지금까지 명절마다 모인다고 한다.', '마을 사람들은 "하늘이 맺어 준 인연"이라 입을 모았다.'],
-    ['처음엔 서먹했지만, 장마 한 철을 함께 넘기고 나서 둘도 없는 사돈이 되었다.', '서로의 부족한 곳을 메워 주며 가문을 두 배로 키웠다.'],
-    ['밥상에서 자주 티격태격했지만, 큰일이 닥치면 누구보다 먼저 서로를 찾았다.', '의견은 자주 갈렸지만 결국 같은 곳을 향해 걸었다.'],
-    ['혼담 자리에서 한바탕 언쟁이 벌어졌지만, 그 덕에 서로를 가장 잘 아는 사이가 되었다.', '불꽃이 튀는 만큼 이야깃거리도 많은, 동네의 전설 같은 인연이 되었다.'],
+    ['두 집안의 잔치는 사흘 밤낮 이어졌을 거예요.', '마을 사람들은 "하늘이 맺어 준 인연"이라 했을 거예요.'],
+    ['처음엔 서먹해도 장마 한 철을 함께 넘기면 둘도 없는 사돈이 됐을 거예요.', '서로의 부족한 곳을 메워 주는 사이였을 거예요.'],
+    ['밥상에서 자주 티격태격해도 큰일 앞에선 서로를 먼저 찾았을 거예요.', '의견은 자주 갈려도 결국 같은 곳을 향했을 거예요.'],
+    ['혼담 자리에서 한바탕 언쟁이 벌어졌겠지만, 그만큼 서로를 잘 아는 사이가 됐을 거예요.', '불꽃이 튀는 만큼 이야깃거리도 많은 인연이었을 거예요.'],
   ];
-  return `${ja} 집안의 ${aName}${josaK(aName, '과', '와')} ${jb} 집안의 ${bName}. 두 가문이 조선에서 만났다면… ${pick(r, endings[tier])}`;
+  return `(상상) ${ja} ${aName}님과 ${jb} ${bName}님이 조선에서 만났다면… ${pick(r, endings[tier])}`;
 }
 
-const josaK = (w, a, b) => { const c = w.charCodeAt(w.length - 1); return (c >= 0xac00 && c <= 0xd7a3 && (c - 0xac00) % 28) ? a : b; };
-
-// 친구 추정 유형 (사주만으로)
+/** 친구 유형 추정 — 퀴즈 없이 사주(25)·출생 시대(15) 성분만 사용 */
 export function estimateType(name, birth) {
   const [y, m, d] = birth.split('-').map(Number);
   const saju = computeSaju(y, m, d, null);
-  const el = saju.dayEl;
-  const cands = TYPES.map((t, i) => i).filter(i => TYPES[i].el === el);
-  const id = cands[hash(name + birth) % cands.length];
-  return { typeId: id, saju };
+  const s = sajuAxes(saju), e = eraAxes(y, '비밀');
+  const bits = s.map((v, k) => (WEIGHTS.saju * v + WEIGHTS.era * e[k] > 0 ? 0 : 1));
+  return { typeId: typeFromBits(bits), saju };
 }
 
-// 오늘의 조상님 한마디
+/* ---------------- 오늘의 조상님 한마디 (재미 요소) ---------------- */
 export function dailyMessage(result, date = new Date()) {
-  const key = date.toISOString ? `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}` : '';
+  const key = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
   const r = rng(hash(key + '|' + result.seed));
   const tp = todayPillar(date);
   const todayEl = STEM_EL[tp.stem];
   const myEl = result.saju.dayEl;
   const rel = elRelation(todayEl, myEl);
   const mood = {
-    same: ['나와 같은 기운이 도와주는 날', 82], gen: ['오늘의 기운이 나를 살려 주는 날', 91], genBy: ['내가 베풀수록 돌아오는 날', 78],
-    ctrl: ['작은 마찰을 조심할 날', 64], ctrlBy: ['내가 주도권을 쥐는 날', 85],
+    same: '오늘 일진이 나와 같은 오행인 날', gen: '오늘 일진이 나를 생(生)하는 날', genBy: '내가 오늘 일진을 생(生)하는 날',
+    ctrl: '오늘 일진이 나를 극(剋)하는 날', ctrlBy: '내가 오늘 일진을 극(剋)하는 날',
   }[rel];
   const luckyEl = ELEMENTS[EL_ORDER[(EL_ORDER.indexOf(myEl) + 4) % 5]];
   return {
-    msg: pick(r, DAILY),
-    ilJin: `${STEMS_K[tp.stem]}${BRANCHES_K[tp.branch]}일`,
-    mood: mood[0], score: Math.min(99, mood[1] + Math.floor(r() * 8)),
-    luckyColor: luckyEl.lucky, luckyNum: luckyEl.num[Math.floor(r() * 2)], luckyDir: luckyEl.dir,
+    msg: pick(r, DAILY), ilJin: `${STEMS_K[tp.stem]}${BRANCHES_K[tp.branch]}일`, todayEl, rel, mood,
+    luckyColor: luckyEl.lucky, luckyEl: EL_ORDER[(EL_ORDER.indexOf(myEl) + 4) % 5], luckyDir: luckyEl.dir,
   };
 }
 
@@ -237,7 +260,7 @@ export function todayStrongType(date = new Date()) {
   const tp = todayPillar(date);
   const el = STEM_EL[tp.stem];
   const c = TYPES.map((t, i) => i).filter(i => TYPES[i].el === el);
-  return { id: c[tp.idx % c.length], ilJin: `${STEMS_K[tp.stem]}${BRANCHES_K[tp.branch]}일` };
+  return { id: c[tp.idx % c.length], ilJin: `${STEMS_K[tp.stem]}${BRANCHES_K[tp.branch]}일`, el };
 }
 
 // invite encoding (name + type only)
@@ -258,3 +281,4 @@ export function decodeInvite(s) {
     return { n, t };
   } catch { return null; }
 }
+export { AXES };

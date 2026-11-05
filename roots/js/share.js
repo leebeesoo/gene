@@ -29,7 +29,7 @@ export async function makeShareCard({ name, result, url }) {
   const W = 1080, H = 1350;
   const c = document.createElement('canvas'); c.width = W; c.height = H;
   const ctx = c.getContext('2d');
-  const text = `${name}님의 근본은${t.name}형${t.hanja}${t.tagline}내 안에 흐르는 피${result.blend.map(b => TYPES[b.id].name).join('')}0123456789%·너의 근본은? 근본 테스트에서 확인하기思行守遊理情獨群根本`;
+  const text = `${name}님의 근본 코드${t.name}형${t.hanja}${t.tagline}${result.nick}가까운 근본 3가지${result.blend.map(b => TYPES[b.id].name).join('')}0123456789%·너의 코드는? TKLSARHG思行守遊理情獨群根本`;
   await ensureFonts(text);
 
   // background
@@ -50,35 +50,33 @@ export async function makeShareCard({ name, result, url }) {
   ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left'; ctx.fillStyle = '#f5efe3'; ctx.font = `800 38px ${SANS}`; ctx.fillText('근본 테스트', 148, 110);
 
   ctx.textAlign = 'center'; ctx.fillStyle = '#b9c3d6'; ctx.font = `700 40px ${SANS}`;
-  ctx.fillText(`${name}님의 근본은`, W / 2, 230);
+  ctx.fillText(`${name}님의 근본 코드`, W / 2, 230);
 
   // emblem
   const img = await loadImg(svgUrl(emblemSVG(result.typeId, 400)));
   ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.45)'; ctx.shadowBlur = 50; ctx.shadowOffsetY = 20;
-  ctx.drawImage(img, W / 2 - 180, 260, 360, 360); ctx.restore();
+  ctx.drawImage(img, W / 2 - 150, 262, 300, 300); ctx.restore();
 
-  // name
-  ctx.fillStyle = '#f5efe3'; ctx.font = `900 120px ${SERIF}`;
-  const nm = `${t.name}형`; const nmW = ctx.measureText(nm).width;
-  ctx.font = `900 54px ${SERIF}`; const hjW = ctx.measureText(t.hanja).width;
-  const total = nmW + 22 + hjW; const sx = W / 2 - total / 2;
-  ctx.textAlign = 'left'; ctx.font = `900 120px ${SERIF}`; ctx.fillText(nm, sx, 770);
-  ctx.fillStyle = '#f2c46a'; ctx.font = `900 54px ${SERIF}`; ctx.fillText(t.hanja, sx + nmW + 22, 770);
-
-  // code
+  // code badge
+  const code = result.code.split('');
   const bits = typeBits(result.typeId);
-  const code = AXES.map((a, i) => bits[i] ? a.neg.h : a.pos.h);
-  ctx.font = `900 34px ${SERIF}`; ctx.textAlign = 'center';
+  const hz = AXES.map((a, i) => bits[i] ? a.neg.h : a.pos.h);
+  ctx.textAlign = 'center';
   code.forEach((ch, i) => {
-    const cx = W / 2 - 99 + i * 66;
-    ctx.fillStyle = 'rgba(245,239,227,.1)'; roundRect(ctx, cx - 26, 800, 52, 52, 10); ctx.fill();
-    ctx.fillStyle = '#f5efe3'; ctx.fillText(ch, cx, 838);
+    const cx = W / 2 - 201 + i * 134;
+    ctx.fillStyle = i % 2 ? '#f2c46a' : '#f5efe3'; roundRect(ctx, cx - 58, 650, 116, 128, 20); ctx.fill();
+    ctx.fillStyle = '#15213b'; ctx.font = `900 84px ${SANS}`; ctx.fillText(ch, cx, 738);
+    ctx.fillStyle = 'rgba(21,33,59,.6)'; ctx.font = `900 26px ${SERIF}`; ctx.fillText(hz[i], cx, 768);
   });
-  ctx.fillStyle = '#cfd6e4'; ctx.font = `600 34px ${SANS}`; ctx.fillText(t.tagline, W / 2, 912);
+  // nickname
+  ctx.fillStyle = '#f5efe3'; ctx.font = `900 76px ${SERIF}`; ctx.fillText(result.nick, W / 2, 870);
+  ctx.fillStyle = '#cfd6e4'; const tl = `${t.name}형 · ${t.tagline}`; let fs = 32;
+  do { ctx.font = `600 ${fs}px ${SANS}`; fs -= 2; } while (ctx.measureText(tl).width > W - 140 && fs > 20);
+  ctx.fillText(tl, W / 2, 926);
 
   // blend
   roundRect(ctx, 90, 958, W - 180, 300, 28); ctx.fillStyle = 'rgba(245,239,227,.07)'; ctx.fill();
-  ctx.fillStyle = '#f2c46a'; ctx.font = `800 28px ${SANS}`; ctx.textAlign = 'left'; ctx.fillText('내 안에 흐르는 피', 130, 1010);
+  ctx.fillStyle = '#f2c46a'; ctx.font = `800 28px ${SANS}`; ctx.textAlign = 'left'; ctx.fillText('가까운 근본 3가지', 130, 1010);
   result.blend.forEach((b, i) => {
     const bt = TYPES[b.id]; const y = 1062 + i * 64;
     ctx.fillStyle = '#f5efe3'; ctx.font = `800 32px ${SANS}`; ctx.textAlign = 'left'; ctx.fillText(bt.name, 130, y + 11);
@@ -91,7 +89,7 @@ export async function makeShareCard({ name, result, url }) {
   });
 
   ctx.textAlign = 'center'; ctx.fillStyle = '#9fabc2'; ctx.font = `600 26px ${SANS}`;
-  ctx.fillText(`너의 근본은? · ${url.replace(/^https?:\/\//, '').replace(/\?.*$/, '')}`, W / 2, H - 52);
+  ctx.fillText(`너의 코드는? · ${url.replace(/^https?:\/\//, '').replace(/\?.*$/, '')}`, W / 2, H - 52);
 
   return new Promise(res => c.toBlob(b => res(b), 'image/png'));
 }
