@@ -1,0 +1,270 @@
+[
+  {
+    "platform": "Toss Payments Merchant Admin",
+    "platform_ko": "토스페이먼츠 상점관리자",
+    "audience": "merchant",
+    "screen": "홈 - 정산 달력",
+    "file": "tosspayments-settlement-calendar-home.jpg",
+    "source_url": "https://www.tosspayments.com/blog/articles/29669",
+    "image_url": "https://static.toss.im/ipd-tcs/toss_core/live/01967e5d-a000-45c4-8026-50c858779d4a/image.png",
+    "layout": "흰 배경의 좌측 그룹형 사이드바(정산/결제조회/계약·운영) + 중앙 월간 정산 달력(일자별 매출·입금액) + 우측 바로가기·공지 카드의 3단 구성으로, 상단에 월 매출/입금 정산액 KPI 4개를 배치.",
+    "patterns": [
+      "정산 달력",
+      "KPI 요약 줄",
+      "그룹형 사이드바",
+      "우측 바로가기 패널",
+      "공지 탭"
+    ],
+    "fit_score": 5,
+    "fit_reason": "파트너(고수)에게 '언제 얼마가 입금되는지'를 달력으로 보여주는 방식은 홈서비스 파트너 정산 화면에 거의 그대로 쓸 수 있습니다. 매출일과 입금 예정일을 함께 보여주는 점이 특히 유용합니다."
+  },
+  {
+    "platform": "Toss Payments Merchant Admin",
+    "platform_ko": "토스페이먼츠 상점관리자",
+    "audience": "merchant",
+    "screen": "정산내역 - 건별 탭 + 표 설정",
+    "file": "tosspayments-settlement-list-table-settings.jpg",
+    "source_url": "https://www.tosspayments.com/blog/articles/33945",
+    "image_url": "https://static.toss.im/ipd-tcs/toss_core/live/39ea83e4-1ee4-4f8d-b2bc-8773dff9cb42/image.png",
+    "layout": "상단 탭(요약/건별/일자별/결제수단별) 아래 조건 검색 폼(기간·상태·결제수단)과 고밀도 표를 두고, '표 설정' 모달에서 표시할 컬럼을 체크박스로 고르는 구조.",
+    "patterns": [
+      "요약/건별/일자별 탭",
+      "조건 검색 폼",
+      "컬럼 표시 설정",
+      "엑셀 다운로드",
+      "고밀도 데이터 표"
+    ],
+    "fit_score": 5,
+    "fit_reason": "운영자 정산 대사 화면(건별 수수료·정산액·입금일)에 필요한 요소가 모두 들어 있습니다. 컬럼 설정과 엑셀 다운로드는 재무/CS 담당자에게 꼭 필요합니다."
+  },
+  {
+    "platform": "Toss Place (Reservation Home)",
+    "platform_ko": "토스플레이스 예약 홈",
+    "audience": "merchant",
+    "screen": "예약 홈 - 월간 캘린더",
+    "file": "tossplace-reservation-month-calendar.jpg",
+    "source_url": "https://tossplace.com/story/reservation_updates",
+    "image_url": "https://static.toss.im/ipd-tcs/toss_core/live/3df014d4-d602-4188-bd0b-380f12c17672/(월간뷰 미리보기.gif, 마지막 프레임)",
+    "layout": "어두운 상단바(예약 홈/주문/고객 탭) + 좌측 미니 달력(일자별 건수) + 우측 월간 그리드에 담당자 색 점이 찍힌 예약을 나열하고, 셀 hover 시 예약 목록 팝오버를 보여주는 구성.",
+    "patterns": [
+      "월간 예약 캘린더",
+      "미니 달력 건수 배지",
+      "담당자 색상 구분",
+      "hover 미리보기 팝오버",
+      "플로팅 + 버튼"
+    ],
+    "fit_score": 5,
+    "fit_reason": "날짜별 예약 밀도와 담당 고수를 한눈에 보여 주어, 파트너용 일정 관리와 운영자의 일자별 배정 현황 화면에 바로 참고할 수 있습니다."
+  },
+  {
+    "platform": "Toss Place (Reservation Home)",
+    "platform_ko": "토스플레이스 예약 홈",
+    "audience": "merchant",
+    "screen": "예약 홈 - 주간 타임라인 + 고객 카드",
+    "file": "tossplace-reservation-week-customer-card.jpg",
+    "source_url": "https://tossplace.com/story/reservation_updates",
+    "image_url": "https://static.toss.im/ipd-tcs/toss_core/live/2f83344c-ce17-442c-a3d3-882fe2d133b1/(주간뷰 미리보기.gif, 마지막 프레임)",
+    "layout": "주간 시간축 그리드에 예약 블록을 놓고, 현재 시각 라인과 함께 블록 hover 시 고객 카드(방문 횟수·노쇼 횟수·선불권·담당자·시간·서비스)를 띄우는 구조. 상단에 담당자 필터와 일/주/월 전환이 있음.",
+    "patterns": [
+      "주간 타임라인",
+      "현재 시각 표시선",
+      "고객 요약 카드(노쇼/방문수)",
+      "담당자 필터",
+      "뷰 전환(일/주/월)",
+      "드래그로 일정 변경"
+    ],
+    "fit_score": 5,
+    "fit_reason": "고수별 일정 블록과 고객 이력(노쇼 횟수 등)을 함께 보여 주는 방식은 매칭·배정과 CS 판단에 바로 도움이 됩니다. 운영자 배정 보드의 기본형으로 삼기 좋습니다."
+  },
+  {
+    "platform": "Toss Place POS",
+    "platform_ko": "토스 포스 매출 리포트",
+    "audience": "merchant",
+    "screen": "매출 리포트 - 매출현황",
+    "file": "tossplace-sales-report.jpg",
+    "source_url": "https://tossplace.com/story/40353",
+    "image_url": "https://static.toss.im/ipd-tcs/toss_core/live/db0b04b9-7e01-4cf9-87e5-c06327d20344/0904-report-inner-1.png",
+    "layout": "좌측 회색 보조 메뉴(매출현황/상세/달력/상품분석) + 엑셀 내보내기 버튼, 본문에 일/주/월/연 탭·기간 선택기·KPI 카드(실매출·건당 평균·취소·할인)·지난주 대비 막대 차트를 둔 큰 글씨의 태블릿 레이아웃.",
+    "patterns": [
+      "기간 단위 탭",
+      "KPI 카드",
+      "전주 동시간 비교",
+      "막대 차트",
+      "엑셀 내보내기"
+    ],
+    "fit_score": 4,
+    "fit_reason": "파트너 매출·수익 리포트를 쉽게 보여 주는 참고 사례입니다. 다만 POS 중심이라 매칭률이나 취소율 같은 중개 플랫폼 지표는 직접 더해야 합니다."
+  },
+  {
+    "platform": "Naver SmartPlace Center (app)",
+    "platform_ko": "네이버 스마트플레이스센터 앱",
+    "audience": "merchant",
+    "screen": "앱 - 홈/업체정보/리뷰/알림/고객/통계",
+    "file": "naver-smartplace-app-overview.jpg",
+    "source_url": "https://apps.apple.com/kr/app/id1521817390",
+    "image_url": "App Store 스크린샷 6장 몽타주 (is1-ssl.mzstatic.com PurpleSource116/126)",
+    "layout": "어두운 헤더 + 가로 스크롤 탭(업체정보/예약·주문/리뷰/고객/통계) 구조로, 홈에서 예약 현황(확정대기·오늘확정·이용·취소 건수)을 숫자 타일로 보여 주고 알림 피드와 고객 목록 표를 제공.",
+    "patterns": [
+      "예약 상태 숫자 타일",
+      "가로 스크롤 탭",
+      "통합 알림 피드",
+      "고객 목록(마스킹)",
+      "리뷰 답글 관리",
+      "통계 카드"
+    ],
+    "fit_score": 4,
+    "fit_reason": "파트너 모바일 앱 홈을 '확정대기/오늘/취소' 숫자로 시작하는 방식과 알림 피드는 고수용 앱에 잘 맞습니다. 웹 관리자 화면은 직접 확인하지 못했습니다."
+  },
+  {
+    "platform": "Kakao Business Partner Center (app)",
+    "platform_ko": "카카오비즈니스 파트너센터(구 카카오톡 채널 관리자)",
+    "audience": "merchant",
+    "screen": "앱 - 홈/채팅/매장/쿠폰/예약·매출",
+    "file": "kakao-partnercenter-app-home.jpg",
+    "source_url": "https://apps.apple.com/kr/app/id990571676",
+    "image_url": "App Store 스크린샷 5장 몽타주 (is1-ssl.mzstatic.com PurpleSource211/221)",
+    "layout": "흰 카드형 홈에 채널·매장 상태(상담중/영업중), 오늘 할 일 칩(AI 메시지·채팅 답하기), 최근 7일 지표 카드를 두고, 하위 화면에 AI 상담매니저 채팅·리뷰·오늘 예약·카카오페이 매출 카드를 배치.",
+    "patterns": [
+      "오늘 할 일 칩",
+      "상태 배지(상담중/영업중)",
+      "최근 7일 지표 카드",
+      "AI 상담 자동응답",
+      "오늘 예약 카드"
+    ],
+    "fit_score": 4,
+    "fit_reason": "'오늘 할 일' 중심 홈과 부재 시 AI 자동응답 채팅은 파트너 CS 부담을 줄이는 패턴으로 참고할 만합니다. 예약과 매출을 한 화면에 묶은 점도 유용합니다."
+  },
+  {
+    "platform": "Kakao Talk Reservation Partner Center (PC)",
+    "platform_ko": "카카오톡 예약하기 파트너센터",
+    "audience": "merchant",
+    "screen": "예약 > 예약현황(일간/주간 슬롯)",
+    "file": "kakao-booking-pc-reservation-status.jpg",
+    "source_url": "https://kakaobusiness.gitbook.io/main/tool/booking/pc/undefined-3",
+    "image_url": "https://234308570-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F-MVZVmVOd-5LtENUPqdq%2Fuploads%2FLvWmQDmWYQNyngAqxRQe/... (gitbook 가이드 이미지)",
+    "layout": "상단 조회 조건(일간/주간·기간·매장 선택) 아래 상품(코스)별 컬럼 × 30분 시간 슬롯 그리드로, 각 슬롯에 판매수량/예약가능 수를 표기하고 상태 범례 칩(신청/확정/완료/가능/판매수량)을 둠.",
+    "patterns": [
+      "시간 슬롯 그리드",
+      "슬롯별 재고/가능 수",
+      "상태 범례 칩",
+      "일간/주간 토글",
+      "상품별 컬럼"
+    ],
+    "fit_score": 4,
+    "fit_reason": "고수별·서비스별 가용 슬롯(capacity)을 관리하는 데 바로 응용할 수 있습니다. 다만 화면 밀도가 높고 시각적으로 오래된 느낌이라 스타일은 다시 다듬어야 합니다."
+  },
+  {
+    "platform": "Kakao Talk Reservation Partner Center (mobile)",
+    "platform_ko": "카카오톡 예약하기 파트너센터(모바일)",
+    "audience": "merchant",
+    "screen": "예약 캘린더 + 확정대기 바텀시트",
+    "file": "kakao-booking-mobile-calendar-confirm.jpg",
+    "source_url": "https://kakaobusiness.gitbook.io/main/tool/booking/undefined/undefined-4",
+    "image_url": "https://234308570-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F-MVZVmVOd-5LtENUPqdq%2Fuploads%2FobWHTY1kSleIV6HXNpsn/image.png",
+    "layout": "모바일 예약관리(예약내역/예약캘린더 탭)에서 담당자별 일간·주간 타임라인을 보여 주고, 예약을 누르면 확정대기 바텀시트(일시·담당·고객·서비스·금액 + 거절/확정 버튼)가 뜨는 구조.",
+    "patterns": [
+      "담당자별 타임라인",
+      "확정/거절 바텀시트",
+      "슬롯 잔여 수 표기",
+      "예약내역/캘린더 탭",
+      "채팅하기 바로가기"
+    ],
+    "fit_score": 5,
+    "fit_reason": "고수가 들어온 요청을 모바일에서 바로 수락하거나 거절하는 흐름과 거의 같습니다. 바텀시트 하나에 필요한 정보와 2가지 액션을 모은 방식은 그대로 가져올 만합니다."
+  },
+  {
+    "platform": "Sixshop Admin",
+    "platform_ko": "식스샵 관리자",
+    "audience": "merchant",
+    "screen": "주문 > 신규 주문 목록",
+    "file": "sixshop-order-list.jpg",
+    "source_url": "https://help.sixshop.com/learn-sixshop/store-manager/orders",
+    "image_url": "https://4055358229-files.gitbook.io/~/files/v0/b/gitbook-legacy-files/o/assets%2F-Ld5OD2VFGhsB7IF4FTG%2F-MAYzaFiRH5MN0klIxa5%2F-MAZ-6cnoQIIx9d1fVza%2F1%20%EC%A3%BC%EB%AC%B8%20%EA%B4%80%EB%A6%AC%ED%95%98%EA%B8%B0.png",
+    "layout": "흰 좌측 트리 사이드바에서 주문 상태별 하위 메뉴(입금대기/결제완료/배송준비/취소요청 등)에 건수 배지를 달고, 본문은 검색바 + 일괄 상태 변경 + 날짜 구분 행이 있는 주문 표로 구성.",
+    "patterns": [
+      "상태별 사이드바 + 건수 배지",
+      "색 점 상태 표시",
+      "일괄 상태 변경",
+      "날짜 그룹 행",
+      "엑셀 내려받기"
+    ],
+    "fit_score": 4,
+    "fit_reason": "예약 상태(요청/매칭중/확정/완료/취소요청)를 사이드바 건수로 보여 주는 방식은 운영자의 작업 큐 화면에 잘 맞습니다."
+  },
+  {
+    "platform": "Ant Design Pro",
+    "platform_ko": "앤트 디자인 프로",
+    "audience": "operator",
+    "screen": "조회 테이블(ProTable)",
+    "file": "antdpro-query-table.jpg",
+    "source_url": "https://preview.pro.ant.design/list/table-list",
+    "image_url": "playwright screenshot",
+    "layout": "좌측 아코디언 사이드바 + 브레드크럼, 상단 검색 폼 카드(초기화/조회/펼치기)와 하단 표 카드(신규·새로고침·밀도·컬럼 설정 툴바, 정렬, 상태 점, 행 액션 링크)로 구성된 전형적인 엔터프라이즈 B2B 레이아웃.",
+    "patterns": [
+      "검색 폼 + 표 분리",
+      "테이블 툴바(밀도/컬럼)",
+      "상태 점 배지",
+      "행 액션 링크",
+      "접이식 필터"
+    ],
+    "fit_score": 5,
+    "fit_reason": "예약·파트너·정산 목록을 빠르게 많이 만들어야 하는 운영 백오피스에 가장 효율적인 기본 틀입니다. 한국어 B2B 관리자들도 익숙한 형태입니다."
+  },
+  {
+    "platform": "Ant Design Pro",
+    "platform_ko": "앤트 디자인 프로",
+    "audience": "operator",
+    "screen": "고급 상세 페이지(진행 단계)",
+    "file": "antdpro-advanced-detail.jpg",
+    "source_url": "https://preview.pro.ant.design/profile/advanced",
+    "image_url": "playwright screenshot",
+    "layout": "헤더에 건 번호·메타 정보·상태/금액·주요 액션 버튼 묶음, 그 아래 탭과 '流程进度' 스텝 바(생성→1차검토→재무검토→완료)·사용자 정보 description 리스트를 카드로 쌓은 상세 화면.",
+    "patterns": [
+      "상세 헤더 + 상태/금액",
+      "단계 진행 스텝",
+      "주/보조 액션 버튼 그룹",
+      "정보 Description 리스트",
+      "탭"
+    ],
+    "fit_score": 5,
+    "fit_reason": "예약 건 상세(요청→매칭→방문→완료→정산)를 스텝으로 보여 주고, 고객·파트너 정보와 처리 액션을 한 화면에 두는 데 딱 맞습니다."
+  },
+  {
+    "platform": "shadcn/ui",
+    "platform_ko": "shadcn/ui 대시보드 블록",
+    "audience": "operator",
+    "screen": "dashboard-01",
+    "file": "shadcn-dashboard-01.jpg",
+    "source_url": "https://ui.shadcn.com/view/new-york-v4/dashboard-01",
+    "image_url": "playwright screenshot",
+    "layout": "모노톤 좌측 사이드바(Quick Create 버튼, 섹션 그룹) + 증감 배지가 있는 KPI 카드 4개 + 기간 토글 영역 차트 + 탭·컬럼 설정·드래그 정렬 가능한 데이터 표를 둔 여백 넉넉한 미니멀 스타일.",
+    "patterns": [
+      "KPI 카드 + 증감 배지",
+      "기간 토글",
+      "영역 차트",
+      "Quick Create",
+      "컬럼 커스터마이즈 표"
+    ],
+    "fit_score": 4,
+    "fit_reason": "운영 대시보드(일 예약수·매칭률·GMV·취소율) 첫 화면으로 쓰기 좋은 깔끔한 기본형입니다. 다만 밀도가 낮아 실무 목록 화면은 따로 촘촘하게 설계해야 합니다."
+  },
+  {
+    "platform": "Tremor",
+    "platform_ko": "Tremor 대시보드 템플릿",
+    "audience": "operator",
+    "screen": "Details - 필터 칩 + 데이터 표",
+    "file": "tremor-details-table.jpg",
+    "source_url": "https://dashboard.tremor.so/details",
+    "image_url": "playwright screenshot",
+    "layout": "워크스페이스 전환 드롭다운이 있는 좌측 사이드바 + '+ Status / Region / Costs' 점선 필터 칩과 검색, Export/View 버튼, 상태 배지·막대 지표가 들어간 표로 구성된 가볍고 현대적인 레이아웃.",
+    "patterns": [
+      "점선 필터 칩(Faceted filter)",
+      "워크스페이스 전환",
+      "상태 배지",
+      "Export/View 설정",
+      "미니 바 지표"
+    ],
+    "fit_score": 4,
+    "fit_reason": "지역·서비스 카테고리·상태로 예약과 파트너를 걸러 보는 운영 목록에 잘 맞는 필터 칩 패턴입니다. 큰 검색 폼보다 가볍고 빠르게 쓸 수 있습니다."
+  }
+]
