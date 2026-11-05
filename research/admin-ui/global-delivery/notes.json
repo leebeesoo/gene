@@ -1,0 +1,300 @@
+[
+  {
+    "platform": "DoorDash Merchant Portal",
+    "platform_ko": "도어대시 머천트 포털",
+    "audience": "merchant",
+    "screen": "홈 · 오늘의 개요 + 매장 전환",
+    "file": "doordash-home-overview.jpg",
+    "source_url": "https://merchants.doordash.com/en-us/learning-center/navigation",
+    "image_url": "https://images.ctfassets.net/trvmqu12jq2l/6y724sCqzv0qgRDWE8fJWV/18105c4f6284b6e79abb619f09e40e5b/multi-profile.png",
+    "layout": "좌측 접이식 사이드바(인사이트·주문·메뉴·정산·설정) + 흰 배경 카드 그리드, 좌상단 사업장/매장 스위처 팝오버, 빨강 포인트 컬러.",
+    "patterns": [
+      "매장(지점) 스위처",
+      "오늘의 개요 카드",
+      "최적화 점수 게이지",
+      "운영 지표 요약(취소율·대기·정확도)",
+      "인사이트 바로가기"
+    ],
+    "fit_score": 4,
+    "fit_reason": "파트너가 여러 지역/팀을 운영할 때 상단 스위처와 '오늘의 개요'(매출·운영 지표·점수)는 그대로 차용 가능하다. 운영 지표 항목만 노쇼·지각·재작업률로 바꾸면 된다."
+  },
+  {
+    "platform": "DoorDash Merchant Portal",
+    "platform_ko": "도어대시 머천트 포털",
+    "audience": "merchant",
+    "screen": "주문 내역(필터)",
+    "file": "doordash-orders-list.jpg",
+    "source_url": "https://merchants.doordash.com/en-us/learning-center/financials",
+    "image_url": "https://images.ctfassets.net/trvmqu12jq2l/5of8n8m2VZcEHsnptUjFxf/1c5b5138c46de753df72e3cecc9b190b/Orders_tab__history_.png",
+    "layout": "진행중/예약/내역 탭 + 채널·기간·상태 멀티선택 드롭다운 필터, 검색창, 우상단 '마지막 업데이트 n초 전'·새로고침, 밀도 중간의 테이블.",
+    "patterns": [
+      "상태 탭(진행/예약/완료)",
+      "멀티선택 상태 필터",
+      "실시간 갱신 표시",
+      "프로모션 배너",
+      "주문 테이블"
+    ],
+    "fit_score": 5,
+    "fit_reason": "예약 플랫폼의 '진행 중 / 예정 / 완료' 3단 탭과 상태 다중필터는 예약 관리 화면의 기본 골격으로 바로 쓸 수 있다."
+  },
+  {
+    "platform": "DoorDash Merchant Portal",
+    "platform_ko": "도어대시 머천트 포털",
+    "audience": "merchant",
+    "screen": "주문 상세 사이드 드로어",
+    "file": "doordash-order-detail-drawer.jpg",
+    "source_url": "https://merchants.doordash.com/en-us/learning-center/financials",
+    "image_url": "https://images.ctfassets.net/trvmqu12jq2l/6CNKdth5b6QnAgHzmJJEw1/204a33893cba6d73e0b4b1b6eb5b27b1/LC-order-id-EN_2x.png",
+    "layout": "목록을 유지한 채 우측에서 열리는 상세 드로어: 상태 뱃지(취소-지급됨)·사유 설명·도움 요청 버튼·배송/고객/라이더/주소 섹션.",
+    "patterns": [
+      "마스터-디테일 드로어",
+      "상태 뱃지 + 정산 결과 병기",
+      "사유 설명 문구",
+      "도움받기 CTA",
+      "당사자(고객·배달원) 정보 블록"
+    ],
+    "fit_score": 5,
+    "fit_reason": "예약 건의 고객·파트너·주소·결제 상태를 드로어로 보여주고 '정산 여부'를 상태와 함께 표기하는 방식은 CS·분쟁 처리에 매우 적합하다."
+  },
+  {
+    "platform": "DoorDash Merchant Portal",
+    "platform_ko": "도어대시 머천트 포털",
+    "audience": "merchant",
+    "screen": "정산 · 거래 내역",
+    "file": "doordash-transactions.jpg",
+    "source_url": "https://merchants.doordash.com/en-us/learning-center/payout-and-monthly-statement",
+    "image_url": "https://images.ctfassets.net/trvmqu12jq2l/5kftnhN6agSjZsPS6CRE7V/8788d291710d802df1236855046bf8b5/Mx_-_Payouts_-_Transactions_-_EN-US.png",
+    "layout": "기간·채널 필터 + 요약 카드(순정산·수수료·마케팅비·조정액, 펼침형) 아래 거래 단위 고밀도 와이드 테이블, '리포트 생성' 버튼.",
+    "patterns": [
+      "요약 KPI 카드(펼침)",
+      "거래 원장 테이블",
+      "수수료/조정 항목 분리",
+      "기간 프리셋 드롭다운",
+      "리포트 내보내기"
+    ],
+    "fit_score": 5,
+    "fit_reason": "매출-수수료-조정=정산액 구조를 카드와 원장 테이블로 분리해 보여주는 방식은 파트너 정산 화면에 그대로 대응된다."
+  },
+  {
+    "platform": "DoorDash Merchant Portal",
+    "platform_ko": "도어대시 머천트 포털",
+    "audience": "merchant",
+    "screen": "정산 · 지급(Payouts) 목록",
+    "file": "doordash-payouts.jpg",
+    "source_url": "https://merchants.doordash.com/en-us/learning-center/payout-and-monthly-statement",
+    "image_url": "https://images.ctfassets.net/trvmqu12jq2l/46oLDpfxpQEam2IIJmCSaE/fb8273d5ce456f024a92cf0c2ae478e9/Mx_-_Payouts_-_Payouts_-_EN-US.png",
+    "layout": "지급 회차별 행(상태 뱃지 Pending/Paid·매출·수수료·마케팅·조정·순지급), 기간 라디오 + 사용자 지정 범위 팝오버.",
+    "patterns": [
+      "지급 회차 테이블",
+      "지급 상태 뱃지",
+      "기간 프리셋+커스텀 범위",
+      "순지급 컬럼 강조"
+    ],
+    "fit_score": 5,
+    "fit_reason": "주간/일간 정산 회차를 상태 뱃지(대기·지급완료)와 함께 나열하는 패턴은 홈서비스 파트너 정산 내역에 가장 직접적으로 적용된다."
+  },
+  {
+    "platform": "DoorDash Merchant Portal",
+    "platform_ko": "도어대시 머천트 포털",
+    "audience": "merchant",
+    "screen": "Most Loved(우수 파트너) 프로그램 진행도",
+    "file": "doordash-most-loved-program.jpg",
+    "source_url": "https://merchants.doordash.com/en-us/learning-center/navigation",
+    "image_url": "https://images.ctfassets.net/trvmqu12jq2l/38YvGoR7QhXdlGj7LSf6aN/890cc52808658b3ca1af78d709ce4c48/Most_Loved.png",
+    "layout": "월별 탭 + 3개 목표 지표 카드(취소율·오류율·평점, 목표 대비 On track/Not on track), 평생 요건 체크리스트, 캐시백 보상 박스.",
+    "patterns": [
+      "목표 대비 지표 카드",
+      "On track 상태 표시",
+      "등급/배지 요건 체크리스트",
+      "보상 금액 강조"
+    ],
+    "fit_score": 5,
+    "fit_reason": "파트너 등급제(우수 기사·인증 파트너)를 운영할 때 목표 대비 달성 현황과 보상을 한 화면에 보여주는 구조가 그대로 들어맞는다."
+  },
+  {
+    "platform": "DoorDash Business Manager (app)",
+    "platform_ko": "도어대시 비즈니스 매니저 앱",
+    "audience": "merchant",
+    "screen": "주문 · '확인 필요' 섹션",
+    "file": "doordash-app-orders-attention.jpg",
+    "source_url": "https://apps.apple.com/us/app/doordash-business-manager/id1551000102",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource126/v4/8d/dc/18/8ddc18b5-29d4-65df-21aa-fde938be4a9c/2aa9ab13-a35a-4b37-9216-c039e9744a16_1242x2208_still_2.jpg/2000x2000bb.jpg",
+    "layout": "모바일, 진행중/완료 세그먼트 아래 'Needs Attention' 그룹을 최상단에 두고 사유(고객 대기·배달원 지연)를 빨간 텍스트+경과시간으로 표시.",
+    "patterns": [
+      "예외 우선 정렬(Needs Attention)",
+      "지연 사유 빨간 라벨",
+      "경과 시간 표시",
+      "세그먼트 탭"
+    ],
+    "fit_score": 5,
+    "fit_reason": "지각·미배정·고객 대기 같은 예외 건을 맨 위로 끌어올리는 패턴은 매칭/출동 관제 화면에 핵심적으로 쓸 만하다."
+  },
+  {
+    "platform": "Uber Eats Manager",
+    "platform_ko": "우버이츠 매니저",
+    "audience": "merchant",
+    "screen": "홈 · 오늘의 요약 + 추천 액션",
+    "file": "ubereats-home-summary.jpg",
+    "source_url": "https://merchants.ubereats.com/gb/en/resources/learning-center/uber-eats-manager/",
+    "image_url": "https://tb-static.uber.com/prod/udam-assets/e7d443fa-c02d-496b-b84f-c896217678d9.png",
+    "layout": "흑백 미니멀 좌측 내비 + 상단 KPI 3카드(매출·주문수·객단가, 증감률), 중앙 '성장 기회' 추천 카드(도움됨/안됨 피드백), 우측 빠른 실행 목록.",
+    "patterns": [
+      "KPI 카드 + 증감률",
+      "추천(Opportunity) 카드",
+      "빠른 실행(Quick actions)",
+      "전체 매장 필터 칩",
+      "추천 피드백 버튼"
+    ],
+    "fit_score": 4,
+    "fit_reason": "운영자/파트너 홈에 '오늘 KPI + 해야 할 일 추천 + 빠른 실행' 3단을 두는 구성은 단순하고 확장성이 좋다."
+  },
+  {
+    "platform": "Uber Eats Manager",
+    "platform_ko": "우버이츠 매니저",
+    "audience": "merchant",
+    "screen": "성과 · 매출 분석",
+    "file": "ubereats-sales-analytics.jpg",
+    "source_url": "https://merchants.ubereats.com/gb/en/resources/learning-center/uber-eats-manager/",
+    "image_url": "https://tb-static.uber.com/prod/udam-assets/635c691c-26a7-440c-b05b-29fa8e3f6b29.png",
+    "layout": "성과 하위 메뉴(매출·운영·Top Eats), 매장·기간 필터 칩, 선택형 KPI 카드(클릭 시 차트 전환), 기간 비교 라인차트+툴팁, 다운로드.",
+    "patterns": [
+      "선택형 KPI 카드→차트 전환",
+      "전기간 비교 라인",
+      "채널별 탭",
+      "마지막 업데이트 표시",
+      "CSV 다운로드"
+    ],
+    "fit_score": 4,
+    "fit_reason": "카테고리·지역·파트너별 매출/건수 분석 화면의 표준 형태로, KPI 카드를 눌러 차트를 바꾸는 방식이 운영자 분석에 효율적이다."
+  },
+  {
+    "platform": "Uber Eats Manager",
+    "platform_ko": "우버이츠 매니저",
+    "audience": "merchant",
+    "screen": "주문 목록 · 일괄 이의제기",
+    "file": "ubereats-orders-dispute.jpg",
+    "source_url": "https://merchants.ubereats.com/us/en/technology/simplify-operations/overview/",
+    "image_url": "https://tb-static.uber.com/prod/udam-assets/ddfa1eeb-1090-494c-bd41-0b33ced98519.png",
+    "layout": "필터 칩(기간·매장·정렬·'환불됨' 활성) + 체크박스 행 선택, 'Inaccurate' 상태 뱃지, 금액과 차감액(빨강) 병기, 우측 상단 '선택 건 이의제기(5)' 일괄 버튼.",
+    "patterns": [
+      "필터 칩 바",
+      "행 체크박스 일괄 처리",
+      "상태 뱃지",
+      "차감액 빨간 표기",
+      "대리 접속(Emulation) 표시"
+    ],
+    "fit_score": 5,
+    "fit_reason": "환불·차감 건을 골라 한 번에 이의제기하는 흐름과 상단 '대리 접속 중' 표시는 CS 운영자의 파트너 계정 대행·분쟁 처리에 바로 쓸 수 있다."
+  },
+  {
+    "platform": "Uber Eats Manager",
+    "platform_ko": "우버이츠 매니저",
+    "audience": "merchant",
+    "screen": "고객 리뷰 · 답글 관리",
+    "file": "ubereats-reviews-feedback.jpg",
+    "source_url": "https://merchants.ubereats.com/us/en/technology/simplify-operations/overview/",
+    "image_url": "https://tb-static.uber.com/prod/udam-assets/b486c99b-ade2-4a97-8012-93c07bf42825.png",
+    "layout": "피드백 하위 탭(개요·리뷰·메뉴·인계), 상단 지표 4개(리뷰 수·답글 대기·쿠폰 사용·ROI), 자동 답글 유도 배너, 별점/태그/답글상태 필터 + 리뷰 행별 Reply 버튼과 남은 기한.",
+    "patterns": [
+      "답글 대기 카운트",
+      "자동 답글 설정",
+      "별점·태그 필터",
+      "행별 Reply CTA",
+      "응답 기한 표시"
+    ],
+    "fit_score": 5,
+    "fit_reason": "후기 응답률이 신뢰도에 직결되는 홈서비스에서 '답글 대기 n건 + 기한 + 보상 쿠폰' 구조는 파트너 후기 관리에 매우 적합하다."
+  },
+  {
+    "platform": "Uber Eats Manager",
+    "platform_ko": "우버이츠 매니저",
+    "audience": "merchant",
+    "screen": "리포트 생성(정산·운영)",
+    "file": "ubereats-report-builder.jpg",
+    "source_url": "https://merchants.ubereats.com/gb/en/resources/learning-center/uber-eats-manager/",
+    "image_url": "https://tb-static.uber.com/prod/udam-assets/b69aed52-7cbe-49f8-a1fc-c6c8d7ce90f6.png",
+    "layout": "브레드크럼 + 단계형 폼(1. 리포트 유형 체크박스: 결제 상세/품목별/지급 요약, 운영, 피드백 → 2. 즉시/정기 예약 토글, 매장 선택).",
+    "patterns": [
+      "단계형 리포트 빌더",
+      "리포트 유형 체크박스",
+      "즉시/정기 예약 토글",
+      "매장 범위 선택"
+    ],
+    "fit_score": 4,
+    "fit_reason": "정산·세무 자료를 파트너가 직접 뽑고 정기 메일로 받게 하는 기능은 운영팀 CS 부담을 줄여 준다."
+  },
+  {
+    "platform": "Deliveroo Partner Hub",
+    "platform_ko": "딜리버루 파트너 허브",
+    "audience": "merchant",
+    "screen": "매출 · 주문 탭",
+    "file": "deliveroo-hub-sales.jpg",
+    "source_url": "https://help.deliveroo.com/en/articles/9721717-how-to-view-insights-on-your-deliveroo-orders-in-hub-excl-uae",
+    "image_url": "https://deliveroo-8eed9eee60c8.intercom-attachments-7.com/i/o/1140152808/42ed0de9d66625ff89f89968/ (서명 URL, 만료됨)",
+    "layout": "아이콘+텍스트 좌측 내비(평점·매출·실시간 주문·메뉴·팀·청구서), 하위 탭(주문·판매품목·반품·환불·환불 분쟁), KPI 4개 + '계산 방법' 툴팁 + 단순 테이블.",
+    "patterns": [
+      "하위 탭으로 세분화",
+      "KPI 산식 안내 링크",
+      "마지막 업데이트 시각",
+      "환불 분쟁 전용 탭",
+      "청구서 메뉴 분리"
+    ],
+    "fit_score": 4,
+    "fit_reason": "총매출·순매출 차이를 '어떻게 계산되나요?'로 설명하는 방식은 수수료 구조에 대한 파트너 문의를 줄이는 데 효과적이다."
+  },
+  {
+    "platform": "GrabMerchant (app)",
+    "platform_ko": "그랩 머천트 앱",
+    "audience": "merchant",
+    "screen": "앱 홈 · 매출 요약 + 기능 그리드",
+    "file": "grab-app-home.jpg",
+    "source_url": "https://apps.apple.com/sg/app/grabmerchant/id1282271764",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/21/56/cc/2156ccc3-83d0-6d9d-9cc6-80a872a16779/7e2a417d-d8bb-4966-baab-acb37155acc1_Artboard_7.png/2000x2000bb.jpg",
+    "layout": "녹색 브랜드 카드에 오늘 매출·전일 대비, 주문/QR결제 건수, 아래 아이콘 그리드(주문·메뉴·프로모션·아카데미·광고·정산·직원)와 새 소식 카드, 하단 탭바.",
+    "patterns": [
+      "오늘 매출 히어로 카드",
+      "아이콘 기능 그리드",
+      "교육(아카데미) 진입",
+      "직원 권한 메뉴",
+      "하단 탭바"
+    ],
+    "fit_score": 3,
+    "fit_reason": "모바일 파트너 앱 홈 구성 참고용으로 좋지만, 운영자 웹 콘솔에는 정보 밀도가 낮다."
+  },
+  {
+    "platform": "GrabMerchant (app)",
+    "platform_ko": "그랩 머천트 앱",
+    "audience": "merchant",
+    "screen": "고객 평점 · 리뷰",
+    "file": "grab-app-ratings.jpg",
+    "source_url": "https://apps.apple.com/sg/app/grabmerchant/id1282271764",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/8c/aa/41/8caa4183-65a2-7689-6d7d-a7388656b64e/9fa31357-af45-4a84-af94-aa9afdb93c36_Artboard_12.png/2000x2000bb.jpg",
+    "layout": "평균 평점(4.1)+별점 분포 막대, 개선 팁 링크, 별점별 필터 칩(전체·5·4·3), 날짜와 함께 리뷰 카드 리스트.",
+    "patterns": [
+      "별점 분포 히스토그램",
+      "증감 표시",
+      "별점 필터 칩",
+      "개선 가이드 링크"
+    ],
+    "fit_score": 4,
+    "fit_reason": "파트너 개인 평점 화면에 별점 분포와 '개선 방법' 가이드를 함께 두는 구성은 홈서비스 기사 품질 관리에 적합하다."
+  },
+  {
+    "platform": "Wolt Merchant",
+    "platform_ko": "월트 머천트",
+    "audience": "merchant",
+    "screen": "지난 주문 · 일별 매출 요약",
+    "file": "wolt-merchant-order-history.jpg",
+    "source_url": "https://apps.apple.com/fi/app/merchant-lite/id1521979843",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource116/v4/29/ba/d1/29bad1cf-4f89-1f02-0e14-c9dc5ee2c423/38939174-9297-4630-bd8c-5b7f733def21_Tablet_3.png/2000x2000bb.jpg",
+    "layout": "태블릿, 주문/품목 세그먼트 + 기간·배달·리뷰 필터 칩, 상단 요약(총매출·거절·취소), 날짜별 그룹 주문 리스트(상태·금액·리뷰 별점).",
+    "patterns": [
+      "요약 수치 스트립",
+      "필터 칩",
+      "날짜 그룹 리스트",
+      "주문별 리뷰 별점 표시"
+    ],
+    "fit_score": 3,
+    "fit_reason": "주문 단위에 리뷰 점수를 붙여 보여주는 점은 참고할 만하나, 태블릿 매장용이라 운영 콘솔로는 단순하다."
+  }
+]
