@@ -79,8 +79,8 @@ function renderPeople() {
       <span class="p-main"><b>${esc(p.name)} <small>${esc(p.rel)}</small></b>
         <small>${p.error ? `<span class="bad">${esc(p.error)}</span>` : `${esc(dateText(p))} · ${ZODIAC[p.saju.year.branch]}띠`}</small></span>
       <span class="p-act">
-        <button class="icon-btn" type="button" data-edit aria-label="${esc(p.name)} 수정"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4zM14 6l4 4"/></svg></button>
-        <button class="icon-btn" type="button" data-del aria-label="${esc(p.name)} 삭제"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13"/></svg></button>
+        <button class="icon-btn" type="button" data-edit aria-label="${esc(p.name)} 수정"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4zM14 6l4 4"/></svg></button>
+        <button class="icon-btn" type="button" data-del aria-label="${esc(p.name)} 삭제"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13"/></svg></button>
       </span>`;
     li.querySelector('[data-edit]').addEventListener('click', () => startEdit(p.id));
     li.querySelector('[data-del]').addEventListener('click', () => removePerson(p.id));
@@ -143,7 +143,7 @@ function renderBalance() {
     <div class="tag">${lack.map(e => `<span><i class="e-${e}" style="display:inline-block"></i> ${EL_K[e]}(${EL_H[e]})</span>`).join(' ')}</div>
     ${lack.map(e => `<p><b>${EL_K[e]}(${EL_H[e]}) = ${T[e].word}</b> · 전통적으로 ${T[e].season}, ${T[e].color}, ${T[e].dir}과 연결돼요. 재미로 채워 보기: ${T[e].tip}.</p>`).join('')}
     <p>${b.relative ? `모든 오행이 ${Math.round(LACK_RATIO * 100)}% 이상이라 꽤 고른 편이에요.` : `가족 전체 글자 중 ${Math.round(LACK_RATIO * 100)}% 미만인 오행이에요.`} 가장 많은 기운은 <b>${EL_K[b.strong]}(${EL_H[b.strong]})</b>.</p>`;
-  $('#sanhe').innerHTML = model.sanhe.map(s => `<p class="sanhe-note">🎉 <b>가족 삼합 완성!</b> ${s.who.map(i => esc(model.people[i].name)).join('·')}의 ${s.label}가 ${s.branches.map(x => BRANCHES[x]).join('')} ${EL_K[s.el]}(${EL_H[s.el]})국을 이뤄요 — 셋이 뭉치면 한 팀.</p>`).join('');
+  $('#sanhe').innerHTML = model.sanhe.map(s => `<p class="sanhe-note"><span class="mk" aria-hidden="true">三合</span><span><b>가족 삼합 완성!</b> ${s.who.map(i => esc(model.people[i].name)).join('·')}의 ${s.label}가 ${s.branches.map(x => BRANCHES[x]).join('')} ${EL_K[s.el]}(${EL_H[s.el]})국을 이뤄요 — 셋이 뭉치면 한 팀.</span></p>`).join('');
 }
 
 function renderRoles() {
@@ -174,7 +174,7 @@ function renderSaju() {
         <span><b>${esc(p.name)}</b><small>${esc(dateText(p))}${lunarNote}</small></span></header>
       <div class="pillars" role="img" aria-label="${[s.year, s.month, s.day, s.hour].filter(Boolean).map(pillarH).join(' ')}">${cells}</div>
       <p class="saju-meta">일간 <b>${STEMS[s.day.stem]}${EL_H[e]} (${STEMS_K[s.day.stem]}${EL_K[e]})</b> · ${ZODIAC[s.year.branch]}띠 (${BRANCHES[s.year.branch]})</p>
-      ${s.warning ? `<p class="saju-meta" style="color:var(--muted)">⚠️ ${esc(s.warning)}</p>` : ''}
+      ${s.warning ? `<p class="saju-meta" style="color:var(--muted)">${esc(s.warning)}</p>` : ''}
     </article>`;
   }).join('');
 }
@@ -200,7 +200,7 @@ function showPair() {
   $('#pair-body').innerHTML = `
     <div class="pd-head">${dot(A)}<b id="pair-title">${esc(A.name)}</b><span class="vs">×</span>${dot(B)}<b>${esc(B.name)}</b></div>
     <div class="pd-score"><span class="num sc ${p.tone}">${p.score}</span><span class="hl">${p.headline}</span></div>
-    <div class="meter" aria-hidden="true"><i style="left:${p.score}%"></i></div>
+    <div class="meter" aria-hidden="true"><b class="${p.tone}" style="width:${p.score}%"></b></div>
     <p style="margin:0 0 12px;color:var(--ink-2);font-size:14.5px">${advice}</p>
     <ul class="pd-items">${items}</ul>
     <p class="pd-sum">기본 ${W.base}점 ${sum >= 0 ? '+' : '−'} ${Math.abs(sum)}점 = ${p.raw}점${p.raw !== p.score ? ` → ${W.clamp[0]}~${W.clamp[1]} 범위로 맞춰 ${p.score}점` : ''}</p>
@@ -473,7 +473,7 @@ function renderSaved() {
     const li = document.createElement('li');
     const d = new Date(b.at);
     li.innerHTML = `<span><b>${esc(b.title)}</b><small>${b.people.length}명 · ${esc(b.people.map(p => p.name).join(', ')).slice(0, 40)} · ${d.getMonth() + 1}/${d.getDate()}</small></span>
-      <button class="chip-btn" type="button" data-load>불러오기</button><button class="icon-btn" type="button" data-del aria-label="${esc(b.title)} 삭제"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13"/></svg></button>`;
+      <button class="chip-btn" type="button" data-load>불러오기</button><button class="icon-btn" type="button" data-del aria-label="${esc(b.title)} 삭제"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13"/></svg></button>`;
     li.querySelector('[data-load]').addEventListener('click', () => {
       board = { title: b.title, people: b.people.map(p => ({ ...p })), savedId: b.id };
       $('#board-title').value = board.title; resetForm(); commit();
@@ -537,7 +537,7 @@ function importFromHash() {
   board = shared;
   persist();
   $('#shared-note').hidden = false;
-  $('#shared-note').innerHTML = `<div class="note">💌 <span><b>공유받은 궁합판이에요.</b> 내 정보도 넣어 보세요${cur && cur.people?.length ? ' (원래 보드는 "저장한 보드"에 보관했어요)' : ''}.</span></div>`;
+  $('#shared-note').innerHTML = `<div class="note"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="6" width="17" height="12" rx="2"/><path d="M4.5 7.5l7.5 5.5 7.5-5.5"/></svg><span><b>공유받은 궁합판이에요.</b> 내 정보도 넣어 보세요${cur && cur.people?.length ? ' (원래 보드는 "저장한 보드"에 보관했어요)' : ''}.</span></div>`;
   return true;
 }
 
@@ -565,7 +565,7 @@ function setupFestival() {
   if (!f) return;
   const when = f.dday > 0 ? `${f.name}까지 D-${f.dday}` : f.dday === 0 ? `오늘은 ${f.name}!` : `${f.name} 연휴`;
   const el = $('#festival');
-  el.innerHTML = `<div class="festival-in"><span class="moon" aria-hidden="true">${f.kind === 'chuseok' ? '🌕' : '🧧'}</span><span><b>명절 모드 · ${when}</b> — 모인 김에 식구 궁합판 한 장, 단톡방에 던져 보세요.</span></div>`;
+  el.innerHTML = `<div class="festival-in"><span class="moon" aria-hidden="true">${f.kind === 'chuseok' ? '月' : '春'}</span><span><b>명절 모드 · ${when}</b> — 모인 김에 식구 궁합판 한 장, 단톡방에 던져 보세요.</span></div>`;
   el.hidden = false;
   document.body.classList.add('festive');
 }

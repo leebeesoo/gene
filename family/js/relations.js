@@ -207,10 +207,10 @@ export const EL_TRAITS = {
 //  분위기메이커 — 내가 생해 주는 사람 수 + 화(火) 일간이면 1
 //  사랑받는 막내 기운 — 나를 생해 주는 사람 수
 export const ROLE_RULES = [
-  { key: 'mediator', name: '중재자', icon: '⚖️', rule: '상극인 두 사람 사이를 생(生)으로 이어 주는 통관(通關) 횟수. 동점이면 토(土) 일간 우선.' },
-  { key: 'driver', name: '추진자', icon: '🚀', rule: '내 일간이 극(剋)하는 가족 수 + 양간(갑·병·무·경·임)이면 0.5점.' },
-  { key: 'mood', name: '분위기메이커', icon: '🎉', rule: '내 일간이 생(生)해 주는 가족 수 + 화(火) 일간이면 1점.' },
-  { key: 'loved', name: '사랑받는 사람', icon: '🧸', rule: '내 일간을 생(生)해 주는 가족 수.' },
+  { key: 'mediator', name: '중재자', icon: '中', rule: '상극인 두 사람 사이를 생(生)으로 이어 주는 통관(通關) 횟수. 동점이면 토(土) 일간 우선.' },
+  { key: 'driver', name: '추진자', icon: '進', rule: '내 일간이 극(剋)하는 가족 수 + 양간(갑·병·무·경·임)이면 0.5점.' },
+  { key: 'mood', name: '분위기메이커', icon: '樂', rule: '내 일간이 생(生)해 주는 가족 수 + 화(火) 일간이면 1점.' },
+  { key: 'loved', name: '사랑받는 사람', icon: '愛', rule: '내 일간을 생(生)해 주는 가족 수.' },
 ];
 export function familyRoles(people) {
   const els = people.map(p => STEM_EL[p.saju.day.stem]);

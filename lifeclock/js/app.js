@@ -149,8 +149,31 @@
       '</svg>';
   }
 
+  /* ---------- 아이콘 (1.5px 선, 24 그리드) ---------- */
+  var IC = {
+    sofa: '<path d="M5 11V8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3"/><path d="M3 13a2 2 0 0 1 4 0v2h10v-2a2 2 0 0 1 4 0v4H3z"/><path d="M5 17v2M19 17v2"/>',
+    blossom: '<circle cx="12" cy="12" r="2"/><path d="M12 10C10.5 7.5 10.8 5 12 3.5c1.2 1.5 1.5 4 0 6.5zM14 12c2.5-1.5 5-1.2 6.5 0-1.5 1.2-4 1.5-6.5 0zM12 14c1.5 2.5 1.2 5 0 6.5-1.2-1.5-1.5-4 0-6.5zM10 12c-2.5 1.5-5 1.2-6.5 0 1.5-1.2 4-1.5 6.5 0z"/>',
+    moon: '<circle cx="12" cy="12" r="8"/><circle cx="9.5" cy="10" r="1.5"/><circle cx="14.5" cy="14.5" r="1"/>',
+    pouch: '<path d="M9.5 7h5L13.5 4h-3z"/><path d="M9 7c-3.5 2.5-4.5 6-4 9a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4c.5-3-.5-6.5-4-9z"/><path d="M9 7h6"/>',
+    ball: '<circle cx="12" cy="12" r="8.5"/><path d="M12 8.5l3 2.2-1.1 3.5h-3.8L9 10.7z"/><path d="M12 8.5V3.5M15 10.7l4.5-1.4M13.9 14.2l2.7 3.8M10.1 14.2l-2.7 3.8M9 10.7 4.5 9.3"/>',
+    ballot: '<path d="M4 12h16v8H4z"/><path d="M8 12V4.5h8V12"/><path d="M10 8.2l1.6 1.6L14.2 7"/>',
+    cake: '<path d="M4 20h16M5 20v-7h14v7"/><path d="M5 16.5c2 1.2 3.5 1.2 5 0s3-1.2 5 0 3 1.2 4 0"/><path d="M12 13V9.5"/><path d="M12 7.5c-.8-.8-.8-1.8 0-3 .8 1.2.8 2.2 0 3z"/>',
+    mind: '<circle cx="12" cy="12" r="8.5"/><path d="M9 10h.01M15 10h.01M8.8 14.5c1.8 1.5 4.6 1.5 6.4 0"/>',
+    close: '<path d="M6 6l12 12M18 6 6 18"/>',
+    lotto: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.5"/>',
+    lottomap: '<path d="M12 20.5s-6.5-5.4-6.5-10.5a6.5 6.5 0 0 1 13 0c0 5.1-6.5 10.5-6.5 10.5z"/><circle cx="12" cy="10" r="2.5"/>',
+    market: '<path d="M4 10h16l-1.6 9.2a1 1 0 0 1-1 .8H6.6a1 1 0 0 1-1-.8z"/><path d="M8.5 10 12 4l3.5 6M9.5 14v3M14.5 14v3"/>',
+    season: '<path d="M5.5 18.5C5.5 10.5 10.5 5.5 19 5c0 8.5-5 13.5-13.5 13.5z"/><path d="M5.5 18.5l7-7"/>',
+    hanki: '<path d="M4 12h16a8 8 0 0 1-16 0z"/><path d="M9 20.5h6M13 9l6-5.5M10 9l5-5.5"/>',
+    roots: '<path d="M12 21v-9"/><path d="M12 12c0-4 3-6.5 7-6.5 0 4-3 6.5-7 6.5zM12 14.5c0-3-2.5-5.5-6-5.5 0 3 2.5 5.5 6 5.5z"/>',
+    family: '<path d="M4 11 12 4l8 7"/><path d="M6 9.5V20h12V9.5"/><path d="M10 20v-5h4v5"/>',
+    names: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12l6-6"/>',
+    birthyear: '<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9.5h16M8.5 3v4M15.5 3v4"/>'
+  };
+  function svgIc(k) { return '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' + (IC[k] || '') + '</svg>'; }
+
   function tile(ic, label, val, unit, sub, cls) {
-    return '<div class="tile ' + (cls || '') + '"><div class="ic" aria-hidden="true">' + ic + '</div><div><div class="l">' + label + '</div><div class="v num">' + val + '<small>' + unit + '</small></div>' + (sub ? '<div class="s">' + sub + '</div>' : '') + '</div></div>';
+    return '<div class="tile ' + (cls || '') + '"><div class="ic" aria-hidden="true">' + svgIc(ic) + '</div><div><div class="l">' + label + '</div><div class="v num">' + val + '<small>' + unit + '</small></div>' + (sub ? '<div class="s">' + sub + '</div>' : '') + '</div></div>';
   }
 
   function lifestyleHtml(s, p) {
@@ -191,11 +214,11 @@
     var html = '';
     if (past.length) {
       var lp = past[past.length - 1];
-      html += '<li class="ms done"><span class="n">' + lp.label + ' ✓</span><span class="d">' + dateKo(lp.at) + '에 지났어요</span><span class="cd num">' + fmt(Math.floor(-lp.msLeft / C.DAY)) + '<small>일 전</small></span></li>';
+      html += '<li class="ms done"><span class="n">' + lp.label + '</span><span class="d">' + dateKo(lp.at) + '에 지났어요</span><span class="cd num">' + fmt(Math.floor(-lp.msLeft / C.DAY)) + '<small>일 전</small></span></li>';
     }
     up.forEach(function (m, i) {
       var soon = m.msLeft < 30 * C.DAY;
-      html += '<li class="ms' + (soon ? ' soon' : '') + (i === 0 ? ' next' : '') + '"><span class="n">' + (soon ? '⏰ ' : '') + '인생 ' + m.label + '</span><span class="d">' + dateKo(m.at) + ' ' + String(m.at.getHours()).padStart(2, '0') + ':' + String(m.at.getMinutes()).padStart(2, '0') + '</span><span class="cd num">' + dday(m.msLeft) + '<small>' + (soon ? '곧 다가와요' : '남았어요') + '</small></span>' +
+      html += '<li class="ms' + (soon ? ' soon' : '') + (i === 0 ? ' next' : '') + '"><span class="n">' + '인생 ' + m.label + '</span><span class="d">' + dateKo(m.at) + ' ' + String(m.at.getHours()).padStart(2, '0') + ':' + String(m.at.getMinutes()).padStart(2, '0') + '</span><span class="cd num">' + dday(m.msLeft) + '<small>' + (soon ? '곧 다가와요' : '남았어요') + '</small></span>' +
         (i === 0 ? '<span class="live num" data-live="' + m.at.getTime() + '">' + countdown(m.msLeft) + ' 남음</span>' : '') +
         '<button class="ics" type="button" data-ics="' + m.at.getTime() + '" data-label="' + esc(m.label) + '">캘린더에 추가</button></li>';
     });
@@ -228,14 +251,14 @@
   function mentalHtml(s) {
     var q = state.quiz && state.quiz.done ? C.mentalAge(D.QUIZ, state.quiz.answers) : null;
     if (!q) {
-      return '<div class="card mental-cta"><div class="ic" aria-hidden="true">🧠</div><div><h3>내 정신 나이는 몇 살?</h3><p>상황 질문 12개, 1분이면 끝나요.</p><button class="btn btn-ink btn-sm" type="button" data-action="quiz">정신 나이 테스트 시작</button></div></div>';
+      return '<div class="card mental-cta"><div class="ic" aria-hidden="true">' + svgIc('mind') + '</div><div><h3>내 정신 나이는 몇 살?</h3><p>상황 질문 12개, 1분이면 끝나요.</p><button class="btn btn-ink btn-sm" type="button" data-action="quiz">정신 나이 테스트 시작</button></div></div>';
     }
     var t = C.mentalType(D.MENTAL_TYPES, q.age);
     var diff = q.age - s.ages.man;
     var diffTxt = diff === 0 ? '실제 나이(만 ' + s.ages.man + '세)와 딱 같아요. 몸과 마음의 시계가 맞춰져 있네요.' :
       '실제 나이(만 ' + s.ages.man + '세)보다 <b>' + Math.abs(diff) + '살 ' + (diff > 0 ? '많아요' : '어려요') + '</b>.';
     var rows = q.rows.map(function (r, i) { return '<tr><td>' + (i + 1) + '. ' + esc(r.a) + '</td><td>' + r.pts + '세</td></tr>'; }).join('');
-    return '<div class="card mres"><div class="head"><div class="em" aria-hidden="true">' + t.emoji + '</div><div><div class="type">' + t.name + '</div><div class="age num">정신 나이 ' + q.age + '세</div></div></div>' +
+    return '<div class="card mres"><div class="head"><div><div class="type">' + t.name + '</div><div class="age num">정신 나이 ' + q.age + '세</div></div></div>' +
       '<p class="diff">' + diffTxt + ' ' + t.desc + '</p>' +
       '<details><summary>점수 계산 보기</summary><p style="margin:8px 0 0">선택지마다 나이 점수가 있고, 12개 점수의 평균이 정신 나이예요: ' + fmt(q.sum) + ' ÷ ' + q.n + ' = ' + fmt1(q.exact) + ' → ' + q.age + '세. 재미로 보는 테스트예요.</p><table class="score"><thead><tr><th>내 선택</th><th>점수</th></tr></thead><tbody>' + rows + '</tbody></table></details>' +
       '<div class="btns" style="margin-top:14px"><button class="btn btn-ghost btn-sm" type="button" data-action="quiz">다시 하기</button></div></div>';
@@ -253,7 +276,7 @@
     box.innerHTML = '<ul class="fam-list">' + state.family.map(function (f, i) {
       var s = C.summary(D.LIFE_TABLE, f, now);
       var nx = C.milestones(D.MILESTONES, s.birth, now).filter(function (m) { return !m.past; })[0];
-      return '<li class="fam"><span class="n">' + esc(f.name) + ' <small style="color:var(--muted);font-weight:600">만 ' + s.ages.man + '세</small></span><span class="d num">인생 ' + fmt(s.lived.nthDay) + '번째 날 · 남은 추석 약 ' + s.counts.chuseok + '번' + (nx ? ' · ' + nx.label + ' ' + dday(nx.msLeft) : '') + '</span><button class="x" type="button" data-del="' + i + '" aria-label="' + esc(f.name) + ' 삭제">✕</button></li>';
+      return '<li class="fam"><span class="n">' + esc(f.name) + ' <small>만 ' + s.ages.man + '세</small></span><span class="d num">인생 ' + fmt(s.lived.nthDay) + '번째 날 · 남은 추석 약 ' + s.counts.chuseok + '번' + (nx ? ' · ' + nx.label + ' ' + dday(nx.msLeft) : '') + '</span><button class="x" type="button" data-del="' + i + '" aria-label="' + esc(f.name) + ' 삭제">' + svgIc('close') + '</button></li>';
     }).join('') + '</ul>';
   }
 
@@ -278,13 +301,13 @@
       '<div class="bar" role="progressbar" aria-label="기대수명 대비 지나온 시간" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + Math.round(s.progress * 100) + '"><i style="width:' + (s.progress * 100).toFixed(1) + '%"></i></div><div class="bar-l"><span>지나온 ' + (s.progress * 100).toFixed(1) + '%</span><span>남은 약 ' + fmt(s.remHours) + '시간</span></div></div></section>' +
 
       '<section class="sec" aria-labelledby="leftT"><h2 class="sec-h" id="leftT">앞으로 남은 횟수</h2><p class="sec-sub">평균대로 산다면, 이만큼이 남았어요.</p><div class="grid">' +
-      tile('🛋️', '남은 주말', fmt(c.weekends), '번', '토·일 한 쌍 기준', 'hl') +
-      tile('🌸', '남은 벚꽃', fmt(c.blossom), '번', '봄마다 한 번') +
-      tile('🌕', '남은 추석', fmt(c.chuseok), '번', '해마다 한 번') +
-      tile('🧧', '남은 설날', fmt(c.seollal), '번', '해마다 한 번') +
-      tile('⚽', '남은 월드컵', fmt(c.worldcup.n), '번', c.worldcup.first ? c.worldcup.first + '년 대회부터' : '') +
-      tile('🗳️', '남은 대선', fmt(c.election.n), '번', '5년 주기 가정') +
-      tile('🎂', '남은 생일', fmt(c.birthdays), '번', '다음 생일 D-' + s.ages.daysToBirthday, 'wide') +
+      tile('sofa', '남은 주말', fmt(c.weekends), '번', '토·일 한 쌍 기준', 'hl') +
+      tile('blossom', '남은 벚꽃', fmt(c.blossom), '번', '봄마다 한 번') +
+      tile('moon', '남은 추석', fmt(c.chuseok), '번', '해마다 한 번') +
+      tile('pouch', '남은 설날', fmt(c.seollal), '번', '해마다 한 번') +
+      tile('ball', '남은 월드컵', fmt(c.worldcup.n), '번', c.worldcup.first ? c.worldcup.first + '년 대회부터' : '') +
+      tile('ballot', '남은 대선', fmt(c.election.n), '번', '5년 주기 가정') +
+      tile('cake', '남은 생일', fmt(c.birthdays), '번', '다음 생일 D-' + s.ages.daysToBirthday, 'wide') +
       '</div></section>' +
 
       '<section class="sec" aria-labelledby="wkT"><h2 class="sec-h" id="wkT">인생 주 단위 달력</h2><p class="sec-sub">한 칸이 1주, 한 줄이 1년이에요. 지금까지 ' + fmt(s.lived.weeks) + '주를 살았어요.</p>' +
@@ -546,7 +569,7 @@
   }
   function renderQ() {
     var Q = D.QUIZ[qi], n = D.QUIZ.length;
-    $('#quiz').innerHTML = '<div class="qtop"><button class="icon-btn" type="button" data-q="back" aria-label="' + (qi ? '이전 질문' : '테스트 나가기') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button><div class="prog" role="progressbar" aria-label="진행률" aria-valuemin="0" aria-valuemax="' + n + '" aria-valuenow="' + qi + '"><i style="width:' + (qi / n * 100) + '%"></i></div><span class="prog-n num">' + (qi + 1) + '/' + n + '</span></div>' +
+    $('#quiz').innerHTML = '<div class="qtop"><button class="icon-btn" type="button" data-q="back" aria-label="' + (qi ? '이전 질문' : '테스트 나가기') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button><div class="prog" role="progressbar" aria-label="진행률" aria-valuemin="0" aria-valuemax="' + n + '" aria-valuenow="' + qi + '"><i style="width:' + (qi / n * 100) + '%"></i></div><span class="prog-n num">' + (qi + 1) + '/' + n + '</span></div>' +
       '<div class="qnum">Q' + (qi + 1) + '</div><h2 class="qtext" id="qText" tabindex="-1">' + esc(Q.q) + '</h2><div class="opts" role="group" aria-labelledby="qText">' +
       Q.a.map(function (a, k) { return '<button class="opt" type="button" data-k="' + k + '" aria-pressed="' + (qa[qi] === k) + '">' + esc(a[0]) + '</button>'; }).join('') + '</div>';
     $('#qText').focus({ preventScroll: true });
@@ -577,7 +600,7 @@
 
   /* ---------- 기타 ---------- */
   $('#nextGrid').innerHTML = D.NEXT_TESTS.map(function (t) {
-    return '<a href="' + t.href + '"><span class="ic" aria-hidden="true">' + t.icon + '</span><span><b>' + t.name + '</b><small>' + t.desc + '</small></span></a>';
+    return '<a href="' + t.href + '"><span class="ic" aria-hidden="true">' + svgIc(t.icon) + '</span><span><b>' + t.name + '</b><small>' + t.desc + '</small></span></a>';
   }).join('');
   $('#lnkSources').addEventListener('click', function () { $('#sources').open = true; });
 

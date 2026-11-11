@@ -447,7 +447,7 @@
   function afterBalls(animated) {
     var R = cur.R, g = cur.g;
     var digits = g.digits.map(function (x) { return x === 0 ? '0' : x; }).join('·');
-    $('#digitNote').innerHTML = '<span class="st" aria-hidden="true">★</span>' + elName(R.luckyEl) + ' 기운 숫자 · 끝자리 ' + digits;
+    $('#digitNote').innerHTML = '<span class="st" aria-hidden="true"></span>' + elName(R.luckyEl) + ' 기운 숫자 · 끝자리 ' + digits;
     $('#ballsLive').textContent = cur.p.name + '님의 오늘 번호: ' + g.nums.join(', ') + ', 행운 번호 ' + g.bonus;
     setLucky(R, animated);
     setScore(R, animated);
@@ -462,7 +462,7 @@
     $('#scoreTag').textContent = R.relTag;
     $('#scoreLine').textContent = R.line;
     $('#scoreTip').textContent = R.tip;
-    var color = R.score >= 85 ? 'var(--brand)' : R.score >= 75 ? '#E2861A' : 'var(--el4)';
+    var color = 'var(--brand)';
     fg.style.stroke = color;
     requestAnimationFrame(function () { fg.style.strokeDashoffset = String(169.65 * (1 - R.score / 100)); });
     if (animated && !reduceMotion) {
@@ -766,54 +766,41 @@
   }
   var BALL_HEX = { 'c-y': '#FBC400', 'c-b': '#69C8F2', 'c-r': '#FF7272', 'c-k': '#AAAAAA', 'c-g': '#B0D840' };
   function drawBall(ctx, x, y, r, n, F) {
-    var base = BALL_HEX[colorClass(n)];
-    ctx.save();
-    ctx.shadowColor = 'rgba(0,0,0,.35)'; ctx.shadowBlur = r * .5; ctx.shadowOffsetY = r * .18;
-    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fillStyle = base; ctx.fill();
-    ctx.restore();
-    var g1 = ctx.createRadialGradient(x - r * .35, y - r * .4, r * .05, x - r * .2, y - r * .25, r * 1.1);
-    g1.addColorStop(0, 'rgba(255,255,255,.85)'); g1.addColorStop(.18, 'rgba(255,255,255,.28)'); g1.addColorStop(.5, 'rgba(255,255,255,0)'); g1.addColorStop(1, 'rgba(0,0,0,.18)');
-    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fillStyle = g1; ctx.fill();
-    ctx.fillStyle = '#fff'; ctx.font = '800 ' + Math.round(r * .9) + 'px ' + F; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'rgba(0,0,0,.4)'; ctx.shadowBlur = 4; ctx.shadowOffsetY = 2;
+    // 공식 5색 평면 원
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fillStyle = BALL_HEX[colorClass(n)]; ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.font = '700 ' + Math.round(r * .9) + 'px ' + F; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillText(String(n), x, y + r * .05);
-    ctx.shadowColor = 'transparent';
   }
   function drawCard() {
     var W = 1080, H = 1350, c = document.createElement('canvas'); c.width = W; c.height = H;
     var ctx = c.getContext('2d'), F = '"Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif';
-    var bg = ctx.createLinearGradient(0, 0, W * .6, H);
-    bg.addColorStop(0, '#1A1434'); bg.addColorStop(1, '#2D2167');
-    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
-    function glow(x, y, r, col) { var g = ctx.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, col); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
-    glow(W, 0, 760, 'rgba(243,181,63,.40)'); glow(0, H, 760, 'rgba(232,67,43,.38)');
-    var r = E.rng(cur.hex, 'stars'); ctx.fillStyle = 'rgba(255,255,255,.6)';
-    for (var i = 0; i < 46; i++) { ctx.beginPath(); ctx.arc(r() * W, r() * H, r() * 2.2 + .6, 0, 7); ctx.fill(); }
+    var BG = '#F6F6F4', SURF = '#FFFFFF', INK = '#16171A', MUTED = '#6B6E75', LINE = '#E4E4E1', ACC = '#D9381E';
+    ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
 
     // brand
-    drawBall(ctx, 98, 104, 26, 7, F);
-    ctx.fillStyle = '#fff'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.font = '800 40px ' + F; ctx.fillText('오늘로또', 140, 106);
-    ctx.font = '800 30px ' + F; var rt = '제 ' + cur.info.round + '회';
+    ctx.fillStyle = ACC; ctx.beginPath(); ctx.arc(84, 106, 10, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = INK; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.font = '700 36px ' + F; ctx.fillText('오늘로또', 108, 108);
+    ctx.font = '700 28px ' + F; var rt = '제 ' + cur.info.round + '회';
     var tw = ctx.measureText(rt).width + 44;
-    var pg = ctx.createLinearGradient(W - 72 - tw, 0, W - 72, 0); pg.addColorStop(0, '#FFD978'); pg.addColorStop(1, '#FFB24A');
-    ctx.fillStyle = pg; roundRect(ctx, W - 72 - tw, 80, tw, 52, 26); ctx.fill();
-    ctx.fillStyle = '#3A2400'; ctx.textAlign = 'center'; ctx.fillText(rt, W - 72 - tw / 2, 107);
+    ctx.fillStyle = SURF; roundRect(ctx, W - 72 - tw, 82, tw, 52, 26); ctx.fill();
+    ctx.strokeStyle = LINE; ctx.lineWidth = 2; ctx.stroke();
+    ctx.fillStyle = INK; ctx.textAlign = 'center'; ctx.fillText(rt, W - 72 - tw / 2, 109);
+    ctx.fillStyle = LINE; ctx.fillRect(72, 176, W - 144, 2);
 
     // title
-    ctx.textAlign = 'left'; ctx.fillStyle = 'rgba(255,255,255,.7)'; ctx.font = '600 34px ' + F;
-    ctx.fillText(fmtKeyLong(today), 72, 250);
-    ctx.fillStyle = '#fff'; ctx.font = '800 72px ' + F;
+    ctx.textAlign = 'left'; ctx.fillStyle = MUTED; ctx.font = '500 32px ' + F;
+    ctx.fillText(fmtKeyLong(today), 72, 254);
+    ctx.fillStyle = INK; ctx.font = '700 72px ' + F;
     var nm = cur.p.name.length > 6 ? cur.p.name.slice(0, 6) + '…' : cur.p.name;
-    ctx.fillText(nm + '님의', 72, 340);
-    var tg = ctx.createLinearGradient(72, 0, 700, 0); tg.addColorStop(0, '#FFD978'); tg.addColorStop(.55, '#FFB24A'); tg.addColorStop(1, '#FF8A5C');
-    ctx.fillStyle = tg; ctx.fillText('오늘의 행운 번호', 72, 432);
+    ctx.fillText(nm + '님의', 72, 342);
+    ctx.fillText('오늘의 행운 번호', 72, 432);
 
     // balls panel
-    ctx.fillStyle = 'rgba(255,255,255,.07)'; roundRect(ctx, 56, 500, W - 112, 330, 44); ctx.fill();
-    ctx.strokeStyle = 'rgba(255,255,255,.12)'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.fillStyle = SURF; roundRect(ctx, 56, 500, W - 112, 330, 24); ctx.fill();
+    ctx.strokeStyle = LINE; ctx.lineWidth = 2; ctx.stroke();
     var br = 64, gap = 18, total = 6 * br * 2 + 5 * gap, sx = (W - total) / 2 + br;
     cur.g.nums.forEach(function (n, i) { drawBall(ctx, sx + i * (br * 2 + gap), 625, br, n, F); });
-    ctx.fillStyle = 'rgba(255,255,255,.65)'; ctx.font = '700 30px ' + F; ctx.textAlign = 'right';
+    ctx.fillStyle = MUTED; ctx.font = '500 30px ' + F; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
     ctx.fillText('+ 행운 번호', W / 2 + 20, 760);
     drawBall(ctx, W / 2 + 80, 758, 40, cur.g.bonus, F);
 
@@ -821,15 +808,16 @@
     var R = cur.R, rows = [['행운 시간', R.time.label], ['행운 방향', R.dir + '쪽'], ['행운 장소', R.place], ['행운 점수', R.score + '점 · ' + R.relTag]];
     rows.forEach(function (row, i) {
       var y = 912 + i * 82;
-      ctx.textAlign = 'left'; ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.font = '600 32px ' + F; ctx.fillText(row[0], 84, y);
-      ctx.fillStyle = '#fff'; ctx.font = '800 38px ' + F; ctx.textAlign = 'right'; ctx.fillText(row[1], W - 84, y);
-      if (i < rows.length - 1) { ctx.fillStyle = 'rgba(255,255,255,.1)'; ctx.fillRect(84, y + 40, W - 168, 2); }
+      ctx.textAlign = 'left'; ctx.fillStyle = MUTED; ctx.font = '500 32px ' + F; ctx.fillText(row[0], 84, y);
+      ctx.fillStyle = i === 3 ? ACC : INK; ctx.font = '700 36px ' + F; ctx.textAlign = 'right'; ctx.fillText(row[1], W - 84, y);
+      if (i < rows.length - 1) { ctx.fillStyle = LINE; ctx.fillRect(84, y + 40, W - 168, 2); }
     });
 
     // footer
-    ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.font = '700 32px ' + F;
+    ctx.fillStyle = LINE; ctx.fillRect(72, 1206, W - 144, 2);
+    ctx.textAlign = 'center'; ctx.fillStyle = INK; ctx.font = '700 30px ' + F;
     ctx.fillText('나도 내 번호 뽑기 → ' + location.host + location.pathname.replace(/index\.html$/, ''), W / 2, 1258);
-    ctx.fillStyle = 'rgba(255,255,255,.45)'; ctx.font = '500 24px ' + F;
+    ctx.fillStyle = MUTED; ctx.font = '500 24px ' + F;
     ctx.fillText('재미로 보는 번호예요 · 당첨을 보장하지 않습니다', W / 2, 1304);
     return c;
   }
@@ -846,7 +834,7 @@
       if (dlg.showModal) { if (!dlg.open) dlg.showModal(); } else dlg.setAttribute('open', '');
     };
     if (document.fonts && document.fonts.load) {
-      Promise.all([document.fonts.load('800 40px "Pretendard Variable"'), document.fonts.load('600 30px "Pretendard Variable"')]).then(go, go);
+      Promise.all([document.fonts.load('700 40px "Pretendard Variable"'), document.fonts.load('500 30px "Pretendard Variable"')]).then(go, go);
     } else go();
   }
   function shareText() { return cur.p.name + '님의 제' + cur.info.round + '회 행운 번호: ' + cur.g.nums.join(' ') + ' · 너도 뽑아봐!'; }

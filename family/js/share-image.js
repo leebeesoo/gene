@@ -3,7 +3,8 @@ import { STEMS, STEM_EL, EL_COLOR, EL_INK, EL_K, EL_H, ELS, ZODIAC } from './gan
 import { layout, edgeWidth } from './graph.js';
 
 const W = 1080, H = 1350;
-const C = { paper: '#f5efe3', paper2: '#ece3cf', card: '#fffbf2', ink: '#1b2333', ink2: '#474f60', muted: '#7a7263', navy: '#15213b', navy2: '#0c162b', red: '#b8332a', gold: '#f2c46a', good: '#2f9e6a', mid: '#a3a8b1', bad: '#d0453a', line: 'rgba(27,35,51,.14)' };
+// 한지 바탕 · 먹 글씨 · 청록 포인트 (그라데이션·그림자 없음)
+const C = { paper: '#F3F1EC', paper2: '#EAE7E0', card: '#FBFAF7', ink: '#1C1C1E', ink2: '#45423D', muted: '#6F6B64', accent: '#1F5F57', good: '#3F7D62', mid: '#A39E95', bad: '#B5574B', line: '#DDD8CE' };
 const SANS = '"Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
 const SERIF = '"Noto Serif KR", serif';
 const TONE = { good: C.good, mid: C.mid, bad: C.bad };
@@ -11,8 +12,8 @@ const TONE = { good: C.good, mid: C.mid, bad: C.bad };
 async function fontsReady() {
   try {
     await Promise.all([
-      document.fonts.load(`900 60px ${SERIF}`, '食궁합甲乙丙丁戊己庚辛壬癸'),
-      document.fonts.load(`800 40px ${SANS}`, '식구궁합 가족'),
+      document.fonts.load(`700 60px ${SERIF}`, '食궁합甲乙丙丁戊己庚辛壬癸'),
+      document.fonts.load(`700 40px ${SANS}`, '식구궁합 가족'),
       document.fonts.load(`600 30px ${SANS}`, '식구궁합 가족'),
     ]);
     await document.fonts.ready;
@@ -42,22 +43,16 @@ export async function drawShareImage(model) {
   // 배경
   ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, H);
   // 헤더
-  const hg = ctx.createLinearGradient(0, 0, W, 300);
-  hg.addColorStop(0, '#24365c'); hg.addColorStop(1, C.navy2);
-  ctx.fillStyle = hg; ctx.fillRect(0, 0, W, 250);
-  const stripe = [EL_COLOR.wood, EL_COLOR.fire, EL_COLOR.earth, EL_COLOR.metal, '#22314f'];
-  stripe.forEach((c, i) => { ctx.fillStyle = c; ctx.fillRect((W / 5) * i, 250, W / 5, 12); });
-
-  ctx.save(); ctx.translate(92, 92); ctx.rotate(-0.07);
-  ctx.fillStyle = C.red; rr(ctx, -36, -36, 72, 72, 14); ctx.fill();
-  ctx.fillStyle = '#fbf3e4'; ctx.font = `900 40px ${SERIF}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillText('食', 0, 2); ctx.restore();
+  ctx.fillStyle = C.accent; rr(ctx, 56, 56, 64, 64, 10); ctx.fill();
+  ctx.fillStyle = C.card; ctx.font = `700 36px ${SERIF}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('食', 88, 90);
   ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
-  ctx.fillStyle = '#e9d9b5'; ctx.font = `700 30px ${SANS}`; ctx.fillText('식구궁합', 150, 104);
-  ctx.fillStyle = '#f5efe3'; ctx.font = `900 64px ${SERIF}`;
-  ctx.fillText(fitText(ctx, `${model.title} 궁합판`, W - 120), 56, 196);
-  ctx.textAlign = 'right'; ctx.fillStyle = C.gold; ctx.font = `800 30px ${SANS}`;
-  ctx.fillText(`${people.length}명 · 평균 ${model.avg}점`, W - 56, 104);
+  ctx.fillStyle = C.ink; ctx.font = `700 30px ${SANS}`; ctx.fillText('식구궁합', 140, 100);
+  ctx.fillStyle = C.ink; ctx.font = `700 64px ${SERIF}`;
+  ctx.fillText(fitText(ctx, `${model.title} 궁합판`, W - 112), 56, 208);
+  ctx.textAlign = 'right'; ctx.fillStyle = C.muted; ctx.font = `500 30px ${SANS}`;
+  ctx.fillText(`${people.length}명 · 평균 ${model.avg}점`, W - 56, 100);
+  ctx.fillStyle = C.line; ctx.fillRect(56, 250, W - 112, 2);
 
   // 관계도
   const n = people.length, cx = W / 2, cy = 618, R = n <= 3 ? 240 : n % 2 === 0 ? 250 : 280;
@@ -82,7 +77,7 @@ export async function drawShareImage(model) {
           placed.push({ x, y });
           ctx.fillStyle = C.card; rr(ctx, x - 34, y - 22, 68, 44, 22); ctx.fill();
           ctx.lineWidth = 3; ctx.strokeStyle = TONE[p.tone]; ctx.stroke();
-          ctx.fillStyle = TONE[p.tone]; ctx.font = `900 26px ${SANS}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          ctx.fillStyle = TONE[p.tone]; ctx.font = `700 26px ${SANS}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
           ctx.fillText(String(p.score), x, y + 1);
           break;
         }
@@ -94,11 +89,11 @@ export async function drawShareImage(model) {
     const e = STEM_EL[person.saju.day.stem];
     ctx.fillStyle = C.card; ctx.beginPath(); ctx.arc(x, y, nr + 9, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = EL_COLOR[e]; ctx.beginPath(); ctx.arc(x, y, nr, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = EL_INK[e]; ctx.font = `900 ${Math.round(nr * 0.8)}px ${SERIF}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = EL_INK[e]; ctx.font = `700 ${Math.round(nr * 0.8)}px ${SERIF}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillText(STEMS[person.saju.day.stem], x, y + 3);
     ctx.textBaseline = 'alphabetic';
     ctx.lineJoin = 'round'; ctx.strokeStyle = C.paper; ctx.lineWidth = 10;
-    ctx.font = `800 32px ${SANS}`;
+    ctx.font = `700 32px ${SANS}`;
     const nm = fitText(ctx, person.name, 230);
     ctx.strokeText(nm, x, y + nr + 44); ctx.fillStyle = C.ink; ctx.fillText(nm, x, y + nr + 44);
     ctx.font = `600 23px ${SANS}`;
@@ -114,13 +109,13 @@ export async function drawShareImage(model) {
   const cw = cards.length === 2 ? (W - 56 * 2 - 24) / 2 : W - 112;
   cards.forEach(([label, p], k) => {
     const x = 56 + k * (cw + 24);
-    ctx.fillStyle = C.card; rr(ctx, x, cardY, cw, 128, 26); ctx.fill();
+    ctx.fillStyle = C.card; rr(ctx, x, cardY, cw, 128, 16); ctx.fill();
     ctx.strokeStyle = C.line; ctx.lineWidth = 2; ctx.stroke();
     ctx.textAlign = 'left';
-    ctx.fillStyle = TONE[p.tone]; ctx.font = `800 24px ${SANS}`; ctx.fillText(label, x + 26, cardY + 42);
-    ctx.fillStyle = C.ink; ctx.font = `800 31px ${SANS}`;
+    ctx.fillStyle = TONE[p.tone]; ctx.font = `700 24px ${SANS}`; ctx.fillText(label, x + 26, cardY + 42);
+    ctx.fillStyle = C.ink; ctx.font = `700 31px ${SANS}`;
     ctx.fillText(fitText(ctx, `${people[p.i].name} × ${people[p.j].name}`, cw - 150), x + 26, cardY + 92);
-    ctx.textAlign = 'right'; ctx.fillStyle = TONE[p.tone]; ctx.font = `900 56px ${SERIF}`;
+    ctx.textAlign = 'right'; ctx.fillStyle = TONE[p.tone]; ctx.font = `700 56px ${SANS}`;
     ctx.fillText(String(p.score), x + cw - 24, cardY + 96);
   });
 
@@ -131,19 +126,19 @@ export async function drawShareImage(model) {
 
   // 오행 밸런스 바
   const bx = 56, by = 1196, bw = W - 112, bh = 40;
-  ctx.save(); rr(ctx, bx, by, bw, bh, 14); ctx.clip();
+  ctx.save(); rr(ctx, bx, by, bw, bh, 10); ctx.clip();
   let acc = bx;
   ELS.forEach(e => {
     const w = bw * balance.ratio[e];
     ctx.fillStyle = EL_COLOR[e]; ctx.fillRect(acc, by, w + 0.5, bh);
     if (w > 70) {
-      ctx.fillStyle = EL_INK[e]; ctx.font = `800 21px ${SANS}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillStyle = EL_INK[e]; ctx.font = `700 21px ${SANS}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       ctx.fillText(`${EL_H[e]} ${Math.round(balance.ratio[e] * 100)}%`, acc + w / 2, by + bh / 2 + 1);
     }
     acc += w;
   });
   ctx.restore();
-  ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left'; ctx.fillStyle = C.ink; ctx.font = `800 25px ${SANS}`;
+  ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left'; ctx.fillStyle = C.ink; ctx.font = `700 25px ${SANS}`;
   const lack = balance.lack.map(e => `${EL_K[e]}(${EL_H[e]})`).join('·');
   ctx.fillText(`${balance.relative ? '가장 적은 기운' : '우리 가족에게 부족한 기운'}: ${lack}`, bx, by + bh + 36);
 

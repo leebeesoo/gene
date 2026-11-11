@@ -1,14 +1,17 @@
 // 남는 지도: 홈(#/), 지역(#/region/:sido), 신호 상세(#/signal/:id)
 import { store } from '../store.js';
-import { esc, icon, won, num, dateLabel, toast, todayISO } from '../util.js';
+import { esc, icon, won, num, dateLabel } from '../util.js';
 import { REGION_NAMES, isActive } from '../meta.js';
-import { grid, rail, adSlot, emptyState, openSheet, stepper, bindStepper } from '../components.js';
+import { grid, rail, adSlot, emptyState } from '../components.js';
 import { GEO } from '../geo.js';
 import {
   loadSurplus, LEVEL, LEVEL_ORDER, levelOf, EVENT_TYPE, supportOf, regionSummary, eventsOf, sourceById,
-  asOfDate, isStale, pctText, ratioText, placeText, listingsForItem, STAB_LABEL,
+  asOfDate, isStale, pctText, ratioText, placeText, listingsForItem, STAB_LABEL, groupAuctionLows, relDay,
 } from '../surplus.js';
+import { TRADING_OPEN } from '../config.js';
+import { joinCta, loadCounts, progressHTML, progressLine, foodbankHTML, openRuleText } from '../participate.js';
 import { marketHTML, bindMarket } from './home.js';
+import { processBlock } from './process.js';
 
 // ── 조각 ──
 export const levelTag = (lv, cls = '') => `<span class="lv-tag lv-${esc(lv)} ${cls}">${esc(levelOf(lv).label)}</span>`;
@@ -112,9 +115,9 @@ function howItWorks() {
 function emptyBox(data) {
   return `<div class="smap-empty">
     <h2>${data.ok ? '오늘 수집된 신호가 없어요' : '남는 지도 데이터를 불러오지 못했어요'}</h2>
-    <p>${data.ok ? '과잉·폭락·폐기 신호가 잡히면 이 지도에 지역별로 칠해져요. 매일 아침 새로 모아요.' : '네트워크 상태를 확인하고 잠시 후 다시 열어 주세요. 장터는 그대로 이용할 수 있어요.'}</p>
+    <p>${data.ok ? '과잉·폭락·폐기 신호가 잡히면 이 지도에 지역별로 칠해져요. 매일 아침 새로 모아요.' : `네트워크 상태를 확인하고 잠시 후 다시 열어 주세요.${TRADING_OPEN ? ' 장터는 그대로 이용할 수 있어요.' : ''}`}</p>
     <h3>이렇게 만들어요</h3>${howItWorks()}
-    <div class="row-gap start"><a class="btn primary" href="#/market">${icon('store', 16)}장터 둘러보기</a><a class="btn" href="#/farmer">농가 판단 도구</a></div>
+    <div class="row-gap start">${TRADING_OPEN ? `<a class="btn primary" href="#/market">${icon('store', 16)}장터 둘러보기</a>` : `<a class="btn primary" href="#/join?role=report">${icon('pin', 16)}제보하기</a>`}<a class="btn" href="#/farmer">농가 판단 도구</a></div>
   </div>`;
 }
 
@@ -130,6 +133,44 @@ function knowBox() {
   </section>`;
 }
 
+// ── 헐값 경매 ──
+const AUCTION_MAX = 6;
+function dayText(iso) {
+  return relDay(iso) || (iso ? isoDay(iso) : '최근');
+}
+function rangeText(a, b, fmt) {
+  return a === b ? fmt(a) : `${fmt(a)}~${fmt(b)}`;
+}
+export function auctionLine(item, l) {
+  const origin = [l.sido, l.sigungu].filter(Boolean).join(' ');
+  const price = rangeText(Math.round(l.minPpk), Math.round(l.maxPpk), (v) => num(v));
+  const ratio = l.minRatio != null ? `(평균의 ${rangeText(Math.round(l.minRatio * 100), Math.round(l.maxRatio * 100), (v) => v)}%)` : '';
+  const sub = [...l.markets, ...l.varieties].filter(Boolean).join(' · ');
+  return `<li><p>${esc(dayText(l.date))} ${origin ? `${esc(origin)}산 ` : ''}${esc(item)} <b>${num(l.n)}건</b>이 kg당 <b class="ac-price">${price}원</b>${esc(ratio)}에 낙찰</p>${sub ? `<small>${esc(sub)}</small>` : ''}</li>`;
+}
+
+export function auctionSection(data) {
+  const groups = groupAuctionLows(data.auctionLows || []);
+  if (!groups.length) return '';
+  const card = (g) => `<article class="ac">
+    <h3>${esc(g.item)}<span>${num(g.total)}건</span></h3>
+    <ul>${g.lines.slice(0, 3).map((l) => auctionLine(g.item, l)).join('')}</ul>
+    ${g.lines.length > 3 ? `<p class="muted small">외 ${num(g.lines.length - 3)}곳</p>` : ''}</article>`;
+  return `<section class="sec" id="sec-auction" aria-labelledby="h-ac">
+    <div class="sec-head"><h2 id="h-ac">${icon('trend', 20)}헐값 경매</h2><p>공영도매시장 경매에서 같은 품목 당일 평균의 30% 이하로 낙찰된 건</p></div>
+    <div class="ac-grid">${groups.slice(0, AUCTION_MAX).map(card).join('')}</div>
+    ${groups.length > AUCTION_MAX ? `<p class="note">품목 ${num(groups.length - AUCTION_MAX)}개 더 있어요. 낙폭이 큰 순서로 ${AUCTION_MAX}개만 보여요.</p>` : ''}
+    <p class="note">경매가는 등급·상태가 낮은 물량일 수 있어요. 농가가 받은 값은 수수료·운송비를 빼면 더 낮아요.</p>
+  </section>`;
+}
+
+function joinBand() {
+  return `<section class="cta-band join-band" aria-labelledby="h-jb">
+    <div><h2 id="h-jb">거래는 지역별로 신청이 모이면 열려요</h2><p>한 지역에 ${esc(openRuleText())}이 모이면 그 지역부터 장터를 열어요. 제보와 구출 원정대도 미리 받아요.</p></div>
+    <div class="row-gap start"><a class="btn primary lg" href="#/join">${icon('flag', 18)}참여 신청</a><a class="btn lg" href="#/process">${icon('jar', 18)}가공 연결</a></div>
+  </section>`;
+}
+
 // ── 홈 ──
 export async function homeView(ctx) {
   const data = await loadSurplus();
@@ -139,7 +180,7 @@ export async function homeView(ctx) {
   ctx.title = '맛남의 광장 — 오늘 어디서 무엇이 남는지, 버려지기 전에';
   const topSignals = data.signals;
   const disposalEvents = data.events.filter((e) => e.type !== 'forecast').slice(0, 6);
-  const market = await marketHTML({ hero: false });
+  const market = TRADING_OPEN ? await marketHTML({ hero: false }) : '';
 
   ctx.el.innerHTML = `
   <section class="smap-hero" aria-labelledby="h-map">
@@ -151,10 +192,12 @@ export async function homeView(ctx) {
     <figure class="smap">${mapSvg(sum)}<figcaption>${legend()}</figcaption></figure>
     <div class="smap-side">
       ${data.empty ? emptyBox(data) : `<ul class="lv-counts" aria-label="단계별 시·도 수">${LEVEL_ORDER.map((l) => `<li class="lv-${l}"><b>${counts[l]}</b><span>${esc(LEVEL[l].label)}</span></li>`).join('')}</ul>
-      <div class="hero-cta"><a class="btn primary" href="#sec-top" data-jump>${icon('bolt', 16)}남는 품목 보기</a><a class="btn" href="#/farmer">농가라면, 손익부터</a></div>`}
+      <div class="hero-cta"><a class="btn primary" href="#sec-top" data-jump>남는 품목 보기</a><a class="btn" href="#/farmer">농가라면, 손익부터</a></div>`}
       ${dataLine(data)}
     </div>
   </section>
+
+  ${auctionSection(data)}
 
   ${adSlot('detail')}
 
@@ -177,8 +220,8 @@ export async function homeView(ctx) {
 
   ${knowBox()}
 
-  <div class="market-divider" id="sec-market"><h2>${icon('store', 20)}장터에서 바로 구하기</h2><p>농가가 직접 올린 규격외·과잉 물량이에요.</p></div>
-  ${market}`;
+  ${TRADING_OPEN ? `<div class="market-divider" id="sec-market"><h2>${icon('store', 20)}장터에서 바로 구하기</h2><p>농가가 직접 올린 규격외·과잉 물량이에요.</p></div>
+  ${market}` : joinBand()}`;
 
   ctx.el.querySelector('[data-jump]')?.addEventListener('click', (e) => {
     e.preventDefault();
@@ -192,7 +235,7 @@ export async function homeView(ctx) {
     e.currentTarget.parentElement.remove();
     more.querySelector('a')?.focus();
   });
-  await bindMarket(ctx.el);
+  if (TRADING_OPEN) await bindMarket(ctx.el);
 }
 
 // ── 지역 ──
@@ -202,11 +245,13 @@ export async function regionView(ctx) {
     ctx.el.innerHTML = `<section class="page">${emptyState('없는 지역이에요', '17개 시·도 중에서 골라 주세요.', '<a class="btn primary" href="#/">남는 지도로</a>')}</section>`;
     return;
   }
-  const [data, list, wish] = await Promise.all([loadSurplus(), store.getListings(), store.getWishlist()]);
+  const [data, list, wish, counts] = await Promise.all([
+    loadSurplus(), TRADING_OPEN ? store.getListings() : [], TRADING_OPEN ? store.getWishlist() : [], loadCounts(),
+  ]);
   const sum = regionSummary(data)[sido];
   const listings = list.filter((l) => l.region === sido && isActive(l));
   ctx.title = `${sido} 남는 지도 — 맛남의 광장`;
-  ctx.description = `${sido}에서 지금 남거나 값이 떨어진 농산물, 갈아엎기·시장격리 소식, 산지 직거래 상품.`;
+  ctx.description = `${sido}에서 지금 남거나 값이 떨어진 농산물, 갈아엎기·시장격리 소식${TRADING_OPEN ? ', 산지 직거래 상품' : ', 지역별 참여 신청 현황'}.`;
   ctx.el.innerHTML = `<section class="page region">
     <nav class="crumbs" aria-label="위치"><a href="#/">남는 지도</a>${icon('chevron', 12)}<span aria-current="page">${esc(sido)}</span></nav>
     <div class="region-head">
@@ -225,14 +270,25 @@ export async function regionView(ctx) {
     ${sum.events.length ? `<section class="sec" aria-labelledby="h-re"><div class="sec-head"><h2 id="h-re">최근 소식</h2></div>
       <ul class="ev-list">${sum.events.map(eventRow).join('')}</ul></section>` : ''}
 
+    ${counts ? `<section class="sec" aria-labelledby="h-rp"><div class="sec-head"><h2 id="h-rp">${esc(sido)} 참여 신청 현황</h2><p>목표: ${esc(openRuleText())}</p></div>
+      ${progressHTML(sido, counts[sido], { title: false })}</section>` : ''}
+
     <section class="cta-band">
-      <div><h2>이 지역 농가라면</h2><p>갈아엎기 전에 판매·나눔으로 돌릴 수 있는지 먼저 확인하고 바로 등록하세요.</p></div>
-      <div class="row-gap start"><a class="btn primary lg" href="#/farmer?sido=${encodeURIComponent(sido)}">${icon('plus', 18)}판매·나눔 등록</a></div>
+      <div><h2>이 지역에서 보고 들은 게 있다면</h2><p>갈아엎기·산지폐기·헐값 출하 소식을 알려 주세요. 확인한 뒤 남는 지도에 반영해요.</p></div>
+      <div class="row-gap start">${joinCta({ role: 'report', sido }, { label: '이 지역 제보하기', cls: 'btn primary lg', iconName: 'pin' })}</div>
     </section>
 
-    <section class="sec" aria-labelledby="h-rl"><div class="sec-head"><h2 id="h-rl">${esc(sido)} 산지 상품</h2><a class="link" href="#/market">장터 전체${icon('chevron', 14)}</a></div>
-      ${grid(listings, { wish, empty: emptyState(`아직 ${sido} 상품이 없어요`, '농가가 올리면 여기에 보여요.', `<a class="btn" href="#/alerts">${icon('bell', 16)}알림 받기</a>`) })}
+    <section class="sec" aria-labelledby="h-rf"><div class="sec-head"><h2 id="h-rf">이 지역 농가·식당이라면</h2></div>
+      <div class="row-gap start">
+        ${TRADING_OPEN ? `<a class="btn primary" href="#/farmer?sido=${encodeURIComponent(sido)}">${icon('plus', 16)}판매·나눔 등록</a>` : joinCta({ role: 'farmer', sido }, { label: '판매 희망 농가 신청', cls: 'btn primary' })}
+        ${joinCta({ role: 'buyer', sido }, { label: '구매 희망 신청', cls: 'btn' })}
+        <a class="btn ghost" href="#/farmer?sido=${encodeURIComponent(sido)}">${icon('calc', 16)}갈아엎기 손익 계산</a>
+      </div>
     </section>
+
+    ${TRADING_OPEN ? `<section class="sec" aria-labelledby="h-rl"><div class="sec-head"><h2 id="h-rl">${esc(sido)} 산지 상품</h2><a class="link" href="#/market">장터 전체${icon('chevron', 14)}</a></div>
+      ${grid(listings, { wish, empty: emptyState(`아직 ${sido} 상품이 없어요`, '농가가 올리면 여기에 보여요.', `<a class="btn" href="#/alerts">${icon('bell', 16)}알림 받기</a>`) })}
+    </section>` : ''}
   </section>`;
 }
 
@@ -268,62 +324,10 @@ function supportExplain(sig) {
     <p>정부·지자체 수급대책으로 신청·약정한 물량만 면적당 보상을 받아요(예: 2026년 4월 조생양파 시장격리 ㎡당 3,113원 ≈ 평당 1만원). 신청한 물량은 판매·기부할 수 없고, 신청하지 않은 물량은 자유롭게 팔 수 있어요.</p>${note}</div></div>`;
 }
 
-const ROLE_OPTS = [['farmer', '농가'], ['org', '기업·단체(ESG 후원)'], ['foodbank', '푸드뱅크·복지기관'], ['person', '개인']];
-
-export function openShareSheet(sig) {
-  openSheet({
-    title: '나눔 연결 관심 등록',
-    html: `<form class="form" id="share-form">
-      <p class="notice warn">${icon('info')}<span>나눔 연결은 <b>준비 중</b>이에요. 지금은 이 기기에만 저장되고, 서비스가 열리면 이 화면과 MY에서 안내해 드려요.</span></p>
-      <fieldset class="fs"><legend>어떤 입장인가요?</legend><div class="chip-radios">${ROLE_OPTS.map(([v, t], i) => `<label class="chip-radio"><input type="radio" name="role" value="${v}" ${i === 0 ? 'checked' : ''}><span>${esc(t)}</span></label>`).join('')}</div></fieldset>
-      <div class="field"><label for="sh-note">메모 <span class="muted small">선택</span></label><textarea id="sh-note" name="note" rows="2" maxlength="200" placeholder="예) 수확·운송비를 후원할 수 있어요"></textarea></div>
-      <button class="btn primary lg block" type="submit">관심 등록 (서비스 오픈 시 알림)</button>
-    </form>`,
-    onMount: (dlg, close) => {
-      dlg.querySelector('#share-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const fd = new FormData(e.currentTarget);
-        await store.saveInterest('share', { signalId: sig.id, item: sig.item, sido: sig.sido, role: fd.get('role'), note: String(fd.get('note') || '').trim() });
-        close();
-        toast('관심 등록을 이 기기에 저장했어요', { action: 'MY에서 보기', href: '#/me' });
-      });
-    },
-  });
-}
-
-export function openExpeditionSheet(sig) {
-  openSheet({
-    title: '구출 원정대 관심 등록',
-    html: `<form class="form" id="exp-form" novalidate>
-      <p class="notice warn">${icon('info')}<span>구출 원정대는 <b>준비 중</b>이에요. 아직 농가와 일정을 잡아 드리는 기능은 없어요. 등록 내용은 이 기기에만 저장되고, 서비스가 열리면 안내해 드려요.</span></p>
-      <div class="row2">
-        <div class="field"><span class="lbl" id="lbl-people">인원</span>${stepper('people', 4, { min: 1, max: 50, label: '인원', unit: '명' })}</div>
-        <div class="field"><label for="exp-date">희망 날짜</label><input id="exp-date" name="date" type="date" min="${todayISO()}" value="${todayISO(3)}" aria-describedby="err-date"><p class="err" id="err-date"></p></div>
-      </div>
-      <div class="field"><label for="exp-sido">지역</label><select id="exp-sido" name="sido">${REGION_NAMES.map((r) => `<option ${r === sig.sido ? 'selected' : ''}>${r}</option>`).join('')}</select></div>
-      <label class="check"><input type="checkbox" name="carry" checked><span>수확한 만큼 직접 사 가거나 나눔처로 옮길 수 있어요</span></label>
-      <p class="muted small">출하정지·산지폐기 약정 물량은 원정대가 수확할 수 없어요. 약정 외 물량·비대상 품목만 연결해요.</p>
-      <button class="btn primary lg block" type="submit">관심 등록 (서비스 오픈 시 알림)</button>
-    </form>`,
-    onMount: (dlg, close) => {
-      const form = dlg.querySelector('#exp-form');
-      bindStepper(form);
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const fd = new FormData(form);
-        const date = String(fd.get('date') || '');
-        const err = form.querySelector('#err-date');
-        if (!date || date < todayISO()) { err.textContent = '오늘 이후 날짜를 골라 주세요.'; form.date.setAttribute('aria-invalid', 'true'); form.date.focus(); return; }
-        await store.saveInterest('expedition', { signalId: sig.id, item: sig.item, sido: String(fd.get('sido')), people: Number(fd.get('people')) || 1, date, carry: !!fd.get('carry') });
-        close();
-        toast('원정대 관심 등록을 이 기기에 저장했어요', { action: 'MY에서 보기', href: '#/me' });
-      });
-    },
-  });
-}
-
 export async function signalView(ctx) {
-  const [data, list, wish] = await Promise.all([loadSurplus(), store.getListings(), store.getWishlist()]);
+  const [data, list, wish, counts] = await Promise.all([
+    loadSurplus(), TRADING_OPEN ? store.getListings() : [], TRADING_OPEN ? store.getWishlist() : [], loadCounts(),
+  ]);
   const sig = data.signals.find((s) => s.id === ctx.params.id);
   if (!sig) {
     ctx.el.innerHTML = `<section class="page">${emptyState('이 신호는 지금 없어요', '날마다 새로 모으기 때문에 지난 신호는 사라질 수 있어요.', '<a class="btn primary" href="#/">남는 지도로</a>')}</section>`;
@@ -335,8 +339,9 @@ export async function signalView(ctx) {
   const srcs = sig.source_ids.map((id) => sourceById(data, id)).filter(Boolean);
   const place = placeText(sig);
   ctx.title = `${place} ${sig.item} ${levelOf(sig.level).label} — 남는 지도`;
-  ctx.description = `${place} ${sig.item}: 평년 대비 ${pctText(m.price_vs_normal_pct)}, 반입량 ${ratioText(m.volume_vs_normal_ratio)}. 사러 가기·나눔 연결·구출 원정대.`;
+  ctx.description = `${place} ${sig.item}: 평년 대비 ${pctText(m.price_vs_normal_pct)}, 반입량 ${ratioText(m.volume_vs_normal_ratio)}. 거래 연결·푸드뱅크 기부·구출 원정대·가공.`;
   const farmerHref = `#/farmer?signal=${encodeURIComponent(sig.id)}`;
+  const who = { role: 'farmer', sido: sig.sido, sigungu: sig.sigungu || '', item: sig.item };
 
   ctx.el.innerHTML = `<section class="page signal">
     <nav class="crumbs" aria-label="위치"><a href="#/">남는 지도</a>${icon('chevron', 12)}<a href="#/region/${encodeURIComponent(sig.sido)}">${esc(sig.sido)}</a>${icon('chevron', 12)}<span aria-current="page">${esc(sig.item)}</span></nav>
@@ -362,23 +367,30 @@ export async function signalView(ctx) {
     <section class="sec" aria-labelledby="h-act"><div class="sec-head"><h2 id="h-act">버려지기 전에 할 수 있는 일</h2></div>
       <div class="actions3">
         <article class="act" id="act-buy">
-          <h3>${icon('cart', 20)}사러 가기</h3>
+          ${TRADING_OPEN ? `<h3>${icon('cart', 20)}사러 가기</h3>
           <p>${matches.length ? `장터에 ${esc(sig.item)} 상품 ${num(matches.length)}개가 있어요.` : `아직 장터에 ${esc(sig.item)} 상품이 없어요. 알림을 켜두면 올라올 때 알려드려요.`}</p>
-          <div class="row-gap start">${matches.length ? `<a class="btn primary" href="#/search?q=${encodeURIComponent(sig.item)}">${esc(sig.item)} 상품 보기</a>` : `<a class="btn primary" href="#/alerts">${icon('bell', 16)}알림 받기</a>`}</div>
+          <div class="row-gap start">${matches.length ? `<a class="btn primary" href="#/search?q=${encodeURIComponent(sig.item)}">${esc(sig.item)} 상품 보기</a>` : `<a class="btn primary" href="#/alerts">${icon('bell', 16)}알림 받기</a>`}</div>`
+          : `<h3>${icon('store', 20)}거래 연결</h3>
+          <p>거래는 지역별로 신청이 모이면 열려요. 농가는 판매 희망, 식당·가공업체는 구매 희망으로 미리 신청해 두세요.</p>
+          <div class="row-gap start">${joinCta(who, { label: '이 품목 팔고 싶어요', cls: 'btn primary' })}${joinCta({ ...who, role: 'buyer' }, { label: '이 품목 사고 싶어요', cls: 'btn' })}</div>
+          ${counts ? `<p class="act-prog">${esc(sig.sido)} ${progressLine(counts[sig.sido])}</p>` : ''}`}
         </article>
         <article class="act">
-          <h3>${icon('hand', 20)}나눔 연결 <span class="soon">준비 중</span></h3>
-          <p>농산물 기부의 세금 혜택은 농가에 거의 없어요(작물재배 소득은 원래 비과세). 그래서 기업·단체의 <b>ESG 후원으로 수확·물류비를 대고 푸드뱅크로 잇는</b> 방식을 준비하고 있어요.</p>
-          <div class="row-gap start"><button type="button" class="btn" data-share>관심 등록</button></div>
+          <h3>${icon('hand', 20)}푸드뱅크에 기부</h3>
+          <p>팔기 어려운 물량은 지역 푸드뱅크로 바로 기부할 수 있어요. 기부는 저희가 받지 않고 푸드뱅크로 연결해 드려요.</p>
+          ${foodbankHTML({ compact: true })}
+          <p class="muted small"><a class="link inline" href="#/join?sec=foodbank">기부 전에 알아둘 것</a></p>
         </article>
-        <article class="act hl">
-          <h3>${icon('users', 20)}구출 원정대 <span class="soon">준비 중</span></h3>
-          <p>밭을 갈아엎는 가장 큰 이유는 <b>수확 인건비</b>예요. 구매자·봉사자가 직접 밭에 가서 수확하면 농가는 수확비 없이 팔거나 나눌 수 있어요.</p>
-          <div class="row-gap start"><button type="button" class="btn primary" data-exp>원정대 관심 등록</button></div>
+        <article class="act">
+          <h3>${icon('users', 20)}구출 원정대</h3>
+          <p>밭을 갈아엎는 가장 큰 이유는 <b>수확 인건비</b>예요. 직접 밭에 가서 수확을 도울 수 있다면 원정대로 신청해 주세요.</p>
+          <div class="row-gap start">${joinCta({ ...who, role: 'expedition' }, { label: '원정대 신청', cls: 'btn' })}</div>
         </article>
       </div>
-      ${matches.length ? `<div class="sec">${rail(matches, { wish })}</div>` : ''}
+      ${TRADING_OPEN && matches.length ? `<div class="sec">${rail(matches, { wish })}</div>` : ''}
     </section>
+
+    ${processBlock(sig.item, { sido: sig.sido, sigungu: sig.sigungu || '' })}
 
     <section class="cta-band">
       <div><h2>${esc(sig.item)} 농가라면</h2><p>갈아엎기·판매·원정대 중 무엇이 남는지 이 시세로 바로 계산해 보세요.</p></div>
@@ -386,6 +398,4 @@ export async function signalView(ctx) {
     </section>
   </section>`;
 
-  ctx.el.querySelector('[data-share]').addEventListener('click', () => openShareSheet(sig));
-  ctx.el.querySelector('[data-exp]').addEventListener('click', () => openExpeditionSheet(sig));
 }

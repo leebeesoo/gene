@@ -2,7 +2,9 @@
 import { esc, icon, won, num } from '../util.js';
 import { REGION_NAMES } from '../meta.js';
 import { loadSurplus, stabItem, itemDefaults, ITEM_DEFAULTS, STAB_LABEL, placeText } from '../surplus.js';
-import { openExpeditionSheet, openShareSheet } from './map.js';
+import { TRADING_OPEN } from '../config.js';
+import { joinCta, updateJoinLink, foodbankHTML } from '../participate.js';
+import { procFor } from '../processing.js';
 
 const NH_URL = 'https://www.nonghyup.com';
 
@@ -32,7 +34,7 @@ function verdict(v, r) {
   const diff = (a, b) => won(Math.abs(a - b));
   if (best[0] === 'sell') return `<b>수확해서 파는 쪽이 갈아엎기보다 ${diff(r.sell, r.destroy)} 더 남아요.</b>${r.exp > r.destroy ? ' 일손이 모자라면 구출 원정대도 갈아엎기보다 나아요.' : ''}`;
   if (best[0] === 'exp') return `<b>수확비가 들지 않는 구출 원정대가 가장 나아요.</b> 갈아엎기보다 ${diff(r.exp, r.destroy)}, 직접 수확해 파는 것보다 ${diff(r.exp, r.sell)} 더 남아요.`;
-  return `<b>지금 시세로는 갈아엎는 쪽이 손해가 가장 적어요.</b> 판매보다 ${diff(r.destroy, r.sell)} 덜 손해예요.${v.comp > 0 ? '' : ' 그래도 원정대·나눔으로 일부라도 살릴 수 있는지 살펴보세요.'}`;
+  return `<b>지금 시세로는 갈아엎는 쪽이 손해가 가장 적어요.</b> 판매보다 ${diff(r.destroy, r.sell)} 덜 손해예요.${v.comp > 0 ? '' : ' 그래도 원정대·푸드뱅크 기부·가공으로 일부라도 살릴 수 있는지 살펴보세요.'}`;
 }
 
 export async function farmerView(ctx) {
@@ -56,9 +58,9 @@ export async function farmerView(ctx) {
   ctx.el.innerHTML = `<section class="page farmer">
     <nav class="crumbs" aria-label="위치"><a href="#/">남는 지도</a>${icon('chevron', 12)}<span aria-current="page">농가 판단 도구</span></nav>
     <h1 class="page-title">갈아엎기 전에, 3단계만</h1>
-    <p class="muted lead-sm">보상 대상인지 확인하고 → 손익을 비교하고 → 팔 물량은 바로 등록해요.${sig ? ` <b>${esc(placeText(sig))} ${esc(sig.item)}</b> 신호의 시세를 불러왔어요.` : ''}</p>
+    <p class="muted lead-sm">보상 대상인지 확인하고 → 손익을 비교하고 → ${TRADING_OPEN ? '팔 물량은 바로 등록해요' : '판매·기부·가공 중 길을 골라요'}.${sig ? ` <b>${esc(placeText(sig))} ${esc(sig.item)}</b> 신호의 시세를 불러왔어요.` : ''}</p>
 
-    <ol class="steps" aria-label="진행 단계"><li data-s="1" class="on">보상 대상 확인</li><li data-s="2">손익 계산</li><li data-s="3">판매·나눔 등록</li></ol>
+    <ol class="steps" aria-label="진행 단계"><li data-s="1" class="on">보상 대상 확인</li><li data-s="2">손익 계산</li><li data-s="3">${TRADING_OPEN ? '판매·나눔 등록' : '판매·나눔 연결'}</li></ol>
 
     <section class="step-card" id="step1" aria-labelledby="h-s1">
       <h2 id="h-s1"><span class="step-no">1</span>보상 대상 확인</h2>
@@ -141,14 +143,18 @@ export async function farmerView(ctx) {
     </section>
 
     <section class="step-card" id="step3" aria-labelledby="h-s3" hidden>
-      <h2 id="h-s3"><span class="step-no">3</span>판매·나눔 등록</h2>
-      <p>팔 수 있는 물량이라면 바로 장터에 올리세요. 등록할 때 <b>약정 물량이 아님</b>을 한 번 더 확인해요.</p>
-      <div class="row-gap start">
-        <a class="btn primary lg" id="go-sell" href="#/sell">${icon('plus', 18)}판매 등록하기</a>
-        <button type="button" class="btn lg" data-exp>${icon('users', 18)}구출 원정대 관심 등록</button>
-        <button type="button" class="btn ghost lg" data-share>${icon('hand', 18)}나눔 연결 관심 등록</button>
+      <h2 id="h-s3"><span class="step-no">3</span>${TRADING_OPEN ? '판매·나눔 등록' : '판매·나눔 연결'}</h2>
+      ${TRADING_OPEN
+        ? `<p>팔 수 있는 물량이라면 바로 장터에 올리세요. 등록할 때 <b>약정 물량이 아님</b>을 한 번 더 확인해요.</p>
+      <div class="row-gap start"><a class="btn primary lg" id="go-sell" href="#/sell">${icon('plus', 18)}판매 등록하기</a></div>`
+        : `<p>거래는 지역별로 신청이 모이면 열려요. 팔 물량이 있다면 <b>판매 희망 농가</b>로 미리 신청해 두세요. 지역에 모이면 가장 먼저 연락드려요.</p>
+      <div class="row-gap start">${joinCta({ role: 'farmer', sido, sigungu, item }, { label: '판매 희망 농가로 신청', cls: 'btn primary lg' }).replace('<a ', '<a id="go-join" ')}</div>`}
+      <div class="s3-grid">
+        <div class="s3-box"><h3>${icon('hand', 18)}팔기 어려우면 푸드뱅크로</h3>${foodbankHTML({ compact: true })}
+          <p class="muted small">약정 물량은 기부할 수 없어요. <a class="link inline" href="#/join?sec=foodbank">자세히</a></p></div>
+        <div class="s3-box"><h3>${icon('jar', 18)}가공해서 오래 두기</h3><p class="small">즙·말랭이·절임처럼 가공하면 제값을 받을 시간을 벌 수 있어요.</p>
+          <a class="btn sm" id="go-proc" href="#/process${procFor(item) ? `?item=${encodeURIComponent(procFor(item).id)}` : ''}">가공 방법 보기${icon('chevron', 14)}</a></div>
       </div>
-      <p class="muted small">원정대·나눔 연결은 준비 중이라 지금은 이 기기에만 저장돼요.</p>
     </section>
   </section>`;
 
@@ -188,7 +194,11 @@ export async function farmerView(ctx) {
     if (v.item) qs.set('item', v.item);
     if (v.sido) qs.set('sido', v.sido);
     if (sigungu) qs.set('sigungu', sigungu);
-    $('#go-sell').href = `#/sell?${qs}`;
+    const gs = $('#go-sell');
+    if (gs) gs.href = `#/sell?${qs}`;
+    updateJoinLink($('#go-join'), { role: 'farmer', sido: v.sido, sigungu: v.sido === sido ? sigungu : '', item: v.item });
+    const pf = procFor(v.item);
+    $('#go-proc').href = `#/process${pf ? `?item=${encodeURIComponent(pf.id)}` : ''}`;
   };
 
   const show = (n) => {
@@ -247,10 +257,4 @@ export async function farmerView(ctx) {
     form.elements.prodCost.value = String(dd.cost);
     draw();
   });
-  const target = () => {
-    const v = read();
-    return { id: sig?.id || null, item: v.item || item, sido: v.sido || sido || '전남' };
-  };
-  ctx.el.querySelector('[data-exp]').addEventListener('click', () => openExpeditionSheet(target()));
-  ctx.el.querySelector('[data-share]').addEventListener('click', () => openShareSheet(target()));
 }

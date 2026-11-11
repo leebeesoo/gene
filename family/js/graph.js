@@ -75,7 +75,7 @@ export function renderGraph(svg, people, pairs, onPair) {
         placed.push(spot);
         const bg = el('g', { class: 'badge', transform: `translate(${spot.x.toFixed(1)} ${spot.y.toFixed(1)})` }, gBadges);
         el('rect', { x: -15, y: -10, width: 30, height: 20, rx: 10, stroke: TONE_VAR[p.tone], 'stroke-width': 1.5 }, bg);
-        const t = el('text', { 'text-anchor': 'middle', 'dominant-baseline': 'central', 'font-size': 11.5, 'font-weight': 800, fill: TONE_VAR[p.tone] }, bg);
+        const t = el('text', { 'text-anchor': 'middle', 'dominant-baseline': 'central', 'font-size': 11.5, 'font-weight': 700, fill: TONE_VAR[p.tone] }, bg);
         t.textContent = p.score;
       }
     }
@@ -87,8 +87,7 @@ export function renderGraph(svg, people, pairs, onPair) {
     const g = el('g', { class: 'node', 'data-i': i, transform: `translate(${x.toFixed(1)} ${y.toFixed(1)})` }, gNodes);
     el('circle', { class: 'ring', r: nr + 4, fill: 'var(--card)', stroke: 'var(--line)', 'stroke-width': 1 }, g);
     el('circle', { r: nr, fill: EL_COLOR[e] }, g);
-    if (e === 'water') el('circle', { r: nr - 3, fill: 'none', stroke: '#f2c46a', 'stroke-width': 1.2, 'stroke-opacity': 0.7 }, g);
-    const t = el('text', { 'text-anchor': 'middle', 'dominant-baseline': 'central', fill: EL_INK[e], 'font-family': 'Noto Serif KR, serif', 'font-weight': 900, 'font-size': Math.round(nr * 0.82) }, g);
+    const t = el('text', { 'text-anchor': 'middle', 'dominant-baseline': 'central', fill: EL_INK[e], 'font-family': 'Noto Serif KR, serif', 'font-weight': 700, 'font-size': Math.round(nr * 0.82) }, g);
     t.textContent = STEMS[stem];
     const name = el('text', { class: 'nlabel', 'text-anchor': 'middle', y: nr + 18 }, g);
     name.textContent = person.name.length > 6 ? person.name.slice(0, 6) + '…' : person.name;

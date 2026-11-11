@@ -1,0 +1,11 @@
+# Cloudflare Pages 응답 헤더 (https://developers.cloudflare.com/pages/configuration/headers/)
+# 매일 바뀌는 데이터는 10분 캐시
+/market/data/*
+  Cache-Control: public, max-age=600
+
+/hanki/data/*
+  Cache-Control: public, max-age=600
+
+# 이미지는 길게 (파일을 바꿀 때는 이름을 바꿉니다)
+/*.png
+  Cache-Control: public, max-age=31536000, immutable

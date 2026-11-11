@@ -12,7 +12,7 @@
 | 주기 | 사이트 | 할 일 | 파일 |
 |---|---|---|---|
 | 매주 (일요일) | 명당로드 `lottomap/` | 토요일 추첨 회차의 당첨번호·1등 판매점 추가. `NODE_USE_ENV_PROXY=1 node lottomap/tools/update-data.mjs --from=<마지막 회차+1>` 실행 후 결과 확인 | `lottomap/data/draws.js`, `lottomap/data/stores.js` |
-| 매월 (5일 전후) | 제철맛력 `season/` | KAMIS 소매가격 → 기간별 → 월별 표에서 21개 품목의 지난달 월평균 추가(품목 코드는 `season/SOURCES.md`). 새 과잉생산·산지폐기 기사가 있으면 원문 확인 후 추가 | `season/js/prices.js`, `season/js/news.js` |
+| 매월 (5일 전후) | 제철장보기 `season/` | KAMIS 소매가격 → 기간별 → 월별 표에서 21개 품목의 지난달 월평균 추가(품목 코드는 `season/SOURCES.md`). 새 과잉생산·산지폐기 기사가 있으면 원문 확인 후 추가 | `season/js/prices.js`, `season/js/news.js` |
 | 매년 1~3월 | 이름레이더 `names/` | 대법원 전자가족관계등록시스템 전년도 출생신고 이름 순위(TOP 100) 확정치로 교체, 진행 중인 해는 "잠정" 표시 | `names/js/data.js` |
 | 매년 1~3월 | 나때연감 `birthyear/` | 새 해 추가(출생아 수·합계출산율 잠정치, 1인당 GDP, 소비자물가지수, 흥행 1위 영화, 최저임금) | `birthyear/data/years.js` |
 | 매년 12월 | 남은봄 `lifeclock/` | 통계청(국가데이터처) 새 생명표 발표 시 성별·나이별 기대여명 표 교체 | `lifeclock/js/data.js` |
@@ -24,8 +24,8 @@
 |---|---|---|
 | 나때연감 | 연도별 국내·세계 사건, 히트곡, 흥행 영화와 관객 수, 유명인, 최저임금 | 국가기록원, 멜론/가온 연간 차트, KOBIS, 최저임금위원회 |
 | 이름레이더 | 인명 한자 약 290자의 훈·음 | 표준국어대사전, 대법원 인명용 한자표 |
-| 제철맛력 | 62개 품목의 제철 시기·주산지·고르는 법·보관법 | 농사로(농촌진흥청), 해수부 이달의 수산물, 통계청 농작물생산조사 |
-| 제철맛력 | 배추 외 20개 품목 가격(웹 조회 도구로 옮겨 적음) | KAMIS 월별 표와 숫자 대조 |
+| 제철장보기 | 62개 품목의 제철 시기·주산지·고르는 법·보관법 | 농사로(농촌진흥청), 해수부 이달의 수산물, 통계청 농작물생산조사 |
+| 제철장보기 | 배추 외 20개 품목 가격(웹 조회 도구로 옮겨 적음) | KAMIS 월별 표와 숫자 대조 |
 | 남은봄 | 생명표 기대여명(PDF 이미지에서 옮겨 적음) | 국가데이터처 2024 생명표 원표 |
 | 근본 테스트 | 본관별 시조 이름·시대, 1729년 대구 호적 신분 비율 | 각 문중 공식 자료, 한국학중앙연구원 연구 |
 
@@ -36,7 +36,9 @@
 
 ## 남는 지도 데이터 (`market/data/surplus.json`)
 
-매일 06:17 KST에 GitHub Actions(`.github/workflows/surplus-data.yml`)가 `tools/surplus/collect.mjs`를 돌려 `market/data/surplus*.json`이 바뀌었을 때만 main에 커밋하고, 이어서 `pages.yml`이 `workflow_run`으로 배포합니다. 형식은 `tools/surplus/SCHEMA.md`, 도구 설명은 `tools/surplus/README.md`.
+매일 06:17 KST에 GitHub Actions(`.github/workflows/surplus-data.yml`)가 `tools/surplus/collect.mjs`를 돌려 `market/data/surplus*.json`이 바뀌었을 때만 main에 커밋하고, Cloudflare Pages가 그 푸시를 보고 자동 배포합니다(설정: 루트 `DEPLOY.md`, 데이터 캐시 10분: 루트 `_headers`). 형식은 `tools/surplus/SCHEMA.md`, 도구 설명은 `tools/surplus/README.md`.
+
+같은 aT 키로 실시간 경매 건별 자료도 받아, 같은 날 같은 품목(품종) 평균의 30% 이하에 낙찰된 20kg 이상 건을 `auction_lows`(최근 7일, 상위 50건)에 넣습니다. 한 산지·품목에서 하루 5건 이상이면 그 지역 신호가 최소 '과잉'이 됩니다.
 
 ### 1. API 키 받기 (모두 무료, 없어도 돌아가지만 그 출처는 건너뜀)
 

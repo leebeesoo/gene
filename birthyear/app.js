@@ -199,14 +199,14 @@
       if (!p) return;
       any = true; used[p.src] = 1;
       var exact = p.y === y;
-      items += '<li><div class="pl">' + it.emoji + ' ' + esc(it.label) + '</div><div class="pv num">' + won(p.v) + '</div><div class="pn">' +
+      items += '<li><div class="pl">' + esc(it.label) + '</div><div class="pv num">' + won(p.v) + '</div><div class="pn">' +
         (exact ? '' : p.y + '년 기록 · ') + esc(p.note || it.unit) + '</div></li>';
     });
     var gdp = S.gdp[y], gdpNow = S.gdp[NOW.year];
     var html = any ? '<ul class="prices">' + items + '</ul>' : '<p class="empty">이 해 앞뒤 3년 안에 확인된 품목 가격 기록이 없어요. 대신 물가지수로 환산해 볼게요.</p>';
     if (any) html += '<p class="src">출처: ' + Object.keys(used).map(function (k) { return esc(SRC[k] || k); }).join(' / ') + '</p>';
     html += machineHTML(y);
-    if (gdp && gdpNow) html += '<p class="callout" style="background:var(--teal-soft)">그해 1인당 GDP <b style="color:var(--teal)">$' + fmt(gdp) + '</b> → ' + NOW.year + '년 $' + fmt(gdpNow) + (y !== NOW.year ? ' (' + times(gdpNow / gdp) + '배)' : '') + '</p><p class="src">' + esc(SRC.gdp) + '</p>';
+    if (gdp && gdpNow) html += '<p class="callout plain">그해 1인당 GDP <b>$' + fmt(gdp) + '</b> → ' + NOW.year + '년 $' + fmt(gdpNow) + (y !== NOW.year ? ' (' + times(gdpNow / gdp) + '배)' : '') + '</p><p class="src">' + esc(SRC.gdp) + '</p>';
     $('#priceBox').innerHTML = html;
   }
 
@@ -225,6 +225,7 @@
 
   /* ---------------- share card (canvas) ---------------- */
   var FONT = '"Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif';
+  var SERIF = '"Noto Serif KR", "Nanum Myeongjo", "AppleMyungjo", Batang, serif';
   function cssVar(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
   function wrapText(ctx, text, x, y, maxW, lh, maxLines) {
     var words = String(text).split(''), line = '', lines = [];
@@ -239,24 +240,26 @@
   }
   function drawCard() {
     var c = $('#shareCanvas'), ctx = c.getContext('2d'), y = state.y, d = Y[y] || {}, g = ganji(y);
-    var paper = '#FFFBF3', ink = '#23201B', red = '#C8402B', muted = '#7A7264', mustard = '#C98E1E', line = '#E1D6C2';
-    ctx.fillStyle = '#F3ECDF'; ctx.fillRect(0, 0, 1080, 1350);
-    // paper
-    ctx.fillStyle = paper; roundRect(ctx, 60, 60, 960, 1230, 36); ctx.fill();
-    ctx.fillStyle = red; roundRectTop(ctx, 60, 60, 960, 120, 36); ctx.fill();
-    ctx.fillStyle = '#F3ECDF';
+    var bg = '#F2EFE8', paper = '#FBFAF6', ink = '#222020', red = '#B23A26', muted = '#716C64', line = '#DAD4C8';
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, 1080, 1350);
+    // paper (1px 선 → 캔버스 2px)
+    ctx.fillStyle = paper; roundRect(ctx, 60, 60, 960, 1230, 32); ctx.fill();
+    ctx.strokeStyle = line; ctx.lineWidth = 2; ctx.stroke();
+    // 일력 머리 + 절취 구멍
+    ctx.fillStyle = red; roundRectTop(ctx, 60, 60, 960, 120, 32); ctx.fill();
+    ctx.fillStyle = bg;
     for (var i = 0; i < 12; i++) { ctx.beginPath(); ctx.arc(130 + i * 75, 92, 11, 0, Math.PI * 2); ctx.fill(); }
-    ctx.fillStyle = '#FFFFFF'; ctx.font = '800 40px ' + FONT; ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = '#FFFFFF'; ctx.font = '700 40px ' + SERIF; ctx.textBaseline = 'alphabetic';
     ctx.fillText('나때연감', 100, 160);
-    ctx.textAlign = 'right'; ctx.font = '700 30px ' + FONT; ctx.fillText(g.name + ' · ' + g.tti + '띠', 980, 160); ctx.textAlign = 'left';
+    ctx.textAlign = 'right'; ctx.font = '500 30px ' + FONT; ctx.fillText(g.name + ' · ' + g.tti + '띠', 980, 160); ctx.textAlign = 'left';
     // year
-    ctx.fillStyle = ink; ctx.textAlign = 'center'; ctx.font = '900 300px ' + FONT;
-    ctx.fillText(String(y), 540, 470);
-    ctx.fillStyle = red; ctx.font = '800 44px ' + FONT;
+    ctx.fillStyle = ink; ctx.textAlign = 'center'; ctx.font = '700 280px ' + SERIF;
+    ctx.fillText(String(y), 540, 465);
+    ctx.fillStyle = red; ctx.font = '700 44px ' + FONT;
     ctx.fillText((state.m && y === state.home ? state.m + '월, ' : '') + (state.r && y === state.home ? state.r + '에서 ' : '') + '태어난 해', 540, 545);
     ctx.textAlign = 'left';
     // dashed line
-    ctx.strokeStyle = line; ctx.setLineDash([12, 10]); ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(110, 600); ctx.lineTo(970, 600); ctx.stroke(); ctx.setLineDash([]);
+    ctx.strokeStyle = ink; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(110, 600); ctx.lineTo(970, 600); ctx.stroke();
     var rows = [];
     var b = S.births[y], now = S.births[NOW.year];
     if (b) rows.push(['함께 태어난 사람', fmt(b) + '명' + (y !== NOW.year && now ? (b / now >= 1.05 ? '  (' + NOW.year + '년의 ' + times(b / now) + '배)' : '') : '')]);
@@ -268,25 +271,25 @@
     if (d.ko && d.ko.length) rows.push(['그해 뉴스', d.ko[0][1]]);
     var yy = 660;
     rows.forEach(function (r) {
-      ctx.font = '800 40px ' + FONT;
+      ctx.font = '700 40px ' + FONT;
       var lines = Math.min(2, Math.ceil(ctx.measureText(r[1]).width / 860));
       if (yy + 44 + (lines - 1) * 48 > 1140) return; // 공간이 모자라면 생략
-      ctx.fillStyle = muted; ctx.font = '700 28px ' + FONT; ctx.fillText(r[0], 110, yy);
-      ctx.fillStyle = ink; ctx.font = '800 40px ' + FONT;
+      ctx.fillStyle = muted; ctx.font = '500 28px ' + FONT; ctx.fillText(r[0], 110, yy);
+      ctx.fillStyle = ink; ctx.font = '700 40px ' + FONT;
       var h = wrapText(ctx, r[1], 110, yy + 48, 860, 48, 2);
       yy += 48 + h + 24;
     });
     // footer
-    ctx.fillStyle = mustard; roundRect(ctx, 110, 1180, 860, 70, 35); ctx.fill();
-    ctx.fillStyle = '#2A1E05'; ctx.font = '800 30px ' + FONT; ctx.textAlign = 'center';
-    ctx.fillText('내가 태어난 해 타임캡슐 · 나때연감', 540, 1226); ctx.textAlign = 'left';
+    ctx.strokeStyle = line; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(110, 1180); ctx.lineTo(970, 1180); ctx.stroke();
+    ctx.fillStyle = muted; ctx.font = '500 30px ' + FONT; ctx.textAlign = 'center';
+    ctx.fillText('내가 태어난 해 타임캡슐 · 나때연감', 540, 1236); ctx.textAlign = 'left';
   }
   function roundRect(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
   function roundRectTop(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x, y + h); ctx.lineTo(x, y + r); ctx.arcTo(x, y, x + r, y, r); ctx.lineTo(x + w - r, y); ctx.arcTo(x + w, y, x + w, y + r, r); ctx.lineTo(x + w, y + h); ctx.closePath(); }
   function scheduleCard() {
     drawCard();
     if (document.fonts && document.fonts.load) {
-      document.fonts.load('800 40px "Pretendard Variable"').then(function () { drawCard(); }).catch(function () {});
+      Promise.all([document.fonts.load('700 40px "Pretendard Variable"'), document.fonts.load('700 280px "Noto Serif KR"', '0123456789나때연감')]).then(function () { drawCard(); }).catch(function () {});
     }
   }
   function canvasBlob() {

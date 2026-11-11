@@ -6,9 +6,9 @@ import { art } from '../art.js';
 
 export async function meView(ctx) {
   ctx.title = 'MY — 맛남의 광장';
-  const [prefs, my, wish, recentIds, list, orders, alerts, threads, interests] = await Promise.all([
+  const [prefs, my, wish, recentIds, list, orders, alerts, threads] = await Promise.all([
     store.getPrefs(), store.getMyImpact(), store.getWishlist(), store.getRecent(), store.getListings({ includeInactive: true }),
-    store.getOrders(), store.getAlertMatches(), store.getThreads({ as: 'buyer' }), store.getInterests(),
+    store.getOrders(), store.getAlertMatches(), store.getThreads({ as: 'buyer' }),
   ]);
   const lv = levelOf(my.kg);
   const recent = recentIds.map((id) => list.find((l) => l.id === id)).filter(Boolean);
@@ -44,14 +44,6 @@ export async function meView(ctx) {
       <a href="#/seller">${icon('store')}<span>판매자 센터</span>${icon('chevron', 16, 'go')}</a>
     </nav>
 
-    ${interests.length ? `<section class="settings interests" aria-labelledby="h-int">
-      <h2 id="h-int">관심 등록 <span class="soon">준비 중</span></h2>
-      <p class="muted small">구출 원정대·나눔 연결은 아직 준비 중이에요. 이 기기에만 저장돼 있고, 서비스가 열리면 여기서 안내해 드려요.</p>
-      <ul class="int-list">${interests.map((x) => `<li><div><b>${x.kind === 'expedition' ? '구출 원정대' : '나눔 연결'} · ${esc([x.sido, x.item].filter(Boolean).join(' '))}</b>
-        <small>${x.kind === 'expedition' ? `${num(x.people)}명 · ${esc(x.date)} 희망` : esc({ farmer: '농가', org: '기업·단체', foodbank: '푸드뱅크·복지기관', person: '개인' }[x.role] || '')}${x.note ? ` · ${esc(x.note)}` : ''}</small></div>
-        <button type="button" class="btn text sm" data-del-int="${esc(x.id)}" aria-label="관심 등록 삭제">${icon('trash', 16)}</button></li>`).join('')}</ul>
-    </section>` : ''}
-
     <form class="settings" id="settings">
       <h2>설정</h2>
       <fieldset class="fs"><legend>모드</legend>
@@ -73,14 +65,6 @@ export async function meView(ctx) {
     await store.setPrefs({ [name]: value });
     toast(name === 'role' ? (value === 'seller' ? '판매자 모드로 바꿨어요' : '구매자 모드로 바꿨어요') : '저장했어요');
   });
-  ctx.el.querySelectorAll('[data-del-int]').forEach((b) => b.addEventListener('click', async () => {
-    await store.removeInterest(b.dataset.delInt);
-    const li = b.closest('li');
-    const ul = li.parentElement;
-    li.remove();
-    if (!ul.children.length) ul.closest('section').remove();
-    toast('관심 등록을 지웠어요');
-  }));
   ctx.el.querySelector('[data-reset]').addEventListener('click', async () => {
     if (!confirm('이 기기에 저장된 주문·찜·등록 상품이 모두 지워져요. 초기화할까요?')) return;
     await store.resetAll();

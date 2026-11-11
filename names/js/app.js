@@ -160,7 +160,6 @@
     $('#result').hidden = false; // 차트 폭 계산을 위해 먼저 표시
     const html = `
       <div class="r-hero reveal">
-        <svg class="rings" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#fff" stroke-opacity=".35"><circle cx="100" cy="100" r="96"/><circle cx="100" cy="100" r="66"/><circle cx="100" cy="100" r="36"/></g>${dots(same)}</svg>
         <span class="tag">${esc(gLabel)} · ${esc(st.sur)} + ${esc(st.given)}</span>
         <p class="r-name">${esc(st.full)}${st.hanja ? `<small lang="zh-Hant">${esc(st.hanja)}</small>` : ''}</p>
         <p class="r-big">전국의 ${esc(st.full)}<span class="est-badge">추정</span><b>약 ${approxNum(same)}<span class="unit">명</span></b></p>
@@ -186,8 +185,8 @@
         <h3>결과 공유하기</h3>
         <p class="cap">친구에게 보내고 누가 더 흔한 이름인지 겨뤄 보세요.</p>
         <div class="actions">
-          <button type="button" class="btn btn-solid" id="btnShareImg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5M5 14v5h14v-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>이미지 공유</button>
-          <button type="button" class="btn btn-ghost" id="btnCopy"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>링크 복사</button>
+          <button type="button" class="btn btn-solid" id="btnShareImg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5M5 14v5h14v-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>이미지 공유</button>
+          <button type="button" class="btn btn-ghost" id="btnCopy"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>링크 복사</button>
         </div>
         <div class="card-preview" id="cardPreview"></div>
       </div>
@@ -208,17 +207,6 @@
     if (prevAd) adHost.appendChild(prevAd);
     else { adHost.innerHTML = AD_HTML; pushAds(adHost); }
     bindResult();
-  }
-
-  function dots(n) {
-    const k = Math.max(1, Math.min(22, Math.round(Math.log10(Math.max(n, 1) + 1) * 4.5)));
-    let s = '', seed = 7;
-    const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
-    for (let i = 0; i < k; i++) {
-      const r = 20 + rnd() * 76, t = rnd() * Math.PI * 2;
-      s += `<circle cx="${(100 + r * Math.cos(t)).toFixed(1)}" cy="${(100 + r * Math.sin(t)).toFixed(1)}" r="${(2 + rnd() * 2.5).toFixed(1)}" fill="#7CFFDB" fill-opacity="${(.5 + rnd() * .5).toFixed(2)}"/>`;
-    }
-    return s;
   }
 
   function bindResult() {
@@ -403,39 +391,31 @@
     const c = document.createElement('canvas'); c.width = W; c.height = H;
     const x = c.getContext('2d');
     const F = '"Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif';
-    try { await Promise.all([document.fonts.load(`800 120px ${F}`, st.full), document.fonts.load(`600 40px ${F}`, '전국의 동명이인 추정')]); } catch (e) { /* 기본 폰트 사용 */ }
-    // 배경
-    let gr = x.createLinearGradient(0, 0, W * .6, H);
-    gr.addColorStop(0, '#2731D8'); gr.addColorStop(.65, '#141A6B'); gr.addColorStop(1, '#0B0F38');
-    x.fillStyle = gr; x.fillRect(0, 0, W, H);
-    gr = x.createRadialGradient(W, 0, 10, W, 0, 760);
-    gr.addColorStop(0, 'rgba(120,80,255,.75)'); gr.addColorStop(1, 'rgba(120,80,255,0)');
-    x.fillStyle = gr; x.fillRect(0, 0, W, H);
-    // 레이더
-    const cx = W - 170, cy = 250;
-    x.strokeStyle = 'rgba(255,255,255,.22)'; x.lineWidth = 3;
-    for (const r of [330, 230, 130]) { x.beginPath(); x.arc(cx, cy, r, 0, Math.PI * 2); x.stroke(); }
-    const sw = x.createConicGradient ? x.createConicGradient(-Math.PI / 2, cx, cy) : null;
-    if (sw) { sw.addColorStop(0, 'rgba(124,255,219,.35)'); sw.addColorStop(.18, 'rgba(124,255,219,0)'); sw.addColorStop(1, 'rgba(124,255,219,0)'); x.fillStyle = sw; x.beginPath(); x.arc(cx, cy, 330, 0, Math.PI * 2); x.fill(); }
-    let seed = 11; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
-    const k = Math.max(3, Math.min(26, Math.round(Math.log10(same + 1) * 5)));
-    for (let i = 0; i < k; i++) { const r = 60 + rnd() * 260, t = rnd() * Math.PI * 2; x.fillStyle = `rgba(124,255,219,${.45 + rnd() * .55})`; x.beginPath(); x.arc(cx + r * Math.cos(t), cy + r * Math.sin(t), 7 + rnd() * 8, 0, Math.PI * 2); x.fill(); }
-    // 브랜드
-    x.fillStyle = 'rgba(255,255,255,.92)'; x.font = `800 40px ${F}`; x.textBaseline = 'alphabetic';
-    x.fillText('이름레이더', 80, 120);
-    x.font = `600 30px ${F}`; x.fillStyle = 'rgba(255,255,255,.6)'; x.fillText('내 이름, 전국에 몇 명?', 80, 166);
+    try { await Promise.all([document.fonts.load(`700 120px ${F}`, st.full), document.fonts.load(`500 40px ${F}`, '전국의 동명이인 추정')]); } catch (e) { /* 기본 폰트 사용 */ }
+    // 배경 (평면)
+    const P = { bg: '#F6F7F9', surface: '#FFFFFF', ink: '#15171C', muted: '#6A6F7A', line: '#E3E5EA', accent: '#2B50D8' };
+    x.fillStyle = P.bg; x.fillRect(0, 0, W, H);
+    // 브랜드 (1.5px 선 아이콘 비율)
+    x.save(); x.strokeStyle = P.accent; x.lineWidth = 4; x.lineCap = 'round';
+    x.beginPath(); x.arc(104, 106, 24, 0, Math.PI * 2); x.stroke();
+    x.beginPath(); x.arc(104, 106, 13, 0, Math.PI * 2); x.stroke();
+    x.beginPath(); x.moveTo(104, 106); x.lineTo(121, 89); x.stroke(); x.restore();
+    x.fillStyle = P.ink; x.font = `700 40px ${F}`; x.textBaseline = 'alphabetic';
+    x.fillText('이름레이더', 146, 120);
+    x.font = `500 30px ${F}`; x.fillStyle = P.muted; x.fillText('내 이름, 전국에 몇 명?', 80, 190);
     // 이름
-    x.fillStyle = '#fff';
-    let fs = 210; x.font = `850 ${fs}px ${F}`;
-    while (x.measureText(st.full).width > W - 160 && fs > 100) { fs -= 10; x.font = `850 ${fs}px ${F}`; }
-    x.fillText(st.full, 76, 560);
+    x.fillStyle = P.ink;
+    let fs = 180; x.font = `700 ${fs}px ${F}`;
+    while (x.measureText(st.full).width > W - 160 && fs > 100) { fs -= 10; x.font = `700 ${fs}px ${F}`; }
+    x.fillText(st.full, 76, 470);
     // 숫자
-    x.font = `600 44px ${F}`; x.fillStyle = 'rgba(255,255,255,.78)';
-    x.fillText('전국의 동명이인 (추정)', 80, 680);
-    x.font = `850 150px ${F}`; x.fillStyle = '#7CFFDB';
+    x.strokeStyle = P.line; x.lineWidth = 2; x.beginPath(); x.moveTo(80, 560); x.lineTo(W - 80, 560); x.stroke();
+    x.font = `500 40px ${F}`; x.fillStyle = P.muted;
+    x.fillText('전국의 동명이인 (추정)', 80, 650);
+    x.font = `700 140px ${F}`; x.fillStyle = P.accent;
     const big = '약 ' + approx(same);
-    let bs = 150; while (x.measureText(big).width > W - 160 && bs > 80) { bs -= 8; x.font = `850 ${bs}px ${F}`; }
-    x.fillText(big, 76, 830);
+    let bs = 140; while (x.measureText(big).width > W - 160 && bs > 80) { bs -= 8; x.font = `700 ${bs}px ${F}`; }
+    x.fillText(big, 76, 800);
     // 통계 박스
     const a = res.main, pk = a.peak;
     const boxes = [
@@ -443,19 +423,20 @@
       ['가장 유행', pk ? (pk.type === 'year' ? `${pk.y}년` : `${pk.y}년 무렵`) : '순위 밖'],
       ['평균 출생', a.avgYear ? `${Math.round(a.avgYear)}년생` : '—']
     ];
-    const bw = (W - 160 - 40) / 3, by = 920, bh = 200;
+    const bw = (W - 160 - 40) / 3, by = 900, bh = 200;
     boxes.forEach((b, i) => {
       const bx = 80 + i * (bw + 20);
-      x.fillStyle = 'rgba(255,255,255,.1)'; roundRect(x, bx, by, bw, bh, 28); x.fill();
-      x.fillStyle = 'rgba(255,255,255,.65)'; x.font = `600 32px ${F}`; x.fillText(b[0], bx + 28, by + 62);
-      x.fillStyle = '#fff'; let f2 = 50; x.font = `800 ${f2}px ${F}`;
-      while (x.measureText(b[1]).width > bw - 50 && f2 > 28) { f2 -= 3; x.font = `800 ${f2}px ${F}`; }
+      x.fillStyle = P.surface; roundRect(x, bx, by, bw, bh, 28); x.fill();
+      x.strokeStyle = P.line; x.lineWidth = 2; x.stroke();
+      x.fillStyle = P.muted; x.font = `500 30px ${F}`; x.fillText(b[0], bx + 28, by + 62);
+      x.fillStyle = P.ink; let f2 = 48; x.font = `700 ${f2}px ${F}`;
+      while (x.measureText(b[1]).width > bw - 50 && f2 > 28) { f2 -= 3; x.font = `700 ${f2}px ${F}`; }
       x.fillText(b[1], bx + 28, by + 140);
     });
     // 바닥
-    x.fillStyle = 'rgba(255,255,255,.55)'; x.font = `500 28px ${F}`;
+    x.fillStyle = P.muted; x.font = `500 28px ${F}`;
     x.fillText('통계청·대법원 공개 통계 기반 추정치예요.', 80, 1210);
-    x.fillStyle = 'rgba(255,255,255,.9)'; x.font = `700 32px ${F}`;
+    x.fillStyle = P.ink; x.font = `700 32px ${F}`;
     x.fillText('친구 이름도 찾아보기 → ' + (location.host || '이름레이더') + location.pathname.replace(/index\.html$/, ''), 80, 1262);
     return c;
   }

@@ -6,8 +6,8 @@
 <title>이름레이더 · 내 이름 전국에 몇 명? 동명이인·성씨 순위·이름 유행 연도</title>
 <meta name="description" content="이름을 넣으면 같은 성씨 인구와 순위(2015 인구주택총조사), 출생신고 이름 순위로 본 이름 유행 연도·평균 출생연도, 전국 동명이인 수 추정을 한 번에 보여 드려요.">
 <meta name="keywords" content="동명이인 찾기, 내 이름 몇 명, 이름 순위, 성씨 순위, 신생아 이름 순위, 인기 이름, 이름 통계, 출생신고 이름 순위">
-<meta name="theme-color" content="#EEF1FA" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0A0D1C" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F6F7F9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1013" media="(prefers-color-scheme: dark)">
 <meta name="color-scheme" content="light dark">
 <link rel="canonical" href="https://leebeesoo.github.io/gene/names/">
 
@@ -25,7 +25,7 @@
 <meta name="twitter:description" content="성씨 순위, 이름 유행 연도, 동명이인 추정을 한 번에.">
 <meta name="twitter:image" content="https://leebeesoo.github.io/gene/names/og.png">
 
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%233340F0'/%3E%3Ccircle cx='32' cy='32' r='21' fill='none' stroke='%23fff' stroke-opacity='.35' stroke-width='3'/%3E%3Ccircle cx='32' cy='32' r='11' fill='none' stroke='%23fff' stroke-opacity='.6' stroke-width='3'/%3E%3Cpath d='M32 32 50 18' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='44' cy='40' r='4.5' fill='%2300E0B0'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232B50D8'/%3E%3Cg fill='none' stroke='%23fff' stroke-width='4' stroke-linecap='round'%3E%3Ccircle cx='32' cy='32' r='20'/%3E%3Ccircle cx='32' cy='32' r='9'/%3E%3Cpath d='M32 32 46 18'/%3E%3C/g%3E%3C/svg%3E">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="css/style.css">
@@ -82,7 +82,7 @@
 <header class="top">
   <div class="wrap top-in">
     <a class="brand" href="./" aria-label="이름레이더 처음으로">
-      <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="12" fill="currentColor"/><circle cx="20" cy="20" r="13" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="2"/><circle cx="20" cy="20" r="6.5" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="2"/><path d="M20 20 31 11" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><circle cx="27.5" cy="25" r="3" fill="#00E0B0"/></svg>
+      <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 12l6.4-6.4"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>
       <span>이름레이더</span>
     </a>
     <a class="top-link" href="#top10">신생아 TOP 10</a>
@@ -92,7 +92,6 @@
 <main id="main">
   <section class="hero" aria-labelledby="heroTitle">
     <div class="wrap">
-      <div class="radar-bg" aria-hidden="true"><span></span><span></span><span></span><i></i></div>
       <p class="eyebrow">성씨 통계 × 출생신고 이름 순위</p>
       <h1 id="heroTitle">내 이름,<br><em>전국에 몇 명</em>일까?</h1>
       <p class="lead">성씨 순위, 이름이 가장 유행한 해, 나와 이름이 같은 사람 수까지 한 번에 찾아 드려요.</p>
@@ -126,7 +125,7 @@
         </details>
         <p id="formErr" class="err" role="alert" hidden></p>
         <button class="btn btn-main" type="submit">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 12l5-4" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg>
           레이더 돌리기
         </button>
       </form>
@@ -171,14 +170,15 @@
   <section class="wrap block" aria-labelledby="nextTitle">
     <div class="block-head"><h2 id="nextTitle">다음에 해볼 테스트</h2></div>
     <ul class="next">
-      <li><a href="../lotto/"><span class="ni ni-1" aria-hidden="true">7</span><b>오늘로또</b><small>사주로 뽑는 오늘의 로또 번호와 살 시간·방향</small></a></li>
-      <li><a href="../lottomap/"><span class="ni ni-6" aria-hidden="true">◎</span><b>명당로드</b><small>로또 1등 명당 지도와 번호 통계</small></a></li>
-      <li><a href="../market/"><span class="ni ni-7" aria-hidden="true">菜</span><b>맛남의 광장</b><small>버려질 뻔한 못난이 농수산물 장터</small></a></li>
-      <li><a href="../season/"><span class="ni ni-5" aria-hidden="true">❀</span><b>제철맛력</b><small>이달의 제철 식재료와 지금 싼 품목</small></a></li>
-      <li><a href="../roots/"><span class="ni ni-3" aria-hidden="true">根</span><b>근본 테스트</b><small>사주와 퀴즈로 찾는 나의 근본 코드</small></a></li>
-      <li><a href="../family/"><span class="ni ni-8" aria-hidden="true">家</span><b>식구궁합</b><small>우리 가족 오행 궁합판</small></a></li>
-      <li><a href="../lifeclock/"><span class="ni ni-4" aria-hidden="true">◔</span><b>남은봄</b><small>남은 주말·명절·벚꽃 세는 인생 시계</small></a></li>
-      <li><a href="../birthyear/"><span class="ni ni-2" aria-hidden="true">年</span><b>나때연감</b><small>내가 태어난 해 타임캡슐</small></a></li>
+      <li><a href="../lotto/"><span class="ni" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.5"/></svg></span><b>오늘로또</b><small>사주로 뽑는 오늘의 로또 번호와 살 시간·방향</small></a></li>
+      <li><a href="../lottomap/"><span class="ni" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-6.5-5.4-6.5-10.5a6.5 6.5 0 0 1 13 0c0 5.1-6.5 10.5-6.5 10.5z"/><circle cx="12" cy="10" r="2.5"/></svg></span><b>명당로드</b><small>로또 1등 명당 지도와 번호 통계</small></a></li>
+      <li><a href="../market/"><span class="ni" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10h16l-1.6 9.2a1 1 0 0 1-1 .8H6.6a1 1 0 0 1-1-.8z"/><path d="M8.5 10 12 4l3.5 6M9.5 14v3M14.5 14v3"/></svg></span><b>맛남의 광장</b><small>버려질 뻔한 못난이 농수산물 장터</small></a></li>
+      <li><a href="../season/"><span class="ni" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 18.5C5.5 10.5 10.5 5.5 19 5c0 8.5-5 13.5-13.5 13.5z"/><path d="M5.5 18.5l7-7"/></svg></span><b>제철장보기</b><small>이달의 제철 식재료와 지금 싼 품목</small></a></li>
+      <li><a href="../hanki/"><span class="ni" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16a8 8 0 0 1-16 0z"/><path d="M9 20.5h6M13 9l6-5.5M10 9l5-5.5"/></svg></span><b>제철한끼</b><small>이달 이 지역 제철 음식 잘하는 집</small></a></li>
+      <li><a href="../roots/"><span class="ni" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21v-9"/><path d="M12 12c0-4 3-6.5 7-6.5 0 4-3 6.5-7 6.5zM12 14.5c0-3-2.5-5.5-6-5.5 0 3 2.5 5.5 6 5.5z"/></svg></span><b>근본 테스트</b><small>사주와 퀴즈로 찾는 나의 근본 코드</small></a></li>
+      <li><a href="../family/"><span class="ni" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11 12 4l8 7"/><path d="M6 9.5V20h12V9.5"/><path d="M10 20v-5h4v5"/></svg></span><b>식구궁합</b><small>우리 가족 오행 궁합판</small></a></li>
+      <li><a href="../lifeclock/"><span class="ni" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></span><b>남은봄</b><small>남은 주말·명절·벚꽃 세는 인생 시계</small></a></li>
+      <li><a href="../birthyear/"><span class="ni" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9.5h16M8.5 3v4M15.5 3v4"/></svg></span><b>나때연감</b><small>내가 태어난 해 타임캡슐</small></a></li>
     </ul>
   </section>
 

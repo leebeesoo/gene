@@ -96,29 +96,44 @@ async function collectAt(doc, history, status) {
     }
     history.plor = { fetched: TODAY, names };
   }
-  let all = [];
-  let mode = 'sale';
-  for (const build of [L.atSaleUrl, L.atRealtimeUrl]) {
-    all = [];
+  const fetchAll = async (build, label) => {
+    const all = [];
     for (const m of history.markets.list) {
       for (let page = 1; page <= 60; page++) {
         const url = build(key, { date, market: m.cd, page });
-        vlog('aT', m.nm, page);
+        vlog(label, m.nm, page);
         const r = L.parseDataGo(await fetchJson(url, { timeout: 30000 }));
-        if (!r.ok) { vlog('aT error', m.nm, r.error); break; }
+        if (!r.ok) { vlog(label, 'error', m.nm, r.error); break; }
         all.push(...r.items);
         if (page * 1000 >= r.total || !r.items.length) break;
       }
     }
-    if (all.length) break;
-    mode = 'realtime';
-  }
+    return all;
+  };
+  const plorNames = history.plor?.names || {};
+  let mode = 'sale';
+  let sale = await fetchAll(L.atSaleUrl, 'aT 정산');
+  let realtime = null;
+  let all = sale;
+  if (!all.length) { mode = 'realtime'; realtime = await fetchAll(L.atRealtimeUrl, 'aT 실시간'); all = realtime; }
   if (!all.length) throw new Error(`aT: ${date} 거래 없음`);
-  const { agg, used, skipped } = L.aggregateAtTrades(all, history.plor?.names || {});
+  const { agg, used, skipped } = L.aggregateAtTrades(all, plorNames);
   L.pushHistory(history, date, agg);
   const rows = L.atMetrics(history, date);
   doc.metrics = L.replaceMetrics(doc.metrics, 'at', rows);
   status.at = `ok(${mode}): 거래 ${used}건 집계(${skipped} 제외) → 지표 ${rows.length} (기록 ${Object.keys(history.days).length}일)`;
+
+  // 헐값 경매: 경매 건별(실시간) 자료가 기준. 못 받으면 정산 행(법인·등급별 묶음)으로 대신 판정
+  let lowMode = 'realtime';
+  try { if (!realtime) realtime = await fetchAll(L.atRealtimeUrl, 'aT 실시간'); } catch (e) { vlog('aT 실시간 실패', e.message); realtime = []; }
+  let src = realtime;
+  if (!src.length) { src = sale; lowMode = 'sale'; }
+  if (!src.length) { status.lows = 'fail(이전 값 유지): 경매 건 없음'; return; }
+  const found = L.findAuctionLows(src, plorNames);
+  doc.auction_lows = L.mergeAuctionLows(doc.auction_lows, found.lows, TODAY);
+  doc.metrics = L.replaceMetrics(doc.metrics, 'at-lows', L.auctionLowMetrics(found.counts));
+  const bump = found.counts.filter((c) => c.count >= L.LOW_BUMP_COUNT).length;
+  status.lows = `ok(${lowMode}): 건 ${found.lots} → 헐값 ${found.counts.reduce((a, c) => a + c.count, 0)} (상위 ${found.lows.length} 저장, 신호 올림 ${bump})`;
 }
 
 async function collectNaver(doc, status) {
@@ -157,7 +172,7 @@ async function main() {
   const prev = await readJson(OUT, {});
   const doc = {
     schema: 1, generated_at: null, sources: [], signals: [],
-    events: prev.events || [], forecasts: prev.forecasts || [], metrics: prev.metrics || [],
+    events: prev.events || [], auction_lows: prev.auction_lows || [], forecasts: prev.forecasts || [], metrics: prev.metrics || [],
   };
   const history = await readJson(HIST, { schema: 1, days: {} });
   const status = {};
@@ -189,7 +204,7 @@ async function main() {
   doc.generated_at = L.kstIso();
 
   const lv = {}; for (const s of doc.signals) lv[s.level] = (lv[s.level] || 0) + 1;
-  log(`signals ${doc.signals.length} ${JSON.stringify(lv)} · events ${doc.events.length} · forecasts ${doc.forecasts.length} · metrics ${doc.metrics.length}`);
+  log(`signals ${doc.signals.length} ${JSON.stringify(lv)} · events ${doc.events.length} · 헐값 경매 ${doc.auction_lows.length} · forecasts ${doc.forecasts.length} · metrics ${doc.metrics.length}`);
   const regions = [...new Set(doc.signals.map((s) => s.sido).filter(Boolean))];
   log(`시도 ${regions.length}곳: ${regions.join(' ')}`);
 

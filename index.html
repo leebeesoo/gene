@@ -4,133 +4,149 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>재미랩 — 오늘 해볼 만한 것들</title>
-<meta name="description" content="사주로 뽑는 오늘의 로또 번호, 로또 명당 지도, 근본 테스트, 가족 궁합, 이름 통계, 인생 시계, 출생연도 타임캡슐, 제철 식재료와 못난이 농수산물 장터까지. 매일 들르고 싶은 작은 웹 서비스 9가지.">
-<meta name="theme-color" content="#f6f5f2" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0f0f12" media="(prefers-color-scheme: dark)">
+<meta name="description" content="사주로 뽑는 오늘의 로또 번호, 로또 명당 지도, 근본 테스트, 가족 궁합, 이름 통계, 인생 시계, 출생연도 타임캡슐, 제철 음식 잘하는 집과 제철 장보기, 버려질 농수산물 지도까지. 매일 들르고 싶은 작은 웹 서비스 10가지.">
+<meta name="theme-color" content="#F7F7F5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111213" media="(prefers-color-scheme: dark)">
 <meta name="color-scheme" content="light dark">
 <link rel="canonical" href="https://leebeesoo.github.io/gene/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="재미랩">
 <meta property="og:url" content="https://leebeesoo.github.io/gene/">
 <meta property="og:title" content="재미랩 — 오늘 해볼 만한 것들">
-<meta property="og:description" content="운세·재미 · 생활·데이터 · 장보기, 작은 웹 서비스 9가지">
+<meta property="og:description" content="운세·재미 · 생활·데이터 · 먹거리, 작은 웹 서비스 10가지">
 <meta property="og:locale" content="ko_KR">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23111'/%3E%3Ccircle cx='32' cy='32' r='14' fill='%23ffcc33'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23191A1C'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23F7F7F5'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 <style>
 :root{
-  --bg:#f6f5f2;--fg:#15151a;--fg-2:#3d3d46;--muted:#6b6b74;--card:#fff;--card-2:#fbfaf7;--line:#e7e5df;--focus:#4b5bff;
-  --t-fun:#e8432b;--t-life:#2563d6;--t-food:#2f7a45;
-  --s-yellow:#fff3c4;--s-red:#fde4dc;--s-green:#dff3e2;--s-blue:#e1ecfb;--s-violet:#ece6fb;--s-pink:#fbe4ee;--s-sand:#f6eedb;--s-teal:#dcf2f0;--s-orange:#fde9d6;
-  --shadow:0 1px 2px rgba(20,20,30,.04),0 14px 36px -22px rgba(20,20,30,.35);
+  --bg:#F7F7F5;--surface:#FFFFFF;--ink:#191A1C;--muted:#6E7076;--line:#E6E6E3;
+  /* 사이트별 포인트 색 — 점으로만 쓴다 */
+  --d-lotto:#D9381E;--d-lottomap:#C8361F;--d-roots:#8E2B22;--d-family:#1F5F57;
+  --d-names:#2B50D8;--d-lifeclock:#C2456A;--d-birthyear:#B23A26;
+  --d-hanki:#B4532A;--d-season:#2F6B4F;--d-market:#3E6B3A;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root{
-  --bg:#0f0f12;--fg:#f2f2f4;--fg-2:#c9c9d2;--muted:#9a9aa6;--card:#18181d;--card-2:#1d1d23;--line:#27272f;--focus:#8c98ff;
-  --t-fun:#ff7a5f;--t-life:#6c9dff;--t-food:#5cc27d;
-  --s-yellow:#3a321a;--s-red:#3b2320;--s-green:#1d3324;--s-blue:#1c2a40;--s-violet:#2a2440;--s-pink:#3a2130;--s-sand:#352e1f;--s-teal:#18332f;--s-orange:#3a2a1a;
-  --shadow:0 1px 2px rgba(0,0,0,.3),0 16px 40px -22px rgba(0,0,0,.8);
+  --bg:#111213;--surface:#1A1B1D;--ink:#ECECEA;--muted:#8E9096;--line:#2A2B2E;
+  --d-lotto:#FF5C41;--d-lottomap:#F06A50;--d-roots:#C9584A;--d-family:#5FA79B;
+  --d-names:#7A93F0;--d-lifeclock:#E07A97;--d-birthyear:#E0664E;
+  --d-hanki:#E07F52;--d-season:#6DB08C;--d-market:#7FAF6F;
   color-scheme:dark;
 }}
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;font-size:16px;line-height:1.5;letter-spacing:-.012em;word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;font-size:16px;line-height:1.5;font-weight:500;letter-spacing:-.01em;word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased}
+h1,h2,h3,p{margin:0}
 a{color:inherit}
-:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:12px}
-.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:10px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+.ic{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 
+/* 상단바 */
+.top{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:56px}
+.brand{display:inline-flex;align-items:center;gap:8px;font-size:16px;font-weight:700;text-decoration:none;letter-spacing:-.02em}
+.brand i{width:10px;height:10px;border-radius:50%;background:var(--ink)}
+.top nav{display:flex;gap:4px}
+.top nav a{font-size:14px;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px}
+.top nav a:hover{color:var(--ink)}
+
+/* 첫 화면: 바탕 위 큰 글자 */
 .hero{padding-top:40px;padding-bottom:8px}
-.brand{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:15px;color:var(--fg-2);margin:0 0 18px}
-.brand i{width:22px;height:22px;border-radius:7px;background:#111;display:grid;place-items:center}
-.brand i::after{content:"";width:10px;height:10px;border-radius:50%;background:#ffcc33}
-@media (prefers-color-scheme:dark){.brand i{background:#2a2a32}}
-h1{font-size:clamp(30px,7.4vw,48px);line-height:1.15;letter-spacing:-.035em;margin:0 0 10px;font-weight:850}
-.sub{color:var(--muted);margin:0;font-size:16.5px}
-.jump{display:flex;gap:8px;margin:22px 0 0;padding:0;list-style:none;overflow-x:auto;scrollbar-width:none}
-.jump::-webkit-scrollbar{display:none}
-.jump a{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap;color:var(--fg-2)}
-.jump a b{font-weight:700;color:var(--muted);font-size:12.5px}
-.jump .dot{width:8px;height:8px;border-radius:50%}
+.kicker{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:.02em;font-variant-numeric:tabular-nums}
+h1{font-size:28px;line-height:1.3;font-weight:700;letter-spacing:-.03em;margin-top:8px}
+.sub{margin-top:8px;color:var(--muted);font-size:16px}
 
-.group{padding-top:30px;scroll-margin-top:12px}
-.g-head{display:flex;align-items:baseline;gap:10px;margin:0 0 12px}
-.g-head h2{margin:0;font-size:19px;font-weight:800;letter-spacing:-.025em;display:flex;align-items:center;gap:8px}
-.g-head h2::before{content:"";width:4px;height:18px;border-radius:2px;background:var(--tone)}
-.g-head p{margin:0;color:var(--muted);font-size:13.5px}
-.fun{--tone:var(--t-fun)}.life{--tone:var(--t-life)}.food{--tone:var(--t-food)}
+/* 묶음 */
+.groups{display:grid;gap:28px;padding-top:28px}
+.group{scroll-margin-top:72px;min-width:0}
+.g-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:0 2px 10px}
+.g-head h2{font-size:20px;font-weight:700;letter-spacing:-.025em}
+.g-head span{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.list{margin:0;padding:0;list-style:none;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.list li+li{border-top:1px solid var(--line)}
+.svc{display:grid;grid-template-columns:8px 1fr 20px;align-items:center;column-gap:14px;padding:16px;min-height:76px;text-decoration:none;transition:background-color .15s}
+.svc:hover{background:color-mix(in srgb,var(--ink) 3%,var(--surface))}
+.svc:active{background:color-mix(in srgb,var(--ink) 6%,var(--surface))}
+.svc .dot{width:8px;height:8px;border-radius:50%;background:var(--dot);align-self:start;margin-top:8px}
+.svc h3{font-size:16px;font-weight:700;letter-spacing:-.02em}
+.svc p{margin-top:2px;font-size:14px;color:var(--muted);line-height:1.45}
+.svc .ic{color:var(--muted);transition:transform .15s,color .15s}
+.svc:hover .ic{color:var(--ink);transform:translateX(2px)}
+.s-lotto{--dot:var(--d-lotto)}.s-lottomap{--dot:var(--d-lottomap)}.s-roots{--dot:var(--d-roots)}.s-family{--dot:var(--d-family)}
+.s-names{--dot:var(--d-names)}.s-lifeclock{--dot:var(--d-lifeclock)}.s-birthyear{--dot:var(--d-birthyear)}
+.s-hanki{--dot:var(--d-hanki)}.s-season{--dot:var(--d-season)}.s-market{--dot:var(--d-market)}
 
-.grid{display:grid;gap:10px;grid-template-columns:1fr;margin:0;padding:0;list-style:none}
-.grid>li{display:grid}
-a.card{position:relative;display:grid;grid-template-columns:52px 1fr 20px;align-items:center;gap:14px;padding:16px;border-radius:20px;background:var(--card);border:1px solid var(--line);text-decoration:none;box-shadow:var(--shadow);transition:transform .2s cubic-bezier(.2,.8,.2,1),border-color .2s}
-a.card:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--tone) 45%,var(--line))}
-a.card:active{transform:scale(.985)}
-.ico{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;font-size:26px;line-height:1}
-.txt{min-width:0}
-.card h3{margin:0 0 2px;font-size:17px;font-weight:800;letter-spacing:-.025em}
-.card p{margin:0;color:var(--muted);font-size:14px;line-height:1.45}
-.arw{width:20px;height:20px;color:var(--muted);transition:transform .2s,color .2s}
-a.card:hover .arw{transform:translateX(3px);color:var(--tone)}
+.ad{position:relative;margin:32px 0 0;min-height:120px;padding:22px 0 6px;border:1px solid var(--line);border-radius:12px;overflow:hidden;text-align:center}
+.ad small{position:absolute;top:5px;left:12px;color:var(--muted);font-size:12px;font-weight:500}
+footer{margin-top:32px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
+footer .wrap{padding-top:20px;padding-bottom:calc(40px + env(safe-area-inset-bottom))}
+footer p+p{margin-top:4px}
 
-.ad{position:relative;margin:36px 0 0;min-height:120px;padding:22px 0 6px;border-radius:16px;background:color-mix(in srgb,var(--card) 60%,transparent);overflow:hidden;text-align:center}
-.ad small{position:absolute;top:5px;left:12px;color:var(--muted);font-size:10.5px;font-weight:600;letter-spacing:.04em}
-footer{margin-top:28px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
-footer .wrap{padding-top:22px;padding-bottom:calc(40px + env(safe-area-inset-bottom))}
-footer p{margin:0 0 6px}
-
-@media (min-width:640px){
-  .hero{padding-top:64px}
-  .grid{grid-template-columns:repeat(2,1fr);gap:14px}
-  a.card{grid-template-columns:1fr;grid-template-rows:auto auto 1fr;align-items:start;gap:14px;padding:22px;min-height:196px;border-radius:24px}
-  .ico{width:56px;height:56px;font-size:28px}
-  .card h3{font-size:19px;margin-bottom:4px}
-  .card p{font-size:14.5px}
-  .arw{position:absolute;right:20px;top:24px}
+@media (min-width:720px){
+  .hero{padding-top:72px;padding-bottom:16px}
+  .groups{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 20px;padding-top:36px}
 }
-@media (min-width:960px){.grid{grid-template-columns:repeat(3,1fr)}.fun .grid{grid-template-columns:repeat(4,1fr)}.food .grid{grid-template-columns:repeat(2,1fr)}.food a.card{min-height:150px}.group{padding-top:40px}}
+@media (min-width:1000px){
+  .groups{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
-<header class="wrap hero">
-  <p class="brand"><i aria-hidden="true"></i>재미랩</p>
-  <h1>오늘 뭐 해볼까?</h1>
-  <p class="sub">매일 들러도 새로운 작은 서비스 9가지. 모든 입력은 내 기기에만 남아요.</p>
-  <ul class="jump" aria-label="분류 바로가기">
-    <li><a href="#fun"><span class="dot" style="background:var(--t-fun)"></span>운세·재미 <b>4</b></a></li>
-    <li><a href="#life"><span class="dot" style="background:var(--t-life)"></span>생활·데이터 <b>3</b></a></li>
-    <li><a href="#food"><span class="dot" style="background:var(--t-food)"></span>장보기 <b>2</b></a></li>
-  </ul>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-next" viewBox="0 0 20 20"><path d="M7.5 4.5 13 10l-5.5 5.5"/></symbol>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="./"><i aria-hidden="true"></i>재미랩</a>
+    <nav aria-label="분류 바로가기">
+      <a href="#fun">운세·재미</a>
+      <a href="#life">생활·데이터</a>
+      <a href="#food">먹거리</a>
+    </nav>
+  </div>
 </header>
 
 <main class="wrap">
-  <section class="group fun" id="fun" aria-labelledby="fun-h">
-    <div class="g-head"><h2 id="fun-h">운세·재미</h2><p>사주·퀴즈로 가볍게</p></div>
-    <ul class="grid">
-      <li><a class="card" href="lotto/"><span class="ico" style="background:var(--s-yellow)" aria-hidden="true">🎱</span><div class="txt"><h3>오늘로또</h3><p>사주로 뽑는 오늘의 로또 번호와 살 시간·방향</p></div><svg class="arw" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5"/></svg></a></li>
-      <li><a class="card" href="roots/"><span class="ico" style="background:var(--s-violet)" aria-hidden="true">🌳</span><div class="txt"><h3>근본 테스트</h3><p>사주와 퀴즈로 찾는 나의 근본 코드</p></div><svg class="arw" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5"/></svg></a></li>
-      <li><a class="card" href="family/"><span class="ico" style="background:var(--s-red)" aria-hidden="true">👨‍👩‍👧</span><div class="txt"><h3>식구궁합</h3><p>우리 가족 오행 궁합판</p></div><svg class="arw" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5"/></svg></a></li>
-      <li><a class="card" href="names/"><span class="ico" style="background:var(--s-pink)" aria-hidden="true">📡</span><div class="txt"><h3>이름레이더</h3><p>내 이름, 전국에 몇 명?</p></div><svg class="arw" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5"/></svg></a></li>
-    </ul>
+  <section class="hero" aria-labelledby="hero-h">
+    <p class="kicker">작은 웹 서비스 10가지</p>
+    <h1 id="hero-h">오늘 뭐 해볼까?</h1>
+    <p class="sub">매일 들러도 새로운 것들. 입력한 정보는 내 기기에만 남아요.</p>
   </section>
 
-  <section class="group life" id="life" aria-labelledby="life-h">
-    <div class="g-head"><h2 id="life-h">생활·데이터</h2><p>공개 통계로 보는 숫자들</p></div>
-    <ul class="grid">
-      <li><a class="card" href="lottomap/"><span class="ico" style="background:var(--s-blue)" aria-hidden="true">🗺️</span><div class="txt"><h3>명당로드</h3><p>로또 1등 명당 지도와 번호 통계</p></div><svg class="arw" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5"/></svg></a></li>
-      <li><a class="card" href="lifeclock/"><span class="ico" style="background:var(--s-teal)" aria-hidden="true">🌸</span><div class="txt"><h3>남은봄</h3><p>남은 주말·명절·벚꽃 세는 인생 시계</p></div><svg class="arw" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5"/></svg></a></li>
-      <li><a class="card" href="birthyear/"><span class="ico" style="background:var(--s-sand)" aria-hidden="true">📼</span><div class="txt"><h3>나때연감</h3><p>내가 태어난 해 타임캡슐</p></div><svg class="arw" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5"/></svg></a></li>
-    </ul>
-  </section>
+  <div class="groups">
+    <section class="group" id="fun" aria-labelledby="fun-h">
+      <div class="g-head"><h2 id="fun-h">운세·재미</h2><span>4</span></div>
+      <ul class="list">
+        <li><a class="svc s-lotto" href="lotto/"><span class="dot" aria-hidden="true"></span><div><h3>오늘로또</h3><p>사주로 뽑는 오늘의 로또 번호와 살 시간·방향</p></div><svg class="ic" aria-hidden="true"><use href="#i-next"/></svg></a></li>
+        <li><a class="svc s-lottomap" href="lottomap/"><span class="dot" aria-hidden="true"></span><div><h3>명당로드</h3><p>로또 1등 명당 지도와 번호 통계</p></div><svg class="ic" aria-hidden="true"><use href="#i-next"/></svg></a></li>
+        <li><a class="svc s-roots" href="roots/"><span class="dot" aria-hidden="true"></span><div><h3>근본 테스트</h3><p>사주와 퀴즈로 찾는 나의 근본 코드</p></div><svg class="ic" aria-hidden="true"><use href="#i-next"/></svg></a></li>
+        <li><a class="svc s-family" href="family/"><span class="dot" aria-hidden="true"></span><div><h3>식구궁합</h3><p>우리 가족 오행 궁합판</p></div><svg class="ic" aria-hidden="true"><use href="#i-next"/></svg></a></li>
+      </ul>
+    </section>
 
-  <section class="group food" id="food" aria-labelledby="food-h">
-    <div class="g-head"><h2 id="food-h">장보기</h2><p>제철에 싸고 맛있게</p></div>
-    <ul class="grid">
-      <li><a class="card" href="market/"><span class="ico" style="background:var(--s-green)" aria-hidden="true">🥬</span><div class="txt"><h3>맛남의 광장</h3><p>버려질 뻔한 못난이 농수산물 장터</p></div><svg class="arw" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5"/></svg></a></li>
-      <li><a class="card" href="season/"><span class="ico" style="background:var(--s-orange)" aria-hidden="true">🍂</span><div class="txt"><h3>제철맛력</h3><p>이달의 제철 식재료와 지금 싼 품목</p></div><svg class="arw" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5 13 10l-5.5 5.5"/></svg></a></li>
-    </ul>
-  </section>
+    <section class="group" id="life" aria-labelledby="life-h">
+      <div class="g-head"><h2 id="life-h">생활·데이터</h2><span>3</span></div>
+      <ul class="list">
+        <li><a class="svc s-names" href="names/"><span class="dot" aria-hidden="true"></span><div><h3>이름레이더</h3><p>내 이름, 전국에 몇 명?</p></div><svg class="ic" aria-hidden="true"><use href="#i-next"/></svg></a></li>
+        <li><a class="svc s-lifeclock" href="lifeclock/"><span class="dot" aria-hidden="true"></span><div><h3>남은봄</h3><p>남은 주말·명절·벚꽃 세는 인생 시계</p></div><svg class="ic" aria-hidden="true"><use href="#i-next"/></svg></a></li>
+        <li><a class="svc s-birthyear" href="birthyear/"><span class="dot" aria-hidden="true"></span><div><h3>나때연감</h3><p>내가 태어난 해 타임캡슐</p></div><svg class="ic" aria-hidden="true"><use href="#i-next"/></svg></a></li>
+      </ul>
+    </section>
+
+    <section class="group" id="food" aria-labelledby="food-h">
+      <div class="g-head"><h2 id="food-h">먹거리</h2><span>3</span></div>
+      <ul class="list">
+        <li><a class="svc s-hanki" href="hanki/"><span class="dot" aria-hidden="true"></span><div><h3>제철한끼</h3><p>이달 이 지역 제철 음식을 잘하는 집</p></div><svg class="ic" aria-hidden="true"><use href="#i-next"/></svg></a></li>
+        <li><a class="svc s-season" href="season/"><span class="dot" aria-hidden="true"></span><div><h3>제철장보기</h3><p>이달 제철 식재료와 지금 싼 품목</p></div><svg class="ic" aria-hidden="true"><use href="#i-next"/></svg></a></li>
+        <li><a class="svc s-market" href="market/"><span class="dot" aria-hidden="true"></span><div><h3>맛남의 광장</h3><p>버려질 농수산물이 어디서 남는지, 버려지기 전에</p></div><svg class="ic" aria-hidden="true"><use href="#i-next"/></svg></a></li>
+      </ul>
+    </section>
+  </div>
 
   <div class="ad" aria-label="광고"><small>광고</small>
     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>

@@ -289,6 +289,117 @@ export function atMetrics(history, date, { minDays = 7, window = 28 } = {}) {
   return out;
 }
 
+// ───────────── 2-1. 헐값 경매 (auction_lows) ─────────────
+// 실시간 경매(katRealTime2/trades2, 15141808) 명세: scsbd_prc '단량당 낙찰가(원)', qty '수량', unit_qty '단위물량',
+// unit_nm '단위명', corp_gds_vrty_nm '법인상품품종명', plor_nm '원산지명' (등급 필드 없음).
+// 정산(katSale/trades, 15141809) 행도 받습니다: avgprc '평균가(단량당)', unit_tot_qty '단위총물량', grd_nm '등급명'.
+export const LOW_RATIO = 0.3;      // 당일 같은 품목(가능하면 같은 품종) 전국 가중평균 kg당 가격의 30% 이하
+export const LOW_MIN_KG = 20;      // 20kg 미만 건은 잡음으로 보고 제외
+export const LOW_MIN_GROUP = 5;    // 비교 기준 묶음에 최소 5건 이상 있어야 판정
+export const LOW_TOP = 50;
+export const LOW_KEEP_DAYS = 7;
+export const LOW_BUMP_COUNT = 5;   // 하루 한 산지·품목에서 헐값 5건 이상 → 신호 최소 'surplus'
+const OFF_GRADE = /등외|규격외|비상품|파지|잔품|못난이|B품/;
+
+/** 단위물량 + 단위명 → 한 단량의 kg ('kg'+10 → 10, '500g'+1 → 0.5, '개'·'속' → null) */
+export function unitSizeKg(unitQty, unitNm) {
+  const m = String(unitNm || '').toLowerCase().replace(/\s/g, '').match(/^(\d+(?:\.\d+)?)?(kg|킬로그램|g|그램|t|톤|ton)$/);
+  if (!m) return null;
+  const f = { kg: 1, 킬로그램: 1, g: 0.001, 그램: 0.001, t: 1000, 톤: 1000, ton: 1000 }[m[2]];
+  const inName = m[1] ? Number(m[1]) : 1;
+  const q = num(unitQty);
+  const size = (q != null && q > 0 ? q : 1) * inName * f;
+  return size > 0 ? size : null;
+}
+
+/** 경매 건(실시간) 또는 정산 행 → 비교용 건. 무게 단위가 아니거나 산지를 모르면 null */
+export function auctionLot(r, plorNames = {}) {
+  const lc = String(r.gds_lclsf_nm || '');
+  if (/축산|화훼|가공|기타/.test(lc) && !/수산/.test(lc)) return null;
+  const item = normItem(String(r.gds_mclsf_nm || r.corp_gds_item_nm || '').trim());
+  if (!item) return null;
+  const unitKgv = unitSizeKg(r.unit_qty, r.unit_nm);
+  if (!unitKgv) return null;
+  const realtime = r.scsbd_prc != null;
+  const price = num(realtime ? r.scsbd_prc : r.avgprc ?? r.scsbd_prc);
+  if (!price || price <= 0) return null;
+  let qty, kg;
+  if (realtime) { qty = num(r.qty); kg = qty != null ? qty * unitKgv : null; }
+  else {
+    const f = unitSizeKg(1, r.unit_nm); // 정산 unit_tot_qty는 단위명 기준 총물량
+    kg = num(r.unit_tot_qty) != null ? num(r.unit_tot_qty) * f : null;
+    qty = kg != null ? Math.round(kg / unitKgv) : null;
+  }
+  if (!kg || kg <= 0) return null;
+  const { sido, sigungu } = findRegion(String(r.plor_nm || plorNames[r.plor_cd] || '').trim());
+  const variety = String(r.corp_gds_vrty_nm || r.gds_sclsf_nm || '').trim() || null;
+  return {
+    date: String(r.trd_clcln_ymd || '').slice(0, 10), market: String(r.whsl_mrkt_nm || '').trim() || null,
+    sido, sigungu: sido ? sigungu || null : null, item, variety: variety === item ? null : variety,
+    grade: String(r.grd_nm || '').trim() || null,
+    unit_kg: unitKgv, price, price_per_kg: price / unitKgv, qty, kg,
+    category: AT_CAT.find(([re]) => re.test(lc))?.[1] || categoryOf(item),
+  };
+}
+
+/**
+ * 헐값 경매 찾기.
+ * 기준: 같은 (날짜, 품목, 품종) 국산 건들의 무게 가중평균 kg당 가격(건수가 모자라면 같은 (날짜, 품목) 전체).
+ * 등외·규격외처럼 원래 싼 등급은 평균에도, 헐값 후보에도 넣지 않습니다.
+ * → { lows: 상위 top개(비율 낮은 순), counts: [{date, sido, sigungu, item, category, count, min_ratio}], lots }
+ */
+export function findAuctionLows(items, plorNames = {}, { ratio = LOW_RATIO, minKg = LOW_MIN_KG, minGroup = LOW_MIN_GROUP, top = LOW_TOP } = {}) {
+  const lots = [];
+  for (const r of items) {
+    const l = auctionLot(r, plorNames);
+    if (l && l.sido && l.date && !OFF_GRADE.test(`${l.grade || ''} ${l.variety || ''}`)) lots.push(l);
+  }
+  const groups = new Map();
+  const add = (k, l) => { const g = groups.get(k) || groups.set(k, { kg: 0, won: 0, n: 0 }).get(k); g.kg += l.kg; g.won += l.price_per_kg * l.kg; g.n++; };
+  for (const l of lots) { add(`${l.date}|${l.item}|`, l); if (l.variety) add(`${l.date}|${l.item}|${l.variety}`, l); }
+  const all = [];
+  for (const l of lots) {
+    if (l.kg < minKg) continue;
+    let g = l.variety ? groups.get(`${l.date}|${l.item}|${l.variety}`) : null;
+    if (!g || g.n < minGroup) g = groups.get(`${l.date}|${l.item}|`);
+    if (!g || g.n < minGroup || !g.kg) continue;
+    const avg = g.won / g.kg;
+    const r = l.price_per_kg / avg;
+    if (r > ratio) continue;
+    all.push({
+      date: l.date, market: l.market, sido: l.sido, sigungu: l.sigungu, item: l.item, variety: l.variety, grade: l.grade,
+      unit_kg: Math.round(l.unit_kg * 100) / 100, price: Math.round(l.price), price_per_kg: Math.round(l.price_per_kg),
+      avg_price_per_kg: Math.round(avg), ratio: Math.round(r * 100) / 100, qty: l.qty,
+      _kg: l.kg, _cat: l.category, _r: r,
+    });
+  }
+  const cmap = new Map();
+  for (const x of all) {
+    const k = `${x.date}|${x.sido}|${x.sigungu || ''}|${x.item}`;
+    const c = cmap.get(k) || cmap.set(k, { date: x.date, sido: x.sido, sigungu: x.sigungu, item: x.item, category: x._cat, count: 0, min_ratio: 1 }).get(k);
+    c.count++; c.min_ratio = Math.min(c.min_ratio, x.ratio);
+  }
+  all.sort((a, b) => a._r - b._r || b._kg - a._kg || a.item.localeCompare(b.item));
+  const lows = all.slice(0, top).map(({ _kg, _cat, _r, ...x }) => x);
+  return { lows, counts: [...cmap.values()], lots: lots.length };
+}
+
+/** 헐값 집계 → 지표 행(origin 'at-lows'). 화면 표시용 지표로는 고르지 않고 신호 등급 올리기에만 씁니다 */
+export function auctionLowMetrics(counts) {
+  return counts.map((c) => ({
+    key: `at-lows|${c.sido}|${c.sigungu || ''}|${c.item}|${c.date}`, origin: 'at-lows', source_id: 'at',
+    sido: c.sido, sigungu: c.sigungu || null, item: c.item, category: c.category,
+    price: null, unit: null, price_basis: null, price_vs_normal_pct: null, price_vs_last_year_pct: null, volume_vs_normal_ratio: null,
+    auction_lows: c.count, min_ratio: c.min_ratio, market: '전국 공영도매시장', as_of: c.date,
+  }));
+}
+
+/** 이번에 새로 받았으면(fresh 배열) 교체, 못 받았으면(null) 이전 값 유지. 어느 쪽이든 7일 지난 건은 지움 */
+export function mergeAuctionLows(prev, fresh, today, keepDays = LOW_KEEP_DAYS) {
+  const base = fresh ?? prev ?? [];
+  return base.filter((x) => x.date && daysBetween(x.date, today) <= keepDays && daysBetween(x.date, today) >= -1);
+}
+
 // ───────────── 3. 네이버 뉴스 ─────────────
 export const NAVER_NEWS = 'https://openapi.naver.com/v1/search/news.json';
 export const NEWS_QUERIES = [
@@ -468,12 +579,20 @@ function supportFor(item, events, today) {
  */
 export function deriveSignals({ metrics = [], events = [], today }) {
   const fresh = (d) => d && daysBetween(d, today) <= KEEP_DAYS && daysBetween(d, today) >= -1;
-  const ms = metrics.filter((m) => fresh(asOfDate(m.as_of)));
+  const ms = metrics.filter((m) => m.origin !== 'at-lows' && fresh(asOfDate(m.as_of)));
+  const lowRows = metrics.filter((m) => m.origin === 'at-lows' && m.sido && m.as_of
+    && daysBetween(m.as_of, today) <= LOW_KEEP_DAYS && daysBetween(m.as_of, today) >= -1);
   const es = events.filter((e) => fresh(e.date) && e.item);
   const keyOf = (o) => `${o.sido || ''}|${o.sido ? o.sigungu || '' : ''}|${normItem(o.item)}`;
   const groups = new Map();
-  const g = (k, base) => groups.get(k) || groups.set(k, { ...base, metrics: [], events: [] }).get(k);
+  const g = (k, base) => groups.get(k) || groups.set(k, { ...base, metrics: [], events: [], lows: 0 }).get(k);
   for (const e of es) g(keyOf(e), { sido: e.sido || null, sigungu: e.sido ? e.sigungu || null : null, item: normItem(e.item) }).events.push(e);
+  // 헐값 경매: 하루 한 산지·품목에서 LOW_BUMP_COUNT건 이상이면 신호를 만들고 최소 'surplus'
+  for (const m of lowRows) {
+    if ((m.auction_lows || 0) < LOW_BUMP_COUNT) continue;
+    const grp = g(keyOf(m), { sido: m.sido, sigungu: m.sigungu || null, item: normItem(m.item) });
+    grp.lows = Math.max(grp.lows, m.auction_lows);
+  }
   for (const m of ms) {
     const k = keyOf(m);
     if (groups.has(k) || metricFlag(m)) g(k, { sido: m.sido || null, sigungu: m.sido ? m.sigungu || null : null, item: normItem(m.item) }).metrics.push(m);
@@ -500,9 +619,11 @@ export function deriveSignals({ metrics = [], events = [], today }) {
         : (LEVEL_RANK[flag] || 0) > LEVEL_RANK.surplus ? flag : 'surplus';
     }
     else level = flag || 'watch';
+    if (grp.lows && level !== 'disposal' && (LEVEL_RANK[level] || 0) < LEVEL_RANK.surplus) level = 'surplus';
     const evSorted = [...grp.events].sort((a, b) => b.date.localeCompare(a.date));
     const sourceIds = new Set();
     if (m) sourceIds.add(m.source_id);
+    if (grp.lows) sourceIds.add('at');
     for (const e of evSorted) sourceIds.add(e.source_id || (e.publisher === '농림축산식품부' ? 'mafra' : 'news'));
     signals.push({
       id: signalId(grp.sido, grp.sigungu, grp.item),
@@ -533,7 +654,9 @@ export function deriveSignals({ metrics = [], events = [], today }) {
 /** 오래된 사건·지표 정리 */
 export function prune(doc, today) {
   doc.events = (doc.events || []).filter((e) => e.date && daysBetween(e.date, today) <= KEEP_DAYS);
-  doc.metrics = (doc.metrics || []).filter((m) => asOfDate(m.as_of) && daysBetween(asOfDate(m.as_of), today) <= KEEP_DAYS);
+  doc.metrics = (doc.metrics || []).filter((m) => asOfDate(m.as_of)
+    && daysBetween(asOfDate(m.as_of), today) <= (m.origin === 'at-lows' ? LOW_KEEP_DAYS : KEEP_DAYS));
+  doc.auction_lows = mergeAuctionLows(doc.auction_lows, null, today);
   doc.forecasts = (doc.forecasts || []).filter((f) => !f.period || asOfDate(f.period) >= shiftDate(today, -KEEP_DAYS));
   return doc;
 }

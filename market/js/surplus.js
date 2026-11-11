@@ -123,9 +123,23 @@ function normalize(raw, fixture) {
   const forecasts = (Array.isArray(raw?.forecasts) ? raw.forecasts : []).filter((f) => f && f.item && f.summary).map((f) => ({
     item: str(f.item), period: str(f.period) || null, summary: str(f.summary), source_id: f.source_id ? String(f.source_id) : null, url: okUrl(f.url),
   }));
+  const auctionLows = (Array.isArray(raw?.auction_lows) ? raw.auction_lows : [])
+    .filter((a) => a && str(a.item) && numOr(a.price_per_kg) != null)
+    .map((a) => {
+      const ppk = numOr(a.price_per_kg);
+      const avg = numOr(a.avg_price_per_kg);
+      const ratio = numOr(a.ratio) ?? (avg ? ppk / avg : null);
+      return {
+        date: str(a.date) || null, market: str(a.market) || null,
+        sido: REGION_NAMES.includes(a.sido) ? a.sido : null, sigungu: str(a.sigungu) || null,
+        item: str(a.item), variety: str(a.variety) || null, grade: str(a.grade) || null,
+        unit_kg: numOr(a.unit_kg), price: numOr(a.price), price_per_kg: ppk, avg_price_per_kg: avg,
+        ratio: ratio != null && ratio >= 0 && ratio <= 1 ? ratio : null, qty: numOr(a.qty),
+      };
+    });
   return {
     ok: true, fixture, test: fixture || raw?._test === true,
-    generatedAt: str(raw?.generated_at) || null, sources, signals, events, forecasts,
+    generatedAt: str(raw?.generated_at) || null, sources, signals, events, forecasts, auctionLows,
     empty: !signals.length && !events.length && !forecasts.length,
   };
 }
@@ -148,7 +162,7 @@ export async function loadSurplus() {
       return normalize(await res.json(), fixture);
     } catch (err) {
       console.warn('[surplus] load failed', err);
-      return { ok: false, fixture, test: fixture, generatedAt: null, sources: [], signals: [], events: [], forecasts: [], empty: true };
+      return { ok: false, fixture, test: fixture, generatedAt: null, sources: [], signals: [], events: [], forecasts: [], auctionLows: [], empty: true };
     }
   })();
   return cache;
@@ -198,4 +212,48 @@ export function listingsForItem(list, item, sido = null) {
   };
   const hit = list.filter((l) => match(l.title));
   return sido ? [...hit.filter((l) => l.region === sido), ...hit.filter((l) => l.region !== sido)] : hit;
+}
+
+// ── 헐값 경매 (auction_lows) ──
+const ymd = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+/** '오늘' | '어제' | null(그 밖) */
+export function relDay(iso, now = new Date()) {
+  if (!iso) return null;
+  const d = iso.slice(0, 10);
+  if (d === ymd(now)) return '오늘';
+  const y = new Date(now); y.setDate(y.getDate() - 1);
+  return d === ymd(y) ? '어제' : null;
+}
+
+/**
+ * 품목별 묶음: [{ item, minRatio, total, lines: [{ date, sido, sigungu, n, minPpk, maxPpk, minRatio, maxRatio, markets, varieties }] }]
+ * lines는 (날짜, 산지)별로 묶어요.
+ */
+export function groupAuctionLows(rows) {
+  const byItem = new Map();
+  for (const a of rows) {
+    if (!byItem.has(a.item)) byItem.set(a.item, new Map());
+    const key = [a.date, a.sido, a.sigungu].join('|');
+    const g = byItem.get(a.item);
+    if (!g.has(key)) g.set(key, { date: a.date, sido: a.sido, sigungu: a.sigungu, rows: [] });
+    g.get(key).rows.push(a);
+  }
+  const uniq = (xs) => [...new Set(xs.filter(Boolean))];
+  const out = [];
+  for (const [item, g] of byItem) {
+    const lines = [...g.values()].map((x) => {
+      const ppk = x.rows.map((r) => r.price_per_kg);
+      const rt = x.rows.map((r) => r.ratio).filter((v) => v != null);
+      return {
+        date: x.date, sido: x.sido, sigungu: x.sigungu, n: x.rows.length,
+        minPpk: Math.min(...ppk), maxPpk: Math.max(...ppk),
+        minRatio: rt.length ? Math.min(...rt) : null, maxRatio: rt.length ? Math.max(...rt) : null,
+        markets: uniq(x.rows.map((r) => r.market)),
+        varieties: uniq(x.rows.map((r) => [r.variety, r.grade].filter(Boolean).join(' '))),
+      };
+    }).sort((a, b) => String(b.date).localeCompare(String(a.date)) || (a.minRatio ?? 1) - (b.minRatio ?? 1));
+    const rs = lines.map((l) => l.minRatio).filter((v) => v != null);
+    out.push({ item, lines, total: lines.reduce((s, l) => s + l.n, 0), minRatio: rs.length ? Math.min(...rs) : null });
+  }
+  return out.sort((a, b) => (a.minRatio ?? 1) - (b.minRatio ?? 1) || b.total - a.total);
 }

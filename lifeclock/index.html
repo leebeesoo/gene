@@ -6,7 +6,8 @@
 <title>남은봄 — 인생 시계 | 남은 주말·명절·벚꽃 세기, 만 나이, 정신 나이 테스트</title>
 <meta name="description" content="생년월일과 성별만 넣으면 통계청(국가데이터처) 2024년 생명표로 남은 주말, 추석·설, 벚꽃, 월드컵, 대선 횟수를 세어 드려요. 인생 주 단위 달력, 만 나이·연 나이·한국 나이, 정신 나이 테스트까지.">
 <meta name="keywords" content="인생시계, 남은 시간 계산기, 기대수명 계산, 기대여명, 생명표, 만 나이 계산기, 정신 나이 테스트, 인생 달력, 살아온 날 계산, 10000일 계산">
-<meta name="theme-color" content="#2b1f3a">
+<meta name="theme-color" content="#F7F5F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121113" media="(prefers-color-scheme: dark)">
 <link rel="canonical" href="https://leebeesoo.github.io/gene/lifeclock/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="남은봄">
@@ -21,7 +22,7 @@
 <meta name="twitter:title" content="벚꽃, 앞으로 몇 번 더 볼까? — 남은봄">
 <meta name="twitter:description" content="남은 주말·추석·벚꽃·월드컵 · 인생 주 단위 달력 · 정신 나이 테스트">
 <meta name="twitter:image" content="https://leebeesoo.github.io/gene/lifeclock/og.png">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%232b1f3a'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%23f7a8bd' stroke-width='3' stroke-dasharray='3 8.5'/%3E%3Cpath d='M32 32 L32 13' stroke='%23fbf5ef' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M32 32 C40 26 47 30 46 36 C41 38 36 36 32 32Z' fill='%23e2486f'/%3E%3Ccircle cx='32' cy='32' r='4' fill='%23fbf5ef'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23C2456A'/%3E%3Cg fill='none' stroke='%23fff' stroke-width='4' stroke-linecap='round'%3E%3Ccircle cx='32' cy='32' r='20'/%3E%3Cpath d='M32 20v12l8 5'/%3E%3C/g%3E%3C/svg%3E">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="css/style.css">
@@ -66,13 +67,13 @@
 <header class="top">
   <div class="top-in">
     <a class="brand" href="./" aria-label="남은봄 처음으로">
-      <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="28" fill="var(--night)"/><circle cx="32" cy="32" r="22" fill="none" stroke="var(--blossom-2)" stroke-width="3" stroke-dasharray="3 8.5"/><path d="M32 32 L32 13" stroke="var(--bg)" stroke-width="5" stroke-linecap="round"/><path d="M32 32 C40 26 47 30 46 36 C41 38 36 36 32 32Z" fill="var(--blossom)"/><circle cx="32" cy="32" r="4" fill="var(--bg)"/></svg>
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/></svg>
       남은봄<small>인생 시계</small>
     </a>
     <span class="top-sp"></span>
     <button class="txt-btn" type="button" id="btnEdit" hidden>다시 입력</button>
     <button class="icon-btn" type="button" id="btnTheme" aria-label="화면 테마 바꾸기">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
     </button>
   </div>
 </header>
@@ -81,10 +82,6 @@
   <div id="viewHome">
     <div class="wrap">
       <section class="hero" id="intro" aria-labelledby="introTitle">
-        <svg class="petals" viewBox="0 0 100 100" aria-hidden="true">
-          <g fill="var(--blossom-2)"><path d="M50 50c-6-14-2-26 6-30 4 8 2 20-6 30z"/><path d="M50 50c14-6 26-2 30 6-8 4-20 2-30-6z" opacity=".85"/><path d="M50 50c6 14 2 26-6 30-4-8-2-20 6-30z" opacity=".7"/><path d="M50 50c-14 6-26 2-30-6 8-4 20-2 30 6z" opacity=".8"/></g>
-          <circle cx="50" cy="50" r="5" fill="var(--blossom)"/>
-        </svg>
         <span class="eyebrow">2024년 생명표 기준</span>
         <h1 id="introTitle">벚꽃,<br>앞으로 <em>몇 번</em> 더 볼까?</h1>
         <p class="lead">생일과 성별만 넣으면 남은 주말·명절·벚꽃을 세어 드려요. 숫자를 보면 오늘이 조금 달라 보일 거예요.</p>

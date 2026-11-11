@@ -32,6 +32,17 @@ const BASE = location.origin + location.pathname;
 const hanjaCode = id => typeBits(id).map((b, i) => b ? AXES[i].neg : AXES[i].pos);
 const josa = (w, a, b) => { const c = String(w).charCodeAt(String(w).length - 1); return (c >= 0xac00 && c <= 0xd7a3 && (c - 0xac00) % 28) ? a : b; };
 const NOW_Y = new Date().getFullYear();
+/* 1.5px 선 아이콘 한 세트 (24 그리드) */
+const ICON = {
+  clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+  lock: '<rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>',
+  chart: '<path d="M4 20h16M7 16v-4M12 16V7M17 16v-6"/>',
+  alert: '<path d="M12 4.5l8.5 15h-17z"/><path d="M12 10v4M12 16.8v.2"/>',
+  mail: '<rect x="3.5" y="6" width="17" height="12" rx="2"/><path d="M4.5 7.5l7.5 5.5 7.5-5.5"/>',
+  close: '<path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/>',
+  back: '<path d="M14.5 5.5L8 12l6.5 6.5"/>',
+};
+const icon = (n, s = 20) => `<svg class="ic" width="${s}" height="${s}" viewBox="0 0 24 24" aria-hidden="true">${ICON[n]}</svg>`;
 const euro = w => { const t = String(w).replace(/\([^)]*\)/g, '').trim(); const c = t.charCodeAt(t.length - 1); if (!(c >= 0xac00 && c <= 0xd7a3)) return '(으)로'; const j = (c - 0xac00) % 28; return j === 0 || j === 8 ? '로' : '으로'; };
 
 function toast(msg) {
@@ -90,7 +101,8 @@ function nextTests(exclude = '') {
     { k: 'lotto', href: '../lotto/', icon: '福', t: '오늘로또', d: '사주로 뽑는 오늘의 번호' },
     { k: 'lottomap', href: '../lottomap/', icon: '地', t: '명당로드', d: '로또 명당 지도' },
     { k: 'market', href: '../market/', icon: '市', t: '맛남의 광장', d: '리퍼브 농수산물 직거래' },
-    { k: 'season', href: '../season/', icon: '節', t: '제철맛력', d: '이달의 제철 음식' },
+    { k: 'season', href: '../season/', icon: '節', t: '제철장보기', d: '이달 제철 식재료와 지금 싼 품목' },
+    { k: 'hanki', href: '../hanki/', icon: '味', t: '제철한끼', d: '이달 이 지역 제철 음식 잘하는 집' },
     { k: 'family', href: '../family/', icon: '家', t: '식구궁합', d: '가족끼리 보는 궁합' },
     { k: 'names', href: '../names/', icon: '名', t: '이름레이더', d: '내 이름은 얼마나 흔할까' },
     { k: 'lifeclock', href: '../lifeclock/', icon: '春', t: '남은봄', d: '남은 시간 계산기' },
@@ -107,27 +119,19 @@ function renderLanding() {
   const saved = store.get(RKEY);
   const strong = todayStrongType();
   const st = TYPES[strong.id];
-  const orbitIds = [1, 13, 15, 2, 8, 14, 12, 9];
-  const sats = orbitIds.map((id, i) => {
-    const a = (i / orbitIds.length) * Math.PI * 2 - Math.PI / 2;
-    return `<div class="sat" style="left:${50 + 41 * Math.cos(a)}%;top:${50 + 41 * Math.sin(a)}%">${emblemSVG(id, 90, 'aria-hidden="true"')}</div>`;
-  }).join('');
   app.innerHTML = `
   <section class="hero">
     <div class="hero-in">
       <div>
         ${inv ? `<div class="invite-banner">${emblemSVG(inv.t, 46, 'aria-hidden="true"')}<div><b>${esc(inv.n)}</b>님(${codeOf(inv.t)} · ${TYPES[inv.t].name}형)이 궁합을 신청했어요.<br><small>테스트를 마치면 두 사람의 궁합이 바로 나와요.</small></div></div>` : ''}
-        <span class="eyebrow">🌳 근본 코드 · 만세력 사주 · 조상 타임라인</span>
+        <span class="eyebrow">근본 코드 · 만세력 사주 · 조상 타임라인</span>
         <h1>너, <em>근본</em>이<br>어디야?</h1>
         <p class="lead">나이대에 맞춘 10개의 질문과 정확한 만세력 사주로 나만의 4글자 <b>근본 코드</b>를 찾아요. 조상들이 실제로 겪은 역사와, 나와 같은 본관이 몇 명인지까지.</p>
         <div class="hero-cta">
           <button class="btn btn-primary btn-block" data-action="start">내 근본 코드 찾기 →</button>
           ${saved ? `<button class="btn btn-light btn-block" data-action="show-result">내 결과 다시 보기</button>` : ''}
-          <div class="hero-meta"><span>⏱ <b>2분</b></span><span>🔒 정보는 <b>내 기기에만</b></span><span>📊 <b>통계청·천문연</b> 자료 기반</span></div>
+          <div class="hero-meta"><span>${icon('clock')}<b>2분</b></span><span>${icon('lock')}정보는 <b>내 기기에만</b></span><span>${icon('chart')}<b>통계청·천문연</b> 자료 기반</span></div>
         </div>
-      </div>
-      <div class="hero-art" aria-hidden="true">
-        <div class="orbit"><div class="orbit-ring"></div><div class="spin">${sats}</div><div class="core"><div><span>根本</span><small>16가지 근본 코드</small></div></div></div>
       </div>
     </div>
   </section>
@@ -205,7 +209,7 @@ function renderStep() {
   if (key === 'name') {
     const sp = splitName(pf.name);
     body = `
-      <div class="q-art" aria-hidden="true">📜</div>
+      <div class="q-art" aria-hidden="true">名</div>
       <div class="q-label">족보 첫 장</div>
       <h1 class="q-title">당신의 이름은?</h1>
       <p class="q-sub">성씨는 자동으로 나눠 드려요 · 성씨 통계에 쓰여요</p>
@@ -216,7 +220,7 @@ function renderStep() {
     const list = bongwanOptions(sur);
     const chips = list.slice(0, 10).map(b => `<button class="chip ${pf.bongwan === b ? 'sel' : ''}" data-action="bon" data-v="${esc(b)}">${esc(b)}</button>`).join('');
     body = `
-      <div class="q-art" aria-hidden="true">🏯</div>
+      <div class="q-art" aria-hidden="true">本</div>
       <div class="q-label">가문의 뿌리</div>
       <h1 class="q-title">본관을 알고 있나요?</h1>
       <p class="q-sub">알면 같은 본관 인구(2015 통계)와 시조 이야기가 열려요</p>
@@ -226,7 +230,7 @@ function renderStep() {
     const [y, m, d] = (pf.birth || '').split('-');
     const lunar = pf.cal === 'lunar';
     body = `
-      <div class="q-art" aria-hidden="true">🌙</div>
+      <div class="q-art" aria-hidden="true">生</div>
       <div class="q-label">사주의 기둥</div>
       <h1 class="q-title">언제 태어났나요?</h1>
       <p class="q-sub">태어난 해에 맞춰 질문 세트도 달라져요</p>
@@ -249,7 +253,7 @@ function renderStep() {
       <p class="hint err" id="birth-err" role="alert"></p>`;
   } else if (key === 'region') {
     body = `
-      <div class="q-art" aria-hidden="true">🗺️</div>
+      <div class="q-art" aria-hidden="true">鄕</div>
       <div class="q-label">고향의 기운 · 공식의 일부(작은 비중)</div>
       <h1 class="q-title">어디에서 자랐나요?</h1>
       <p class="q-sub">가장 오래 자란 곳을 골라 주세요</p>
@@ -261,13 +265,13 @@ function renderStep() {
       <div class="q-art" aria-hidden="true">${q.art}</div>
       <div class="q-label">질문 ${qi + 1} / ${set.length} · ${stg.label} 질문</div>
       <h1 class="q-title">${esc(q.q)}</h1>
-      <div class="opts" style="margin-top:20px">${q.opts.map((o, oi) => `<button class="opt ${state.answers[qi] === oi ? 'sel' : ''}" data-action="answer" data-v="${oi}"><span class="e" aria-hidden="true">${o.e}</span>${esc(o.t)}</button>`).join('')}</div>`;
+      <div class="opts" style="margin-top:20px">${q.opts.map((o, oi) => `<button class="opt ${state.answers[qi] === oi ? 'sel' : ''}" data-action="answer" data-v="${oi}">${esc(o.t)}</button>`).join('')}</div>`;
   }
   const needsNext = ['name', 'bongwan', 'birth'].includes(key);
   app.innerHTML = `
     <div class="flow">
       <div class="flow-top">
-        <button class="back" data-action="back" aria-label="이전"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button class="back" data-action="back" aria-label="이전">${icon('back')}</button>
         <div class="prog" role="progressbar" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${state.step + 1}"><i style="width:${((state.step + 1) / total) * 100}%"></i></div>
         <span class="prog-n">${state.step + 1}/${total}</span>
       </div>
@@ -416,7 +420,7 @@ function sajuCard(res, pf) {
       <div class="pillar ${p.key === 'day' ? 'me' : ''}"><div class="pl">${p.label}${p.key === 'day' ? ' (나)' : ''}</div>
         <div class="ch" style="background:${ELEMENTS[STEM_EL[p.stem]].color}">${STEMS[p.stem]}<small>${STEMS_K[p.stem]} · ${ELEMENTS[STEM_EL[p.stem]].h}</small></div>
         <div class="ch" style="background:${ELEMENTS[BRANCH_EL[p.branch]].color};opacity:.88">${BRANCHES[p.branch]}<small>${BRANCHES_K[p.branch]} · ${ELEMENTS[BRANCH_EL[p.branch]].h}</small></div></div>`).join('')}</div>
-    ${S.boundaryWarning ? `<p class="warn">⚠ ${esc(S.boundaryWarning)}</p>` : ''}
+    ${S.boundaryWarning ? `<p class="warn">${icon('alert')}<span>${esc(S.boundaryWarning)}</span></p>` : ''}
     ${(S.dayDate.y !== S.solar.y || S.dayDate.m !== S.solar.m || S.dayDate.d !== S.solar.d) ? `<p class="warn">자시(KST 23:30~)에 태어나 일주는 다음 날(${S.dayDate.m}/${S.dayDate.d}) 기준이에요. 자정에 날짜를 바꾸는 만세력(야자시 적용)과는 일주가 다를 수 있어요.</p>` : ''}
     <div class="el-head"><span></span><span>${S.total}글자 기준</span><span>지장간 포함</span></div>
     <div class="el-bars">${dist.map(d => `<div class="el-row"><b style="color:${ELEMENTS[d.k].color}">${ELEMENTS[d.k].h}<small> ${ELEMENTS[d.k].k}</small></b><div class="el-track"><i data-w="${Math.max(3, d.p)}" style="background:${ELEMENTS[d.k].color}"></i></div><span>${d.v}개</span><span class="hid">${d.h}%</span></div>`).join('')}</div>
@@ -456,9 +460,9 @@ function likelyCard(res) {
     <div class="likely">
       <p>${e.year}년 무렵 태어난 세대는 당신의 <b>${e.n}대조</b>, 조상 자리로는 <b>${nf(e.slots)}명</b>이에요. 그 시기 <b>대구 호적</b>을 분석한 연구에 따르면 양반 ${e.st.yangban}% · 양인(상민) ${e.st.sangmin}% · 노비 약 ${e.st.nobi}%였어요.</p>
       <div class="stack" aria-label="1690년 대구 신분 구성">
-        <i style="width:${e.st.yangban}%;background:var(--gold)"></i><i style="width:${e.st.sangmin}%;background:var(--teal)"></i><i style="width:${e.st.nobi}%;background:#7a6a58"></i>
+        <i style="width:${e.st.yangban}%;background:var(--d1)"></i><i style="width:${e.st.sangmin}%;background:var(--d2)"></i><i style="width:${e.st.nobi}%;background:var(--d3)"></i>
       </div>
-      <div class="stack-legend"><span><i style="background:var(--gold)"></i>양반 약 ${nf(e.yangban)}명</span><span><i style="background:var(--teal)"></i>양인 약 ${nf(e.sangmin)}명</span><span><i style="background:#7a6a58"></i>노비 약 ${nf(e.nobi)}명</span></div>
+      <div class="stack-legend"><span><i style="background:var(--d1)"></i>양반 약 ${nf(e.yangban)}명</span><span><i style="background:var(--d2)"></i>양인 약 ${nf(e.sangmin)}명</span><span><i style="background:var(--d3)"></i>노비 약 ${nf(e.nobi)}명</span></div>
       <p class="fine">대구 한 지역의 비율을 그대로 곱한 단순 기대값이에요. 그래도 결론은 분명해요: <b>당신 조상의 다수는 농사짓던 양인과 노비였을 가능성이 높아요.</b> 같은 대구에서 양반 호(戶)는 1729년 ${e.st2.yangban}%, 1858년 ${e.st3.yangban}%로 늘었는데, 납속·직역 모칭 등으로 '호적상 양반'이 급증한 결과예요. 오늘날 족보에 양반 조상이 많은 이유이기도 하죠. 1801년 공노비 해방, 1894년 갑오개혁으로 신분제는 법적으로 사라졌어요.</p>
     </div>
     <div class="resemble">${emblemSVG(res.typeId, 56, 'aria-hidden="true"')}<div>
@@ -560,7 +564,7 @@ function renderResult(fresh = false) {
   app.innerHTML = `
   <div class="result wrap">
     <section class="daily" aria-label="오늘의 조상님 한마디">
-      <div class="daily-top"><span>오늘의 조상님 한마디 · ${daily.ilJin}</span><span class="streak">🔥 ${streak.n}일 연속 문안</span></div>
+      <div class="daily-top"><span>오늘의 조상님 한마디 · ${daily.ilJin}</span><span class="streak">${streak.n}일 연속 문안</span></div>
       <div class="daily-msg">${emblemSVG(res.typeId, 52, 'aria-hidden="true"')}<p>“${esc(daily.msg)}”<small>— ${res.code} ${t.name}형 조상님 · ${esc(daily.mood)}</small></p></div>
       <div class="daily-stats">
         <div><b>${daily.ilJin}</b><span>오늘 일진</span></div>
@@ -638,7 +642,7 @@ function renderResult(fresh = false) {
       <p class="sub">오행 상생·상극 + 코드 궁합 + 띠 궁합으로 계산해요</p>
       ${invHtml}
       <div class="invite-box">
-        <h3>💌 친구에게 궁합 신청하기</h3>
+        <h3>${icon('mail')}친구에게 궁합 신청하기</h3>
         <p>링크를 받은 친구가 테스트를 마치면 두 사람의 코드와 궁합이 자동으로 나와요. 링크엔 이름과 코드만 담겨요.</p>
         <div class="btn-row"><button class="btn btn-primary btn-sm" data-action="invite-share">링크 보내기</button><button class="btn btn-ghost btn-sm" data-action="invite-copy">링크 복사</button></div>
       </div>
@@ -687,7 +691,7 @@ function renderEra(i) {
   $('#era-panel').innerHTML = `
     <div class="era-card">${emblemSVG(e.id, 76, 'aria-hidden="true"')}<div>
       <div class="era-y">${e.name} · ${e.year}</div>
-      <div class="era-h">${e.key === 'future' ? '2100년에 태어났다면' : `${e.name}에 태어났다면`}, 너는 <span style="color:var(--red)">${esc(e.role)}</span>${e.key === 'now' ? josa(e.role, '이야', '야') : josa(e.role, '이었을 거야', '였을 거야')}.</div>
+      <div class="era-h">${e.key === 'future' ? '2100년에 태어났다면' : `${e.name}에 태어났다면`}, 너는 <u style="text-decoration-thickness:1px;text-underline-offset:5px">${esc(e.role)}</u>${e.key === 'now' ? josa(e.role, '이야', '야') : josa(e.role, '이었을 거야', '였을 거야')}.</div>
       <p>${esc(e.story)}</p></div></div>
     <div class="fact"><b>그 시대 사실</b>${esc(e.fact)}</div>`;
   $$('.tab', app).forEach((b, j) => b.setAttribute('aria-selected', String(j === i)));
@@ -701,10 +705,10 @@ function cmpCard(aName, a, bName, b, c, label, estimated) {
   const circ = 2 * Math.PI * 42;
   const verdict = c.total >= 88 ? '천생연분' : c.total >= 75 ? '찰떡궁합' : c.total >= 62 ? '티키타카' : '불꽃 케미';
   return `<div class="cmp" role="group" aria-label="궁합 결과">
-    ${label ? `<div style="font-size:12.5px;color:#f2c46a;font-weight:800;margin-bottom:8px">${label}</div>` : ''}
+    ${label ? `<div class="cmp-label">${label}</div>` : ''}
     <div class="cmp-top">
       <div class="cmp-p">${emblemSVG(a.typeId, 64, 'aria-hidden="true"')}<b>${esc(aName)}</b><small>${codeOf(a.typeId)} · ${ta.name}형</small></div>
-      <div class="ring"><svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="42" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="8"/><circle cx="48" cy="48" r="42" fill="none" stroke="#f2c46a" stroke-width="8" stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${circ * (1 - c.total / 100)}"/></svg><span>${c.total}<small>${verdict}</small></span></div>
+      <div class="ring"><svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="42" fill="none" style="stroke:var(--line)" stroke-width="6"/><circle cx="48" cy="48" r="42" fill="none" style="stroke:var(--accent)" stroke-width="6" stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${circ * (1 - c.total / 100)}"/></svg><span>${c.total}<small>${verdict}</small></span></div>
       <div class="cmp-p">${emblemSVG(b.typeId, 64, 'aria-hidden="true"')}<b>${esc(bName)}</b><small>${codeOf(b.typeId)}${estimated ? '(추정)' : ''} · ${tb.name}형</small></div>
     </div>
     <div class="cmp-rows">
@@ -740,7 +744,7 @@ function onFriendSubmit(e) {
 function renderHistory() {
   const dex = getDex(); const el = $('#history'); if (!el) return;
   if (!dex.length) { el.innerHTML = ''; return; }
-  el.innerHTML = `<div class="history"><b style="font-size:14px;margin-top:6px">지난 궁합</b>${dex.slice(0, 6).map((x, i) => `<button data-action="hist" data-i="${i}">${emblemSVG(x.t, 32, 'aria-hidden="true"')}<span>${esc(x.n)} · ${codeOf(x.t)} ${TYPES[x.t].name}형</span><span class="sc">${x.s}</span></button>`).join('')}</div>`;
+  el.innerHTML = `<div class="history"><b>지난 궁합</b>${dex.slice(0, 6).map((x, i) => `<button data-action="hist" data-i="${i}">${emblemSVG(x.t, 32, 'aria-hidden="true"')}<span>${esc(x.n)} · ${codeOf(x.t)} ${TYPES[x.t].name}형</span><span class="sc">${x.s}</span></button>`).join('')}</div>`;
 }
 
 function renderDex() {
@@ -755,7 +759,7 @@ function renderDex() {
     <div class="dex-progress"><span>${count} / 16</span><div class="prog"><i style="width:${(count / 16) * 100}%"></i></div><span>${count === 16 ? '완성!' : '수집 중'}</span></div>
     <div class="dex">${TYPES.map((t, i) => {
       const isMine = i === mine, got = isMine || owned.has(i);
-      return `<button class="${got ? '' : 'locked'} ${isMine ? 'mine' : ''}" data-action="dex" data-id="${i}" aria-label="${got ? codeOf(i) + ' ' + t.name + '형' : '잠긴 카드'}">${got ? emblemSVG(i, 52, 'aria-hidden="true"') : lockedSVG(52)}<b>${got ? codeOf(i) : '????'}</b><small style="font-size:10.5px">${isMine ? '나' : got ? esc(owned.get(i)) : ''}</small></button>`;
+      return `<button class="${got ? '' : 'locked'} ${isMine ? 'mine' : ''}" data-action="dex" data-id="${i}" aria-label="${got ? codeOf(i) + ' ' + t.name + '형' : '잠긴 카드'}">${got ? emblemSVG(i, 52, 'aria-hidden="true"') : lockedSVG(52)}<b>${got ? codeOf(i) : '????'}</b><small>${isMine ? '나' : got ? esc(owned.get(i)) : ''}</small></button>`;
     }).join('')}</div>`;
 }
 
@@ -848,7 +852,7 @@ function shareText() {
 async function doShare() { openShareSheet(inviteUrl(R.pf.name, R.res.typeId)); }
 function openShareSheet(url) {
   sheet.innerHTML = `
-    <button class="sheet-x" data-action="close" aria-label="닫기">×</button>
+    <button class="sheet-x" data-action="close" aria-label="닫기">${icon('close')}</button>
     <h2 id="modal-title">내 근본 코드 공유하기</h2>
     <img class="share-preview" id="sheet-preview" alt="공유 카드 미리보기">
     <div class="share-actions">
@@ -897,18 +901,18 @@ function openTypeModal(id, mode) {
   const t = TYPES[id]; const code = hanjaCode(id);
   const unlocked = mode !== 'locked';
   sheet.innerHTML = `
-    <button class="sheet-x" data-action="close" aria-label="닫기">×</button>
+    <button class="sheet-x" data-action="close" aria-label="닫기">${icon('close')}</button>
     <div class="type-modal-head">${unlocked ? emblemSVG(id, 84, 'aria-hidden="true"') : lockedSVG(84)}<div>
-      <div style="font-size:12.5px;font-weight:800;color:var(--red)">${codeOf(id)} · ${code.map(c => c.h).join('')} · ${ELEMENTS[t.el].h}</div>
-      <h2 id="modal-title" style="margin:2px 0 2px">${unlocked ? `${esc(nickOf(id))} <small style="color:var(--muted);font-size:15px">${t.name}형</small>` : '아직 못 만난 근본'}</h2>
-      <div style="color:var(--ink-2);font-size:14.5px">${unlocked ? esc(t.tagline) : `${code.map(c => c.d).join(' · ')}의 기질을 가진 코드`}</div></div></div>
+      <div class="tm-kicker">${codeOf(id)} · ${code.map(c => c.h).join('')} · ${ELEMENTS[t.el].h}</div>
+      <h2 id="modal-title" style="margin:2px 0 2px">${unlocked ? `${esc(nickOf(id))} <small style="color:var(--muted);font-size:14px;font-family:var(--sans)">${t.name}형</small>` : '아직 못 만난 근본'}</h2>
+      <div class="tm-tag">${unlocked ? esc(t.tagline) : `${code.map(c => c.d).join(' · ')}의 기질을 가진 코드`}</div></div></div>
     ${unlocked ? `<div class="kw" style="justify-content:flex-start">${t.keywords.map(k => `<span>${esc(k)}</span>`).join('')}</div>
-      ${mode === 'preview' ? `<p class="desc" style="margin-top:14px;font-size:15.5px">${esc(t.title)}. MBTI로 치면 ${mbtiOf(id)}와 비슷한 결(참고용). 내 코드는 테스트로 확인해 보세요.</p>
+      ${mode === 'preview' ? `<p class="desc" style="margin-top:14px;font-size:16px">${esc(t.title)}. MBTI로 치면 ${mbtiOf(id)}와 비슷한 결(참고용). 내 코드는 테스트로 확인해 보세요.</p>
         <button class="btn btn-primary btn-block" style="margin-top:16px" data-action="start">내 근본 코드 찾기 →</button>` :
-      `<p class="desc" style="margin-top:14px;font-size:15.5px">${esc(t.desc)}</p>
+      `<p class="desc" style="margin-top:14px;font-size:16px">${esc(t.desc)}</p>
         <div class="today-box"><b>오늘날 이런 사람</b>${esc(t.today)}</div>
         <p style="font-size:14px;margin:14px 0 0"><b>잘 맞는 코드</b> ${t.best.map(b => `${codeOf(b)}(${TYPES[b].name})`).join(', ')} · <b>티격태격</b> ${codeOf(t.worst)}(${TYPES[t.worst].name})</p>`}` :
-      `<p class="desc" style="margin-top:12px;font-size:15px">이 코드를 가진 친구와 궁합을 보면 카드가 열려요. 궁합 링크를 보내 보세요!</p>
+      `<p class="desc" style="margin-top:12px;font-size:16px">이 코드를 가진 친구와 궁합을 보면 카드가 열려요. 궁합 링크를 보내 보세요!</p>
        <button class="btn btn-primary btn-block" style="margin-top:14px" data-action="invite-share">궁합 링크 보내기</button>`}`;
   openModal();
 }

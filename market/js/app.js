@@ -10,25 +10,38 @@ import { sellView } from './views/sell.js';
 import { cartView, checkoutView, ordersView } from './views/cart.js';
 import { sellerView } from './views/seller.js';
 import { meView, wishView, alertsView } from './views/me.js';
+import { joinView, closedView } from './views/join.js';
+import { processView } from './views/process.js';
+import { TRADING_OPEN } from './config.js';
+
+// 거래 화면: TRADING_OPEN이 false면 안내 화면으로 대체 (거래 코드는 그대로 둠)
+const T = (view) => (TRADING_OPEN ? view : closedView);
 
 const ROUTES = [
   [/^\/$/, homeView, 'map'],
   [/^\/region\/([^/]+)$/, regionView, 'map', ['sido']],
   [/^\/signal\/([^/]+)$/, signalView, 'map', ['id']],
   [/^\/farmer$/, farmerView, 'farmer'],
-  [/^\/market$/, marketView, 'market'],
-  [/^\/search$/, searchView, 'market'],
-  [/^\/item\/([\w-]+)$/, itemView, 'market', ['id']],
-  [/^\/sell$/, sellView, 'sell'],
-  [/^\/sell\/([\w-]+)$/, sellView, 'sell', ['id']],
-  [/^\/cart$/, cartView, 'cart'],
-  [/^\/checkout$/, checkoutView, 'cart'],
-  [/^\/orders$/, ordersView, 'me'],
-  [/^\/seller$/, sellerView, 'sell'],
-  [/^\/me$/, meView, 'me'],
-  [/^\/wish$/, wishView, 'me'],
-  [/^\/alerts$/, alertsView, 'me'],
+  [/^\/process$/, processView, 'process'],
+  [/^\/join$/, joinView, 'join'],
+  [/^\/market$/, T(marketView), 'market'],
+  [/^\/search$/, T(searchView), 'market'],
+  [/^\/item\/([\w-]+)$/, T(itemView), 'market', ['id']],
+  [/^\/sell$/, T(sellView), 'sell'],
+  [/^\/sell\/([\w-]+)$/, T(sellView), 'sell', ['id']],
+  [/^\/cart$/, T(cartView), 'cart'],
+  [/^\/checkout$/, T(checkoutView), 'cart'],
+  [/^\/orders$/, T(ordersView), 'me'],
+  [/^\/seller$/, T(sellerView), 'sell'],
+  [/^\/me$/, T(meView), 'me'],
+  [/^\/wish$/, T(wishView), 'me'],
+  [/^\/alerts$/, T(alertsView), 'me'],
 ];
+
+// 정보 우선 모드: 거래 메뉴(data-trade)와 정보 메뉴(data-info) 전환
+document.body.dataset.trading = TRADING_OPEN ? 'open' : 'closed';
+$$('[data-trade]').forEach((el) => { el.hidden = !TRADING_OPEN; });
+$$('[data-info]').forEach((el) => { el.hidden = TRADING_OPEN; });
 
 const DEFAULT_DESC = document.querySelector('meta[name=description]').content;
 const app = $('#app');
@@ -65,7 +78,7 @@ async function route() {
 
   const el = document.createElement('div');
   el.className = 'view';
-  const ctx = { el, params: match.params, query, title: '', description: '', jsonld: null, cleanup: null, afterMount: null, noAds: false };
+  const ctx = { el, params: match.params, query, nav: match.nav, title: '', description: '', jsonld: null, cleanup: null, afterMount: null, noAds: false };
   document.body.classList.add('loading');
   try {
     await match.view(ctx);
@@ -94,7 +107,7 @@ async function route() {
   window.scrollTo(0, isBack ? positions.get(key) || 0 : 0);
   if (!firstRender) app.focus({ preventScroll: true });
   if (!ctx.noAds) pushAds(el);
-  if (firstRender || path === '/' || path === '/market') animateCounts(el);
+  if (TRADING_OPEN && (firstRender || path === '/' || path === '/market')) animateCounts(el);
   firstRender = false;
   ctx.afterMount?.();
   tick();
@@ -111,6 +124,7 @@ function setNav(nav) {
 
 // ── 배지 & 모드 ──
 async function refreshBadges() {
+  if (!TRADING_OPEN) return;
   const [cart, alerts, prefs, sellerOrders, threadsB, threadsS] = await Promise.all([
     store.getCart(), store.getAlertMatches(), store.getPrefs(), store.getOrders({ as: 'seller' }),
     store.getThreads({ as: 'buyer' }), store.getThreads({ as: 'seller' }),
@@ -184,7 +198,7 @@ history.scrollRestoration = 'manual';
 
 (async function boot() {
   await store.init();
-  store.on((topic) => { if (['cart', 'orders', 'prefs', 'threads', 'listings', 'all'].includes(topic)) refreshBadges(); });
+  if (TRADING_OPEN) store.on((topic) => { if (['cart', 'orders', 'prefs', 'threads', 'listings', 'all'].includes(topic)) refreshBadges(); });
   setInterval(tick, 1000);
   await route();
   // 다른 탭에서 시간이 지나 상태가 바뀐 경우 대비

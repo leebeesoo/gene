@@ -1,7 +1,7 @@
 // 16 근본 엠블럼 — 낙관(도장) 스타일, viewBox 0 0 100 100
 import { TYPES, ELEMENTS } from './data.js';
 
-const INK = '#1b2333';
+const INK = '#1C1C1E';
 const S = '__S__';
 const S_DEFAULTS = { fill: 'none', stroke: INK, 'stroke-width': '3.2', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' };
 // merge default stroke style into tags marked with __S__, explicit attributes win (keeps XML valid)
@@ -67,11 +67,11 @@ function glyph(i, c) {
 
 export function emblemInner(i) {
   const t = TYPES[i]; const c = ELEMENTS[t.el].color;
-  return `<circle cx="50" cy="50" r="47" fill="#f6efe1" stroke="${c}" stroke-width="2.5"/>
+  return `<circle cx="50" cy="50" r="47" fill="#FBFAF7" stroke="${c}" stroke-width="2.5"/>
     <circle cx="50" cy="50" r="41.5" fill="none" stroke="${INK}" stroke-opacity=".18" stroke-width="1" stroke-dasharray="2 3"/>
     ${applyStyle(glyph(i, c))}
-    <rect x="72" y="72" width="15" height="15" rx="2.5" fill="#b8332a" transform="rotate(-6 79.5 79.5)"/>
-    <path d="M76 76.5h7M76 80h7M79.5 76.5v7" stroke="#f6efe1" stroke-width="1.4" transform="rotate(-6 79.5 79.5)"/>`;
+    <rect x="72" y="72" width="15" height="15" rx="2.5" fill="#8E2B22" transform="rotate(-6 79.5 79.5)"/>
+    <path d="M76 76.5h7M76 80h7M79.5 76.5v7" stroke="#FBFAF7" stroke-width="1.4" transform="rotate(-6 79.5 79.5)"/>`;
 }
 
 export function emblemSVG(i, size = 120, extra = '') {

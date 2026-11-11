@@ -10,8 +10,8 @@ export const EL_H = { wood: '木', fire: '火', earth: '土', metal: '金', wate
 export const STEM_EL = ['wood', 'wood', 'fire', 'fire', 'earth', 'earth', 'metal', 'metal', 'water', 'water'];
 export const BRANCH_EL = ['water', 'earth', 'wood', 'wood', 'earth', 'fire', 'fire', 'earth', 'metal', 'metal', 'earth', 'water'];
 // 오방색에서 따온 노드 색 (금=백, 수=흑 계열은 대비를 위해 톤 조정)
-export const EL_COLOR = { wood: '#2f7a6a', fire: '#c2412f', earth: '#c9962f', metal: '#9aa1ab', water: '#22314f' };
-export const EL_INK = { wood: '#fff', fire: '#fff', earth: '#1b2333', metal: '#1b2333', water: '#fff' };
+export const EL_COLOR = { wood: '#4E7A64', fire: '#A9544A', earth: '#B39A68', metal: '#A3A8AE', water: '#445A78' }; // 데이터 전용, 채도 낮춤
+export const EL_INK = { wood: '#fff', fire: '#fff', earth: '#1C1C1E', metal: '#1C1C1E', water: '#fff' };
 
 export const mod = (n, m) => ((n % m) + m) % m;
 export const stemText = s => STEMS[s] + EL_H[STEM_EL[s]];

@@ -45,13 +45,17 @@
       "source_id": "news"                         // (추가 필드, 선택) news | mafra — 어느 수집 경로로 들어왔는지
     }
   ],
+  "auction_lows": [                              // 헐값 경매 건 (공영도매시장 경매 건별, 같은 품목 당일 평균의 30% 이하)
+    { "date": "2026-11-10", "market": "서울가락", "sido": "제주", "sigungu": "서귀포시", "item": "감귤", "variety": "노지온주", "grade": "중",
+      "unit_kg": 10, "price": 3000, "price_per_kg": 300, "avg_price_per_kg": 1700, "ratio": 0.18, "qty": 20 }
+  ],
   "forecasts": [                                  // KREI 관측 등 향후 과잉 예보 (출처 표기 필수, 문장 가공 최소화)
     { "item": "양파", "period": "2026-12", "summary": "재배면적 전년 대비 +8% 전망", "source_id": "krei", "url": "https://...",
       "published": "2026-11-03" }                // (추가 필드, 선택) 관측보 발행일
   ],
   "metrics": [                                    // (추가 필드) 수집기 내부용 지표 원본. 화면은 signals[].metrics만 쓰면 됩니다.
     {
-      "key": "kamis|전남|배추", "origin": "kamis-daily", // kamis-daily | kamis-monthly | at | manual — 출처가 이번 실행에 성공하면 같은 origin 행을 통째로 교체
+      "key": "kamis|전남|배추", "origin": "kamis-daily", // kamis-daily | kamis-monthly | at | at-lows | manual — 출처가 이번 실행에 성공하면 같은 origin 행을 통째로 교체
       "source_id": "kamis", "sido": null, "sigungu": null, "item": "배추", "category": "veg", "kind": "가을(10kg) 상품",
       "price": 5000, "unit": "10kg", "price_basis": "KAMIS 도매 일평균",
       "price_vs_normal_pct": -40, "price_vs_last_year_pct": -50,
@@ -76,3 +80,5 @@
 - support: 채소가격안정제 품목(배추·무·건고추·마늘·양파·겨울대파(11~3월 대파)·고랭지감자(6~10월 감자)) → `program: "채소가격안정제"`, `note: "채소가격안정제 대상 품목 (계약 물량만)"`(+ 정부 수급대책 진행 중이면 덧붙임) / 30일 안 isolation 사건 → `"수급대책"` / 그 외 `null`, `note: "정부 폐기 보상 대상 아님 — 판매·나눔 가능"`.
 - 45일 지난 사건·지표·예보는 지웁니다. 사건은 합집합으로 쌓이고, 사람이 고친 값(verified 등)은 덮어쓰지 않습니다.
 - 사건의 `type: "forecast"`는 과거 폐기·과잉을 되짚으며 재발을 경고하는 보도(예: 시의회 감사)에 씁니다. level은 watch.
+- 헐값 경매(`auction_lows`, tools/surplus/lib.mjs `findAuctionLows`): 실시간 경매 건별(15141808 `scsbd_prc` 단량당 낙찰가 ÷ (`unit_qty` 단위물량 × `unit_nm` 단위명의 kg)) kg당 가격이, 같은 날 같은 품목·품종(그 품종 건이 5건 미만이면 품목 전체) 국산 건들의 무게 가중평균의 30% 이하이고 20kg 이상인 건. 등외·규격외·수입(산지 시도 불명)은 평균과 후보에서 뺍니다. 비율 낮은 순 상위 50건. 실시간 자료를 못 받으면 정산 행(`avgprc`, `unit_tot_qty`, `grd_nm`)으로 판정. 출처 실패 시 이전 값을 두되 7일 지난 건은 지웁니다.
+- 하루 한 (시도, 시군구, 품목)에서 헐값 건이 5건 이상이면 그 조합 신호를 만들고 level을 최소 `surplus`로 올립니다(`disposal`·`crash`는 그대로). 집계는 `metrics`에 `origin: "at-lows"`(`auction_lows` 건수, `min_ratio`)로 7일 보관하며 화면 표시 지표로는 쓰지 않습니다.

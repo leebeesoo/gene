@@ -126,7 +126,7 @@
     if (!b) return;
     var id = b.getAttribute('data-fav');
     var i = favs.indexOf(id);
-    if (i >= 0) { favs.splice(i, 1); toast('내 명당에서 뺐어요'); } else { favs.unshift(id); toast('내 명당에 저장했어요 ⭐'); }
+    if (i >= 0) { favs.splice(i, 1); toast('내 명당에서 뺐어요'); } else { favs.unshift(id); toast('내 명당에 저장했어요'); }
     saveFavs();
     $$('[data-fav="' + (window.CSS && CSS.escape ? CSS.escape(id) : id) + '"]').forEach(function (el) {
       var on = isFav(id);
@@ -521,48 +521,50 @@
     var k = $('#share-region').value;
     var F = '"Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif';
     var W = 1080, H = 1080;
-    var g = x.createLinearGradient(0, 0, W, H); g.addColorStop(0, '#15122B'); g.addColorStop(1, '#2A1F5E');
-    x.fillStyle = g; x.fillRect(0, 0, W, H);
-    var rg = x.createRadialGradient(W, 0, 0, W, 0, 760); rg.addColorStop(0, 'rgba(243,181,63,.45)'); rg.addColorStop(1, 'rgba(243,181,63,0)');
-    x.fillStyle = rg; x.fillRect(0, 0, W, H);
-    var rg2 = x.createRadialGradient(0, H, 0, 0, H, 700); rg2.addColorStop(0, 'rgba(232,67,43,.45)'); rg2.addColorStop(1, 'rgba(232,67,43,0)');
-    x.fillStyle = rg2; x.fillRect(0, 0, W, H);
+    var BG = '#F6F6F4', SURF = '#FFFFFF', INK = '#16171A', MUTED = '#6B6E75', LINE = '#E4E4E1', ACC = '#C8361F';
+    x.textAlign = 'left';
+    x.fillStyle = BG; x.fillRect(0, 0, W, H);
     // map silhouette
     x.save(); x.translate(620, 150); x.scale(1.75, 1.75); x.translate(-72, 0);
     REGIONS.forEach(function (r) {
       var p = new Path2D(GEO.regions[r[0]].d);
-      x.fillStyle = r[0] === k ? '#FBC400' : 'rgba(255,255,255,.12)'; x.fill(p);
-      x.strokeStyle = 'rgba(21,18,43,.9)'; x.lineWidth = .8; x.stroke(p);
+      x.fillStyle = r[0] === k ? ACC : '#E4E4E1'; x.fill(p);
+      x.strokeStyle = BG; x.lineWidth = .8; x.stroke(p);
     });
     x.restore();
     var list = rankStores(k ? stores.filter(function (s) { return s.rk === k; }) : stores, 'all');
     var total = list.reduce(function (a, b) { return a + b.n; }, 0);
-    x.fillStyle = 'rgba(255,255,255,.75)'; x.font = '600 34px ' + F; x.textBaseline = 'alphabetic';
-    x.fillText('명당로드 · 로또 1등 명당 지도', 72, 112);
-    x.fillStyle = '#fff'; x.font = '800 92px ' + F;
+    x.fillStyle = ACC; x.beginPath(); x.arc(82, 101, 9, 0, Math.PI * 2); x.fill();
+    x.fillStyle = INK; x.font = '700 32px ' + F; x.textBaseline = 'alphabetic';
+    x.fillText('명당로드', 104, 112);
+    var bw = x.measureText('명당로드').width;
+    x.fillStyle = MUTED; x.font = '500 32px ' + F; x.fillText('· 로또 1등 명당 지도', 116 + bw, 112);
+    x.fillStyle = INK; x.font = '700 92px ' + F;
     x.fillText(k ? RNAME[k] : '전국', 72, 240);
-    x.font = '700 40px ' + F; x.fillStyle = 'rgba(255,255,255,.8)';
+    x.font = '500 40px ' + F; x.fillStyle = MUTED;
     x.fillText('1등 배출', 72, 316);
-    x.font = '900 120px ' + F; x.fillStyle = '#FFD978';
+    x.font = '700 120px ' + F; x.fillStyle = ACC;
     x.fillText(fmt(total), 72, 440);
     var tw = x.measureText(fmt(total)).width;
-    x.font = '800 48px ' + F; x.fillText('건', 84 + tw, 440);
-    x.font = '600 28px ' + F; x.fillStyle = 'rgba(255,255,255,.6)';
+    x.font = '700 48px ' + F; x.fillStyle = INK; x.fillText('건', 84 + tw, 440);
+    x.font = '500 28px ' + F; x.fillStyle = MUTED;
     x.fillText(FIRST + '~' + LATEST + '회 · 판매점 ' + fmt(list.length) + '곳', 72, 492);
     // top 3
     var y = 600;
-    x.font = '800 34px ' + F; x.fillStyle = '#fff'; x.fillText('최다 배출 명당 TOP 3', 72, y - 26);
+    x.font = '700 34px ' + F; x.fillStyle = INK; x.fillText('최다 배출 명당 TOP 3', 72, y - 26);
     list.slice(0, 3).forEach(function (it, i) {
       var Y = y + i * 128;
-      x.fillStyle = 'rgba(255,255,255,.08)'; roundRect(x, c, 72, Y, 560, 108, 26); x.fill();
-      x.fillStyle = ['#FFD978', '#D7DFEA', '#F0B88A'][i]; x.beginPath(); x.arc(126, Y + 54, 30, 0, Math.PI * 2); x.fill();
-      x.fillStyle = '#2A1A00'; x.font = '900 32px ' + F; x.textAlign = 'center'; x.fillText(String(i + 1), 126, Y + 66); x.textAlign = 'left';
-      x.fillStyle = '#fff'; x.font = '800 34px ' + F; x.fillText(fitText(x, it.s.name, 330), 176, Y + 50);
-      x.fillStyle = 'rgba(255,255,255,.6)'; x.font = '600 24px ' + F;
+      x.fillStyle = SURF; roundRect(x, c, 72, Y, 560, 108, 24); x.fill();
+      x.strokeStyle = LINE; x.lineWidth = 2; x.stroke();
+      x.fillStyle = INK; x.beginPath(); x.arc(126, Y + 54, 28, 0, Math.PI * 2); x.fill();
+      x.fillStyle = '#FFFFFF'; x.font = '700 30px ' + F; x.textAlign = 'center'; x.fillText(String(i + 1), 126, Y + 65); x.textAlign = 'left';
+      x.fillStyle = INK; x.font = '700 34px ' + F; x.fillText(fitText(x, it.s.name, 330), 176, Y + 50);
+      x.fillStyle = MUTED; x.font = '500 24px ' + F;
       x.fillText(fitText(x, it.s.addr.split(' ').slice(0, 3).join(' '), 330), 176, Y + 84);
-      x.fillStyle = '#FF8A5C'; x.font = '900 46px ' + F; x.textAlign = 'right'; x.fillText(it.n + '회', 610, Y + 70); x.textAlign = 'left';
+      x.fillStyle = ACC; x.font = '700 44px ' + F; x.textAlign = 'right'; x.fillText(it.n + '회', 610, Y + 70); x.textAlign = 'left';
     });
-    x.fillStyle = 'rgba(255,255,255,.55)'; x.font = '600 24px ' + F;
+    x.fillStyle = LINE; x.fillRect(72, 968, W - 144, 2);
+    x.fillStyle = MUTED; x.font = '500 24px ' + F;
     x.fillText('재미·정보 제공용 · 당첨 보장 없음 · 19세 미만 구매 불가', 72, 1010);
     x.fillText('출처: 동행복권 공개 자료 (' + ST.updated + ')', 72, 1044);
     c.setAttribute('aria-label', (k ? RNAME[k] : '전국') + ' 1등 배출 ' + fmt(total) + '건 공유 카드 미리보기');

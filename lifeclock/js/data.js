@@ -170,14 +170,15 @@
   ];
 
   var NEXT_TESTS = [
-    { href: '../lotto/', name: '오늘로또', desc: '사주로 뽑는 오늘의 로또 번호와 살 시간·방향', icon: '🎱' },
-    { href: '../lottomap/', name: '명당로드', desc: '로또 1등 명당 지도와 번호 통계', icon: '🗺️' },
-    { href: '../market/', name: '맛남의 광장', desc: '버려질 뻔한 못난이 농수산물 장터', icon: '🥬' },
-    { href: '../season/', name: '제철맛력', desc: '이달의 제철 식재료와 지금 싼 품목', icon: '🍂' },
-    { href: '../roots/', name: '근본 테스트', desc: '사주와 퀴즈로 찾는 나의 근본 코드', icon: '🌳' },
-    { href: '../family/', name: '식구궁합', desc: '우리 가족 오행 궁합판', icon: '👨‍👩‍👧' },
-    { href: '../names/', name: '이름레이더', desc: '내 이름, 전국에 몇 명?', icon: '📡' },
-    { href: '../birthyear/', name: '나때연감', desc: '내가 태어난 해 타임캡슐', icon: '📼' }
+    { href: '../lotto/', name: '오늘로또', desc: '사주로 뽑는 오늘의 로또 번호와 살 시간·방향', icon: 'lotto' },
+    { href: '../lottomap/', name: '명당로드', desc: '로또 1등 명당 지도와 번호 통계', icon: 'lottomap' },
+    { href: '../market/', name: '맛남의 광장', desc: '버려질 뻔한 못난이 농수산물 장터', icon: 'market' },
+    { href: '../season/', name: '제철장보기', desc: '이달의 제철 식재료와 지금 싼 품목', icon: 'season' },
+    { href: '../hanki/', name: '제철한끼', desc: '이달 이 지역 제철 음식 잘하는 집', icon: 'hanki' },
+    { href: '../roots/', name: '근본 테스트', desc: '사주와 퀴즈로 찾는 나의 근본 코드', icon: 'roots' },
+    { href: '../family/', name: '식구궁합', desc: '우리 가족 오행 궁합판', icon: 'family' },
+    { href: '../names/', name: '이름레이더', desc: '내 이름, 전국에 몇 명?', icon: 'names' },
+    { href: '../birthyear/', name: '나때연감', desc: '내가 태어난 해 타임캡슐', icon: 'birthyear' }
   ];
 
   root.LC_DATA = {

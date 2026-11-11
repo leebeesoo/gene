@@ -62,6 +62,72 @@ test('aT 파싱·집계 (산지명 없으면 산지코드표 사용, 화훼 제�
   assert.deepEqual(agg['전남|장흥군|쪽파|veg'], [8000, 13600000]);
 });
 
+test('단량 kg 환산 (단위물량 × 단위명)', () => {
+  assert.equal(L.unitSizeKg('10', 'kg'), 10);
+  assert.equal(L.unitSizeKg('500', 'g'), 0.5);
+  assert.equal(L.unitSizeKg('1', '5kg'), 5);
+  assert.equal(L.unitSizeKg('', 'kg'), 1);
+  assert.equal(L.unitSizeKg('1', '톤'), 1000);
+  assert.equal(L.unitSizeKg('1', '개'), null);
+  assert.equal(L.unitSizeKg('10', '속'), null);
+});
+
+test('경매 건 정규화: 실시간(scsbd_prc×qty) · 정산(avgprc, unit_tot_qty)', () => {
+  const rt = L.parseDataGo(fxj('at-realtime.json')).items;
+  const a = L.auctionLot(rt[0]);
+  assert.equal(a.unit_kg, 5); assert.equal(a.qty, 200); assert.equal(a.kg, 1000); assert.equal(a.price_per_kg, 1800);
+  assert.equal(a.sido, '제주'); assert.equal(a.sigungu, '서귀포시'); assert.equal(a.item, '감귤'); assert.equal(a.variety, '노지온주');
+  const g = L.auctionLot(rt[5], { 500200: '제주특별자치도 서귀포시' });
+  assert.equal(g.unit_kg, 0.5); assert.equal(g.kg, 50); assert.equal(g.price_per_kg, 300); assert.equal(g.sigungu, '서귀포시');
+  assert.equal(L.auctionLot(rt[9]), null); // '개' 단위
+  assert.equal(L.auctionLot(rt[10]), null); // 화훼
+  const sale = L.parseDataGo(fxj('at-trades.json')).items;
+  const s = L.auctionLot(sale[0]);
+  assert.equal(s.price_per_kg, 450); assert.equal(s.kg, 60000); assert.equal(s.qty, 6000); assert.equal(s.grade, '특');
+  assert.equal(s.variety, '가을배추'); assert.equal(s.item, '배추');
+});
+
+test('헐값 경매: 같은 품종 가중평균의 30% 이하, 20kg 이상, 등외·수입 제외', () => {
+  const rt = L.parseDataGo(fxj('at-realtime.json')).items;
+  const { lows, counts } = L.findAuctionLows(rt, { 500200: '제주특별자치도 서귀포시' });
+  assert.equal(lows.length, 2, JSON.stringify(lows));
+  const [x, y] = lows;
+  // 노지온주 6건: 3080kg, 5,323,000원 → 1728원/kg
+  assert.deepEqual(x, {
+    date: '2026-11-10', market: '서울가락', sido: '제주', sigungu: '서귀포시', item: '감귤', variety: '노지온주', grade: null,
+    unit_kg: 0.5, price: 150, price_per_kg: 300, avg_price_per_kg: 1728, ratio: 0.17, qty: 100,
+  });
+  assert.equal(y.market, '부산엄궁'); assert.equal(y.unit_kg, 10); assert.equal(y.qty, 2); assert.equal(y.price, 3000);
+  assert.ok(!lows.some((l) => l.price_per_kg === 200)); // 10kg 건은 잡음
+  assert.ok(!lows.some((l) => l.price_per_kg === 100)); // 등외
+  assert.deepEqual(counts, [{ date: '2026-11-10', sido: '제주', sigungu: '서귀포시', item: '감귤', category: 'fruit', count: 2, min_ratio: 0.17 }]);
+  // 상위 N개 제한
+  assert.equal(L.findAuctionLows(rt, { 500200: '서귀포시' }, { top: 1 }).lows.length, 1);
+});
+
+test('헐값 경매 5건 이상 → 신호 최소 surplus, 병합·7일 정리', () => {
+  const today = '2026-11-11';
+  const mk = (count, sigungu) => L.auctionLowMetrics([{ date: '2026-11-10', sido: '제주', sigungu, item: '감귤', category: 'fruit', count, min_ratio: 0.2 }]);
+  const s = L.deriveSignals({ metrics: [...mk(5, '서귀포시'), ...mk(4, '제주시')], events: [], today });
+  assert.equal(s.length, 1);
+  assert.equal(s[0].id, 'jeju-seogwipo-gamgyul');
+  assert.equal(s[0].level, 'surplus');
+  assert.deepEqual(s[0].source_ids, ['at']);
+  assert.equal(s[0].metrics.price, null); // at-lows 행은 표시 지표로 쓰지 않음
+  // 이미 crash인 신호는 그대로
+  const crash = { key: 'k', origin: 'kamis-daily', source_id: 'kamis', sido: null, item: '감귤', price: 1000, unit: 'kg', price_vs_normal_pct: -50, market: '전국 평균', as_of: '2026-11-10' };
+  const s2 = L.deriveSignals({ metrics: [...mk(6, '서귀포시'), crash], events: [], today });
+  assert.equal(s2.find((x) => x.sigungu === '서귀포시').level, 'crash');
+  // 8일 지난 헐값 집계는 무시·정리
+  const old = L.auctionLowMetrics([{ date: '2026-11-03', sido: '제주', sigungu: '서귀포시', item: '감귤', category: 'fruit', count: 9, min_ratio: 0.1 }]);
+  assert.equal(L.deriveSignals({ metrics: old, events: [], today }).length, 0);
+  const prev = [{ date: '2026-11-01', item: 'a' }, { date: '2026-11-08', item: 'b' }];
+  assert.deepEqual(L.mergeAuctionLows(prev, null, today).map((x) => x.item), ['b']); // 출처 실패 → 이전 값 유지, 7일 지난 것만 삭제
+  assert.deepEqual(L.mergeAuctionLows(prev, [{ date: '2026-11-10', item: 'c' }], today).map((x) => x.item), ['c']);
+  const doc = L.prune({ events: [], metrics: [...old, ...mk(5, '서귀포시')], forecasts: [], auction_lows: prev }, today);
+  assert.equal(doc.metrics.length, 1); assert.equal(doc.auction_lows.length, 1);
+});
+
 test('data.go.kr 오류 응답', () => {
   const r = L.parseDataGo(fxj('datago-error.json'));
   assert.equal(r.ok, false); assert.match(r.error, /SERVICE_KEY_IS_NOT_REGISTERED_ERROR/);

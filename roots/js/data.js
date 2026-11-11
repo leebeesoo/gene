@@ -10,11 +10,11 @@ export const AXES = [
 ];
 
 export const ELEMENTS = {
-  wood: { h: '木', k: '목', name: '나무', color: '#2f7d5b', soft: '#e1efe6', lucky: '초록', num: [3, 8], dir: '동쪽' },
-  fire: { h: '火', k: '화', name: '불', color: '#c8402f', soft: '#f7e2dc', lucky: '다홍', num: [2, 7], dir: '남쪽' },
-  earth: { h: '土', k: '토', name: '흙', color: '#b8872a', soft: '#f3ead2', lucky: '황토', num: [5, 10], dir: '가운데' },
-  metal: { h: '金', k: '금', name: '쇠', color: '#6f7c8c', soft: '#e7eaee', lucky: '흰색', num: [4, 9], dir: '서쪽' },
-  water: { h: '水', k: '수', name: '물', color: '#25467a', soft: '#dfe6f1', lucky: '먹색', num: [1, 6], dir: '북쪽' },
+  wood: { h: '木', k: '목', name: '나무', color: '#4E7A64', soft: '#e1efe6', lucky: '초록', num: [3, 8], dir: '동쪽' },
+  fire: { h: '火', k: '화', name: '불', color: '#A9544A', soft: '#f7e2dc', lucky: '다홍', num: [2, 7], dir: '남쪽' },
+  earth: { h: '土', k: '토', name: '흙', color: '#A68A55', soft: '#f3ead2', lucky: '황토', num: [5, 10], dir: '가운데' },
+  metal: { h: '金', k: '금', name: '쇠', color: '#7A828C', soft: '#e7eaee', lucky: '흰색', num: [4, 9], dir: '서쪽' },
+  water: { h: '水', k: '수', name: '물', color: '#445A78', soft: '#dfe6f1', lucky: '먹색', num: [1, 6], dir: '북쪽' },
 };
 export const EL_ORDER = ['wood', 'fire', 'earth', 'metal', 'water'];
 
