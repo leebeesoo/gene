@@ -2,7 +2,9 @@
 import { store } from './store.js';
 import { $, $$, countdown, toast, kg, num } from './util.js';
 import { pushAds } from './components.js';
-import { homeView, searchView } from './views/home.js';
+import { marketView, searchView } from './views/home.js';
+import { homeView, regionView, signalView } from './views/map.js';
+import { farmerView } from './views/farmer.js';
 import { itemView } from './views/item.js';
 import { sellView } from './views/sell.js';
 import { cartView, checkoutView, ordersView } from './views/cart.js';
@@ -10,9 +12,13 @@ import { sellerView } from './views/seller.js';
 import { meView, wishView, alertsView } from './views/me.js';
 
 const ROUTES = [
-  [/^\/$/, homeView, 'home'],
-  [/^\/search$/, searchView, 'search'],
-  [/^\/item\/([\w-]+)$/, itemView, 'home', ['id']],
+  [/^\/$/, homeView, 'map'],
+  [/^\/region\/([^/]+)$/, regionView, 'map', ['sido']],
+  [/^\/signal\/([^/]+)$/, signalView, 'map', ['id']],
+  [/^\/farmer$/, farmerView, 'farmer'],
+  [/^\/market$/, marketView, 'market'],
+  [/^\/search$/, searchView, 'market'],
+  [/^\/item\/([\w-]+)$/, itemView, 'market', ['id']],
   [/^\/sell$/, sellView, 'sell'],
   [/^\/sell\/([\w-]+)$/, sellView, 'sell', ['id']],
   [/^\/cart$/, cartView, 'cart'],
@@ -44,7 +50,11 @@ async function route() {
   let match = null;
   for (const [re, view, nav, names = []] of ROUTES) {
     const m = path.match(re);
-    if (m) { match = { view, nav, params: Object.fromEntries(names.map((n, i) => [n, decodeURIComponent(m[i + 1])])) }; break; }
+    if (m) {
+      let params;
+      try { params = Object.fromEntries(names.map((n, i) => [n, decodeURIComponent(m[i + 1])])); } catch { params = null; }
+      if (params) { match = { view, nav, params }; break; }
+    }
   }
   if (!match) { location.replace('#/'); return; }
 
@@ -70,6 +80,8 @@ async function route() {
   app.replaceChildren(el);
 
   document.title = ctx.title || '맛남의 광장';
+  const ogd = document.querySelector('meta[property="og:description"]');
+  if (ogd) ogd.content = ctx.description || DEFAULT_DESC;
   document.querySelector('meta[name=description]').content = ctx.description || DEFAULT_DESC;
   document.querySelector('meta[property="og:title"]').content = document.title;
   let ld = document.getElementById('ld-page');
@@ -82,7 +94,7 @@ async function route() {
   window.scrollTo(0, isBack ? positions.get(key) || 0 : 0);
   if (!firstRender) app.focus({ preventScroll: true });
   if (!ctx.noAds) pushAds(el);
-  if (firstRender || path === '/') animateCounts(el);
+  if (firstRender || path === '/' || path === '/market') animateCounts(el);
   firstRender = false;
   ctx.afterMount?.();
   tick();

@@ -1,0 +1,1330 @@
+{
+  "schema": 1,
+  "generated_at": "2026-11-11T14:12:51+09:00",
+  "sources": [
+    {
+      "id": "kamis",
+      "name": "KAMIS 농산물유통정보",
+      "url": "https://www.kamis.or.kr",
+      "license": "공공데이터",
+      "as_of": "2026-10"
+    },
+    {
+      "id": "news",
+      "name": "언론 보도 (제목·링크만)",
+      "url": "https://developers.naver.com/docs/serviceapi/search/news/news.md",
+      "license": "각 언론사",
+      "as_of": "2026-11-11"
+    },
+    {
+      "id": "mafra",
+      "name": "농림축산식품부 보도자료",
+      "url": "https://www.mafra.go.kr/bbs/home/792/rssList.do?row=50",
+      "license": "공공누리",
+      "as_of": "2026-11-04"
+    },
+    {
+      "id": "krei",
+      "name": "한국농촌경제연구원 농업관측센터",
+      "url": "https://aglook.krei.re.kr",
+      "license": "출처 표시, 내용 변경 금지",
+      "as_of": "2026-11-03"
+    }
+  ],
+  "signals": [
+    {
+      "id": "jeonnam-jangheung-jjokpa",
+      "sido": "전남",
+      "sigungu": "장흥군",
+      "item": "쪽파",
+      "category": "veg",
+      "level": "disposal",
+      "metrics": {
+        "price": 16935,
+        "unit": "10kg",
+        "price_basis": "도매(가락시장 상품)",
+        "price_vs_normal_pct": null,
+        "price_vs_last_year_pct": -73,
+        "volume_vs_normal_ratio": null,
+        "market": "서울 가락시장 (전국)",
+        "as_of": "2026-11-02"
+      },
+      "support": {
+        "program": null,
+        "note": "정부 폐기 보상 대상 아님 — 판매·나눔 가능"
+      },
+      "event_ids": [
+        "2026-11-06-jangheung-jjokpa-seoul",
+        "2026-11-03-jangheung-jjokpa",
+        "2026-11-02-jangheung-jjokpa-sbs"
+      ],
+      "source_ids": [
+        "news"
+      ]
+    },
+    {
+      "id": "chungbuk-cheongju-baechu",
+      "sido": "충북",
+      "sigungu": "청주시",
+      "item": "배추",
+      "category": "veg",
+      "level": "disposal",
+      "metrics": {
+        "price": 4792,
+        "unit": "10kg",
+        "price_basis": "도매(가락시장 상품)",
+        "price_vs_normal_pct": -42,
+        "price_vs_last_year_pct": -58,
+        "volume_vs_normal_ratio": null,
+        "market": "서울 가락시장 (전국)",
+        "as_of": "2026-11-04"
+      },
+      "support": {
+        "program": "채소가격안정제",
+        "note": "채소가격안정제 대상 품목 (계약 물량만)"
+      },
+      "event_ids": [
+        "2026-11-05-cheongju-baechu",
+        "2026-11-05-cheongju-baechu-cctoday"
+      ],
+      "source_ids": [
+        "news"
+      ]
+    },
+    {
+      "id": "kr-baechu",
+      "sido": null,
+      "sigungu": null,
+      "item": "배추",
+      "category": "veg",
+      "level": "crash",
+      "metrics": {
+        "price": 4792,
+        "unit": "10kg",
+        "price_basis": "도매(가락시장 상품)",
+        "price_vs_normal_pct": -42,
+        "price_vs_last_year_pct": -58,
+        "volume_vs_normal_ratio": null,
+        "market": "서울 가락시장",
+        "as_of": "2026-11-04"
+      },
+      "support": {
+        "program": "채소가격안정제",
+        "note": "채소가격안정제 대상 품목 (계약 물량만) · 정부 수급대책 진행 중"
+      },
+      "event_ids": [
+        "2026-11-05-kr-baechu-herald",
+        "2026-11-04-mafra-582139-baechu",
+        "2026-11-03-mafra-582129-baechu",
+        "2026-10-26-kr-baechu"
+      ],
+      "source_ids": [
+        "news",
+        "mafra"
+      ]
+    },
+    {
+      "id": "jeonnam-haenam-baechu",
+      "sido": "전남",
+      "sigungu": "해남군",
+      "item": "배추",
+      "category": "veg",
+      "level": "crash",
+      "metrics": {
+        "price": 4792,
+        "unit": "10kg",
+        "price_basis": "도매(가락시장 상품)",
+        "price_vs_normal_pct": -42,
+        "price_vs_last_year_pct": -58,
+        "volume_vs_normal_ratio": null,
+        "market": "서울 가락시장 (전국)",
+        "as_of": "2026-11-04"
+      },
+      "support": {
+        "program": "채소가격안정제",
+        "note": "채소가격안정제 대상 품목 (계약 물량만)"
+      },
+      "event_ids": [
+        "2026-11-08-haenam-baechu",
+        "2026-11-06-haenam-baechu"
+      ],
+      "source_ids": [
+        "news"
+      ]
+    },
+    {
+      "id": "kr-mu",
+      "sido": null,
+      "sigungu": null,
+      "item": "무",
+      "category": "veg",
+      "level": "crash",
+      "metrics": {
+        "price": 9189,
+        "unit": "20kg",
+        "price_basis": "도매(가락시장 상품)",
+        "price_vs_normal_pct": -40,
+        "price_vs_last_year_pct": -16,
+        "volume_vs_normal_ratio": null,
+        "market": "서울 가락시장",
+        "as_of": "2026-10-26"
+      },
+      "support": {
+        "program": "채소가격안정제",
+        "note": "채소가격안정제 대상 품목 (계약 물량만) · 정부 수급대책 진행 중"
+      },
+      "event_ids": [
+        "2026-11-04-mafra-582139-mu",
+        "2026-10-26-kr-mu"
+      ],
+      "source_ids": [
+        "news",
+        "mafra"
+      ]
+    },
+    {
+      "id": "gyeongbuk-yeongyang-baechu",
+      "sido": "경북",
+      "sigungu": "영양군",
+      "item": "배추",
+      "category": "veg",
+      "level": "crash",
+      "metrics": {
+        "price": 4792,
+        "unit": "10kg",
+        "price_basis": "도매(가락시장 상품)",
+        "price_vs_normal_pct": -42,
+        "price_vs_last_year_pct": -58,
+        "volume_vs_normal_ratio": null,
+        "market": "서울 가락시장 (전국)",
+        "as_of": "2026-11-04"
+      },
+      "support": {
+        "program": "채소가격안정제",
+        "note": "채소가격안정제 대상 품목 (계약 물량만)"
+      },
+      "event_ids": [
+        "2026-11-11-yeongyang-baechu"
+      ],
+      "source_ids": [
+        "news"
+      ]
+    },
+    {
+      "id": "gangwon-pyeongchang-baechu",
+      "sido": "강원",
+      "sigungu": "평창군",
+      "item": "배추",
+      "category": "veg",
+      "level": "crash",
+      "metrics": {
+        "price": 4792,
+        "unit": "10kg",
+        "price_basis": "도매(가락시장 상품)",
+        "price_vs_normal_pct": -42,
+        "price_vs_last_year_pct": -58,
+        "volume_vs_normal_ratio": null,
+        "market": "서울 가락시장 (전국)",
+        "as_of": "2026-11-04"
+      },
+      "support": {
+        "program": "채소가격안정제",
+        "note": "채소가격안정제 대상 품목 (계약 물량만)"
+      },
+      "event_ids": [
+        "2026-11-10-pyeongchang-baechu"
+      ],
+      "source_ids": [
+        "news"
+      ]
+    },
+    {
+      "id": "kr-aehobak",
+      "sido": null,
+      "sigungu": null,
+      "item": "애호박",
+      "category": "veg",
+      "level": "surplus",
+      "metrics": {
+        "price": 1174,
+        "unit": "1개",
+        "price_basis": "소매 월평균",
+        "price_vs_normal_pct": -32,
+        "price_vs_last_year_pct": -38,
+        "volume_vs_normal_ratio": null,
+        "market": "전국 평균(KAMIS 소매)",
+        "as_of": "2026-10"
+      },
+      "support": {
+        "program": null,
+        "note": "정부 폐기 보상 대상 아님 — 판매·나눔 가능"
+      },
+      "event_ids": [],
+      "source_ids": [
+        "kamis"
+      ]
+    },
+    {
+      "id": "kr-oi",
+      "sido": null,
+      "sigungu": null,
+      "item": "오이",
+      "category": "veg",
+      "level": "surplus",
+      "metrics": {
+        "price": 8124,
+        "unit": "10개",
+        "price_basis": "소매 월평균",
+        "price_vs_normal_pct": -37,
+        "price_vs_last_year_pct": -42,
+        "volume_vs_normal_ratio": null,
+        "market": "전국 평균(KAMIS 소매)",
+        "as_of": "2026-10"
+      },
+      "support": {
+        "program": null,
+        "note": "정부 폐기 보상 대상 아님 — 판매·나눔 가능"
+      },
+      "event_ids": [],
+      "source_ids": [
+        "kamis"
+      ]
+    },
+    {
+      "id": "kr-sangchu",
+      "sido": null,
+      "sigungu": null,
+      "item": "상추",
+      "category": "veg",
+      "level": "surplus",
+      "metrics": {
+        "price": 1005,
+        "unit": "100g",
+        "price_basis": "소매 월평균",
+        "price_vs_normal_pct": -34,
+        "price_vs_last_year_pct": -40,
+        "volume_vs_normal_ratio": null,
+        "market": "전국 평균(KAMIS 소매)",
+        "as_of": "2026-10"
+      },
+      "support": {
+        "program": null,
+        "note": "정부 폐기 보상 대상 아님 — 판매·나눔 가능"
+      },
+      "event_ids": [],
+      "source_ids": [
+        "kamis"
+      ]
+    },
+    {
+      "id": "kr-sigeumchi",
+      "sido": null,
+      "sigungu": null,
+      "item": "시금치",
+      "category": "veg",
+      "level": "surplus",
+      "metrics": {
+        "price": 955,
+        "unit": "100g",
+        "price_basis": "소매 월평균",
+        "price_vs_normal_pct": -25,
+        "price_vs_last_year_pct": -32,
+        "volume_vs_normal_ratio": null,
+        "market": "전국 평균(KAMIS 소매)",
+        "as_of": "2026-10"
+      },
+      "support": {
+        "program": null,
+        "note": "정부 폐기 보상 대상 아님 — 판매·나눔 가능"
+      },
+      "event_ids": [],
+      "source_ids": [
+        "kamis"
+      ]
+    },
+    {
+      "id": "kr-tomato",
+      "sido": null,
+      "sigungu": null,
+      "item": "토마토",
+      "category": "veg",
+      "level": "surplus",
+      "metrics": {
+        "price": 6516,
+        "unit": "1kg",
+        "price_basis": "소매 월평균",
+        "price_vs_normal_pct": -25,
+        "price_vs_last_year_pct": -13,
+        "volume_vs_normal_ratio": null,
+        "market": "전국 평균(KAMIS 소매)",
+        "as_of": "2026-10"
+      },
+      "support": {
+        "program": null,
+        "note": "정부 폐기 보상 대상 아님 — 판매·나눔 가능"
+      },
+      "event_ids": [],
+      "source_ids": [
+        "kamis"
+      ]
+    },
+    {
+      "id": "jeonnam-daepa",
+      "sido": "전남",
+      "sigungu": null,
+      "item": "대파",
+      "category": "veg",
+      "level": "watch",
+      "metrics": {
+        "price": 2838,
+        "unit": "1kg",
+        "price_basis": "소매 월평균",
+        "price_vs_normal_pct": -14,
+        "price_vs_last_year_pct": -13,
+        "volume_vs_normal_ratio": null,
+        "market": "전국 평균(KAMIS 소매)",
+        "as_of": "2026-10"
+      },
+      "support": {
+        "program": "채소가격안정제",
+        "note": "채소가격안정제 대상 품목 (계약 물량만)"
+      },
+      "event_ids": [
+        "2026-11-05-jeonnam-daepa"
+      ],
+      "source_ids": [
+        "kamis",
+        "news"
+      ]
+    },
+    {
+      "id": "kr-sagwa",
+      "sido": null,
+      "sigungu": null,
+      "item": "사과",
+      "category": "fruit",
+      "level": "watch",
+      "metrics": {
+        "price": 30000,
+        "unit": "10kg",
+        "price_basis": "도매(가락시장 상품) 월평균",
+        "price_vs_normal_pct": null,
+        "price_vs_last_year_pct": -51,
+        "volume_vs_normal_ratio": null,
+        "market": "서울 가락시장",
+        "as_of": "2026-10"
+      },
+      "support": {
+        "program": null,
+        "note": "정부 폐기 보상 대상 아님 — 판매·나눔 가능"
+      },
+      "event_ids": [
+        "2026-11-05-kr-sagwa"
+      ],
+      "source_ids": [
+        "krei",
+        "news"
+      ]
+    },
+    {
+      "id": "gyeongnam-tongyeong-gul",
+      "sido": "경남",
+      "sigungu": "통영시",
+      "item": "굴",
+      "category": "sea",
+      "level": "watch",
+      "metrics": {
+        "price": null,
+        "unit": null,
+        "price_basis": null,
+        "price_vs_normal_pct": null,
+        "price_vs_last_year_pct": null,
+        "volume_vs_normal_ratio": null,
+        "market": null,
+        "as_of": null
+      },
+      "support": {
+        "program": null,
+        "note": "정부 폐기 보상 대상 아님 — 판매·나눔 가능"
+      },
+      "event_ids": [
+        "2026-11-02-tongyeong-gul"
+      ],
+      "source_ids": [
+        "news"
+      ]
+    },
+    {
+      "id": "jeju-gamgyul",
+      "sido": "제주",
+      "sigungu": null,
+      "item": "감귤",
+      "category": "fruit",
+      "level": "watch",
+      "metrics": {
+        "price": 3537,
+        "unit": "10개",
+        "price_basis": "소매 월평균",
+        "price_vs_normal_pct": -7,
+        "price_vs_last_year_pct": -16,
+        "volume_vs_normal_ratio": null,
+        "market": "전국 평균(KAMIS 소매)",
+        "as_of": "2026-10"
+      },
+      "support": {
+        "program": null,
+        "note": "정부 폐기 보상 대상 아님 — 판매·나눔 가능"
+      },
+      "event_ids": [
+        "2026-11-02-jeju-gamgyul"
+      ],
+      "source_ids": [
+        "kamis",
+        "news"
+      ]
+    },
+    {
+      "id": "jeonnam-wando-jeonbok",
+      "sido": "전남",
+      "sigungu": "완도군",
+      "item": "전복",
+      "category": "sea",
+      "level": "watch",
+      "metrics": {
+        "price": null,
+        "unit": null,
+        "price_basis": null,
+        "price_vs_normal_pct": null,
+        "price_vs_last_year_pct": null,
+        "volume_vs_normal_ratio": null,
+        "market": null,
+        "as_of": null
+      },
+      "support": {
+        "program": null,
+        "note": "정부 폐기 보상 대상 아님 — 판매·나눔 가능"
+      },
+      "event_ids": [
+        "2026-10-27-wando-jeonbok"
+      ],
+      "source_ids": [
+        "news"
+      ]
+    },
+    {
+      "id": "kr-ssal",
+      "sido": null,
+      "sigungu": null,
+      "item": "쌀",
+      "category": "grain",
+      "level": "watch",
+      "metrics": {
+        "price": 63706,
+        "unit": "20kg",
+        "price_basis": "소매 월평균",
+        "price_vs_normal_pct": 14,
+        "price_vs_last_year_pct": -4,
+        "volume_vs_normal_ratio": null,
+        "market": "전국 평균(KAMIS 소매)",
+        "as_of": "2026-10"
+      },
+      "support": {
+        "program": "수급대책",
+        "note": "정부·지자체 수급대책(시장격리·출하조절) 진행 중 — 보상은 해당 물량만"
+      },
+      "event_ids": [
+        "2026-10-13-kr-ssal"
+      ],
+      "source_ids": [
+        "kamis",
+        "news"
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": "2026-11-11-yeongyang-baechu",
+      "date": "2026-11-11",
+      "type": "price_crash",
+      "sido": "경북",
+      "sigungu": "영양군",
+      "item": "배추",
+      "title": "배추 풍작에 가격 하락⋯경북 주산지 농가소득 감소 우려",
+      "url": "https://www.kbsm.net/news/view.php?idx=540586",
+      "publisher": "경북신문",
+      "verified": true,
+      "source_id": "news"
+    },
+    {
+      "id": "2026-11-10-pyeongchang-baechu",
+      "date": "2026-11-10",
+      "type": "campaign",
+      "sido": "강원",
+      "sigungu": "평창군",
+      "item": "배추",
+      "title": "우상호 강원지사, 평창서 김장 담그며 배추 소비 확대 호소",
+      "url": "https://www.fnnews.com/news/202611101333247119",
+      "publisher": "파이낸셜뉴스",
+      "verified": true,
+      "source_id": "news"
+    },
+    {
+      "id": "2026-11-08-haenam-baechu",
+      "date": "2026-11-08",
+      "type": "price_crash",
+      "sido": "전남",
+      "sigungu": "해남군",
+      "item": "배추",
+      "title": "폭락에 우는 배추값…갈아엎는 쪽파밭",
+      "url": "https://www.nongmin.com/article/20261106500632",
+      "publisher": "농민신문",
+      "verified": true,
+      "source_id": "news"
+    },
+    {
+      "id": "2026-11-06-haenam-baechu",
+      "date": "2026-11-06",
+      "type": "price_crash",
+      "sido": "전남",
+      "sigungu": "해남군",
+      "item": "배추",
+      "title": "'금배추'라더니 1년 만에 가격 반토막… 성난 농심, 밭째 갈아엎었다",
+      "url": "https://www.hankookilbo.com/news/article/A2026110513390001524",
+      "publisher": "한국일보",
+      "verified": true,
+      "source_id": "news"
+    },
+    {
+      "id": "2026-11-06-jangheung-jjokpa-seoul",
+      "date": "2026-11-06",
+      "type": "disposal",
+      "sido": "전남",
+      "sigungu": "장흥군",
+      "item": "쪽파",
+      "title": "김장철 앞두고 배추·쪽파값 반토막…밭 갈아엎는 전남산지",
+      "url": "https://www.seoul.co.kr/news/society/2026/11/06/20261106500020",
+      "publisher": "서울신문",
+      "verified": true,
+      "source_id": "news"
+    },
+    {
+      "id": "2026-11-05-cheongju-baechu",
+      "date": "2026-11-05",
+      "type": "disposal",
+      "sido": "충북",
+      "sigungu": "청주시",
+      "item": "배추",
+      "title": "멀쩡한 배추밭 갈아엎었다…김장철 앞두고 농민들 '초강수'",
+      "url": "https://www.hankyung.com/article/202611058148g",
+      "publisher": "한국경제",
+      "verified": true,
+      "source_id": "news"
+    },
+    {
+      "id": "2026-11-05-cheongju-baechu-cctoday",
+      "date": "2026-11-05",
+      "type": "disposal",
+      "sido": "충북",
+      "sigungu": "청주시",
+      "item": "배추",
+      "title": "올해도 갈아엎은 배추밭…농민 \"가격폭락에 농사 지을수록 빚\"",
+      "url": "https://www.cctoday.co.kr/news/articleView.html?idxno=2239747",
+      "publisher": "충청투데이",
+      "verified": true,
+      "source_id": "news"
+    },
+    {
+      "id": "2026-11-05-jeonnam-daepa",
+      "date": "2026-11-05",
+      "type": "forecast",
+      "sido": "전남",
+      "sigungu": null,
+      "item": "대파",
+      "title": "겨울대파 390ha 산지폐기…전남광주시의회, 수급관리 실효성 지적",
+      "url": "https://www.betanews.net/article/view/beta202611050067",
+      "publisher": "베타뉴스",
+      "verified": true,
+      "source_id": "news"
+    },
+    {
+      "id": "2026-11-05-kr-baechu-herald",
+      "date": "2026-11-05",
+      "type": "price_crash",
+      "sido": null,
+      "sigungu": null,
+      "item": "배추",
+      "title": "한달새 반값으로 떨어진 배추…농민들은 “죽을맛” [푸드360]",
+      "url": "https://biz.heraldcorp.com/article/10926810",
+      "publisher": "헤럴드경제",
+      "verified": true,
+      "source_id": "news"
+    },
+    {
+      "id": "2026-11-05-kr-sagwa",
+      "date": "2026-11-05",
+      "type": "forecast",
+      "sido": null,
+      "sigungu": null,
+      "item": "사과",
+      "title": "사과·감귤 출하량 늘어 가격하락 전망…연말 과일값 부담 덜 듯",
+      "url": "https://www.fnnews.com/news/202611050601186712",
+      "publisher": "파이낸셜뉴스",
+      "verified": true,
+      "source_id": "news"
+    },
+    {
+      "id": "2026-11-04-mafra-582139-baechu",
+      "date": "2026-11-04",
+      "type": "isolation",
+      "sido": null,
+      "sigungu": null,
+      "item": "배추",
+      "title": "농식품부 장관, 배추 등 가격 하락 김장채소류 실질적 소비촉진 대책 추진 당부",
+      "url": "https://www.mafra.go.kr/bbs/home/792/582139/artclView.do",
+      "publisher": "농림축산식품부",
+      "verified": true,
+      "source_id": "mafra"
+    },
+    {
+      "id": "2026-11-04-mafra-582139-mu",
+      "date": "2026-11-04",
+      "type": "isolation",
+      "sido": null,
+      "sigungu": null,
+      "item": "무",
+      "title": "농식품부 장관, 배추 등 가격 하락 김장채소류 실질적 소비촉진 대책 추진 당부",
+      "url": "https://www.mafra.go.kr/bbs/home/792/582139/artclView.do",
+      "publisher": "농림축산식품부",
+      "verified": true,
+      "source_id": "mafra"
+    },
+    {
+      "id": "2026-11-03-jangheung-jjokpa",
+      "date": "2026-11-03",
+      "type": "disposal",
+      "sido": "전남",
+      "sigungu": "장흥군",
+      "item": "쪽파",
+      "title": "김장철 앞두고 쪽파값 급락…뿔난 재배 농가, 쪽파밭 갈아엎기",
+      "url": "https://www.nocutnews.co.kr/news/6601381",
+      "publisher": "노컷뉴스",
+      "verified": true,
+      "source_id": "news"
+    },
+    {
+      "id": "2026-11-03-mafra-582129-baechu",
+      "date": "2026-11-03",
+      "type": "isolation",
+      "sido": null,
+      "sigungu": null,
+      "item": "배추",
+      "title": "10월 소비자물가는 2.8% 기록, 김장재료 수급안정 위해 역대 최대규모 김장대책(640억원) 시행, 동절기 농축수산물 수급 안정 총력",
+      "url": "https://www.mafra.go.kr/bbs/home/792/582129/artclView.do",
+      "publisher": "농림축산식품부",
+      "verified": true,
+      "source_id": "mafra"
+    },
+    {
+      "id": "2026-11-02-jangheung-jjokpa-sbs",
+      "date": "2026-11-02",
+      "type": "disposal",
+      "sido": "전남",
+      "sigungu": "장흥군",
+      "item": "쪽파",
+      "title": "수확 코앞인데 무슨 일…애써 키운 밭 갈아엎는다",
+      "url": "https://news.sbs.co.kr/news/endPage.do?news_id=N1008826489",
+      "publisher": "SBS",
+      "verified": true,
+      "source_id": "news"
+    },
+    {
+      "id": "2026-11-02-jeju-gamgyul",
+      "date": "2026-11-02",
+      "type": "price_crash",
+      "sido": "제주",
+      "sigungu": null,
+      "item": "감귤",
+      "title": "올해산 노지감귤 가격 하락↓...사과·배↓ 전국 과일시장 침체 우려까지",
+      "url": "https://www.newsjeju.net/news/articleView.html?idxno=427816",
+      "publisher": "뉴스제주",
+      "verified": true,
+      "source_id": "news"
+    },
+    {
+      "id": "2026-11-02-tongyeong-gul",
+      "date": "2026-11-02",
+      "type": "price_crash",
+      "sido": "경남",
+      "sigungu": "통영시",
+      "item": "굴",
+      "title": "[인물포커스] - 지홍태 통영굴 수하식 수협 조합장",
+      "url": "https://news.knn.co.kr/news/article/193878",
+      "publisher": "KNN",
+      "verified": true,
+      "source_id": "news"
+    },
+    {
+      "id": "2026-10-27-wando-jeonbok",
+      "date": "2026-10-27",
+      "type": "price_crash",
+      "sido": "전남",
+      "sigungu": "완도군",
+      "item": "전복",
+      "title": "전복값은 ‘바닥’, 불법 양식은 ‘난립’···소비 촉진에만 힘쓰는 전남광주 가격 안정 대책",
+      "url": "https://www.khan.co.kr/article/202610271632011/",
+      "publisher": "경향신문",
+      "verified": true,
+      "source_id": "news"
+    },
+    {
+      "id": "2026-10-26-kr-baechu",
+      "date": "2026-10-26",
+      "type": "price_crash",
+      "sido": null,
+      "sigungu": null,
+      "item": "배추",
+      "title": "배추값 평년 반토막…‘김장철 특수 없나’ 산지 한숨만",
+      "url": "https://www.nongmin.com/article/20261026500768",
+      "publisher": "농민신문",
+      "verified": true,
+      "source_id": "news"
+    },
+    {
+      "id": "2026-10-26-kr-mu",
+      "date": "2026-10-26",
+      "type": "price_crash",
+      "sido": null,
+      "sigungu": null,
+      "item": "무",
+      "title": "배추값 평년 반토막…‘김장철 특수 없나’ 산지 한숨만",
+      "url": "https://www.nongmin.com/article/20261026500768",
+      "publisher": "농민신문",
+      "verified": true,
+      "source_id": "news"
+    },
+    {
+      "id": "2026-10-13-kr-ssal",
+      "date": "2026-10-13",
+      "type": "isolation",
+      "sido": null,
+      "sigungu": null,
+      "item": "쌀",
+      "title": "올해 쌀 6만6천t 과잉 전망…정부, 대여곡 12만t 햅쌀로 돌려받는다",
+      "url": "https://www.imaeil.com/page/view/2026101309431098956",
+      "publisher": "매일신문",
+      "verified": true,
+      "source_id": "news"
+    }
+  ],
+  "forecasts": [
+    {
+      "item": "배추",
+      "period": "2026-11",
+      "summary": "11월 출하량 전년 및 평년 대비 각각 19.3%, 2.8% 증가 전망",
+      "source_id": "krei",
+      "url": "https://aglook.krei.re.kr/main/uObserveMonth/OVR0000000008?queryType=2026&queryType2=8061",
+      "published": "2026-11-03"
+    },
+    {
+      "item": "배추",
+      "period": "2026-11",
+      "summary": "11월 도매가격(상품): 6,000원/10kg 내외 (전년 및 평년 대비 하락 전망)",
+      "source_id": "krei",
+      "url": "https://aglook.krei.re.kr/main/uObserveMonth/OVR0000000008?queryType=2026&queryType2=8061",
+      "published": "2026-11-03"
+    },
+    {
+      "item": "무",
+      "period": "2026-11",
+      "summary": "11월 출하량 전년 및 평년 대비 각각 13.4%, 1.1% 증가 전망",
+      "source_id": "krei",
+      "url": "https://aglook.krei.re.kr/main/uObserveMonth/OVR0000000008?queryType=2026&queryType2=8061",
+      "published": "2026-11-03"
+    },
+    {
+      "item": "배추",
+      "period": "2026-12",
+      "summary": "겨울배추 재배면적: 3,882ha (전년 대비 5.0% 증가), 생산량: 26만 5천 톤 (전년 대비 6.8% 증가)",
+      "source_id": "krei",
+      "url": "https://aglook.krei.re.kr/main/uObserveMonth/OVR0000000008?queryType=2026&queryType2=8061",
+      "published": "2026-11-03"
+    },
+    {
+      "item": "사과",
+      "period": "2026-11",
+      "summary": "11월 출하량: 전년 대비 13.8% 증가 · 11월 후지 도매가격(상품/가락시장): 전년(62,500원) 대비 하락한 43,000원/10kg 내외",
+      "source_id": "krei",
+      "url": "https://aglook.krei.re.kr/main/uObserveMonth/OVR0000000013?queryType=2026&queryType2=8055",
+      "published": "2026-11-03"
+    },
+    {
+      "item": "감귤",
+      "period": "2026-11",
+      "summary": "11월 노지감귤 도매가격(상품/가락시장): 전년(16,500원) 대비 하락한 15,000원/5kg 내외",
+      "source_id": "krei",
+      "url": "https://aglook.krei.re.kr/main/uObserveMonth/OVR0000000013?queryType=2026&queryType2=8055",
+      "published": "2026-11-03"
+    }
+  ],
+  "metrics": [
+    {
+      "origin": "manual",
+      "sigungu": null,
+      "volume_vs_normal_ratio": null,
+      "source_id": "news",
+      "sido": null,
+      "item": "배추",
+      "category": "veg",
+      "kind": "10kg 상품",
+      "price": 4792,
+      "unit": "10kg",
+      "price_basis": "도매(가락시장 상품)",
+      "price_vs_normal_pct": -42,
+      "price_vs_last_year_pct": -58,
+      "market": "서울 가락시장",
+      "as_of": "2026-11-04",
+      "url": "https://www.nongmin.com/article/20261106500632",
+      "note": "평년·전년은 11월 평균 대비",
+      "key": "manual||배추"
+    },
+    {
+      "origin": "manual",
+      "sigungu": null,
+      "volume_vs_normal_ratio": null,
+      "source_id": "news",
+      "sido": null,
+      "item": "쪽파",
+      "category": "veg",
+      "kind": "10kg 상품",
+      "price": 16935,
+      "unit": "10kg",
+      "price_basis": "도매(가락시장 상품)",
+      "price_vs_normal_pct": null,
+      "price_vs_last_year_pct": -73,
+      "market": "서울 가락시장",
+      "as_of": "2026-11-02",
+      "url": "https://www.nongmin.com/article/20261106500632",
+      "key": "manual||쪽파"
+    },
+    {
+      "origin": "manual",
+      "sigungu": null,
+      "volume_vs_normal_ratio": null,
+      "source_id": "news",
+      "sido": null,
+      "item": "무",
+      "category": "veg",
+      "kind": "20kg 상품",
+      "price": 9189,
+      "unit": "20kg",
+      "price_basis": "도매(가락시장 상품)",
+      "price_vs_normal_pct": -40,
+      "price_vs_last_year_pct": -16,
+      "market": "서울 가락시장",
+      "as_of": "2026-10-26",
+      "url": "https://www.nongmin.com/article/20261026500768",
+      "note": "평년·전년은 10월 평균 대비",
+      "key": "manual||무"
+    },
+    {
+      "origin": "manual",
+      "sigungu": null,
+      "volume_vs_normal_ratio": null,
+      "source_id": "krei",
+      "sido": null,
+      "item": "사과",
+      "category": "fruit",
+      "kind": "홍로 상품",
+      "price": 30000,
+      "unit": "10kg",
+      "price_basis": "도매(가락시장 상품) 월평균",
+      "price_vs_normal_pct": null,
+      "price_vs_last_year_pct": -51,
+      "market": "서울 가락시장",
+      "as_of": "2026-10",
+      "url": "https://aglook.krei.re.kr/main/uObserveMonth/OVR0000000013?queryType=2026&queryType2=8055",
+      "note": "KREI 과일관측 2026년 11월호",
+      "key": "manual||사과"
+    },
+    {
+      "key": "kamis-monthly||배추",
+      "origin": "kamis-monthly",
+      "source_id": "kamis",
+      "sido": null,
+      "sigungu": null,
+      "item": "배추",
+      "category": "veg",
+      "kind": "전체",
+      "price": 5281,
+      "unit": "1포기",
+      "price_basis": "소매 월평균",
+      "price_vs_normal_pct": -12,
+      "price_vs_last_year_pct": -9,
+      "volume_vs_normal_ratio": null,
+      "market": "전국 평균(KAMIS 소매)",
+      "as_of": "2026-10",
+      "url": "https://www.kamis.or.kr/customer/price/retail/period.do"
+    },
+    {
+      "key": "kamis-monthly||무",
+      "origin": "kamis-monthly",
+      "source_id": "kamis",
+      "sido": null,
+      "sigungu": null,
+      "item": "무",
+      "category": "veg",
+      "kind": "전체",
+      "price": 2318,
+      "unit": "1개",
+      "price_basis": "소매 월평균",
+      "price_vs_normal_pct": -16,
+      "price_vs_last_year_pct": 2,
+      "volume_vs_normal_ratio": null,
+      "market": "전국 평균(KAMIS 소매)",
+      "as_of": "2026-10",
+      "url": "https://www.kamis.or.kr/customer/price/retail/period.do"
+    },
+    {
+      "key": "kamis-monthly||양배추",
+      "origin": "kamis-monthly",
+      "source_id": "kamis",
+      "sido": null,
+      "sigungu": null,
+      "item": "양배추",
+      "category": "veg",
+      "kind": "양배추",
+      "price": 4462,
+      "unit": "1포기",
+      "price_basis": "소매 월평균",
+      "price_vs_normal_pct": -1,
+      "price_vs_last_year_pct": 17,
+      "volume_vs_normal_ratio": null,
+      "market": "전국 평균(KAMIS 소매)",
+      "as_of": "2026-10",
+      "url": "https://www.kamis.or.kr/customer/price/retail/period.do"
+    },
+    {
+      "key": "kamis-monthly||양파",
+      "origin": "kamis-monthly",
+      "source_id": "kamis",
+      "sido": null,
+      "sigungu": null,
+      "item": "양파",
+      "category": "veg",
+      "kind": "전체",
+      "price": 2160,
+      "unit": "1kg",
+      "price_basis": "소매 월평균",
+      "price_vs_normal_pct": -2,
+      "price_vs_last_year_pct": -2,
+      "volume_vs_normal_ratio": null,
+      "market": "전국 평균(KAMIS 소매)",
+      "as_of": "2026-10",
+      "url": "https://www.kamis.or.kr/customer/price/retail/period.do"
+    },
+    {
+      "key": "kamis-monthly||대파",
+      "origin": "kamis-monthly",
+      "source_id": "kamis",
+      "sido": null,
+      "sigungu": null,
+      "item": "대파",
+      "category": "veg",
+      "kind": "대파",
+      "price": 2838,
+      "unit": "1kg",
+      "price_basis": "소매 월평균",
+      "price_vs_normal_pct": -14,
+      "price_vs_last_year_pct": -13,
+      "volume_vs_normal_ratio": null,
+      "market": "전국 평균(KAMIS 소매)",
+      "as_of": "2026-10",
+      "url": "https://www.kamis.or.kr/customer/price/retail/period.do"
+    },
+    {
+      "key": "kamis-monthly||마늘",
+      "origin": "kamis-monthly",
+      "source_id": "kamis",
+      "sido": null,
+      "sigungu": null,
+      "item": "마늘",
+      "category": "veg",
+      "kind": "깐마늘(국산)",
+      "price": 10938,
+      "unit": "1kg",
+      "price_basis": "소매 월평균",
+      "price_vs_normal_pct": -2,
+      "price_vs_last_year_pct": -1,
+      "volume_vs_normal_ratio": null,
+      "market": "전국 평균(KAMIS 소매)",
+      "as_of": "2026-10",
+      "url": "https://www.kamis.or.kr/customer/price/retail/period.do"
+    },
+    {
+      "key": "kamis-monthly||감자",
+      "origin": "kamis-monthly",
+      "source_id": "kamis",
+      "sido": null,
+      "sigungu": null,
+      "item": "감자",
+      "category": "veg",
+      "kind": "수미",
+      "price": 339,
+      "unit": "100g",
+      "price_basis": "소매 월평균",
+      "price_vs_normal_pct": -5,
+      "price_vs_last_year_pct": -9,
+      "volume_vs_normal_ratio": null,
+      "market": "전국 평균(KAMIS 소매)",
+      "as_of": "2026-10",
+      "url": "https://www.kamis.or.kr/customer/price/retail/period.do"
+    },
+    {
+      "key": "kamis-monthly||고구마",
+      "origin": "kamis-monthly",
+      "source_id": "kamis",
+      "sido": null,
+      "sigungu": null,
+      "item": "고구마",
+      "category": "veg",
+      "kind": "밤고구마",
+      "price": 4934,
+      "unit": "1kg",
+      "price_basis": "소매 월평균",
+      "price_vs_normal_pct": -6,
+      "price_vs_last_year_pct": -4,
+      "volume_vs_normal_ratio": null,
+      "market": "전국 평균(KAMIS 소매)",
+      "as_of": "2026-10",
+      "url": "https://www.kamis.or.kr/customer/price/retail/period.do"
+    },
+    {
+      "key": "kamis-monthly||당근",
+      "origin": "kamis-monthly",
+      "source_id": "kamis",
+      "sido": null,
+      "sigungu": null,
+      "item": "당근",
+      "category": "veg",
+      "kind": "무세척(국산)",
+      "price": 4327,
+      "unit": "1kg",
+      "price_basis": "소매 월평균",
+      "price_vs_normal_pct": -10,
+      "price_vs_last_year_pct": 21,
+      "volume_vs_normal_ratio": null,
+      "market": "전국 평균(KAMIS 소매)",
+      "as_of": "2026-10",
+      "url": "https://www.kamis.or.kr/customer/price/retail/period.do"
+    },
+    {
+      "key": "kamis-monthly||오이",
+      "origin": "kamis-monthly",
+      "source_id": "kamis",
+      "sido": null,
+      "sigungu": null,
+      "item": "오이",
+      "category": "veg",
+      "kind": "가시계통",
+      "price": 8124,
+      "unit": "10개",
+      "price_basis": "소매 월평균",
+      "price_vs_normal_pct": -37,
+      "price_vs_last_year_pct": -42,
+      "volume_vs_normal_ratio": null,
+      "market": "전국 평균(KAMIS 소매)",
+      "as_of": "2026-10",
+      "url": "https://www.kamis.or.kr/customer/price/retail/period.do"
+    },
+    {
+      "key": "kamis-monthly||애호박",
+      "origin": "kamis-monthly",
+      "source_id": "kamis",
+      "sido": null,
+      "sigungu": null,
+      "item": "애호박",
+      "category": "veg",
+      "kind": "애호박",
+      "price": 1174,
+      "unit": "1개",
+      "price_basis": "소매 월평균",
+      "price_vs_normal_pct": -32,
+      "price_vs_last_year_pct": -38,
+      "volume_vs_normal_ratio": null,
+      "market": "전국 평균(KAMIS 소매)",
+      "as_of": "2026-10",
+      "url": "https://www.kamis.or.kr/customer/price/retail/period.do"
+    },
+    {
+      "key": "kamis-monthly||토마토",
+      "origin": "kamis-monthly",
+      "source_id": "kamis",
+      "sido": null,
+      "sigungu": null,
+      "item": "토마토",
+      "category": "veg",
+      "kind": "토마토",
+      "price": 6516,
+      "unit": "1kg",
+      "price_basis": "소매 월평균",
+      "price_vs_normal_pct": -25,
+      "price_vs_last_year_pct": -13,
+      "volume_vs_normal_ratio": null,
+      "market": "전국 평균(KAMIS 소매)",
+      "as_of": "2026-10",
+      "url": "https://www.kamis.or.kr/customer/price/retail/period.do"
+    },
+    {
+      "key": "kamis-monthly||시금치",
+      "origin": "kamis-monthly",
+      "source_id": "kamis",
+      "sido": null,
+      "sigungu": null,
+      "item": "시금치",
+      "category": "veg",
+      "kind": "시금치",
+      "price": 955,
+      "unit": "100g",
+      "price_basis": "소매 월평균",
+      "price_vs_normal_pct": -25,
+      "price_vs_last_year_pct": -32,
+      "volume_vs_normal_ratio": null,
+      "market": "전국 평균(KAMIS 소매)",
+      "as_of": "2026-10",
+      "url": "https://www.kamis.or.kr/customer/price/retail/period.do"
+    },
+    {
+      "key": "kamis-monthly||상추",
+      "origin": "kamis-monthly",
+      "source_id": "kamis",
+      "sido": null,
+      "sigungu": null,
+      "item": "상추",
+      "category": "veg",
+      "kind": "적",
+      "price": 1005,
+      "unit": "100g",
+      "price_basis": "소매 월평균",
+      "price_vs_normal_pct": -34,
+      "price_vs_last_year_pct": -40,
+      "volume_vs_normal_ratio": null,
+      "market": "전국 평균(KAMIS 소매)",
+      "as_of": "2026-10",
+      "url": "https://www.kamis.or.kr/customer/price/retail/period.do"
+    },
+    {
+      "key": "kamis-monthly||사과",
+      "origin": "kamis-monthly",
+      "source_id": "kamis",
+      "sido": null,
+      "sigungu": null,
+      "item": "사과",
+      "category": "fruit",
+      "kind": "후지",
+      "price": 21734,
+      "unit": "10개",
+      "price_basis": "소매 월평균",
+      "price_vs_normal_pct": null,
+      "price_vs_last_year_pct": -20,
+      "volume_vs_normal_ratio": null,
+      "market": "전국 평균(KAMIS 소매)",
+      "as_of": "2026-10",
+      "url": "https://www.kamis.or.kr/customer/price/retail/period.do"
+    },
+    {
+      "key": "kamis-monthly||배",
+      "origin": "kamis-monthly",
+      "source_id": "kamis",
+      "sido": null,
+      "sigungu": null,
+      "item": "배",
+      "category": "fruit",
+      "kind": "신고",
+      "price": 27637,
+      "unit": "10개",
+      "price_basis": "소매 월평균",
+      "price_vs_normal_pct": -8,
+      "price_vs_last_year_pct": -8,
+      "volume_vs_normal_ratio": null,
+      "market": "전국 평균(KAMIS 소매)",
+      "as_of": "2026-10",
+      "url": "https://www.kamis.or.kr/customer/price/retail/period.do"
+    },
+    {
+      "key": "kamis-monthly||감귤",
+      "origin": "kamis-monthly",
+      "source_id": "kamis",
+      "sido": null,
+      "sigungu": null,
+      "item": "감귤",
+      "category": "fruit",
+      "kind": "노지(M과)",
+      "price": 3537,
+      "unit": "10개",
+      "price_basis": "소매 월평균",
+      "price_vs_normal_pct": -7,
+      "price_vs_last_year_pct": -16,
+      "volume_vs_normal_ratio": null,
+      "market": "전국 평균(KAMIS 소매)",
+      "as_of": "2026-10",
+      "url": "https://www.kamis.or.kr/customer/price/retail/period.do"
+    },
+    {
+      "key": "kamis-monthly||단감",
+      "origin": "kamis-monthly",
+      "source_id": "kamis",
+      "sido": null,
+      "sigungu": null,
+      "item": "단감",
+      "category": "fruit",
+      "kind": "부유",
+      "price": 7339,
+      "unit": "5개",
+      "price_basis": "소매 월평균",
+      "price_vs_normal_pct": -4,
+      "price_vs_last_year_pct": -9,
+      "volume_vs_normal_ratio": null,
+      "market": "전국 평균(KAMIS 소매)",
+      "as_of": "2026-10",
+      "url": "https://www.kamis.or.kr/customer/price/retail/period.do"
+    },
+    {
+      "key": "kamis-monthly||고등어",
+      "origin": "kamis-monthly",
+      "source_id": "kamis",
+      "sido": null,
+      "sigungu": null,
+      "item": "고등어",
+      "category": "sea",
+      "kind": "국산(신선 냉장) 大",
+      "price": 4283,
+      "unit": "1마리",
+      "price_basis": "소매 월평균",
+      "price_vs_normal_pct": null,
+      "price_vs_last_year_pct": -5,
+      "volume_vs_normal_ratio": null,
+      "market": "전국 평균(KAMIS 소매)",
+      "as_of": "2026-10",
+      "url": "https://www.kamis.or.kr/customer/price/retail/period.do"
+    },
+    {
+      "key": "kamis-monthly||쌀",
+      "origin": "kamis-monthly",
+      "source_id": "kamis",
+      "sido": null,
+      "sigungu": null,
+      "item": "쌀",
+      "category": "grain",
+      "kind": "20kg",
+      "price": 63706,
+      "unit": "20kg",
+      "price_basis": "소매 월평균",
+      "price_vs_normal_pct": 14,
+      "price_vs_last_year_pct": -4,
+      "volume_vs_normal_ratio": null,
+      "market": "전국 평균(KAMIS 소매)",
+      "as_of": "2026-10",
+      "url": "https://www.kamis.or.kr/customer/price/retail/period.do"
+    }
+  ]
+}

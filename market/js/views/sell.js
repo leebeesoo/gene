@@ -55,15 +55,27 @@ export async function sellView(ctx) {
     }
     v = {
       ...blank(), ...l, deadlineDate: l.deadline.slice(0, 10), eaGram: l.unit === 'ea' ? Math.round(l.unitKg * 1000) : 300,
-      gbOn: !!l.gb, gbGoal: l.gb?.goal || '', gbExtra: l.gb?.extra || 10, images: l.images || [],
+      gbOn: !!l.gb, gbGoal: l.gb?.goal || '', gbExtra: l.gb?.extra || 10, images: l.images || [], noContract: !!l.noContractConfirmed,
     };
     // 로컬 시간 기준 날짜
     const dl = new Date(l.deadline);
     v.deadlineDate = `${dl.getFullYear()}-${String(dl.getMonth() + 1).padStart(2, '0')}-${String(dl.getDate()).padStart(2, '0')}`;
   } else {
     const draft = await store.getDraft();
-    v = { ...blank(), ...(draft || {}), images: [] };
+    v = { ...blank(), ...(draft || {}), images: [], noContract: false }; // 약정 확인은 매번 새로
     const me = await store.getSeller(store.ME);
+    // 남는 지도·농가 판단 도구에서 넘어온 경우 품목·산지 미리 채우기
+    const q = ctx.query;
+    const qItem = (q.get('item') || '').trim().slice(0, 20);
+    if (qItem && !v.title) {
+      v.title = `${q.get('sigungu') ? `${q.get('sigungu').replace(/(군|시|구)$/, '')} ` : ''}${qItem} 과잉생산분`.slice(0, 40);
+      v.reason = v.reason || 'surplus';
+      v.cat = v.cat || 'veg';
+    }
+    if (REGION_NAMES.includes(q.get('sido'))) {
+      if (v.region !== q.get('sido')) v.locality = q.get('sigungu') || '';
+      v.region = q.get('sido');
+    }
     if (!v.region && me.region) { v.region = me.region; v.locality = me.locality; }
   }
   ctx.title = editId ? '상품 수정 — 맛남의 광장' : '판매 등록 — 맛남의 광장';
@@ -75,6 +87,7 @@ export async function sellView(ctx) {
       <h1 class="page-title">${editId ? '상품 수정' : '판매 등록'}</h1>
       <p class="muted">${editId ? '변경 사항은 저장 즉시 반영돼요.' : '3분이면 충분해요. 작성 중인 내용은 이 기기에 자동 저장돼요.'}</p>
     </div>
+    ${editId ? '' : `<a class="notice farmer-link" href="#/farmer">${icon('info')}<span><b>갈아엎을지 팔지 고민 중이라면</b> 보상 대상 여부와 손익부터 확인해 보세요.</span>${icon('chevron', 16)}</a>`}
     <div class="sell-layout">
     <form class="form" id="sell-form" novalidate>
       <fieldset class="fs"><legend>사진 <span class="muted small">최대 ${MAX_PHOTOS}장 · 흠집·크기를 보여주면 신뢰가 올라가요</span></legend>
@@ -135,6 +148,11 @@ export async function sellView(ctx) {
       <div class="field"><label for="f-storage">보관 방법</label><input id="f-storage" name="storage" maxlength="40" value="${esc(v.storage)}" placeholder="예) 냉장 0~5℃, 수령 후 3일 내"></div>
       <div class="field"><label for="f-desc">상품 설명</label><textarea id="f-desc" name="desc" rows="4" maxlength="800" placeholder="품종, 재배 방식, 추천 용도 등">${esc(v.desc)}</textarea></div>
 
+      <div class="field contract-confirm">
+        <label class="check"><input type="checkbox" name="noContract" ${v.noContract ? 'checked' : ''} required aria-describedby="hint-noContract err-noContract"><span><b>출하정지·산지폐기 약정 물량이 아님을 확인합니다</b> <span class="req">*</span></span></label>
+        <p class="hint" id="hint-noContract">채소가격안정제·시장격리 등으로 약정한 물량을 팔거나 기부하면 보조금 회수와 최대 3년 참여 제한이 따라요. 계약 외 물량·의무(50%) 초과분·규격외는 판매할 수 있어요. <a href="#/farmer">확인하기</a></p>
+        <p class="err" id="err-noContract"></p></div>
+
       <div class="sell-submit">
         ${editId ? `<button type="button" class="btn ghost lg" data-close-listing>판매 종료</button>` : ''}
         <button class="btn primary lg grow" type="submit">${editId ? '수정 저장' : '판매 시작하기'}</button>
@@ -161,6 +179,7 @@ export async function sellView(ctx) {
       region: g('region'), locality: g('locality'), harvestDate: g('harvestDate'), deadlineDate: g('deadlineDate'),
       delivery: fd.getAll('delivery'), storage: g('storage'), desc: g('desc'),
       gbOn: !!fd.get('gbOn'), gbGoal: Number(g('gbGoal')) || 0, gbExtra: Number(g('gbExtra')) || 10,
+      noContract: !!fd.get('noContract'),
     };
   };
 
@@ -170,6 +189,7 @@ export async function sellView(ctx) {
     region: d.region, locality: d.locality, harvestDate: d.harvestDate,
     deadline: new Date(`${d.deadlineDate}T23:59:00`).toISOString(), delivery: d.delivery, storage: d.storage, desc: d.desc,
     gb: d.gbOn && d.gbGoal ? { goal: d.gbGoal, extra: d.gbExtra } : null,
+    noContractConfirmed: d.noContract,
   });
 
   const drawPhotos = () => {
@@ -246,6 +266,7 @@ export async function sellView(ctx) {
     else if (d.deadlineDate < todayISO()) e.deadlineDate = '마감일은 오늘 이후여야 해요.';
     else if (d.harvestDate && d.deadlineDate < d.harvestDate && !editId) e.deadlineDate = '마감일이 수확일보다 빨라요.';
     if (!d.delivery.length) e.delivery = '거래 방식을 하나 이상 골라주세요.';
+    if (!d.noContract) e.noContract = '약정 물량이 아닌지 확인하고 체크해 주세요.';
     if (d.gbOn && !(d.gbGoal > 0)) e.gbGoal = '목표 수량을 입력해 주세요.';
     else if (d.gbOn && d.gbGoal > d.total) e.gbGoal = '목표가 판매 수량보다 많아요.';
     return e;

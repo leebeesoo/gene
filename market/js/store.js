@@ -456,6 +456,20 @@ export const store = {
   async saveDraft(d) { try { write('draft', d); } catch { /* 임시저장 실패는 무시 */ } },
   async clearDraft() { try { localStorage.removeItem(NS + 'draft'); } catch {} mem.delete('draft'); },
 
+  // 남는 지도 관심 등록 (나눔 연결·구출 원정대) — 백엔드가 없어 이 기기에만 저장
+  async getInterests() { return read('interests', []); },
+  async saveInterest(kind, data) {
+    const list = read('interests', []);
+    const item = { id: uid('in-'), kind, ...data, createdAt: new Date().toISOString() };
+    write('interests', [item, ...list].slice(0, 50));
+    emit('interests');
+    return clone(item);
+  },
+  async removeInterest(id) {
+    write('interests', read('interests', []).filter((x) => x.id !== id));
+    emit('interests');
+  },
+
   /** 개발/데모용 초기화 */
   async resetAll() {
     try { Object.keys(localStorage).filter((k) => k.startsWith(NS)).forEach((k) => localStorage.removeItem(k)); } catch {}

@@ -1,0 +1,15 @@
+{
+  "_note": "형식은 네이버 검색 API 뉴스(news.json) 문서의 응답 예시(lastBuildDate,total,start,display,items[title,originallink,link,description,pubDate])를 따름. 항목은 이 저장소 수집 시점에 실제로 확인한 기사 제목·링크로 채웠고 description은 비워 둠.",
+  "lastBuildDate": "Wed, 11 Nov 2026 06:00:00 +0900",
+  "total": 4, "start": 1, "display": 4,
+  "items": [
+    {"title": "김장철 앞두고 <b>쪽파</b>값 급락…뿔난 재배 농가, 쪽파밭 <b>갈아엎</b>기", "originallink": "https://www.nocutnews.co.kr/news/6601381",
+     "link": "https://n.news.naver.com/mnews/article/079/0000000000", "description": "", "pubDate": "Tue, 03 Nov 2026 14:26:00 +0900"},
+    {"title": "&quot;배춧값 폭락 대책 마련하라&quot; 밭 <b>갈아엎</b>은 농민들", "originallink": "https://www.segye.com/newsView/20261105509864",
+     "link": "https://n.news.naver.com/mnews/article/022/0000000000", "description": "", "pubDate": "Thu, 05 Nov 2026 14:06:00 +0900"},
+    {"title": "겨울대파 390ha <b>산지폐기</b>…전남광주시의회, 수급관리 실효성 지적", "originallink": "https://www.betanews.net/article/view/beta202611050067",
+     "link": "https://www.betanews.net/article/view/beta202611050067", "description": "", "pubDate": "Thu, 05 Nov 2026 13:21:01 +0900"},
+    {"title": "코스피 <b>가격폭락</b> 우려", "originallink": "https://example.com/stock",
+     "link": "https://example.com/stock", "description": "", "pubDate": "Thu, 05 Nov 2026 10:00:00 +0900"}
+  ]
+}

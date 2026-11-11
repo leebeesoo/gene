@@ -111,7 +111,11 @@ function dailyPicks(list) {
   return pool.map((l) => [r(), l]).sort((a, b) => a[0] - b[0]).slice(0, 6).map((x) => x[1]);
 }
 
-export async function homeView(ctx) {
+/**
+ * 장터 본문 (마감임박·특가·공동구매·전체 상품). 남는 지도 홈 하단과 #/market에서 함께 씀.
+ * hero: 임팩트 히어로 표시 여부
+ */
+export async function marketHTML({ hero = true } = {}) {
   const [list, imp, prefs, wish, recentIds, alerts] = await Promise.all([
     store.getListings(), store.getImpact(), store.getPrefs(), store.getWishlist(), store.getRecent(), store.getAlertMatches(),
   ]);
@@ -121,9 +125,8 @@ export async function homeView(ctx) {
   const recent = recentIds.map((id) => list.find((l) => l.id === id)).filter(Boolean).slice(0, 10);
   const seller = prefs.role === 'seller';
 
-  ctx.title = '맛남의 광장 — 리퍼브 농수산물 산지 직거래';
-  ctx.el.innerHTML = `
-  <section class="hero">
+  return `
+  ${hero ? `<section class="hero">
     <div class="hero-copy">
       <p class="eyebrow">${icon('leaf', 16)}갈아엎기 전에, 식탁으로</p>
       <h1>못생겨도 맛은 그대로.<br><em>버려질 제철</em>을 구해요</h1>
@@ -140,7 +143,7 @@ export async function homeView(ctx) {
       <p class="board-foot">${num(imp.farms)}곳 농가·어가 · 판매 중 ${num(imp.live)}개 상품</p>
       <div class="board-art" aria-hidden="true">${art('tangerine')}</div>
     </div>
-  </section>
+  </section>` : ''}
 
   ${alerts.length ? `<a class="alert-banner" href="#/alerts">${icon('bell', 18)}<span>관심 품목·지역에 <b>새 상품 ${alerts.length}개</b>가 올라왔어요</span>${icon('chevron', 16)}</a>` : ''}
 
@@ -181,13 +184,23 @@ export async function homeView(ctx) {
 
   <section class="seller-band">
     <div><h2>밭을 갈아엎기 전에, 3분만</h2><p>사진 몇 장과 사유만 적으면 바로 판매 시작. 수수료 없이 시범 운영 중이에요.</p></div>
-    <a class="btn primary lg" href="#/sell">${icon('plus', 18)}판매 등록</a>
+    <div class="row-gap start"><a class="btn ghost lg" href="#/farmer">손익부터 따져보기</a><a class="btn primary lg" href="#/sell">${icon('plus', 18)}판매 등록</a></div>
   </section>`;
+}
 
-  ctx.el.querySelector('[data-scroll]')?.addEventListener('click', (e) => {
+/** marketHTML을 넣은 뒤 동작 연결 */
+export async function bindMarket(root) {
+  root.querySelector('[data-scroll]')?.addEventListener('click', (e) => {
     document.querySelector(e.currentTarget.dataset.scroll)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
-  await mountBrowse(ctx.el.querySelector('#browse'), homeFilter);
+  await mountBrowse(root.querySelector('#browse'), homeFilter);
+}
+
+export async function marketView(ctx) {
+  ctx.title = '장터 — 맛남의 광장';
+  ctx.description = '규격외·과잉생산·흠과 등 버려질 뻔한 농수산물을 산지에서 바로. 개인은 반값에, 식당·업체는 대량으로.';
+  ctx.el.innerHTML = await marketHTML({ hero: true });
+  await bindMarket(ctx.el);
 }
 
 export async function searchView(ctx) {

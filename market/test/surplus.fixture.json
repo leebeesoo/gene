@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "_test": true,
+  "_note": "TEST FIXTURE ONLY — 화면 테스트용 가상 데이터입니다. 실제 시세·기사가 아닙니다. index.html?fixture=1 에서만 로드됩니다.",
+  "generated_at": "2026-11-11T06:00:00+09:00",
+  "sources": [
+    { "id": "kamis", "name": "KAMIS 농산물유통정보", "url": "https://www.kamis.or.kr", "as_of": "2026-11-10", "license": "공공데이터" },
+    { "id": "krei", "name": "한국농촌경제연구원 농업관측센터", "url": "https://aglook.krei.re.kr", "as_of": "2026-11-05", "license": "공공데이터" },
+    { "id": "news", "name": "언론 보도(제목·링크)", "url": null, "as_of": "2026-11-10" }
+  ],
+  "signals": [
+    {
+      "id": "jeonnam-jangheung-jjokpa", "sido": "전남", "sigungu": "장흥군", "item": "쪽파", "category": "veg", "level": "disposal",
+      "metrics": { "price": 1200, "unit": "kg", "price_basis": "도매 평균", "price_vs_normal_pct": -68, "price_vs_last_year_pct": -74, "volume_vs_normal_ratio": 2.3, "market": "전국 공영도매시장", "as_of": "2026-11-10",
+        "history": [ { "date": "2026-10-13", "price": 4200 }, { "date": "2026-10-20", "price": 3500 }, { "date": "2026-10-27", "price": 2400 }, { "date": "2026-11-03", "price": 1600 }, { "date": "2026-11-10", "price": 1200 } ] },
+      "support": { "program": null, "note": "지원 품목이 아니어서 폐기 보상 없음" },
+      "event_ids": ["2026-11-03-jangheung-jjokpa"], "source_ids": ["kamis", "news"]
+    },
+    {
+      "id": "jeonnam-muan-onion", "sido": "전남", "sigungu": "무안군", "item": "양파", "category": "veg", "level": "crash",
+      "metrics": { "price": 780, "unit": "kg", "price_basis": "도매 평균", "price_vs_normal_pct": -41, "price_vs_last_year_pct": -35, "volume_vs_normal_ratio": 1.6, "market": "전국 공영도매시장", "as_of": "2026-11-10" },
+      "support": { "program": "채소가격안정제", "note": "계약재배 물량만 출하정지·산지폐기 보전" },
+      "event_ids": [], "source_ids": ["kamis"]
+    },
+    {
+      "id": "jeju-seogwipo-cabbage", "sido": "제주", "sigungu": "서귀포시", "item": "월동무", "category": "veg", "level": "surplus",
+      "metrics": { "price": 560, "unit": "kg", "price_basis": "도매 평균", "price_vs_normal_pct": -22, "price_vs_last_year_pct": -30, "volume_vs_normal_ratio": 1.4, "market": "가락시장", "as_of": "2026-11-10" },
+      "support": { "program": null, "note": null },
+      "event_ids": [], "source_ids": ["kamis"]
+    },
+    {
+      "id": "gyeongbuk-cheongsong-apple", "sido": "경북", "sigungu": "청송군", "item": "사과", "category": "fruit", "level": "watch",
+      "metrics": { "price": 2900, "unit": "kg", "price_basis": "도매 평균", "price_vs_normal_pct": -12, "price_vs_last_year_pct": -18, "volume_vs_normal_ratio": 1.2, "market": "전국 공영도매시장", "as_of": "2026-11-10" },
+      "support": { "program": null, "note": "규격외·비상품 판매 자유" },
+      "event_ids": [], "source_ids": ["kamis"]
+    },
+    {
+      "id": "gangwon-pyeongchang-cabbage", "sido": "강원", "sigungu": "평창군", "item": "배추", "category": "veg", "level": "disposal",
+      "metrics": { "price": 410, "unit": "kg", "price_basis": "도매 평균", "price_vs_normal_pct": -55, "price_vs_last_year_pct": -61, "volume_vs_normal_ratio": 1.9, "market": "가락시장", "as_of": "2026-11-10" },
+      "support": { "program": "수급대책", "note": "가을배추 시장격리(산지폐기) 진행 — 신청 물량만 보상" },
+      "event_ids": ["2026-11-07-gangwon-cabbage-isolation"], "source_ids": ["kamis", "news"]
+    },
+    {
+      "id": "chungnam-yesan-lettuce", "sido": "충남", "sigungu": null, "item": "상추", "category": "veg", "level": "crash",
+      "metrics": { "price": 1900, "unit": "kg", "price_basis": "도매 평균", "price_vs_normal_pct": -47, "price_vs_last_year_pct": null, "volume_vs_normal_ratio": null, "market": "전국 공영도매시장", "as_of": "2026-11-10" },
+      "support": { "program": null, "note": null },
+      "event_ids": [], "source_ids": ["kamis"]
+    },
+    {
+      "id": "jeonnam-jindo-greenonion", "sido": "전남", "sigungu": "진도군", "item": "대파", "category": "veg", "level": "surplus",
+      "metrics": { "price": 1100, "unit": "kg", "price_basis": "도매 평균", "price_vs_normal_pct": -28, "price_vs_last_year_pct": -33, "volume_vs_normal_ratio": 1.5, "market": "전국 공영도매시장", "as_of": "2026-11-10" },
+      "support": { "program": "채소가격안정제", "note": "겨울대파 계약 물량만" },
+      "event_ids": [], "source_ids": ["kamis"]
+    },
+    {
+      "id": "gyeonggi-zucchini", "sido": "경기", "sigungu": null, "item": "애호박", "category": "veg", "level": "watch",
+      "metrics": { "price": 1450, "unit": "kg", "price_basis": "도매 평균", "price_vs_normal_pct": -15, "price_vs_last_year_pct": -9, "volume_vs_normal_ratio": 1.3, "market": "가락시장", "as_of": "2026-11-10" },
+      "support": { "program": null, "note": null },
+      "event_ids": [], "source_ids": ["kamis"]
+    }
+  ],
+  "events": [
+    { "id": "2026-11-03-jangheung-jjokpa", "date": "2026-11-03", "type": "disposal", "sido": "전남", "sigungu": "장흥군", "item": "쪽파", "title": "[테스트] 쪽파값 폭락에 장흥 농가 밭 갈아엎어", "url": "https://example.com/test/news/1", "publisher": "테스트일보", "verified": true },
+    { "id": "2026-11-07-gangwon-cabbage-isolation", "date": "2026-11-07", "type": "isolation", "sido": "강원", "sigungu": "평창군", "item": "배추", "title": "[테스트] 가을배추 시장격리 추진…산지폐기 신청 접수", "url": "https://example.com/test/news/2", "publisher": "테스트농민신문", "verified": true },
+    { "id": "2026-11-09-jeju-radish-campaign", "date": "2026-11-09", "type": "campaign", "sido": "제주", "sigungu": null, "item": "월동무", "title": "[테스트] 월동무 소비촉진 팔아주기 운동", "url": "https://example.com/test/news/3", "publisher": "테스트방송", "verified": false },
+    { "id": "2026-11-10-gyeongnam-pepper", "date": "2026-11-10", "type": "price_crash", "sido": "경남", "sigungu": "밀양시", "item": "풋고추", "title": "[테스트] 풋고추 시세 반토막, 수확 포기 속출", "url": "https://example.com/test/news/4", "publisher": "테스트경제", "verified": false }
+  ],
+  "forecasts": [
+    { "item": "양파", "period": "2026-12", "summary": "[테스트] 저장 재고 평년보다 많아 약보합 전망", "source_id": "krei", "url": "https://aglook.krei.re.kr" },
+    { "item": "배추", "period": "2026-12", "summary": "[테스트] 월동배추 재배면적 전년 대비 증가 전망", "source_id": "krei", "url": "https://aglook.krei.re.kr" }
+  ]
+}
