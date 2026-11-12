@@ -14,10 +14,50 @@ const BY_ID = Object.fromEntries(ITEMS.map((i) => [i.id, i]));
 const BY_K = Object.fromEntries(ITEMS.filter((i) => i.k).map((i) => [i.k, i]));
 const catLabel = (id) => CATS.find((c) => c.id === id)?.label || '';
 const MARKET = '../market/';
-const marketSearch = (it) => `${MARKET}#/search?q=${encodeURIComponent(it.q || it.n)}`;
-const HANKI = '../sikdang/';
+const SIKDANG = '../sikdang/';
 const baseName = (it) => it.n.replace(/\(.*\)/, '').trim();
-const sikdangFood = (it) => `${HANKI}#/food/${encodeURIComponent(baseName(it))}`;
+const sikdangFood = (it) => `${SIKDANG}#/food/${encodeURIComponent(baseName(it))}`;
+// 선 그림 아이콘: 같은 모양 템플릿을 선으로만 그림(CSS .lic)
+const lineIc = (it, size, label = '') => iconSVG(it.ic, size, label).replace('<svg ', '<svg class="lic" ');
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// ── 형제 사이트 데이터(실행 중 한 번만 읽음, 실패하면 조용히 대체) ──
+const getJSON = (url) => fetch(url, { cache: 'no-cache' }).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); });
+// 맛남의 광장: 남는 신호·기사
+const surplusP = getJSON(`${MARKET}data/surplus.json`).catch(() => null);
+const LEVEL_RANK = { disposal: 4, crash: 3, surplus: 2, watch: 1 };
+const LEVEL_TXT = { disposal: '산지폐기', crash: '가격 폭락', surplus: '공급 과잉', watch: '지켜보는 중' };
+function signalFor(D, it) {
+  const sig = Array.isArray(D?.signals) ? D.signals : [];
+  const names = new Set([baseName(it), it.q].filter(Boolean));
+  return sig.filter((x) => x && typeof x.id === 'string' && names.has(x.item))
+    .sort((a, b) => (LEVEL_RANK[b.level] || 0) - (LEVEL_RANK[a.level] || 0))[0] || null;
+}
+// 제철식당: 음식별 식당 수. 구조를 알 수 없으면 null(=링크 숨김)
+const foodsP = getJSON(`${SIKDANG}data/foods.json`).catch(() => null);
+// 요리 이름으로만 있는 경우(예: 과메기 = 재료 꽁치) — dishes.json 행: [지역, 요리, 재료, 제철, 식당 수, …]
+const dishesP = getJSON(`${SIKDANG}data/dishes.json`).catch(() => null);
+function dishCount(D, name) {
+  if (!Array.isArray(D)) return 0;
+  let n = 0;
+  for (const row of D) if (Array.isArray(row) && row[1] === name && typeof row[4] === 'number') n += row[4];
+  return n;
+}
+function restaurantCount(F, name) {
+  const map = F && typeof F === 'object' && !Array.isArray(F) ? (F.foods && typeof F.foods === 'object' ? F.foods : F) : null;
+  const e = map && Object.prototype.hasOwnProperty.call(map, name) ? map[name] : null;
+  if (!e || typeof e !== 'object') return 0;
+  if (typeof e.nr === 'number') return e.nr;
+  if (typeof e.n === 'number') return e.n;
+  if (!Array.isArray(e.r)) return 0;
+  let n = 0;
+  for (const row of e.r) {
+    if (Array.isArray(row) && typeof row[3] === 'number') n += row[3];
+    else if (row && typeof row.nr === 'number') n += row.nr;
+    else return 0; // 모르는 형식이면 빈 화면으로 보내지 않음
+  }
+  return n;
+}
 
 // 1.5px 선 아이콘(인라인)
 const I = (d, cls = 'ic') => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
@@ -110,17 +150,47 @@ const state = { month: NOW.m, cat: '', q: '', sort: 'cheap' };
 
 // ── 렌더: 헤더·히어로 ──
 const WD = ['일', '월', '화', '수', '목', '금', '토'];
+const cheapNow = () => Object.values(SUMS).filter((x) => x && !x.stale && x.vsNormal != null && x.vsNormal < 0).length;
+const basisTxt = (x) => `${x.m}월 소매가`;
+// 이달 장바구니 메모 3개: 제철 시작·평년보다 쌈·끝물·짧은 제철 순으로 점수, 분류는 겹치지 않게
+function picksFor(m) {
+  const cur = m === NOW.m;
+  const scored = ITEMS.filter((i) => inSeason(i, m) && !yearRound(i) && !i.note).map((it) => {
+    const p = it.k && SUMS[it.k];
+    const cheap = cur && p && !p.stale && p.vsNormal != null && p.vsNormal <= -0.05 ? -p.vsNormal : 0;
+    const score = (starts(it, m) ? 3 : 0) + (cheap ? 2 + cheap * 4 : 0) + (ends(it, m) ? 1 : 0) + (12 - it.m.length) / 12;
+    return { it, score, cheap, p };
+  }).sort((a, b) => b.score - a.score);
+  const out = [], cats = {};
+  for (const x of scored) { if ((cats[x.it.cat] || 0) >= 1 && scored.length > 6) continue; cats[x.it.cat] = (cats[x.it.cat] || 0) + 1; out.push(x); if (out.length === 3) break; }
+  for (const x of scored) { if (out.length === 3) break; if (!out.includes(x)) out.push(x); }
+  return out.map(({ it, cheap, p }) => {
+    const why = cheap ? `${basisTxt(p)} 평년보다 ${pctTxt(p.vsNormal)} 싸요`
+      : starts(it, m) ? `${m}월부터 제철` : ends(it, m) ? `${m}월이 끝물` : '제철 한창';
+    const where = (it.r || '').split(/[,·(]/)[0].trim();
+    return { it, why, where };
+  });
+}
 function renderHero() {
-  $('#today').textContent = `${NOW.y}년 ${NOW.m}월 ${NOW.d}일 (${WD[NOW.w]}) · 한국시간 기준`;
-  $('#hero-month').textContent = `${state.month}월`;
+  $('#today').textContent = `${NOW.y}. ${NOW.m}. ${NOW.d}. ${WD[NOW.w]}요일 · 장보기 메모`;
+  $('#hero-month').textContent = state.month;
   $$('[data-month-label]').forEach((n) => { n.textContent = `${state.month}월`; });
-  const inN = ITEMS.filter((i) => inSeason(i, state.month)).length;
-  const startN = ITEMS.filter((i) => starts(i, state.month)).length;
-  const cheapN = Object.values(SUMS).filter((s) => s && !s.stale && s.vsNormal != null && s.vsNormal < 0).length;
-  $('#hero-stats').innerHTML = `
-    <div class="stat"><b>${inN}</b><small>${state.month}월 제철(종)</small></div>
-    <div class="stat"><b>${startN}</b><small>새로 시작(종)</small></div>
-    <div class="stat"><b>${cheapN}</b><small>평년보다 싼 품목 · ${PRICE_META.baseYM[1]}월</small></div>`;
+  const inN = ITEMS.filter((i) => inSeason(i, state.month) && !yearRound(i)).length;
+  $('#hero-lead').textContent = state.month === NOW.m
+    ? `이달 제철 ${inN}가지 중 먼저 담을 세 가지`
+    : `${state.month}월 제철 ${inN}가지 중 세 가지`;
+  $('#cheap-n').textContent = cheapNow();
+  $('#cheap-cta').setAttribute('aria-label', `지금 평년보다 싼 품목 ${cheapNow()}개 보기 (${PRICE_META.baseYM[1]}월 소매가 기준)`);
+}
+function renderPicks() {
+  $('#picks').innerHTML = picksFor(state.month).map(({ it, why, where }, k) => `<li class="pick">
+      <button type="button" class="pick-open" data-item="${it.id}" aria-label="${esc(it.n)}, ${esc(why)}. 고르는 법 보기">
+        <span class="pick-no num" aria-hidden="true">0${k + 1}</span>
+        <span class="pick-art">${lineIc(it, 64)}</span>
+        <span class="pick-txt"><b>${esc(baseName(it))}</b><small>${esc(why)}${where ? ` · ${esc(where)}` : ''}</small></span>
+      </button>
+      <button type="button" class="pick-add" data-list="${it.id}" aria-pressed="${inList(it.id)}" aria-label="${esc(it.n)} 장보기에 담기">${inList(it.id) ? IC.check : IC.plus}</button>
+    </li>`).join('');
 }
 
 function renderBadges() {
@@ -134,10 +204,12 @@ function renderBadges() {
 
 // ── 렌더: 월·분류 ──
 function renderMonths() {
-  $('#months').innerHTML = Array.from({ length: 12 }, (_, i) => {
+  const counts = Array.from({ length: 12 }, (_, i) => ITEMS.filter((it) => inSeason(it, i + 1) && !yearRound(it)).length);
+  const max = Math.max(...counts);
+  $('#months').innerHTML = counts.map((n, i) => {
     const m = i + 1, on = m === state.month;
-    const n = ITEMS.filter((it) => inSeason(it, m)).length;
-    return `<button type="button" role="radio" class="month${m === NOW.m ? ' is-now' : ''}" aria-checked="${on}" tabindex="${on ? 0 : -1}" data-month="${m}" aria-label="${m}월, 제철 ${n}종${m === NOW.m ? ', 이번 달' : ''}">${m}월<small>${n}종</small></button>`;
+    return `<button type="button" role="radio" class="mo${m === NOW.m ? ' is-now' : ''}" aria-checked="${on}" tabindex="${on ? 0 : -1}" data-month="${m}" aria-label="${m}월, 제철 ${n}종${m === NOW.m ? ', 이번 달' : ''}">
+      <span class="mo-bar" aria-hidden="true"><i style="height:${Math.round((n / max) * 100)}%"></i></span><b>${m}</b><small>${n}</small></button>`;
   }).join('');
 }
 function renderCats() {
@@ -150,8 +222,8 @@ function priceFlag(it) {
   const s = it.k && SUMS[it.k];
   if (!s || s.stale || s.vsNormal == null || Math.abs(s.vsNormal) < 0.05) return '';
   return s.vsNormal < 0
-    ? `<span class="flag cheap" title="${s.m}월 소매가, 평년 대비">▼ 평년보다 ${pctTxt(s.vsNormal)}</span>`
-    : `<span class="flag dear" title="${s.m}월 소매가, 평년 대비">▲ 평년보다 ${pctTxt(s.vsNormal)}</span>`;
+    ? `<span class="flag cheap" title="${s.m}월 소매가(KAMIS), 평년보다 ${pctTxt(s.vsNormal)} 쌈">평년보다 ${pctTxt(s.vsNormal)}↓<span class="sr-only"> (${s.m}월 소매가 기준)</span></span>`
+    : `<span class="flag dear" title="${s.m}월 소매가(KAMIS), 평년보다 ${pctTxt(s.vsNormal)} 비쌈">평년보다 ${pctTxt(s.vsNormal)}↑<span class="sr-only"> (${s.m}월 소매가 기준)</span></span>`;
 }
 function sbar(it, cur) {
   return `<div class="sbar" aria-hidden="true">${Array.from({ length: 12 }, (_, i) => `<i class="${inSeason(it, i + 1) ? 'on' : ''}${i + 1 === cur ? ' cur' : ''}"></i>`).join('')}</div>`;
@@ -160,13 +232,13 @@ function card(it) {
   const m = state.month;
   const flags = [
     isNewAlert(it.id) ? '<span class="flag alert">제철 도착</span>' : '',
-    starts(it, m) ? '<span class="flag new">제철 시작</span>' : ends(it, m) ? '<span class="flag last">끝물</span>' : '',
+    yearRound(it) ? '<span class="flag last">연중</span>' : starts(it, m) ? '<span class="flag new">제철 시작</span>' : ends(it, m) ? '<span class="flag last">끝물</span>' : '',
     priceFlag(it),
   ].join('');
   const sub = state.q && !inSeason(it, m) ? `제철 ${seasonText(it)}` : (it.r || it.note || catLabel(it.cat));
   return `<article class="card">
     <button type="button" class="card-open" data-item="${it.id}" aria-label="${esc(it.n)} 자세히 보기, 제철 ${seasonText(it)}">
-      <span class="card-art">${iconSVG(it.ic, 52)}</span>
+      <span class="card-art">${lineIc(it, 48)}</span>
       <h3>${esc(it.n)}</h3>
       <span class="where">${esc(sub)}</span>
       ${sbar(it, m)}
@@ -189,10 +261,13 @@ function filtered() {
 function renderGrid() {
   const m = state.month;
   let items = filtered();
-  if (!state.q) items = [...items.filter((i) => starts(i, m)), ...items.filter((i) => !starts(i, m) && !ends(i, m)), ...items.filter((i) => ends(i, m))];
+  if (!state.q) {
+    const yr = items.filter(yearRound); items = items.filter((i) => !yearRound(i));
+    items = [...items.filter((i) => starts(i, m)), ...items.filter((i) => !starts(i, m) && !ends(i, m)), ...items.filter((i) => ends(i, m)), ...yr];
+  }
   $('#now-count').textContent = state.q
     ? `“${state.q}” 검색 결과 ${items.length}종 (모든 달)`
-    : `${state.cat ? catLabel(state.cat) + ' ' : ''}${items.length}종 · 제철 시작 → 한창 → 끝물 순`;
+    : `${state.cat ? catLabel(state.cat) + ' ' : ''}${items.length}종 · 제철 시작 → 한창 → 끝물 → 연중 순`;
   $('#grid').innerHTML = items.length ? items.map(card).join('')
     : `<div class="empty">${state.q ? '검색 결과가 없어요. 다른 이름으로 찾아보세요.' : `${m}월 제철인 ${catLabel(state.cat)} 품목이 없어요.`}</div>`;
 }
@@ -231,7 +306,7 @@ function pctBadge(s) {
 // ── 렌더: 지금 싸요 ──
 function renderPrices() {
   const [by, bm] = PRICE_META.baseYM;
-  $('#cheap-meta').innerHTML = `${esc(PRICE_META.source)} · 기준 <b>${by}년 ${bm}월</b> · 수집 ${PRICE_META.fetched} · ${Object.keys(PRICES).length}개 품목`;
+  $('#cheap-meta').innerHTML = `평년보다 싼 품목 <b class="num">${cheapNow()}</b>개 · ${esc(PRICE_META.source)} · 기준 <b>${by}년 ${bm}월 소매가</b> · 수집 ${PRICE_META.fetched}`;
   let rows = Object.entries(PRICES).map(([k, p]) => ({ k, p, s: SUMS[k], it: BY_K[k] })).filter((r) => r.s);
   if (state.sort === 'season') rows = rows.filter((r) => r.it && inSeason(r.it, NOW.m));
   // 기준월 값이 없는(제철 아닌) 품목은 맨 뒤로
@@ -243,7 +318,7 @@ function renderPrices() {
     return dir * (ma - mb);
   });
   $('#price-list').innerHTML = rows.map(({ k, p, s, it }) => `<li class="prow">
-      <span class="prow-art">${it ? iconSVG(it.ic, 36) : ''}</span>
+      <span class="prow-art">${it ? lineIc(it, 36) : ''}</span>
       <div class="prow-main">
         <div class="prow-name"><b>${esc(p.name)}</b><small>${esc(p.kind)} · ${esc(p.unit)}</small></div>
         <div class="prow-val"><b>${won(s.v)}</b> <span class="muted">${s.y}년 ${s.m}월${s.stale ? ' (최근 조사월)' : ''}</span></div>
@@ -256,26 +331,47 @@ function renderPrices() {
   $$('#cheap .seg button').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.sort === state.sort)));
 }
 
-// ── 렌더: 뉴스 ──
-const NEWS_T = { plow: '갈아엎기', dispose: '산지폐기·격리', crash: '가격 폭락' };
-function renderNews() {
-  const latest = [...NEWS].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
-  $('#news-list').innerHTML = latest.map((n) => {
-    const [y, m, d] = n.date.split('-').map(Number);
-    return `<li>
-      <div class="news-top"><span class="news-type ${n.type}">${NEWS_T[n.type]}</span><time datetime="${n.date}">${y}. ${m}. ${d}.</time><span>· ${esc(n.region)}</span></div>
-      <h3>${esc(n.item)}</h3>
-      <p>${esc(n.text)}</p>
-      <div class="news-foot"><a class="src" href="${esc(n.url)}" target="_blank" rel="noopener noreferrer">${esc(n.src)} 기사 원문</a></div>
+// ── 렌더: 남는 소식 (맛남의 광장 기사 목록을 실행 중에 읽음, 실패하면 내장 사본) ──
+const NEWS_T = { plow: '갈아엎기', dispose: '산지폐기·격리', crash: '가격 폭락', disposal: '산지폐기', price_crash: '가격 폭락', isolation: '시장격리', forecast: '출하 전망', campaign: '소비 촉진' };
+const dateTxt = (d) => { const [y, m, dd] = d.split('-').map(Number); return `${y}. ${m}. ${dd}.`; };
+function newsRow({ date, type, item, region, title, text, src, url }) {
+  return `<li>
+      <div class="news-top"><time datetime="${esc(date)}">${dateTxt(date)}</time>${region ? `<span>${esc(region)}</span>` : ''}<span class="news-type">${esc(NEWS_T[type] || '남는 소식')}</span></div>
+      <h3>${esc(item)}</h3>
+      <p>${esc(title || text)}</p>
+      <div class="news-foot"><a class="src" href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(src)} 기사 원문</a></div>
     </li>`;
-  }).join('');
+}
+function renderNews(D) {
+  let rows = null;
+  const ev = Array.isArray(D?.events) ? D.events : null;
+  if (ev) {
+    const seen = new Set();
+    rows = [...ev].filter((e) => e && e.verified !== false && typeof e.url === 'string' && /^https?:/.test(e.url) && typeof e.date === 'string')
+      .sort((a, b) => b.date.localeCompare(a.date))
+      .filter((e) => (seen.has(e.url) ? false : seen.add(e.url)));
+    // 같은 품목만 셋이 되지 않게: 품목별 최신 1건 먼저, 모자라면 나머지로 채움
+    const items = new Set(); const first = [], rest = [];
+    for (const e of rows) (items.has(e.item) ? rest : first).push(e), items.add(e.item);
+    rows = [...first, ...rest].slice(0, 3)
+      .map((e) => ({ date: e.date, type: e.type, item: e.item, region: [e.sido, e.sigungu].filter(Boolean).join(' '), title: e.title, src: e.publisher || '언론사', url: e.url }));
+    if (!rows.length) rows = null;
+  }
+  if (rows) {
+    const up = typeof D.generated_at === 'string' ? D.generated_at.slice(0, 10) : '';
+    $('#news-meta').textContent = `값이 떨어진 품목은 장보기엔 기회예요. 맛남의 광장이 모은 기사 원문에서 품목별 최근 소식${up ? ` · ${up} 갱신` : ''}.`;
+  } else {
+    rows = [...NEWS].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3).map((n) => ({ ...n }));
+    $('#news-meta').textContent = `값이 떨어진 품목은 장보기엔 기회예요. 기사 원문을 확인한 최근 3건(2026-11-05 정리).`;
+  }
+  $('#news-list').innerHTML = rows.map(newsRow).join('');
 }
 
 // ── 렌더: 12개월 달력 ──
 function renderCal() {
   const head = `<thead><tr><th scope="col"><span class="sr-only">품목</span></th>${Array.from({ length: 12 }, (_, i) => `<th scope="col" class="${i + 1 === NOW.m ? 'cur' : ''}">${i + 1}월</th>`).join('')}</tr></thead>`;
   const cats = state.cat ? CATS.filter((c) => c.id === state.cat) : CATS;
-  const body = cats.map((c) => `<tbody><tr class="grp"><th colspan="13" scope="rowgroup">${c.label}</th></tr>${ITEMS.filter((i) => i.cat === c.id).map((it) => `<tr><th scope="row"><button type="button" data-item="${it.id}">${iconSVG(it.ic, 22)}${esc(it.n)}</button></th>${Array.from({ length: 12 }, (_, i) => {
+  const body = cats.map((c) => `<tbody><tr class="grp"><th colspan="13" scope="rowgroup">${c.label}</th></tr>${ITEMS.filter((i) => i.cat === c.id).map((it) => `<tr><th scope="row"><button type="button" data-item="${it.id}">${lineIc(it, 22)}${esc(it.n)}</button></th>${Array.from({ length: 12 }, (_, i) => {
     const m = i + 1, on = inSeason(it, m);
     const cls = [on ? 'on' : '', on && (!inSeason(it, prevM(m)) || m === 1) ? 'first' : '', on && (!inSeason(it, nextM(m)) || m === 12) ? 'end' : '', m === NOW.m ? 'cur' : ''].filter(Boolean).join(' ');
     return `<td class="${cls}"${on ? ` title="${esc(it.n)} ${m}월 제철"` : ''}><span></span>${on ? `<span class="sr-only">제철</span>` : ''}</td>`;
@@ -359,8 +455,8 @@ function openItem(id, focusPrice = false) {
     ? (starts(it, NOW.m) ? '<span class="status new">이번 달부터 제철</span>' : '<span class="status in">지금 제철</span>')
     : `<span class="status muted">${monthsUntil(it).i}개월 뒤 제철 (${monthsUntil(it).mm}월)</span>`;
   $('#item-body').innerHTML = `
-    <div class="sheet-head"><span class="sheet-art">${iconSVG(it.ic, 60, it.n)}</span><div><p class="muted small">${catLabel(it.cat)} · ${status}</p><h2 id="item-title">${esc(it.n)}</h2></div>${X_BTN}</div>
-    <div><div class="sbar sbar-lg" aria-label="제철 ${seasonText(it)}">${Array.from({ length: 12 }, (_, i) => `<i class="${inSeason(it, i + 1) ? 'on' : ''}${i + 1 === NOW.m ? ' cur' : ''}" style="${inSeason(it, i + 1) ? 'background:var(--accent);border-color:var(--accent)' : ''}">${i + 1}</i>`).join('')}</div></div>
+    <div class="sheet-head"><span class="sheet-art">${lineIc(it, 56, it.n)}</span><div><p class="muted small">${catLabel(it.cat)} · ${status}</p><h2 id="item-title">${esc(it.n)}</h2></div>${X_BTN}</div>
+    <div><div class="sbar sbar-lg" aria-label="제철 ${seasonText(it)}">${Array.from({ length: 12 }, (_, i) => `<i class="${inSeason(it, i + 1) ? 'on' : ''}${i + 1 === NOW.m ? ' cur' : ''}" >${i + 1}</i>`).join('')}</div></div>
     <dl class="facts">
       ${it.r ? `<div><dt>주산지</dt><dd>${esc(it.r)}</dd></div>` : ''}
       ${it.note ? `<div><dt>참고</dt><dd>${esc(it.note)}</dd></div>` : ''}
@@ -368,18 +464,44 @@ function openItem(id, focusPrice = false) {
       <div><dt>보관법</dt><dd>${esc(it.keep)}</dd></div>
       <div><dt>손질 팁</dt><dd>${esc(it.prep)}</dd></div>
     </dl>
-    ${c && s ? `<section class="price-box" id="item-price" aria-label="가격 동향"><h3>${esc(p.name)} 소매가 <small>${esc(p.kind)} · ${esc(p.unit)} · KAMIS</small></h3>
+    ${c && s ? `<section class="price-box" id="item-price" aria-label="가격 동향"><h3>${esc(p.name)} 소매가 <small>${esc(p.kind)} · ${esc(p.unit)} · KAMIS 소매 월평균</small></h3>
       <p class="prow-val" style="margin-top:4px"><b>${won(s.v)}</b> <span class="muted">${s.y}년 ${s.m}월</span> ${pctBadge(s).replace('pct-sub', 'pct-sub" style="margin-left:4px')}</p>${c.html}</section>` : ''}
     <div class="sheet-actions">
       <button type="button" class="btn ghost" data-watch="${it.id}" aria-pressed="${isWatched(it.id)}">${watchLbl(it.id)}</button>
       <button type="button" class="btn ghost" data-list="${it.id}" aria-pressed="${inList(it.id)}">${listLbl(it.id)}</button>
     </div>
-    <a class="cta-row" href="${sikdangFood(it)}"><span><b>이 재료로 하는 식당 → 제철식당</b><small>${esc(baseName(it))} 요리를 잘하는 집 찾기</small></span>${IC.arrow}</a>
-    <a class="cta-row" href="${marketSearch(it)}"><span><b>남는 곳 보기 → 맛남의 광장</b><small>${esc(baseName(it))} 남는 산지·리퍼브 찾기</small></span>${IC.arrow}</a>`;
+    <div class="ctas" id="item-ctas">${marketCta(it, null)}</div>`;
   const d = openDlg('dlg-item');
+  fillCtas(it);
   if (c) bindChart(d, c);
   history.replaceState(null, '', `#item=${it.id}`);
   if (focusPrice) setTimeout(() => $('#item-price')?.scrollIntoView({ block: 'nearest' }), 60);
+}
+
+// 바깥 연결: 식당이 있는 재료만 제철식당, 남는 신호가 있으면 그 신호로
+function marketCta(it, D) {
+  const sg = D ? signalFor(D, it) : null;
+  if (sg) {
+    const mt = sg.metrics || {};
+    const pct = mt.price_vs_normal_pct ?? mt.price_vs_last_year_pct;
+    const base = mt.price_vs_normal_pct != null ? '평년' : '전년';
+    const fig = typeof pct === 'number' ? ` · ${mt.price_basis || '도매'} ${base} 대비 ${pct > 0 ? '+' : ''}${pct}%${mt.as_of ? ` (${String(mt.as_of).slice(5).replace('-', '.')})` : ''}` : '';
+    const where = [sg.sido, sg.sigungu].filter(Boolean).join(' ') || '전국';
+    return `<a class="cta-row" href="${MARKET}#/signal/${encodeURIComponent(sg.id)}"><span><b>남는 곳 보기 → 맛남의 광장</b><small>${esc(where)} ${esc(baseName(it))} ${esc(LEVEL_TXT[sg.level] || '신호')}${esc(fig)}</small></span>${IC.arrow}</a>`;
+  }
+  return `<a class="cta-row" href="${MARKET}"><span><b>남는 곳 보기 → 맛남의 광장</b><small>버려질 농수산물이 어디서 남는지 지도로 보기</small></span>${IC.arrow}</a>`;
+}
+function sikdangCta(it, F, DS) {
+  const n = restaurantCount(F, baseName(it)) || dishCount(DS, baseName(it));
+  if (!n) return '';
+  return `<a class="cta-row" href="${sikdangFood(it)}"><span><b>이 재료로 하는 식당 → 제철식당</b><small>${esc(baseName(it))} 요리를 내는 집 ${n.toLocaleString('ko-KR')}곳</small></span>${IC.arrow}</a>`;
+}
+function fillCtas(it) {
+  Promise.all([foodsP, surplusP, dishesP]).then(([F, D, DS]) => {
+    const box = $('#item-ctas');
+    if (!box || !$('#dlg-item').open || location.hash !== `#item=${it.id}`) return;
+    box.innerHTML = sikdangCta(it, F, DS) + marketCta(it, D);
+  });
 }
 
 function renderAlerts() {
@@ -391,7 +513,7 @@ function renderAlerts() {
       const st = isNewAlert(it.id) ? '<span class="status new">새로 제철 도착</span>'
         : inSeason(it, NOW.m) ? '<span class="status in">지금 제철</span>'
         : `<span class="status muted">${monthsUntil(it).mm}월부터 (${monthsUntil(it).i}개월 뒤)</span>`;
-      return `<li><span class="li-art">${iconSVG(it.ic, 30)}</span><div class="li-main"><b>${esc(it.n)}</b>${st}</div>
+      return `<li><span class="li-art">${lineIc(it, 28)}</span><div class="li-main"><b>${esc(it.n)}</b>${st}</div>
         <button type="button" class="rm" data-watch="${it.id}" aria-label="${esc(it.n)} 알림 끄기">${IC.x}</button></li>`;
     }).join('')}</ul>` : '<p class="empty">아직 알림 받을 품목이 없어요. 카드의 알림 버튼을 눌러 보세요.</p>'}
     <p class="muted small">알림 목록은 이 기기 브라우저에만 저장돼요.</p>`;
@@ -410,7 +532,7 @@ function renderList() {
     <div class="sheet-head"><div><h2 id="list-title">장보기 리스트</h2><p class="muted small">제철 품목을 담아 두고 장 볼 때 체크하세요.</p></div>${X_BTN}</div>
     ${list.length ? `<ul class="list">${list.map((x) => { const it = BY_ID[x.id]; return `<li class="${x.done ? 'done' : ''}">
       <input type="checkbox" data-done="${it.id}" ${x.done ? 'checked' : ''} aria-label="${esc(it.n)} 샀어요">
-      <span class="li-art">${iconSVG(it.ic, 30)}</span>
+      <span class="li-art">${lineIc(it, 28)}</span>
       <div class="li-main"><b>${esc(it.n)}</b><small>${inSeason(it, NOW.m) ? '지금 제철' : `제철 ${seasonText(it)}`}</small></div>
       <button type="button" class="rm" data-list="${it.id}" aria-label="${esc(it.n)} 빼기">${IC.x}</button></li>`; }).join('')}</ul>
       <div class="sheet-actions"><button type="button" class="btn ghost" data-list-copy>목록 복사·공유</button><button type="button" class="btn ghost" data-list-clear>산 것 지우기</button></div>`
@@ -421,17 +543,18 @@ function renderList() {
 function loadImg(src) { return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; }); }
 function rr(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
 async function drawShare(month) {
-  try { await document.fonts?.ready; } catch { /* 무시 */ }
+  try { await document.fonts?.load('700 112px Hahmlet', `${month}월장보기`); await document.fonts?.ready; } catch { /* 무시 */ }
   const cv = document.createElement('canvas'); cv.width = 1080; cv.height = 1350;
   const ctx = cv.getContext('2d');
   const F = '"Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+  const H = `Hahmlet, ${F}`;
   const C = { bg: '#F7F6F1', surface: '#FFFFFF', ink: '#1F221E', muted: '#6B6F66', line: '#E5E3DA', accent: '#2F6B4F', soft: '#F1F0EA' };
   ctx.fillStyle = C.bg; ctx.fillRect(0, 0, 1080, 1350);
   // 머리: 바탕 위 큰 글자
-  ctx.fillStyle = C.accent; ctx.font = `700 32px ${F}`; ctx.fillText('제철장보기', 72, 112);
+  ctx.fillStyle = C.ink; ctx.font = `700 34px ${H}`; ctx.fillText('제철장보기', 72, 112);
   ctx.fillStyle = C.muted; ctx.font = `500 28px ${F}`; ctx.textAlign = 'right';
   ctx.fillText(`${NOW.y}년 ${month}월`, 1008, 112); ctx.textAlign = 'left';
-  ctx.fillStyle = C.ink; ctx.font = `700 112px ${F}`; ctx.fillText(`${month}월 장보기`, 68, 248);
+  ctx.fillStyle = C.ink; ctx.font = `700 112px ${H}`; ctx.fillText(`${month}월 장보기`, 68, 248);
   ctx.fillStyle = C.muted; ctx.font = `500 36px ${F}`; ctx.fillText('지금 제철이라 맛있고, 많이 나서 싼 것', 72, 304);
   ctx.fillStyle = C.line; ctx.fillRect(72, 344, 936, 2);
 
@@ -477,7 +600,7 @@ async function copyText(t, ok) {
   catch { prompt('아래 내용을 복사하세요', t); }
 }
 async function doShare() {
-  const text = `${state.month}월 제철 ${ITEMS.filter((i) => inSeason(i, state.month)).length}종, 지금 싼 건 뭘까? 제철장보기에서 확인해요 🥬`;
+  const text = `${state.month}월 제철 ${ITEMS.filter((i) => inSeason(i, state.month)).length}종, 지금 싼 건 뭘까? 제철장보기에서 확인해요`;
   try {
     const file = shareBlob && new File([shareBlob], `jecheol-${state.month}.png`, { type: 'image/png' });
     if (file && navigator.canShare?.({ files: [file] })) { await navigator.share({ files: [file], title: '제철장보기', text, url: pageURL() }); return; }
@@ -486,18 +609,27 @@ async function doShare() {
   copyText(`${text} ${pageURL()}`, '링크를 복사했어요. 이미지는 저장 버튼으로 받으세요.');
 }
 
-// ── 광고 ──
+// ── 광고: 슬롯마다 한 번만 push, 채워지지 않으면 영역을 접음 ──
 function pushAds() {
-  $$('ins.adsbygoogle').forEach((ins) => {
-    if (ins.dataset.pushed) return;
+  $$('[data-ad]').forEach((box) => {
+    const ins = $('ins.adsbygoogle', box);
+    if (!ins || ins.dataset.pushed) return;
     ins.dataset.pushed = '1';
+    const sync = () => {
+      const st = ins.getAttribute('data-ad-status');
+      if (st === 'filled') { box.hidden = false; box.classList.add('is-filled'); }
+      else if (st === 'unfilled') box.hidden = true;
+    };
+    new MutationObserver(sync).observe(ins, { attributes: true, attributeFilter: ['data-ad-status'] });
     try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch { /* 광고 차단 등 */ }
+    // 스크립트가 막혔거나 응답이 없으면 접음(나중에 채워지면 다시 보임)
+    setTimeout(() => { if (ins.getAttribute('data-ad-status') !== 'filled') box.hidden = true; }, 4000);
   });
 }
 
 // ── 전체 갱신 ──
 function refresh() {
-  renderHero(); renderBadges(); renderGrid();
+  renderHero(); renderPicks(); renderBadges(); renderGrid();
   const openItemId = $('#dlg-item').open && location.hash.startsWith('#item=') ? location.hash.slice(6) : null;
   if (openItemId) {
     // 상세 시트의 버튼 상태만 갱신
@@ -557,12 +689,24 @@ let qT;
 $('#q').addEventListener('input', (e) => { clearTimeout(qT); qT = setTimeout(() => { state.q = e.target.value; renderGrid(); }, 160); });
 window.addEventListener('hashchange', () => { if (location.hash.startsWith('#item=')) openItem(location.hash.slice(6)); });
 
+// 달을 바꾸면 메모·목록이 교차 전환(서비스의 움직임 1개, 400ms 이하)
+let xfT;
 function setMonth(m) {
+  if (m === state.month) return;
   state.month = m;
-  renderMonths(); renderHero(); renderGrid();
+  renderMonths(); renderHero();
+  const boxes = [$('#picks'), $('#grid')];
+  if (REDUCED || !boxes[0].animate) { renderPicks(); renderGrid(); return; }
+  clearTimeout(xfT);
+  boxes.forEach((b) => b.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 120, fill: 'forwards' }));
+  xfT = setTimeout(() => {
+    renderPicks(); renderGrid();
+    boxes.forEach((b) => b.animate([{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }], { duration: 220, easing: 'ease-out', fill: 'forwards' }));
+  }, 120);
 }
 
 // ── 시작 ──
-renderMonths(); renderCats(); renderHero(); renderBadges(); renderGrid(); renderPrices(); renderNews(); renderCal();
+renderMonths(); renderCats(); renderHero(); renderPicks(); renderBadges(); renderGrid(); renderPrices(); renderNews(null); renderCal();
+surplusP.then((D) => { if (D) renderNews(D); });
 pushAds();
 if (location.hash.startsWith('#item=')) openItem(location.hash.slice(6));

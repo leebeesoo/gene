@@ -49,9 +49,7 @@ function toast(msg) {
   const t = $('#toast'); t.textContent = msg; t.classList.add('show');
   clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 2000);
 }
-function adSlot() {
-  return `<div class="ad-wrap"><span class="ad-label">광고</span><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></div>`;
-}
+const adSlot = kind => adSlotTpl(kind);
 function pushAds(root = document) {
   $$('ins.adsbygoogle:not([data-ad-pushed])', root).forEach(el => {
     el.setAttribute('data-ad-pushed', '1');
@@ -92,24 +90,53 @@ function setFlowMode(on) {
 }
 function clearHash() { if (location.hash) { try { history.replaceState(null, '', location.pathname + location.search); } catch { location.hash = ''; } } }
 
-/* ---------- next-tests grid (landing·result·mini) ---------- */
-function nextTests(exclude = '') {
+/* ---------- 다른 서비스 · 미니 테스트 · 예시 카드 ---------- */
+const SERVICES = [
+  ['lotto', '오늘로또', '사주로 뽑는 오늘의 로또 번호와 살 시간·방향'],
+  ['lottomap', '명당로드', '로또 1등 명당 지도와 번호 통계'],
+  ['market', '맛남의 광장', '버려질 농수산물이 어디서 남는지, 버려지기 전에'],
+  ['season', '제철장보기', '이달 제철 식재료와 지금 싼 품목'],
+  ['sikdang', '제철식당', '이달 이 지역 제철 음식을 잘하는 집'],
+  ['family', '식구궁합', '우리 가족 오행 궁합판'],
+  ['names', '이름레이더', '내 이름, 전국에 몇 명?'],
+  ['lifeclock', '남은봄', '남은 주말·명절·벚꽃 세는 인생 시계'],
+  ['birthyear', '나때연감', '내가 태어난 해 타임캡슐'],
+];
+function otherServices() {
+  return `<section class="others" aria-labelledby="h-others"><h2 id="h-others" class="others-h">다른 서비스</h2>
+    <ul class="svc-list">${SERVICES.map(([k, n, d]) => `<li><a href="../${k}/"><b>${n}</b><span>${d}</span></a></li>`).join('')}</ul></section>`;
+}
+function miniTests(exclude = '') {
   const cards = [
-    { k: 'surname', href: '#/surname', icon: '姓', t: '나와 같은 성씨·본관은 몇 명?', d: '2015 인구주택총조사 실제 통계' },
-    { k: 'ancestors', href: '#/ancestors', icon: '祖', t: '조상 몇 명이 나를 만들었나', d: '10대 위 1,024명, 20대 위 100만 명' },
-    { k: 'main', href: './', icon: '根', t: '나의 근본 코드 찾기', d: '나이대별 10문항 · 사주 · 조상 타임라인' },
-    { k: 'lotto', href: '../lotto/', icon: '福', t: '오늘로또', d: '사주로 뽑는 오늘의 번호' },
-    { k: 'lottomap', href: '../lottomap/', icon: '地', t: '명당로드', d: '로또 명당 지도' },
-    { k: 'market', href: '../market/', icon: '市', t: '맛남의 광장', d: '리퍼브 농수산물 직거래' },
-    { k: 'season', href: '../season/', icon: '節', t: '제철장보기', d: '이달 제철 식재료와 지금 싼 품목' },
-    { k: 'sikdang', href: '../sikdang/', icon: '味', t: '제철식당', d: '이달 이 지역 제철 음식 잘하는 집' },
-    { k: 'family', href: '../family/', icon: '家', t: '식구궁합', d: '가족끼리 보는 궁합' },
-    { k: 'names', href: '../names/', icon: '名', t: '이름레이더', d: '내 이름은 얼마나 흔할까' },
-    { k: 'lifeclock', href: '../lifeclock/', icon: '春', t: '남은봄', d: '남은 시간 계산기' },
-    { k: 'birthyear', href: '../birthyear/', icon: '年', t: '나때연감', d: '내가 태어난 해 연감' },
+    { k: 'main', href: './', h: '根', t: '나의 근본 코드 찾기', d: '질문 10개 · 만세력 사주 · 조상 타임라인' },
+    { k: 'surname', href: '#/surname', h: '姓', t: '나와 같은 성씨·본관은 몇 명?', d: '2015 인구주택총조사 실제 통계' },
+    { k: 'ancestors', href: '#/ancestors', h: '祖', t: '조상 몇 명이 나를 만들었나', d: '10대 위 1,024명, 20대 위 100만 명' },
   ].filter(c => c.k !== exclude);
-  return `<section class="next" aria-labelledby="h-next"><h2 id="h-next" class="next-h">다음에 해볼 테스트</h2>
-    <div class="next-grid">${cards.map(c => `<a class="next-card" href="${c.href}" ${c.k === 'main' ? 'data-action="home-link"' : ''}><span class="next-ic" aria-hidden="true">${c.icon}</span><b>${c.t}</b><small>${c.d}</small></a>`).join('')}</div></section>`;
+  return `<section class="minis" aria-labelledby="h-minis"><h2 id="h-minis" class="others-h">근본 테스트 더 해 보기</h2>
+    <div class="mini-grid">${cards.map(c => `<a class="mini-card" href="${c.href}" ${c.k === 'main' ? 'data-action="home-link"' : ''}><span class="mini-hz" aria-hidden="true">${c.h}</span><b>${c.t}</b><small>${c.d}</small></a>`).join('')}</div></section>`;
+}
+function adSlotTpl(kind = 'display') {
+  const multi = kind === 'multiplex';
+  return `<div class="ad-wrap${multi ? ' ad-multi' : ''}"><span class="ad-label">광고</span><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" ${multi ? 'data-ad-format="autorelaxed"' : 'data-ad-format="auto" data-full-width-responsive="true"'}></ins></div>`;
+}
+/* 인주 도장: 유형 한자를 세로로 찍은 낙관 */
+function sealHTML(id, cls = '') {
+  const h = TYPES[id].hanja;
+  return `<span class="seal seal-l${h.length} ${cls}" aria-hidden="true"><span>${h.split('').join('<br>')}</span></span>`;
+}
+/* 결과 카드 (예시·실제 공용) */
+function codeCardHTML({ id, pct, title, example }) {
+  const t = TYPES[id]; const hz = hanjaCode(id); const code = codeOf(id);
+  return `<figure class="cc${example ? ' is-example' : ''}" ${example ? 'aria-label="예시 결과 카드"' : ''}>
+    ${example ? '<span class="ex-tag">예시</span>' : ''}
+    <div class="cc-top"><span>${esc(title)}</span><span class="cc-no">No.${pad(id + 1)} / 16</span></div>
+    <div class="cc-code" aria-label="근본 코드 ${code}">${code.split('').map((c, k) => `<span><b>${c}</b><small>${hz[k].h}</small></span>`).join('')}</div>
+    <div class="cc-nick">${esc(nickOf(id))}</div>
+    <div class="cc-type">${t.name}형 · ${t.hanja} · ${esc(t.tagline)}</div>
+    <ul class="cc-axes">${pct.map((p, k) => { const lead = p >= 50; const side = lead ? AXES[k].pos : AXES[k].neg; const v = lead ? p : 100 - p; return `<li><span>${side.h} ${side.d}</span><i><b style="width:${v}%"></b></i><em>${v}%</em></li>`; }).join('')}</ul>
+    <div class="cc-foot">16개 중 하나 · 시뮬레이션상 ${RARITY[id]}%</div>
+    ${sealHTML(id, 'cc-seal')}
+  </figure>`;
 }
 
 /* ---------- landing ---------- */
@@ -119,57 +146,77 @@ function renderLanding() {
   const saved = store.get(RKEY);
   const strong = todayStrongType();
   const st = TYPES[strong.id];
+  const top3 = SURNAMES.slice(0, 3);
+  const top3Share = ((top3[0].n + top3[1].n + top3[2].n) / POP_2015 * 100).toFixed(1);
   app.innerHTML = `
-  <section class="hero">
-    <div class="hero-in">
-      <div>
-        ${inv ? `<div class="invite-banner">${emblemSVG(inv.t, 46, 'aria-hidden="true"')}<div><b>${esc(inv.n)}</b>님(${codeOf(inv.t)} · ${TYPES[inv.t].name}형)이 궁합을 신청했어요.<br><small>테스트를 마치면 두 사람의 궁합이 바로 나와요.</small></div></div>` : ''}
-        <span class="eyebrow">근본 코드 · 만세력 사주 · 조상 타임라인</span>
-        <h1>너, <em>근본</em>이<br>어디야?</h1>
-        <p class="lead">나이대에 맞춘 10개의 질문과 정확한 만세력 사주로 나만의 4글자 <b>근본 코드</b>를 찾아요. 조상들이 실제로 겪은 역사와, 나와 같은 본관이 몇 명인지까지.</p>
-        <div class="hero-cta">
-          <button class="btn btn-primary btn-block" data-action="start">내 근본 코드 찾기 →</button>
-          ${saved ? `<button class="btn btn-light btn-block" data-action="show-result">내 결과 다시 보기</button>` : ''}
-          <div class="hero-meta"><span>${icon('clock')}<b>2분</b></span><span>${icon('lock')}정보는 <b>내 기기에만</b></span><span>${icon('chart')}<b>통계청·천문연</b> 자료 기반</span></div>
-        </div>
+  <section class="stage">
+    <div class="stage-in">
+      <div class="stage-head">
+        ${inv ? `<div class="invite-banner"><b>${esc(inv.n)}</b>님(${codeOf(inv.t)} · ${TYPES[inv.t].name}형)이 궁합을 신청했어요. 테스트를 마치면 두 사람의 궁합이 바로 나와요.</div>` : ''}
+        <p class="stage-kicker">근본 테스트 · 16가지 근본 코드</p>
+        <h1 class="stage-title">너, 근본이<br>어디야?</h1>
+        <p class="stage-lead">질문 10개와 만세력 사주로 찾는 4글자 근본 코드. 조상들이 겪은 역사, 나와 같은 본관이 몇 명인지까지 한 장에 담아요.</p>
+      </div>
+      <div class="stage-card">${codeCardHTML({ id: 0, pct: [72, 64, 58, 81], title: '홍길동님의 근본 코드', example: true })}</div>
+      <div class="stage-cta">
+        <button class="btn btn-stamp btn-block" data-action="start">도장 찍기<small>내 근본 코드 찾기</small></button>
+        ${saved ? `<button class="btn btn-on-field btn-block" data-action="show-result">내 결과 다시 보기</button>` : ''}
+        <p class="stage-meta">기본 정보 4개 + 질문 10개 · 약 2분 · 입력한 정보는 내 기기에만</p>
       </div>
     </div>
   </section>
 
-  <section class="section wrap">
+  <section class="section wide" aria-labelledby="h-seals">
+    <div class="sec-head"><h2 class="sec-title" id="h-seals">16가지 근본 코드</h2>
+      <p class="sec-sub">思·行 / 守·遊 / 理·情 / 獨·群, 네 갈래 기질이 만나 하나의 도장이 돼요. 눌러서 미리 보세요.</p></div>
+    <div class="seal-grid">${TYPES.map((t, i) => `<button class="seal-cell" data-action="type" data-id="${i}" aria-label="${codeOf(i)} ${t.name}형 미리보기">${sealHTML(i, i % 2 ? 'is-line' : '')}<b>${codeOf(i)}</b><small>${t.name}</small></button>`).join('')}</div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="h-today">
     <div class="today-strong">
-      ${emblemSVG(strong.id, 64, 'aria-hidden="true"')}
-      <div><b>오늘의 일진 ${strong.ilJin}</b> · ${ELEMENTS[strong.el].name}(${ELEMENTS[strong.el].h})의 날
-        <p>오늘 일간과 같은 오행을 가진 근본: <b>${st.name}형(${codeOf(strong.id)})</b>. 재미로 보는 오늘의 근본이에요.</p></div>
+      <div class="ts-day" aria-hidden="true">${String(strong.ilJin).split('').join('<br>')}</div>
+      <div><h2 id="h-today" class="ts-h">오늘은 ${strong.ilJin}, ${ELEMENTS[strong.el].name}(${ELEMENTS[strong.el].h})의 날</h2>
+        <p>오늘 일진의 천간과 같은 오행을 가진 근본은 <b>${st.name}형(${codeOf(strong.id)})</b>이에요. 재미로 보는 오늘의 근본이에요.</p></div>
     </div>
   </section>
 
-  <section class="section wide" style="padding-top:8px">
-    <div class="sec-head"><div class="sec-kicker">16 ROOT CODES</div><h2 class="sec-title">당신의 근본 코드는?</h2>
-      <p class="sec-sub">思·行 / 守·遊 / 理·情 / 獨·群 — 네 갈래로 나뉘는 16가지 코드</p></div>
-    <div class="type-grid">${TYPES.map((t, i) => `<button class="type-chip" data-action="type" data-id="${i}" aria-label="${t.name}형 미리보기">${emblemSVG(i, 58, 'aria-hidden="true"')}<b>${t.name}</b><small class="code-sm">${codeOf(i)}</small></button>`).join('')}</div>
+  <section class="section wrap" aria-labelledby="h-how">
+    <h2 class="sec-title left" id="h-how">근본 공식은 공개돼 있어요</h2>
+    <ol class="how-list">
+      <li><span class="how-n">60%</span><div><h3>나이대별 질문 10개</h3><p>10대·20~30대·40~50대·60대 이상에 맞춘 상황 질문으로 네 가지 기질을 재요.</p></div></li>
+      <li><span class="how-n">25%</span><div><h3>만세력 사주</h3><p>절기 시각을 천문 계산해 년·월·일·시주를 세워요. 서머타임·표준시 변경, 음력·윤달까지 반영해요.</p></div></li>
+      <li><span class="how-n">15%</span><div><h3>출생 시대·지역</h3><p>자란 시대와 고향을 작은 비중으로 더해요. 계산식은 결과 화면에 그대로 보여 드려요.</p></div></li>
+    </ol>
   </section>
 
-  <div class="wrap">${adSlot()}</div>
+  <div class="wrap">${adSlotTpl()}</div>
 
-  <section class="section wide" style="padding-top:16px">
-    <div class="sec-head"><div class="sec-kicker">HOW IT WORKS</div><h2 class="sec-title">공개된 근본 공식</h2></div>
-    <div class="steps">
-      <div class="step-card"><div class="n">壹 · 60%</div><h3>나이대별 질문</h3><p>10대·20~30대·40~50대·60대 이상에 맞춘 상황 질문 10개로 네 가지 기질을 재요.</p></div>
-      <div class="step-card"><div class="n">貳 · 25%</div><h3>만세력 사주</h3><p>절기 시각을 천문 계산해 년·월·일·시주를 세워요. 서머타임·표준시 변경, 음력·윤달까지 반영해요.</p></div>
-      <div class="step-card"><div class="n">參 · 15%</div><h3>출생 시대·지역</h3><p>자란 시대와 고향을 작은 비중으로 더해요. 계산식은 결과 화면에서 그대로 보여 드려요.</p></div>
-    </div>
+  <section class="section wrap faq" aria-labelledby="h-faq">
+    <h2 class="sec-title left" id="h-faq">자주 묻는 질문</h2>
+    <h3>실제 족보랑 관련이 있나요?</h3><p>아니요. 부모·조부모 같은 개인 정보는 만들어 내지 않아요. 조상 타임라인은 '한 세대 ≈ 30년'으로 계산한 시대와 실제 역사 사건, 성씨·본관 인구는 통계청 2015 인구주택총조사 값이에요. 근본 코드 해석은 재미로 보는 콘텐츠예요.</p>
+    <h3>사주 계산은 얼마나 정확한가요?</h3><p>입춘·12절의 정확한 시각을 천문 계산(오차 1분 이내)으로 구하고, 1954~61년 표준시(UTC+8:30)와 1948~51·1955~60·1987~88년 서머타임, 한국천문연구원 음력(1900~2050)을 반영해요. 시각은 동경 127.5° 기준(현재 표준시 −30분)으로 보정해요.</p>
+    <h3>내 정보는 어디에 저장되나요?</h3><p>이름, 생일 등 모든 입력은 서버로 보내지 않고 이 기기의 브라우저에만 저장돼요.</p>
   </section>
 
-  <section class="section wrap" style="padding-top:0">${nextTests('main')}</section>
+  <div class="wrap">${miniTests('main')}</div>
 
-  <section class="section wrap faq" style="padding-top:8px">
-    <div class="sec-head"><h2 class="sec-title">자주 묻는 질문</h2></div>
-    <details><summary>실제 족보랑 관련이 있나요?</summary><p>아니요. 부모·조부모 같은 개인 정보는 만들어 내지 않아요. 조상 타임라인은 '한 세대 ≈ 30년'으로 계산한 시대와 실제 역사 사건, 성씨·본관 인구는 통계청 2015 인구주택총조사 값이에요. 근본 코드 해석은 재미로 보는 콘텐츠예요.</p></details>
-    <details><summary>사주 계산은 얼마나 정확한가요?</summary><p>입춘·12절의 정확한 시각을 천문 계산(오차 1분 이내)으로 구하고, 1954~61년 표준시(UTC+8:30)와 1948~51·1955~60·1987~88년 서머타임, 한국천문연구원 음력(1900~2050)을 반영해요. 시각은 동경 127.5° 기준(현재 표준시 −30분)으로 보정해요.</p></details>
-    <details><summary>내 정보는 어디에 저장되나요?</summary><p>이름, 생일 등 모든 입력은 서버로 보내지 않고 이 기기의 브라우저에만 저장돼요.</p></details>
+  <section class="section wrap facts" aria-labelledby="h-facts">
+    <h2 class="sec-title left" id="h-facts">알고 보면 더 재밌는 숫자</h2>
+    <dl class="fact-list">
+      <div><dt>${top3Share}%</dt><dd>김·이·박 세 성씨가 2015년 내국인에서 차지하는 비율이에요.</dd></div>
+      <div><dt>${nf(BONGWAN_TOTAL.clans)}개</dt><dd>2015년 조사에 나온 본관 수예요. 1천 명이 넘는 본관은 ${BONGWAN_TOTAL.over1000}개였어요.</dd></div>
+      <div><dt>약 ${man(2 ** 30)}명</dt><dd>30대 위 조상 자리 수예요. 당시 한반도 인구보다 훨씬 많아서, 같은 조상이 여러 자리를 겹쳐 차지해요.</dd></div>
+    </dl>
   </section>
-  <div class="bottom-cta wrap"><button class="btn btn-primary" data-action="start">2분 만에 내 근본 코드 찾기</button></div>`;
+
+  <div class="wrap">${adSlotTpl('multiplex')}</div>
+
+  <section class="wrap sources-note">
+    <p>성씨·본관 인구는 통계청 2015 인구주택총조사, 음력은 한국천문연구원, 장래 인구는 통계청 장래인구추계(2022~2072)를 썼어요. 근본 코드와 사주 해석은 전통 상징을 빌린 재미 콘텐츠이고, 과학적인 성격 검사가 아니에요.</p>
+  </section>
+
+  <div class="wrap">${otherServices()}</div>
+  <div class="bottom-cta wrap"><button class="btn btn-primary btn-block" data-action="start">도장 찍고 내 근본 코드 찾기</button></div>`;
   pushAds(app);
   window.scrollTo(0, 0);
 }
@@ -268,12 +315,14 @@ function renderStep() {
       <div class="opts" style="margin-top:20px">${q.opts.map((o, oi) => `<button class="opt ${state.answers[qi] === oi ? 'sel' : ''}" data-action="answer" data-v="${oi}">${esc(o.t)}</button>`).join('')}</div>`;
   }
   const needsNext = ['name', 'bongwan', 'birth'].includes(key);
+  const nBase = BASE_STEPS.length;
+  const progTxt = state.step < nBase ? `기본 정보 ${state.step + 1}/${nBase}` : `질문 ${state.step - nBase + 1}/${total - nBase}`;
   app.innerHTML = `
     <div class="flow">
       <div class="flow-top">
         <button class="back" data-action="back" aria-label="이전">${icon('back')}</button>
-        <div class="prog" role="progressbar" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${state.step + 1}"><i style="width:${((state.step + 1) / total) * 100}%"></i></div>
-        <span class="prog-n">${state.step + 1}/${total}</span>
+        <div class="prog" role="progressbar" aria-label="진행" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${state.step + 1}" aria-valuetext="${progTxt}"><i style="width:${((state.step + 1) / total) * 100}%"></i></div>
+        <span class="prog-n">${progTxt}</span>
       </div>
       <div class="q-wrap">${body}</div>
       <div class="flow-foot">
@@ -347,7 +396,7 @@ function renderLoading() {
   app.innerHTML = `
     <div class="loading" role="status" aria-live="polite">
       <div>
-        <div class="scroll-anim" aria-hidden="true"><div class="paper">${[30, 48, 66, 84, 102].map((t, i) => `<i style="top:${t}px;animation-delay:${0.9 + i * 0.25}s;${i % 2 ? 'right:60px' : ''}"></i>`).join('')}</div><div class="rod l"></div><div class="rod r"></div></div>
+        <div class="load-seal" aria-hidden="true">根<br>本</div>
         <p class="load-title">근본을 계산하는 중…</p>
         <p class="load-msg" id="lmsg">${esc(msgs[0])}</p>
         <div class="load-bar"><i></i></div>
@@ -562,6 +611,19 @@ function renderResult(fresh = false) {
   const stg = STAGES.find(s => s.key === res.stage);
 
   app.innerHTML = `
+  <section class="stage stage-result" id="r-hero" aria-labelledby="r-title">
+    <div class="stage-in">
+      <div class="stage-head">
+        <p class="stage-kicker">근본 테스트 결과</p>
+        <h1 class="stage-title stage-title-sm" id="r-title">${esc(name)}님의 근본은<br>${t.name}형 ${res.code}</h1>
+        <div class="kw">${t.keywords.map(k => `<span>${esc(k)}</span>`).join('')}</div>
+      </div>
+      <div class="stage-card">${codeCardHTML({ id: res.typeId, pct: res.posPct, title: `${name}님의 근본 코드` })}</div>
+      <div class="stage-cta">
+        <div class="btn-row"><button class="btn btn-stamp" data-action="share">내 코드 공유</button><button class="btn btn-on-field" data-action="goto-compat">궁합 보기</button></div>
+      </div>
+    </div>
+  </section>
   <div class="result wrap">
     <section class="daily" aria-label="오늘의 조상님 한마디">
       <div class="daily-top"><span>오늘의 조상님 한마디 · ${daily.ilJin}</span><span class="streak">${streak.n}일 연속 문안</span></div>
@@ -572,15 +634,6 @@ function renderResult(fresh = false) {
         <div><b>${daily.luckyColor}</b><span>나를 돕는 색</span></div>
         <div><b>${daily.luckyDir}</b><span>나를 돕는 방향</span></div>
       </div>
-    </section>
-
-    <section class="r-hero" id="r-hero">
-      <div class="r-for">${esc(name)}님의 근본 코드는</div>
-      <div class="r-emblem">${emblemSVG(res.typeId, 168, `role="img" aria-label="${t.name}형 엠블럼"`)}</div>
-      <div class="r-code" aria-label="근본 코드 ${res.code}">${res.code.split('').map((c, k) => `<span title="${hanjaCode(res.typeId)[k].d}">${c}</span>`).join('')}</div>
-      <h1 class="r-name">${esc(res.nick)}<small>${t.name}형 · ${t.hanja}</small></h1>
-      <p class="r-tag">${esc(t.tagline)}</p>
-      <div class="kw">${t.keywords.map(k => `<span>${esc(k)}</span>`).join('')}</div>
     </section>
 
     <section class="card" aria-labelledby="h-axes">
@@ -611,11 +664,11 @@ function renderResult(fresh = false) {
 
     ${sajuCard(res, pf)}
     ${ancestorCard(res)}
-    ${likelyCard(res)}
-    ${clanCard(pf)}
-    ${futureCard(res)}
 
     ${adSlot()}
+
+    ${likelyCard(res)}
+    ${clanCard(pf)}
 
     <section class="card" aria-labelledby="h-era">
       <h2 id="h-era">시대별 나의 인생</h2>
@@ -626,6 +679,10 @@ function renderResult(fresh = false) {
       <button class="btn btn-ghost btn-block btn-sm" style="margin-top:12px" data-action="era-next">다음 시대로 →</button>
     </section>
 
+    ${futureCard(res)}
+
+    ${adSlot()}
+
     ${codeCard(res)}
 
     <section class="card share-card-sec" aria-labelledby="h-share">
@@ -634,8 +691,6 @@ function renderResult(fresh = false) {
       <img class="share-preview" id="share-preview" alt="${esc(name)}님의 근본 카드: ${res.code} ${esc(res.nick)}, ${esc(blendTxt)}">
       <div class="btn-row"><button class="btn btn-primary btn-sm" data-action="save-card">이미지 저장</button><button class="btn btn-dark btn-sm" data-action="share">공유하기</button></div>
     </section>
-
-    ${adSlot()}
 
     <section class="card" id="compat" aria-labelledby="h-cmp">
       <h2 id="h-cmp">근본 궁합</h2>
@@ -662,7 +717,21 @@ function renderResult(fresh = false) {
 
     <section class="card" id="dex-sec" aria-labelledby="h-dex"></section>
 
-    ${nextTests('main')}
+    <section class="read-note" aria-labelledby="h-read">
+      <h2 id="h-read">이 결과를 읽는 법</h2>
+      <p>근본 코드는 답변(60%)에 사주 오행(25%)과 출생 시대·지역(15%)을 더한 우리만의 공식이에요. 네 축 중 한쪽으로 크게 기운 축일수록 평소 모습에 가깝고, 50%에 가까운 축은 상황에 따라 반대 모습도 자주 나와요.</p>
+      <p>조상 타임라인은 한 세대를 30년으로 잡은 계산이고, 성씨·본관 숫자는 통계청 2015 인구주택총조사 값이에요. 사주 해석과 '닮은 조상'은 재미로 보는 상상이에요.</p>
+    </section>
+
+    ${adSlot('multiplex')}
+
+    <section class="read-note" aria-labelledby="h-facts2">
+      <h2 id="h-facts2">${esc(pf.surname || name)}${pf.surname ? '씨' : '님'}에 관한 숫자 하나</h2>
+      <p>${(() => { const ss = surnameStat(pf.surname || ''); return ss ? `2015년 기준 ${esc(pf.surname)}씨는 ${ss.rank}위, 약 ${man(ss.n)}명이에요. 100명이 모이면 그중 ${ss.share >= 1 ? `${Math.round(ss.share)}명` : '1명 미만'}이 ${esc(pf.surname)}씨인 셈이에요.` : `2015년 조사에서 성씨는 모두 5,582개(귀화 포함)였어요. 상위 45개 밖의 성씨는 이 앱에 인구 값이 없어요.`; })()} 10대 위로 올라가면 조상 자리만 ${nf(2 ** 10)}개예요.</p>
+    </section>
+
+    ${miniTests('main')}
+    ${otherServices()}
 
     <div class="retry">
       <button class="btn btn-ghost" data-action="retry">다시 테스트하기</button>
@@ -791,8 +860,11 @@ function renderSurnameTest() {
     <section class="card"><h2>성씨 TOP 10</h2><p class="sub">2015년 내국인 ${nf(POP_2015)}명 기준</p>
       <div class="rank">${top10.map(s => `<div><b>${s.rank}</b><span>${s.s}</span><div class="rk-track"><i style="width:${(s.n / top10[0].n) * 100}%"></i></div><em>${man(s.n)}</em></div>`).join('')}</div>
       <p class="fine">김·이·박 세 성씨만 합쳐도 약 ${((top10[0].n + top10[1].n + top10[2].n) / POP_2015 * 100).toFixed(1)}%예요.</p></section>
+    <section class="read-note"><h2>성씨·본관 통계 읽는 법</h2><p>2015년 인구주택총조사는 성씨와 본관을 함께 조사한 가장 최근 자료예요. 같은 한자 성씨라도 '유'와 '류'처럼 한글 표기가 다르면 따로 셌고, 본관은 신고한 대로 집계했어요. 이 앱에는 상위 45개 성씨와 약 80개 본관의 값이 들어 있어요.</p></section>
     ${adSlot()}
-    ${nextTests('surname')}`);
+    <section class="read-note"><h2>시조 이야기는 어디서 왔나요?</h2><p>시조 정보는 각 문중에서 전하는 내용이라 전설이 섞여 있어요. 같은 본관이라도 문중마다 계보가 다를 수 있어요.</p></section>
+    ${miniTests('surname')}
+    ${otherServices()}`);
   const out = $('#sur-out');
   const fill = () => { const s = $('#s-sur').value.trim(); $('#bon-list').innerHTML = bongwanOptions(s).map(b => `<option value="${esc(b.split(' ')[0])}">`).join(''); };
   const show = () => {
@@ -818,8 +890,11 @@ function renderAncestorTest() {
       <input type="range" id="a-r" min="1" max="40" value="10" aria-label="세대 수" class="range">
     </div>
     <div id="anc-out"></div>
+    <section class="read-note"><h2>왜 두 배씩 늘어날까?</h2><p>누구에게나 부모는 2명, 조부모는 4명이에요. 한 세대 올라갈 때마다 조상 자리는 두 배가 되니 n대 위는 2ⁿ명이에요. 한 세대는 평균 30년으로 잡았어요.</p></section>
     ${adSlot()}
-    ${nextTests('ancestors')}`);
+    <section class="read-note"><h2>조상 겹침</h2><p>25대쯤 올라가면 조상 자리가 당시 한반도 인구보다 많아져요. 같은 사람이 여러 자리를 차지하기 때문이고, 그래서 우리는 생각보다 가까운 먼 친척이에요.</p></section>
+    ${miniTests('ancestors')}
+    ${otherServices()}`);
   const draw = () => {
     const by = +$('#a-y').value || by0; const n = +$('#a-n').value || 10;
     const born = by - GEN_YEARS * n; const cnt = 2 ** n; const cum = 2 ** (n + 1) - 2;

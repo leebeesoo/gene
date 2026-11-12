@@ -87,7 +87,7 @@ export function renderGraph(svg, people, pairs, onPair) {
     const g = el('g', { class: 'node', 'data-i': i, transform: `translate(${x.toFixed(1)} ${y.toFixed(1)})` }, gNodes);
     el('circle', { class: 'ring', r: nr + 4, fill: 'var(--card)', stroke: 'var(--line)', 'stroke-width': 1 }, g);
     el('circle', { r: nr, fill: EL_COLOR[e] }, g);
-    const t = el('text', { 'text-anchor': 'middle', 'dominant-baseline': 'central', fill: EL_INK[e], 'font-family': 'Noto Serif KR, serif', 'font-weight': 700, 'font-size': Math.round(nr * 0.82) }, g);
+    const t = el('text', { 'text-anchor': 'middle', 'dominant-baseline': 'central', fill: EL_INK[e], 'font-family': 'Gowun Batang, serif', 'font-weight': 700, 'font-size': Math.round(nr * 0.82) }, g);
     t.textContent = STEMS[stem];
     const name = el('text', { class: 'nlabel', 'text-anchor': 'middle', y: nr + 18 }, g);
     name.textContent = person.name.length > 6 ? person.name.slice(0, 6) + '…' : person.name;

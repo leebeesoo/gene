@@ -94,6 +94,7 @@
     if (state.hanja) $('.hanja-opt').open = true;
     lastSur = sp.sur;
     render(state);
+    updateLive();
     // 최근 검색
     const rec = loadRecent().filter(r => r.raw !== state.raw);
     rec.unshift({ raw: state.raw, g, y: state.year || '' });
@@ -138,11 +139,12 @@
     const peak = a.peak;
     let peakV, peakD;
     if (peak && peak.type === 'year') {
-      peakV = peak.y + '년'; peakD = `${peak.rank}위 · ${comma(peak.count)}명 출생신고${peak.partial ? ' (잠정)' : ''}`;
+      peakV = peak.y + '년'; peakD = `그해 태어난 ${GN[res.gender]}아 중 비율이 가장 높았던 해 · 그해 ${peak.rank}위, ${comma(peak.count)}명${peak.partial ? ' (잠정)' : ''}`;
     } else if (peak) {
-      peakV = peak.y + '년 무렵'; peakD = `그해 인기 이름 ${peak.rank}위 (시대별 TOP 10 목록)`;
+      peakV = peak.y + '년 무렵'; peakD = `출생아 중 비율이 가장 높았던 시기 · 그해 인기 이름 ${peak.rank}위 (시대별 TOP 10 목록)`;
     } else { peakV = '기록 없음'; peakD = '연도별 100위·시대별 10위 밖의 개성 있는 이름이에요'; }
     const avg = a.avgYear ? Math.round(a.avgYear) : null;
+    const bestYr = a.bestRank ? a.years.find(p => p.rank === a.bestRank) : null;
     const age = avg ? Math.max(0, NOW_YEAR - avg) : null;
 
     const surStat = sur.known
@@ -159,7 +161,7 @@
 
     $('#result').hidden = false; // 차트 폭 계산을 위해 먼저 표시
     const html = `
-      <div class="r-hero reveal">
+      <div class="r-hero">
         <span class="tag">${esc(gLabel)} · ${esc(st.sur)} + ${esc(st.given)}</span>
         <p class="r-name">${esc(st.full)}${st.hanja ? `<small lang="zh-Hant">${esc(st.hanja)}</small>` : ''}</p>
         <p class="r-big">전국의 ${esc(st.full)}<span class="est-badge">추정</span><b>약 ${approxNum(same)}<span class="unit">명</span></b></p>
@@ -167,13 +169,14 @@
         ${sameLine}
       </div>
       ${splitAlt}
-      <div class="stats reveal">
+      <div class="stats">
         ${surStat}
-        <div class="stat accent"><span class="k">‘${esc(st.given)}’ 가장 유행한 때</span><span class="v">${esc(peakV)}</span><span class="d">${esc(peakD)}</span></div>
+        <div class="stat accent"><span class="k">‘${esc(st.given)}’ 가장 유행한 해</span><span class="v">${esc(peakV)}</span><span class="d">${esc(peakD)}</span></div>
         <div class="stat"><span class="k">평균 출생연도 추정</span><span class="v">${avg ? avg + '<small>년생</small>' : '—'}</span><span class="d">${avg ? `지금 이 이름을 가진 사람의 평균 · 약 ${age}살` : ''}</span></div>
-        <div class="stat"><span class="k">성 상관없이 ‘${esc(st.given)}’</span><span class="v">약 ${approx(res.total)}</span><span class="d">${a.bestRank ? `2008년 이후 최고 ${a.bestRank}위 · 상위 100위에 ${a.hitYears}번 등장` : (a.hitEras ? `시대별 TOP 10에 ${a.hitEras}번 등장` : '연도별 상위 100위 기록 없음')}${res.unisex ? ' · 남녀 모두 쓰는 이름' : ''}</span></div>
+        <div class="stat"><span class="k">성 상관없이 ‘${esc(st.given)}’</span><span class="v">약 ${approx(res.total)}</span><span class="d">${a.bestRank ? `순위로는 ${bestYr ? bestYr.y + '년 ' : ''}${a.bestRank}위가 최고(2008년 이후) · 상위 100위에 ${a.hitYears}번 등장` : (a.hitEras ? `시대별 TOP 10에 ${a.hitEras}번 등장` : '연도별 상위 100위 기록 없음')}${res.unisex ? ' · 남녀 모두 쓰는 이름' : ''}</span></div>
       </div>
-      <div class="card reveal">
+      <div id="resultAd"></div>
+      <div class="card">
         <h3>‘${esc(st.given)}’ 순위 변화</h3>
         <p class="cap">1940~1990년은 그해 인기 이름 TOP 10, 2008년부터는 출생신고 상위 100위 기준이에요. 위로 갈수록 인기가 높아요.</p>
         ${chartHTML(res)}
@@ -181,7 +184,7 @@
       ${birthYearCard(st, res)}
       ${hanjaCard(st)}
       ${syllableCard(st, res)}
-      <div class="card reveal">
+      <div class="card">
         <h3>결과 공유하기</h3>
         <p class="cap">친구에게 보내고 누가 더 흔한 이름인지 겨뤄 보세요.</p>
         <div class="actions">
@@ -190,13 +193,12 @@
         </div>
         <div class="card-preview" id="cardPreview"></div>
       </div>
-      <div class="card reveal">
+      <div class="card">
         <h3>친구 이름도 검색</h3>
         <form class="friend-form" id="friendForm" autocomplete="off"><label class="sr" for="friendIn">친구 이름</label><input id="friendIn" type="text" maxlength="8" placeholder="친구 이름 (예: 이서연)" spellcheck="false"><button class="btn btn-solid" type="submit">검색</button></form>
         <div class="chips" id="friendChips">${FRIENDS.filter(f => f !== st.full).slice(0, 10).map(f => `<button type="button" class="chip" data-raw="${f}">${f}</button>`).join('')}</div>
       </div>
-      ${howCard(st, res, sur, same)}
-      <div id="resultAd"></div>`;
+      ${howCard(st, res, sur, same)}`;
 
     const box = $('#result');
     // 결과 광고 슬롯은 한 번만 만들고 재사용
@@ -314,10 +316,10 @@
     const g = res.gender;
     const L = NR.eraListFor(st.year, g);
     if (!L) {
-      return `<div class="card reveal"><h3>${st.year}년생 ${GN[g]}자 인기 이름</h3><p class="cap" style="margin:0">1991~2007년 출생아의 연도별 이름 순위는 공개 자료로 확인하지 못해 보여 드리지 않아요.</p></div>`;
+      return `<div class="card"><h3>${st.year}년생 ${GN[g]}자 인기 이름</h3><p class="cap" style="margin:0">1991~2007년 출생아의 연도별 이름 순위는 공개 자료로 확인하지 못해 보여 드리지 않아요.</p></div>`;
     }
     const inList = L.names.indexOf(st.given);
-    return `<div class="card reveal"><h3>${st.year}년생 무렵 ${GN[g]}자 인기 이름 TOP 10</h3>
+    return `<div class="card"><h3>${st.year}년생 무렵 ${GN[g]}자 인기 이름 TOP 10</h3>
       <p class="cap">${L.official ? `${esc(L.label)} 출생신고 기준` : `${esc(L.label)} 인기 이름 목록 기준 (민간 정리 자료)`}${inList >= 0 ? ` · ‘${esc(st.given)}’ ${inList + 1}위!` : ` · ‘${esc(st.given)}’은(는) TOP 10 밖이에요`}</p>
       <ol class="toplist">${L.names.map(n => `<li${n === st.given ? ' class="me"' : ''}>${esc(n)}</li>`).join('')}</ol></div>`;
   }
@@ -327,27 +329,27 @@
     if (!st.hanja) return '';
     const r = NR.hanjaLookup(st.hanja, st.given);
     if (!r) return '';
-    if (r.error) return `<div class="card reveal"><h3>이름 한자</h3><p class="cap" style="margin:0">${esc(r.error)}</p></div>`;
+    if (r.error) return `<div class="card"><h3>이름 한자</h3><p class="cap" style="margin:0">${esc(r.error)}</p></div>`;
     const cells = r.map(c => {
       if (c.status === 'ok') return `<div class="hj"><span class="c" lang="zh-Hant">${esc(c.ch)}</span><span class="h">${esc(c.hun)} ${esc(c.eum)}</span></div>`;
       if (c.status === 'mismatch') return `<div class="hj warn"><span class="c" lang="zh-Hant">${esc(c.ch)}</span><span class="h">${esc(c.hun)} ${esc(c.eum)}</span><span class="s">‘${esc(c.syl)}’와 음이 달라요</span></div>`;
       if (c.status === 'invalid') return `<div class="hj warn"><span class="c">${esc(c.ch)}</span><span class="h">한자가 아니에요</span></div>`;
       return `<div class="hj"><span class="c" lang="zh-Hant">${esc(c.ch)}</span><span class="h muted">자료 없음</span><span class="s">사전 목록에 없는 글자</span></div>`;
     }).join('');
-    return `<div class="card reveal"><h3>이름 한자 훈·음</h3><p class="cap">자주 쓰는 인명 한자의 대표 훈·음만 보여 드려요. 글자를 조합해 이름 뜻을 지어내지는 않아요.</p><div class="hanja-row">${cells}</div></div>`;
+    return `<div class="card"><h3>이름 한자 훈·음</h3><p class="cap">자주 쓰는 인명 한자의 대표 훈·음만 보여 드려요. 글자를 조합해 이름 뜻을 지어내지는 않아요.</p><div class="hanja-row">${cells}</div></div>`;
   }
 
   /* ---------- 글자 빈도 카드 (드문 이름) ---------- */
   function syllableCard(st, res) {
     if (res.main.listed) return '';
     const n = NR.syllableNotes(st.given, res.gender);
-    if (!n) return `<div class="card reveal"><h3>드문 이름이에요</h3><p class="cap" style="margin:0">${st.given.length === 1 ? '외자 이름' : '세 글자 이상 이름'}은 순위권 자료가 적어 아주 대략적으로만 추정했어요.</p></div>`;
+    if (!n) return `<div class="card"><h3>드문 이름이에요</h3><p class="cap" style="margin:0">${st.given.length === 1 ? '외자 이름' : '세 글자 이상 이름'}은 순위권 자료가 적어 아주 대략적으로만 추정했어요.</p></div>`;
     const line = (o, pos) => {
       const m = o.modern, old = o.old;
       if (!m && !old) return `<li>${pos} 글자 ‘${esc(o.ch)}’는 순위권 이름에서 거의 보이지 않아요.</li>`;
       return `<li>${pos} 글자 ‘${esc(o.ch)}’: 2008년 이후 상위 100위 ${GN[res.gender]}자 이름의 <b>${pct(m)}</b>${old ? `, 1940~90년 TOP 10의 <b>${pct(old)}</b>` : ''}에 쓰였어요.</li>`;
     };
-    return `<div class="card reveal"><h3>순위 밖의 개성 있는 이름</h3><p class="cap">글자별로 얼마나 흔한지 보고 대략적인 사람 수를 추정했어요.</p><ul class="how" style="padding-left:18px;margin:0;font-size:14px;color:var(--ink-2)">${line(n.first, '첫')}${line(n.last, '끝')}</ul></div>`;
+    return `<div class="card"><h3>순위 밖의 개성 있는 이름</h3><p class="cap">글자별로 얼마나 흔한지 보고 대략적인 사람 수를 추정했어요.</p><ul class="how" style="padding-left:18px;margin:0;font-size:14px;color:var(--ink-2)">${line(n.first, '첫')}${line(n.last, '끝')}</ul></div>`;
   }
 
   /* ---------- 계산 설명 ---------- */
@@ -361,7 +363,7 @@
       return `<tr><td>${esc(p.label)}년생</td><td>${basis}</td><td class="num">${approx(p.count)}</td></tr>`;
     }).join('');
     const other = !res.genderGiven && res.unisex ? ` (+ ${GN[g === 'm' ? 'f' : 'm']}자 약 ${approx(res.by[g === 'm' ? 'f' : 'm'].total)})` : '';
-    return `<details class="card how reveal"><summary>어떻게 계산했나요?</summary><div class="body">
+    return `<details class="card how"><summary>어떻게 계산했나요?</summary><div class="body">
       <div class="formula">동명이인 추정 = <b>${esc(st.sur)}씨 비율</b> × <b>‘${esc(st.given)}’ 이름 인구</b><br>
       = ${sur.known ? `${comma(sur.pop)} ÷ ${comma(NR.censusTotal)}` : '희성 가정 300명 ÷ 총인구'} (${pct(sur.share, 2)}) × 약 ${approx(res.total)}<br>
       ≈ <b>약 ${approx(same)}</b></div>
@@ -510,9 +512,107 @@
     run({ raw: lastSur + b.dataset.n, year: '', g: b.dataset.g, hanja: '' }, true);
   });
 
+
+  /* ---------- 첫 화면: 입력 칸 옆 실시간 숫자 + 유행 막대 ---------- */
+  const reduceMotion = (() => { try { return matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } })();
+  const EXAMPLE = '김민준';
+  let liveVal = 0, liveRaf = 0, liveT = 0;
+  const bigText = n => (n < 1 ? '1 미만' : '약 ' + approxNum(n));
+  function rollTo(target) {
+    cancelAnimationFrame(liveRaf);
+    const el = $('#liveNum');
+    if (reduceMotion || !isFinite(target)) { liveVal = target; el.textContent = bigText(target); return; }
+    const from = liveVal, t0 = performance.now(), dur = 400;
+    const tick = now => {
+      const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+      const v = from + (target - from) * e;
+      el.textContent = bigText(k < 1 ? v : target);
+      if (k < 1) liveRaf = requestAnimationFrame(tick); else liveVal = target;
+    };
+    liveRaf = requestAnimationFrame(tick);
+  }
+  function barsSVG(res) {
+    const a = res.main, g = res.gender, pk = a.peak;
+    const W = 380, H = 150, T = 22, B = 22, ih = H - T - B;
+    const counts = a.years.filter(p => p.count != null);
+    if (counts.length) {
+      const max = Math.max(...counts.map(p => p.count));
+      const n = a.years.length, gap = 4, bw = (W - gap * (n - 1)) / n;
+      let s = `<svg class="bars" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(`‘${res.given}’ ${GN[g]}자 이름 연도별 출생신고: ` + counts.map(p => `${p.y}년 ${comma(p.count)}명`).join(', '))}">`;
+      s += `<line class="base" x1="0" x2="${W}" y1="${T + ih + .5}" y2="${T + ih + .5}"/>`;
+      a.years.forEach((p, i) => {
+        const x = i * (bw + gap);
+        const hot = pk && pk.type === 'year' && pk.y === p.y;
+        if (p.count == null) { s += `<rect class="b-out" x="${x.toFixed(1)}" y="${T + ih - 2}" width="${bw.toFixed(1)}" height="2"/>`; return; }
+        const h = Math.max(3, p.count / max * ih);
+        s += `<rect class="b${hot ? ' hot' : ''}${p.partial ? ' part' : ''}" x="${x.toFixed(1)}" y="${(T + ih - h).toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="2"><title>${p.y}년 ${p.rank}위 · ${comma(p.count)}명${p.partial ? ' (잠정)' : ''}</title></rect>`;
+        if (hot) {
+          const cx = x + bw / 2, anchor = cx < 40 ? 'start' : (cx > W - 40 ? 'end' : 'middle');
+          s += `<text class="b-lbl" x="${(anchor === 'start' ? x : anchor === 'end' ? x + bw : cx).toFixed(1)}" y="${(T + ih - h - 7).toFixed(1)}" text-anchor="${anchor}">${p.y}</text>`;
+        }
+      });
+      const y0 = a.years[0].y;
+      [2008, 2014, 2020, 2026].forEach(y => {
+        const i = y - y0; if (i < 0 || i >= n) return;
+        const x = i * (bw + gap);
+        const anchor = i === 0 ? 'start' : (i === n - 1 ? 'end' : 'middle');
+        const tx = anchor === 'start' ? x : anchor === 'end' ? x + bw : x + bw / 2;
+        s += `<text class="b-ax" x="${tx.toFixed(1)}" y="${H - 5}" text-anchor="${anchor}">${y}</text>`;
+      });
+      return { svg: s + '</svg>', cap: `‘${res.given}’ 연도별 출생신고 (2008–2026, ${GN[g]}자)` };
+    }
+    const eras = a.eraRanks;
+    if (eras.some(e => e.rank)) {
+      const n = eras.length, gap = 10, bw = (W - gap * (n - 1)) / n;
+      let s = `<svg class="bars" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(`‘${res.given}’ 시대별 인기 순위: ` + eras.filter(e => e.rank).map(e => `${e.k}년 ${e.rank}위`).join(', '))}">`;
+      s += `<line class="base" x1="0" x2="${W}" y1="${T + ih + .5}" y2="${T + ih + .5}"/>`;
+      eras.forEach((e, i) => {
+        const x = i * (bw + gap), hot = pk && pk.type === 'era' && pk.y === e.k;
+        if (!e.rank) s += `<rect class="b-out" x="${x.toFixed(1)}" y="${T + ih - 2}" width="${bw.toFixed(1)}" height="2"/>`;
+        else {
+          const h = (11 - e.rank) / 10 * ih;
+          s += `<rect class="b${hot ? ' hot' : ''}" x="${x.toFixed(1)}" y="${(T + ih - h).toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="2"><title>${e.k}년 ${e.rank}위</title></rect>`;
+          s += `<text class="b-lbl${hot ? '' : ' dim'}" x="${(x + bw / 2).toFixed(1)}" y="${(T + ih - h - 7).toFixed(1)}" text-anchor="middle">${e.rank}위</text>`;
+        }
+        s += `<text class="b-ax" x="${(x + bw / 2).toFixed(1)}" y="${H - 5}" text-anchor="middle">${e.k}</text>`;
+      });
+      return { svg: s + '</svg>', cap: `‘${res.given}’ 시대별 인기 순위 (TOP 10, ${GN[g]}자)` };
+    }
+    return { svg: `<div class="bars-empty">2008년 이후 상위 100위, 1940~90년 TOP 10 어디에도 없는 이름이에요. 그만큼 드물어요.</div>`, cap: `‘${res.given}’ 이름 유행` };
+  }
+  function updateLive() {
+    const raw = inName.value.trim(), ex = !raw;
+    $('#liveTag').hidden = !ex;
+    $('#liveOut').classList.toggle('is-ex', ex);
+    const sp = NR.splitName(ex ? EXAMPLE : raw);
+    if (sp.error) {
+      $('#liveName').textContent = raw;
+      $('#liveSub').textContent = /^[가-힣 ]+$/.test(raw) ? '성과 이름을 함께 써 주세요 (예: 김민준)' : sp.error;
+      return;
+    }
+    const res = NR.analyzeName(sp.given, getGender());
+    const sur = NR.surnameInfo(sp.sur);
+    const same = res.total * sur.share;
+    $('#liveName').textContent = sp.full;
+    $('#liveSub').textContent = `대략 ${approxNum(res.lo * sur.share)}~${approx(res.hi * sur.share)} 사이 · 통계로 계산한 추정치예요`;
+    const b = barsSVG(res);
+    $('#liveChart').innerHTML = b.svg;
+    $('#peakCap').textContent = b.cap;
+    const pk = res.main.peak;
+    $('#peakNote').innerHTML = pk
+      ? (pk.type === 'year'
+        ? `가장 유행한 해 <b>${pk.y}년</b> · 그해 ${pk.rank}위, ${comma(pk.count)}명${pk.partial ? ' (잠정)' : ''}`
+        : `가장 유행한 때 <b>${pk.y}년 무렵</b> · 그해 인기 이름 ${pk.rank}위`)
+      : '순위권 기록이 없는 드문 이름이에요';
+    rollTo(same);
+  }
+  inName.addEventListener('input', () => { clearTimeout(liveT); liveT = setTimeout(updateLive, 90); });
+  $$('input[name=g]', form).forEach(r => r.addEventListener('change', updateLive));
+
   /* ---------- 시작 ---------- */
   renderTop10();
   renderRecent();
+  updateLive();
   pushAds(document);
   try {
     const q = new URLSearchParams(location.search);

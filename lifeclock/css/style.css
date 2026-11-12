@@ -1,4 +1,4 @@
-/* 남은봄 — 인생 시계 (DESIGN.md: 중립색 + 벚꽃 포인트 하나) */
+/* 남은봄 — 시선 끌기, "인생 주 격자" (docs/design-direction.md) */
 :root {
   --bg: #F7F5F2;
   --bg-2: #EFECE8;
@@ -13,25 +13,30 @@
   --dot-lived: #1E1B1F;
   --dot-now: #C2456A;
   --dot-left: #E7E3DE;
-  --dot-bonus: #F1EEEA;
+  --dot-bonus: #EFECE8;
+  --spring: #C2456A;
+  --spring-faint: #EBCBD5;
+  --btn: #1E1B1F;
+  --on-btn: #F7F5F2;
   --sheet-shadow: 0 8px 24px -12px rgba(0, 0, 0, .12);
   --r: 12px;
   --r-btn: 10px;
+  --serif: 'Gowun Batang', 'Nanum Myeongjo', 'AppleMyungjo', Batang, serif;
   --sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #121113; --bg-2: #222024; --card: #1B1A1D; --ink: #EFEBEE; --ink-2: #CFCAD0; --muted: #948E97; --line: #2D2A30;
-    --blossom: #E07A97; --blossom-soft: #33222A; --on-accent: #121113;
-    --dot-lived: #CFCAD0; --dot-now: #E07A97; --dot-left: #2D2A30; --dot-bonus: #222024;
+    --bg: #121113; --bg-2: #1F1D21; --card: #1A191C; --ink: #EEEAEC; --ink-2: #CFCAD0; --muted: #948E97; --line: #2D2A30;
+    --blossom: #CC8296; --blossom-soft: #2E2328; --on-accent: #121113; --btn: #EEEAEC; --on-btn: #121113;
+    --dot-lived: #B9B3BB; --dot-now: #CC8296; --dot-left: #2D2A30; --dot-bonus: #1F1D21; --spring: #CC8296; --spring-faint: #4A3540;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #121113; --bg-2: #222024; --card: #1B1A1D; --ink: #EFEBEE; --ink-2: #CFCAD0; --muted: #948E97; --line: #2D2A30;
-  --blossom: #E07A97; --blossom-soft: #33222A; --on-accent: #121113;
-  --dot-lived: #CFCAD0; --dot-now: #E07A97; --dot-left: #2D2A30; --dot-bonus: #222024;
+  --bg: #121113; --bg-2: #1F1D21; --card: #1A191C; --ink: #EEEAEC; --ink-2: #CFCAD0; --muted: #948E97; --line: #2D2A30;
+  --blossom: #CC8296; --blossom-soft: #2E2328; --on-accent: #121113; --btn: #EEEAEC; --on-btn: #121113;
+  --dot-lived: #B9B3BB; --dot-now: #CC8296; --dot-left: #2D2A30; --dot-bonus: #1F1D21; --spring: #CC8296; --spring-faint: #4A3540;
   color-scheme: dark;
 }
 
@@ -57,7 +62,7 @@ img, svg, canvas { display: block; max-width: 100%; }
 /* header */
 .top { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line); }
 .top-in { max-width: 640px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 10px; }
-.brand { display: flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 700; font-size: 16px; letter-spacing: -.02em; }
+.brand { display: flex; align-items: center; gap: 8px; text-decoration: none; font-family: var(--serif); font-weight: 700; font-size: 20px; letter-spacing: -.02em; }
 .brand small { font-weight: 500; font-size: 12px; color: var(--muted); letter-spacing: 0; margin-left: 2px; }
 .brand svg { width: 24px; height: 24px; color: var(--blossom); }
 .top-sp { flex: 1; }
@@ -82,7 +87,7 @@ img, svg, canvas { display: block; max-width: 100%; }
 .seg { display: flex; gap: 6px; flex-wrap: wrap; }
 .seg input { position: absolute; opacity: 0; pointer-events: none; }
 .seg label { flex: 1 1 0; min-width: 76px; text-align: center; padding: 11px 8px; border-radius: var(--r-btn); border: 1px solid var(--line); background: var(--bg); cursor: pointer; font-weight: 500; font-size: 14px; transition: .15s; user-select: none; }
-.seg input:checked + label { border-color: var(--blossom); background: var(--card); color: var(--blossom); font-weight: 700; }
+.seg input:checked + label { border-color: var(--ink); background: var(--ink); color: var(--bg); font-weight: 700; }
 .seg input:focus-visible + label { outline: 2px solid var(--blossom); outline-offset: 2px; }
 details.more { border-top: 1px solid var(--line); padding-top: 14px; margin-top: 4px; }
 details.more summary { cursor: pointer; font-weight: 500; font-size: 14px; color: var(--ink-2); list-style: none; display: flex; align-items: center; gap: 6px; }
@@ -92,17 +97,17 @@ details.more[open] summary::after { content: '−'; }
 details.more .field { margin-top: 14px; }
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 52px; padding: 0 20px; border-radius: var(--r-btn); border: 0; cursor: pointer; font-weight: 700; font-size: 16px; text-decoration: none; transition: background .15s, border-color .15s; }
 .btn:active { transform: scale(.99); }
-.btn-primary { background: var(--blossom); color: var(--on-accent); width: 100%; }
+.btn-primary { background: var(--btn); color: var(--on-btn); width: 100%; }
 .btn-ink { background: var(--ink); color: var(--bg); }
 .btn-ghost { background: var(--card); border: 1px solid var(--line); color: var(--ink); }
 .btn-ghost:hover { border-color: var(--muted); }
 .btn-sm { height: 44px; font-size: 14px; padding: 0 14px; }
-.form-err { color: var(--blossom); font-size: 14px; font-weight: 500; min-height: 0; margin: -6px 0 10px; }
+.form-err { color: var(--blossom); font-weight: 700; font-size: 14px; font-weight: 500; min-height: 0; margin: -6px 0 10px; }
 .fine { font-size: 12px; color: var(--muted); margin: 12px 0 0; }
 
 /* sections */
 .sec { margin: 36px 0; }
-.sec-h { font-size: 20px; letter-spacing: -.02em; font-weight: 700; margin: 0 0 4px; }
+.sec-h { font-family: var(--serif); font-size: 20px; letter-spacing: -.02em; font-weight: 700; margin: 0 0 4px; }
 .sec-sub { margin: 0 0 14px; color: var(--muted); font-size: 14px; }
 
 /* today — 바탕 위 큰 글자 */
@@ -241,19 +246,20 @@ details.more .field { margin-top: 14px; }
 .fam-form .seg label { min-width: 0; padding: 10px 6px; }
 .empty { font-size: 14px; color: var(--muted); margin: 0 0 12px; }
 
-/* next tests */
-.next { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-.next a { display: flex; gap: 10px; align-items: center; padding: 12px; border-radius: var(--r); background: var(--card); border: 1px solid var(--line); text-decoration: none; transition: border-color .15s; }
-.next a:hover { border-color: var(--muted); }
-.next .ic { width: 40px; height: 40px; border-radius: var(--r-btn); background: var(--bg); color: var(--ink-2); display: grid; place-items: center; flex: none; }
-.next .ic svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.next b { display: block; font-size: 14px; font-weight: 700; letter-spacing: -.02em; }
-.next small { display: block; font-size: 12px; color: var(--muted); }
+/* other services */
+.next { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.next li { border-bottom: 1px solid var(--line); }
+.next a { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; padding: 14px 2px; text-decoration: none; }
+.next a:hover b { text-decoration: underline; }
+.next b { font-size: 16px; font-weight: 700; min-width: 88px; }
+.next small { font-size: 14px; color: var(--muted); }
 
-/* ads */
-.ad-wrap { margin: 30px 0; min-height: 130px; }
-.ad-label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
-.ad-wrap ins { display: block; min-height: 110px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); }
+/* ads: 자리 예약 · 라벨 · 빈 슬롯 접기 */
+.ad-wrap { position: relative; margin: 56px 0; min-height: 298px; padding-top: 18px; }
+.ad-label { position: absolute; top: 0; left: 0; font-size: 12px; color: var(--muted); }
+.ad-wrap ins { display: block; min-height: 280px; }
+.ad-wrap:has(ins[data-ad-status="unfilled"]) { display: none; }
+ins[data-ad-status="unfilled"] { display: none !important; }
 
 /* sources + footer */
 .src { font-size: 14px; color: var(--ink-2); }
@@ -263,10 +269,11 @@ details.more .field { margin-top: 14px; }
 .disc { font-size: 12px; color: var(--muted); margin: 14px 0 0; }
 footer { border-top: 1px solid var(--line); margin-top: 30px; padding: 22px 0 40px; font-size: 12px; color: var(--muted); }
 footer nav { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; }
+footer nav a:first-child { color: var(--ink); font-weight: 700; }
 footer a { color: var(--ink-2); font-weight: 500; font-size: 14px; text-decoration: none; }
 footer a:hover { text-decoration: underline; }
 
-.reveal { animation: up .3s ease-out both; }
+.reveal { animation: none; }
 @keyframes up { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 
@@ -283,4 +290,32 @@ footer a:hover { text-decoration: underline; }
   .tile .v { font-size: 20px; }
   .clockcard { grid-template-columns: 108px 1fr; }
   .dial { width: 108px; height: 108px; }
+}
+
+/* hero: 인생 주 격자 */
+.hero { padding: 28px 0 8px; }
+.hero-k { margin: 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 14px; color: var(--muted); font-weight: 500; }
+.ex-tag { display: inline-block; font-size: 12px; font-weight: 700; line-height: 1; padding: 5px 8px; border-radius: 999px; background: var(--ink); color: var(--bg); }
+.hero .hero-t { margin: 10px 0 8px; font-family: var(--serif); font-weight: 700; font-size: clamp(36px, 10vw, 88px); line-height: 1.12; letter-spacing: -.03em; }
+.hero-t .num { font-family: var(--sans); font-weight: 800; color: var(--blossom); letter-spacing: -.04em; }
+.hero-sub { margin: 0 0 18px; color: var(--ink-2); font-size: 16px; max-width: 34em; }
+.hero-head:focus, .hero-t:focus { outline: none; }
+.grid-band { padding: 4px 16px 0; }
+.grid-box { max-width: 1008px; margin: 0 auto; display: flex; justify-content: flex-start; }
+#lifeGrid { display: block; max-width: 100%; }
+.hero-foot { margin-top: 12px; }
+.hero-btn { margin: 0 0 22px; }
+.hero .legend { margin: 0; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+.lg-lived { background: var(--dot-lived); } .lg-spring { background: var(--spring); } .lg-left { background: var(--dot-left); } .lg-bonus { background: var(--dot-bonus); border: 1px solid var(--line); }
+.intro { padding-top: 36px; }
+.mres .head { justify-content: space-between; }
+.mres .diff { margin-top: 12px; }
+.today .big b { color: var(--ink); }
+@media (min-width: 720px) {
+  .hero { padding-top: 48px; }
+  .hero-btn { width: auto; min-width: 220px; }
+  .top-in, .hero-head, .hero-foot { max-width: 1040px; }
 }

@@ -1,24 +1,35 @@
 // 화면 조각
 import { CONFIG } from './config.js';
 import { icon } from './icons.js';
-import { esc, enc, $$, months, rangeText, nowMonth, endingNow, checkedText, naverMap } from './util.js';
+import { esc, enc, $$, months, rangeText, nowMonth, endingNow, checkedText, naverMap, hostOf, inSeason } from './util.js';
 
-export const foodHref = (k, regionId) => `#/food/${enc(k)}${regionId ? `?region=${enc(regionId)}` : ''}`;
+export const dishHref = (regionId, n, extra = '') => `#/dish/${enc(regionId)}/${enc(n)}${extra}`;
+export const foodHref = (name) => `#/food/${enc(name)}`;
 export const regionHref = (id) => `#/region/${enc(id)}`;
 
-/** 글자로만 된 음식 카드 (사진 없음) */
-export function foodCard({ k, cat, ms, region }) {
-  const ending = endingNow(ms);
-  return `<a class="fcard" role="listitem" data-k="${esc(k)}" href="${foodHref(k, region?.id)}">
-    <span class="cat">${esc(cat || '제철')}</span>
-    <span class="name${k.length > 4 ? ' long' : ''}">${esc(k)}</span>
-    <span class="mo">${esc(rangeText(ms))}</span>
-    <span class="rg">${esc(region?.name || '')}${ending ? ' · 이달까지' : ''}</span>
-  </a>`;
+const seasonLabel = (ms, m = nowMonth()) => {
+  if (!ms) return '';
+  if (ms.length === 12) return '사철';
+  return `${rangeText(ms)}${endingNow(ms, m) ? ' · 이달까지' : ''}`;
+};
+
+/** 요리 한 줄 (메뉴판처럼): 요리 이름 · 지역 · 제철 · 식당 수 · 대표 식당 */
+export function dishRow(d, { showRegion = true, label = '' } = {}) {
+  const reg = d.reg || d.region;
+  const nr = d.nr ?? d.rest?.length ?? 0;
+  const sample = d.sample || d.rest?.[0]?.n || '';
+  const m = nowMonth();
+  const now = d.ms && inSeason(d.ms, m) && d.ms.length < 12;
+  return `<li><a class="drow" href="${dishHref(reg.id, d.n)}">
+    <span class="dn">${esc(d.n)}</span>
+    <span class="dmeta">${showRegion ? `<b>${esc(reg.name)}</b>` : ''}${d.ms ? `<span class="num${now ? ' on' : ''}">${esc(label || seasonLabel(d.ms, m))}</span>` : (label ? `<span>${esc(label)}</span>` : '')}</span>
+    <span class="dcount num">식당 <b>${nr}</b>곳</span>
+    <span class="dsample">${esc(sample)}${nr > 1 ? ` 외 ${nr - 1}곳` : ''}</span>
+  </a></li>`;
 }
-export const cardsRow = (items, label) => (items.length
-  ? `<div class="cards" role="list" aria-label="${esc(label)}">${items.map(foodCard).join('')}</div>`
-  : '<p class="cards-empty">이달 제철 음식을 아직 모으는 중이에요.</p>');
+export const dishList = (items, label, opts) => (items.length
+  ? `<ul class="dlist" aria-label="${esc(label)}">${items.map((d) => dishRow(d, opts)).join('')}</ul>`
+  : '');
 
 export function monthBar(ms) {
   ms = months(ms);
@@ -29,53 +40,60 @@ export function monthBar(ms) {
   return `<div class="mbar" role="img" aria-label="제철 ${esc(rangeText(ms))}, 지금 ${now}월"><ol>${cells}</ol></div>`;
 }
 
-export function adSlot() {
-  return `<div class="ad" data-ad><span class="ad-label">광고</span><ins class="adsbygoogle" style="display:block" data-ad-client="${CONFIG.ADSENSE_CLIENT}" data-ad-slot="${CONFIG.ADSENSE_SLOT}" data-ad-format="rectangle" data-full-width-responsive="true"></ins></div>`;
+/** 광고 칸: 자리를 미리 잡고(min-height) 「광고」 라벨. kind: 'display' | 'infeed' | 'multiplex' */
+export function adSlot(kind = 'display') {
+  const multiplex = kind === 'multiplex';
+  return `<div class="ad ad-${kind}" data-ad><span class="ad-label">광고</span><ins class="adsbygoogle" style="display:block" data-ad-client="${CONFIG.ADSENSE_CLIENT}" data-ad-slot="${multiplex ? CONFIG.ADSENSE_SLOT_MULTIPLEX : CONFIG.ADSENSE_SLOT}" data-ad-format="${multiplex ? 'autorelaxed' : 'auto'}"${multiplex ? '' : ' data-full-width-responsive="true"'}></ins></div>`;
 }
-/** 새로 그린 광고 칸마다 한 번만 push */
+/** 새로 그린 광고 칸마다 한 번만 push (숨겨진 칸은 건너뜀) */
 export function pushAds(root = document) {
+  if (document.documentElement.classList.contains('no-ads')) return;
   $$('ins.adsbygoogle', root).forEach((ins) => {
-    if (ins.dataset.pushed) return;
+    if (ins.dataset.pushed || ins.dataset.adsbygoogleStatus || !ins.offsetParent) return;
     ins.dataset.pushed = '1';
     try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch { /* 광고 차단 등 */ }
   });
 }
 
-export function reportHref(kind, r, reg) {
-  if (!CONFIG.REPORT_FORM_URL) return '';
-  const F = CONFIG.REPORT_FIELDS || {};
-  const p = new URLSearchParams({ usp: 'pp_url' });
-  const put = (key, v) => { if (F[key] && v) p.set(F[key], v); };
-  put('kind', kind); put('restaurant', r.n); put('address', r.a); put('food', r.f); put('region', reg?.name);
-  put('page', location.href);
-  return `${CONFIG.REPORT_FORM_URL}${CONFIG.REPORT_FORM_URL.includes('?') ? '&' : '?'}${p}`;
-}
-function reportBtn(kind, r, reg) {
-  const href = reportHref(kind, r, reg);
-  return href
-    ? `<a class="btn sm" href="${esc(href)}" target="_blank" rel="noopener" data-report="${esc(kind)}">${esc(kind)}</a>`
-    : `<button class="btn sm" type="button" disabled data-report="${esc(kind)}" title="제보 폼을 준비하고 있어요">${esc(kind)} <span class="tag">준비 중</span></button>`;
+/** 제보 링크: 폼이 있으면 미리 채운 폼, 없으면 이메일 */
+export function reportHref(r, reg, dish) {
+  if (CONFIG.REPORT_FORM_URL) {
+    const F = CONFIG.REPORT_FIELDS || {};
+    const p = new URLSearchParams({ usp: 'pp_url' });
+    const put = (k, v) => { if (F[k] && v) p.set(F[k], v); };
+    put('restaurant', r.n); put('address', r.a); put('food', dish || r.f); put('region', reg?.name); put('page', location.href);
+    return `${CONFIG.REPORT_FORM_URL}${CONFIG.REPORT_FORM_URL.includes('?') ? '&' : '?'}${p}`;
+  }
+  const subject = `[제철식당 제보] ${r.n}`;
+  const body = `식당: ${r.n}\n주소: ${r.a}\n메뉴: ${dish || r.f || ''}\n지역: ${reg?.name || ''}\n화면: ${location.href}\n\n틀린 점(문 닫음 / 메뉴 없음 / 기타):\n`;
+  return `mailto:${CONFIG.CONTACT_EMAIL}?subject=${enc(subject)}&body=${enc(body)}`;
 }
 
-const hostOf = (u) => { try { return new URL(u).hostname.replace(/^(www|m)\./, ''); } catch { return ''; } };
+/** 사이트 공통 안내 한 줄 (식당 목록 위) */
+export const draftNote = () => (CONFIG.PUBLISH_DRAFTS
+  ? `<p class="note">${icon('info')}<span>검수 중인 정보예요, 틀린 곳은 <a href="contact.html">제보해 주세요</a>. 가기 전에 영업 여부를 한 번 더 확인해 주세요.</span></p>`
+  : '');
 
-export function restaurantCard(r, reg) {
+/** 식당 한 줄 (번호 · 이름 · 주소 · 내는 방식 · 근거 · 출처 · 길찾기) */
+export function restaurantCard(r, reg, dish, i) {
   const host = hostOf(r.src);
+  const ok = r.ok && /^일치/.test(r.ok);
   const mood = (r.mood || []).filter((m) => m.why)
     .map((m) => `<p class="moodl"><b>${esc(m.t)}</b> · ${esc(m.why)}${m.src ? ` <a href="${esc(m.src)}" target="_blank" rel="noopener nofollow">출처</a>` : ''}</p>`).join('');
-  return `<li class="rcard" data-styles="${esc((r.st || []).join('|'))}" data-moods="${esc((r.mood || []).map((m) => m.t).join('|'))}">
-    <div class="top"><h3>${esc(r.n)}</h3>${r.d ? '<span class="badge draft" title="운영자가 아직 검수하지 않은 정보예요">검수 중</span>' : ''}</div>
-    <p class="addr">${esc(r.a)}</p>
-    ${r.st?.length ? `<div class="st" aria-label="내는 요리 방식">${r.st.map((s) => `<span class="badge">${esc(s)}</span>`).join('')}</div>` : ''}
-    ${r.why ? `<p class="why">${esc(r.why)}${r.src ? ` <a href="${esc(r.src)}" target="_blank" rel="noopener nofollow">출처${host ? ` · ${esc(host)}` : ''}</a>` : ''}</p>` : ''}
-    ${mood}
-    <div class="acts">
-      <a class="btn sm primary" href="${esc(naverMap(r.n, r.a))}" target="_blank" rel="noopener">${icon('route')}길찾기</a>
-      ${r.ok ? `<span class="badge accent">${esc(r.ok.replace(/^일치/, '영업 명단 일치'))}</span>` : ''}
-    </div>
-    <div class="foot">
-      <span class="tiny muted">${r.c ? `마지막 확인 ${esc(checkedText(r.c))}` : ''}</span>
-      <span class="reports">${reportBtn('문 닫았어요', r, reg)}${reportBtn('이 메뉴 없어요', r, reg)}</span>
+  const styles = (r.st || []).length ? r.st.join(' · ') : (r.sx || '');
+  return `<li class="rcard" id="r${i + 1}" data-styles="${esc((r.st || []).join('|'))}" data-moods="${esc((r.mood || []).map((m) => m.t).join('|'))}">
+    <span class="rno num" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>
+    <div class="rbody">
+      <h3 class="rname">${esc(r.n)}</h3>
+      <p class="addr">${esc(r.a)}</p>
+      ${styles ? `<p class="rst"><span class="sr">내는 요리 방식: </span>${esc(styles)}</p>` : ''}
+      ${r.why ? `<p class="why">${esc(r.why)}${r.src ? ` <a href="${esc(r.src)}" target="_blank" rel="noopener nofollow">출처${host ? ` · ${esc(host)}` : ''}</a>` : ''}</p>` : ''}
+      ${mood}
+      <div class="acts">
+        <a class="btn sm ink" href="${esc(naverMap(r.n, r.a))}" target="_blank" rel="noopener">${icon('route')}길찾기</a>
+        ${ok ? `<span class="okmark" title="정부 일반음식점 인허가 명단의 상호·주소와 맞는 곳">${icon('check')}공식 명단 일치</span>` : ''}
+      </div>
+      <p class="rfoot">${r.c ? `<span>마지막 확인 ${esc(checkedText(r.c))}</span>` : ''}<a href="${esc(reportHref(r, reg, dish))}"${CONFIG.REPORT_FORM_URL ? ' target="_blank" rel="noopener"' : ''}>틀린 정보 제보</a></p>
     </div>
   </li>`;
 }

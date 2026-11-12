@@ -180,6 +180,58 @@ test('지역·품목 사전', () => {
   assert.deepEqual(L.findItems('김장철 배춧값'), ['배추']);
 });
 
+test('품목 문맥 규칙: 일반어와 겹치는 품목', () => {
+  // 조기: 「조기 추진」은 부사, 수산물 문맥이 있어야 품목
+  assert.deepEqual(L.findItems('농식품부, 배추 수급안정을 위해 공급과잉량 시장격리 등 대책 조기 추진!'), ['배추']);
+  assert.deepEqual(L.findItems('김장 대책 조기 시행'), []);
+  assert.deepEqual(L.findItems('출하 조기 마감'), []);
+  assert.deepEqual(L.findItems('조기 어획 늘어 위판 가격 폭락'), ['조기']);
+  assert.deepEqual(L.findItems('영광 굴비·조기 값 반토막'), ['굴비', '조기']);
+  assert.deepEqual(L.findItems('참조기 풍어에 값 하락'), ['조기']);
+  // 굴: 굴곡·굴착은 아님
+  assert.deepEqual(L.findItems('굴곡진 가격 흐름, 터널 굴착'), []);
+  assert.deepEqual(L.findItems('통영 굴 값 하락'), ['굴']);
+  // 배: 배달·배추·「2배」는 아님
+  assert.deepEqual(L.findItems('배달 앱 할인, 배추값 하락'), ['배추']);
+  assert.deepEqual(L.findItems('반입량 평년의 2배 이상 급증'), []);
+  assert.deepEqual(L.findItems('반입량 두 배 넘게'), []);
+  assert.deepEqual(L.findItems('신고 배 값 폭락'), ['배']);
+  // 무: 무료·무관세·유·무는 아님
+  assert.deepEqual(L.findItems('무료 나눔 행사'), []);
+  assert.deepEqual(L.findItems('무 관세 수입 확대'), []);
+  assert.deepEqual(L.findItems('보상 유·무 확인'), []);
+  assert.deepEqual(L.findItems('월동무 값 폭락'), ['무']);
+  // 김: 김씨·김 지사·김○○ 의원은 아님
+  assert.deepEqual(L.findItems('김씨 농가 갈아엎어'), []);
+  assert.deepEqual(L.findItems('김 지사, 배추 소비 호소'), ['배추']);
+  assert.deepEqual(L.findItems('김 모 씨 밭 폐기'), []);
+  assert.deepEqual(L.findItems('김은경 의원, 쌀 시장격리 촉구'), ['쌀']);
+  assert.deepEqual(L.findItems('물김 위판가 하락, 김 값 폭락'), ['김']);
+  // 밤·갓·감
+  assert.deepEqual(L.findItems('밤 사이 서리 피해'), []);
+  assert.deepEqual(L.findItems('갓 수확한 배추 갈아엎어'), ['배추']);
+  assert.deepEqual(L.findItems('공주 밤 가격 폭락'), ['밤']);
+  assert.deepEqual(L.findItems('여수 돌산 갓 값 하락'), ['갓']);
+});
+
+test('저장된 사건 다시 검사: 오분류·중복 제외, 사람이 확인한 것은 유지', () => {
+  const t = '농식품부, 배추 수급안정을 위해 공급과잉량 시장격리 등 대책 조기 추진!';
+  const u = 'https://www.mafra.go.kr/bbs/home/792/582233/artclView.do';
+  const evs = [
+    { id: 'a-baechu', item: '배추', title: t, url: u, verified: false },
+    { id: 'a-jogi', item: '조기', title: t, url: u, verified: false },
+    { id: 'a-baechu-dup', item: '배추', title: t, url: u, verified: false },
+    { id: 'manual', item: '무', title: '배추 등 김장채소류 소비촉진', url: 'x', verified: true },
+  ];
+  const r = L.revalidateEvents(evs);
+  assert.deepEqual(r.events.map((e) => e.id), ['a-baechu', 'manual']);
+  assert.deepEqual(r.dropped.map((d) => d.why), ['item-not-in-title', 'duplicate']);
+  // RSS에서 다시 읽어도 조기 사건이 생기지 않음
+  const xml = `<rss><channel><item><title>${t}</title><link>${u}</link><pubDate>2026-11-11</pubDate></item></channel></rss>`;
+  const ev = L.parseMafraRss(xml, { today: '2026-11-12' });
+  assert.deepEqual(ev.map((e) => e.item), ['배추']);
+});
+
 test('신호 계산: 폐기 사건 > 지표, 지원 규칙, 45일 정리', () => {
   const today = '2026-11-11';
   const metrics = [

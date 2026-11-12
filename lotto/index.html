@@ -6,8 +6,8 @@
 <title>오늘로또 · 사주로 뽑는 오늘의 로또 번호, 행운의 시간과 방향</title>
 <meta name="description" content="이름·생년월일·사는 곳으로 매일 바뀌는 나만의 로또 6/45 번호를 무료로 뽑아요. 오늘의 행운 시간, 구매 방향, 가까운 판매점 찾기, 추첨 카운트다운과 당첨 확인까지.">
 <meta name="keywords" content="로또 번호 추천, 로또 번호 생성기, 사주 로또, 오늘의 로또, 행운 번호, 로또 6/45, 로또 명당, 로또 추첨 시간">
-<meta name="theme-color" content="#F6F6F4" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#101113" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F4F2EC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
 <meta name="color-scheme" content="light dark">
 <link rel="canonical" href="https://leebeesoo.github.io/gene/lotto/">
 
@@ -25,12 +25,15 @@
 <meta name="twitter:description" content="이름과 생일로 뽑는 오늘의 로또 번호. 행운의 시간·방향·장소까지.">
 <meta name="twitter:image" content="https://leebeesoo.github.io/gene/lotto/og.png">
 
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23D9381E'/%3E%3Ctext x='32' y='43' font-size='30' font-weight='700' text-anchor='middle' fill='%23fff' font-family='Arial,sans-serif'%3E7%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23D23A1F'/%3E%3Ctext x='32' y='43' font-size='30' font-weight='700' text-anchor='middle' fill='%23fff' font-family='Arial,sans-serif'%3E7%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap">
 <link rel="stylesheet" href="style.css">
 
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous" onerror="document.documentElement.classList.add('ads-off')"></script>
 
 <script type="application/ld+json">
 {
@@ -80,10 +83,7 @@
 
 <header class="topbar">
   <div class="wrap topbar-in">
-    <a class="logo" href="./" aria-label="오늘로또 처음으로">
-      <span class="logo-ball" aria-hidden="true">7</span>
-      <span class="logo-txt">오늘로또</span>
-    </a>
+    <a class="logo" href="./" aria-label="오늘로또 처음으로">오늘로또</a>
     <button class="streak-pill" id="streakPill" type="button" aria-label="연속 출석 보기">
       <svg class="ic" aria-hidden="true"><use href="#i-flame"/></svg>
       <span><b id="streakNum">1</b>일 연속</span>
@@ -91,120 +91,14 @@
   </div>
 </header>
 
-<main id="main" class="wrap">
-  <section class="hero" aria-labelledby="heroTitle">
-    <div class="hero-copy">
-      <p class="eyebrow"><span class="dot" aria-hidden="true"></span>매일 자정, 새 번호가 열려요</p>
-      <h1 id="heroTitle">이름과 생일로 뽑는<br>오늘의 행운 번호</h1>
-      <p class="hero-sub">언제, 어디서 사면 좋을지까지 알려드려요</p>
-    </div>
-    <div class="cd" id="countdown">
-      <div class="cd-head">
-        <span class="cd-round" id="cdRound">제 — 회</span>
-        <span class="cd-date" id="cdDate"></span>
-      </div>
-      <p class="cd-label" id="cdLabel">추첨까지</p>
-      <div class="cd-digits" role="timer" aria-labelledby="cdLabel" aria-describedby="cdSr">
-        <span class="cd-u"><b id="cdD">0</b><i>일</i></span>
-        <span class="cd-u"><b id="cdH">00</b><i>시간</i></span>
-        <span class="cd-u"><b id="cdM">00</b><i>분</i></span>
-        <span class="cd-u"><b id="cdS">00</b><i>초</i></span>
-      </div>
-      <span class="sr-only" id="cdSr"></span>
-      <p class="cd-foot" id="cdFoot"></p>
-    </div>
-  </section>
-
-  <section class="card shared" id="shared" hidden aria-labelledby="sharedTitle">
-    <p class="shared-kicker" id="sharedKicker">친구가 보낸 행운 번호</p>
-    <h2 id="sharedTitle" class="shared-title">이 번호, 나랑도 맞을까?</h2>
-    <div class="balls" id="sharedBalls"></div>
-    <button class="btn btn-primary btn-block" id="sharedCta" type="button">나도 오늘의 번호 뽑기<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
-  </section>
-
-  <div class="layout">
-    <div class="col-main">
-      <nav class="profiles" id="profiles" aria-label="프로필 선택" hidden></nav>
-
-      <!-- ===== Form ===== -->
-      <section class="card form-card" id="formCard" hidden aria-labelledby="stepTitle1">
-        <div class="form-top">
-          <button class="icon-btn" id="formBack" type="button" aria-label="이전 단계"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg></button>
-          <div class="progress" role="progressbar" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1" aria-label="입력 단계" id="progress"><span id="progressBar"></span></div>
-          <span class="step-count" id="stepCount">1/3</span>
-        </div>
-
-        <form id="profileForm" novalidate autocomplete="on">
-          <div class="step on" data-step="1">
-            <h2 class="step-title" id="stepTitle1">누구의 번호를 뽑을까요?</h2>
-            <label class="field">
-              <span class="field-label">이름</span>
-              <input id="fName" name="name" type="text" maxlength="12" placeholder="이름 또는 별명" autocomplete="given-name" enterkeyhint="next" aria-describedby="errName">
-            </label>
-            <p class="err" id="errName" role="alert"></p>
-            <fieldset class="field">
-              <legend class="field-label">성별</legend>
-              <div class="tiles tiles-2">
-                <label class="tile"><input type="radio" name="gender" value="M"><span>남성</span></label>
-                <label class="tile"><input type="radio" name="gender" value="F"><span>여성</span></label>
-              </div>
-            </fieldset>
-            <p class="err" id="errGender" role="alert"></p>
-          </div>
-
-          <div class="step" data-step="2">
-            <h2 class="step-title" id="stepTitle2">생년월일을 알려주세요</h2>
-            <label class="field">
-              <span class="field-label">생년월일 8자리 <small>(양력)</small></span>
-              <input id="fBirth" name="bday" type="text" inputmode="numeric" maxlength="10" placeholder="예) 19900115" autocomplete="bday" enterkeyhint="next" aria-describedby="birthHint errBirth">
-            </label>
-            <p class="hint" id="birthHint">숫자만 입력하면 돼요</p>
-            <p class="err" id="errBirth" role="alert"></p>
-            <fieldset class="field">
-              <legend class="field-label">태어난 시간 <small>(선택)</small></legend>
-              <div class="tiles tiles-time" id="timeTiles"></div>
-            </fieldset>
-          </div>
-
-          <div class="step" data-step="3">
-            <h2 class="step-title" id="stepTitle3">어디에서 사세요?</h2>
-            <p class="step-sub">가까운 행운 판매점 방향을 알려드려요</p>
-            <div class="field-row">
-              <label class="field">
-                <span class="field-label">시/도</span>
-                <select id="fSido" name="sido"><option value="">선택</option></select>
-              </label>
-              <label class="field">
-                <span class="field-label">시/군/구</span>
-                <input id="fGugun" name="gugun" type="text" maxlength="20" list="gugunList" placeholder="직접 입력" enterkeyhint="done">
-              </label>
-            </div>
-            <datalist id="gugunList"></datalist>
-            <div class="chips" id="gugunChips" aria-label="시/군/구 빠른 선택"></div>
-          </div>
-
-          <div class="form-actions">
-            <button class="btn btn-text" id="skipBtn" type="button" hidden>건너뛰기</button>
-            <button class="btn btn-primary btn-grow" id="nextBtn" type="submit">다음<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
-          </div>
-          <div class="form-sub">
-            <p class="privacy-line"><svg class="ic" aria-hidden="true"><use href="#i-lock"/></svg>입력 정보는 내 기기에만 저장돼요</p>
-            <button class="btn-link danger" id="deleteProfile" type="button" hidden>이 프로필 삭제</button>
-            <button class="btn-link" id="cancelForm" type="button" hidden>취소</button>
-          </div>
-        </form>
-      </section>
-
-      <!-- ===== Result ===== -->
-      <section class="card result" id="result" hidden aria-labelledby="resultTitle">
-        <div class="rc-head">
-          <div>
-            <p class="rc-date" id="rcDate"></p>
-            <h2 class="rc-title" id="resultTitle"><span id="rcName"></span>님의 오늘 번호</h2>
-          </div>
-          <button class="icon-btn" id="editBtn" type="button" aria-label="내 정보 수정"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg></button>
-        </div>
-        <div class="tags" id="rcTags"></div>
+<main id="main">
+  <!-- ===== 첫 화면: 오늘의 공 여섯 개 ===== -->
+  <section class="hero" id="hero" aria-labelledby="heroTitle">
+    <div class="wrap hero-in">
+      <div class="hero-main">
+        <p class="hero-date"><span id="heroDate"></span><span class="hero-round" id="heroRound"></span></p>
+        <h1 class="hero-title" id="heroTitle">오늘의 공</h1>
+        <p class="hero-who" id="heroWho"></p>
 
         <div class="stage" id="stage">
           <div class="balls" id="balls" aria-hidden="true"></div>
@@ -215,172 +109,284 @@
         </div>
         <p class="sr-only" id="ballsLive" aria-live="polite"></p>
         <p class="digit-note" id="digitNote"></p>
-
         <div class="draws" id="drawTabs" role="group" aria-label="오늘 뽑은 번호" hidden></div>
 
-        <div class="rc-actions">
+        <div class="hero-actions" id="heroNew">
+          <button class="btn btn-primary" id="heroCta" type="button">내 이름으로 다시 뽑기<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+          <p class="hero-note">이름과 생일을 넣으면 나만의 번호와 살 시간·방향이 나와요</p>
+        </div>
+        <div class="hero-actions two" id="heroMine" hidden>
           <button class="btn btn-soft" id="redrawBtn" type="button"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>다시 뽑기<span class="count" id="redrawLeft">3</span></button>
-          <button class="btn btn-soft" id="setBtn" type="button" aria-expanded="false" aria-controls="ticket"><svg class="ic" aria-hidden="true"><use href="#i-ticket"/></svg>5게임 세트</button>
-        </div>
-
-        <div class="ticket" id="ticket" hidden>
-          <div class="tk-head"><b>LOTTO 6/45</b><span id="tkRound"></span></div>
-          <ol class="tk-rows" id="tkRows"></ol>
-          <div class="tk-foot"><span id="tkDates"></span><button class="btn-link" id="tkSave" type="button">5게임 모두 저장</button></div>
-        </div>
-
-        <div class="rc-actions rc-main-actions">
-          <button class="btn btn-outline" id="saveBtn" type="button" aria-pressed="false"><svg class="ic" aria-hidden="true"><use href="#i-bookmark"/></svg><span>보관함 저장</span></button>
           <button class="btn btn-primary" id="shareBtn" type="button"><svg class="ic" aria-hidden="true"><use href="#i-share"/></svg>공유하기</button>
         </div>
+      </div>
 
-        <div class="score" id="score">
-          <div class="ring" aria-hidden="true">
-            <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="27" class="ring-bg"/><circle cx="32" cy="32" r="27" class="ring-fg" id="ringFg"/></svg>
-            <b id="scoreNum">0</b>
-          </div>
-          <div class="score-txt">
-            <p class="score-k"><span>행운 점수</span><span class="score-tag" id="scoreTag"></span></p>
-            <p class="score-line" id="scoreLine"></p>
-            <p class="score-tip" id="scoreTip"></p>
-          </div>
+      <div class="cd" id="countdown">
+        <p class="cd-label" id="cdLabel"><span id="cdRound">제 — 회</span> 추첨까지</p>
+        <div class="cd-digits" role="timer" aria-labelledby="cdLabel" aria-describedby="cdSr">
+          <b id="cdD">0</b><i>일</i><b id="cdH">00</b><i class="sep">:</i><b id="cdM">00</b><i class="sep">:</i><b id="cdS">00</b>
         </div>
-      </section>
+        <span class="sr-only" id="cdSr"></span>
+        <p class="cd-date" id="cdDate"></p>
+        <p class="cd-foot" id="cdFoot"></p>
+      </div>
     </div>
+  </section>
 
-    <aside class="col-side" aria-label="오늘의 행운 정보">
-      <section class="lucky locked" id="lucky" aria-labelledby="luckyTitle">
-        <h2 class="sec-title" id="luckyTitle">오늘의 구매 가이드</h2>
-        <div class="lucky-grid">
-          <article class="lk lk-time">
-            <span class="lk-ico" aria-hidden="true"><svg class="ic"><use href="#i-clock"/></svg></span>
-            <p class="lk-k">행운 시간</p>
-            <p class="lk-v" id="lkTime">오후 2시~3시</p>
-            <p class="lk-s" id="lkTimeSub">미시(未時)</p>
-            <p class="lk-status" id="lkTimeStatus"></p>
-          </article>
-          <article class="lk lk-dir">
-            <div class="compass" aria-hidden="true">
-              <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" class="cp-ring"/><g class="cp-ticks"><path d="M32 6v5M32 53v5M6 32h5M53 32h5"/></g><text x="32" y="20" class="cp-n">N</text><g class="cp-needle" id="needle"><path d="M32 13 37 33H27z" class="cp-up"/><path d="M27 33h10l-5 18z" class="cp-down"/></g><circle cx="32" cy="33" r="2.6" class="cp-hub"/></svg>
-            </div>
-            <p class="lk-k">행운 방향</p>
-            <p class="lk-v" id="lkDir">남동쪽</p>
-            <p class="lk-s" id="lkDirSub">재물 기운</p>
-          </article>
-          <article class="lk lk-place">
-            <span class="lk-ico" aria-hidden="true"><svg class="ic"><use href="#i-store"/></svg></span>
-            <p class="lk-k">행운 장소</p>
-            <p class="lk-v" id="lkPlace">역 근처 편의점</p>
-            <p class="lk-s" id="lkPlaceSub">걸어서 10분 안쪽</p>
-          </article>
-          <article class="lk lk-where">
-            <div class="lk-where-top">
-              <span class="lk-ico" aria-hidden="true"><svg class="ic"><use href="#i-pin"/></svg></span>
-              <div>
-                <p class="lk-k">어디서 살까</p>
-                <p class="lk-v" id="lkWhere">강남구에서 남동쪽</p>
-              </div>
-            </div>
-            <div class="maps">
-              <a class="map-btn naver" id="mapNaver" href="https://map.naver.com/p/search/%EB%B3%B5%EA%B6%8C%ED%8C%90%EB%A7%A4%EC%A0%90" target="_blank" rel="noopener">네이버 지도</a>
-              <a class="map-btn kakao" id="mapKakao" href="https://map.kakao.com/?q=%EB%B3%B5%EA%B6%8C%ED%8C%90%EB%A7%A4%EC%A0%90" target="_blank" rel="noopener">카카오맵</a>
-              <a class="map-btn plain" id="mapHot" href="https://search.naver.com/search.naver?query=%EB%A1%9C%EB%98%90+%EB%AA%85%EB%8B%B9" target="_blank" rel="noopener">명당 검색</a>
-            </div>
-          </article>
-        </div>
-        <p class="lock-msg" id="lockMsg"><svg class="ic" aria-hidden="true"><use href="#i-lock"/></svg><span>번호를 열면 함께 공개돼요</span></p>
-      </section>
-
-      <div class="ad" aria-label="광고">
-        <span class="ad-label">광고</span>
-        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
-      </div>
-
-      <section class="card streak" id="streak" aria-labelledby="streakTitle">
-        <div class="streak-top">
-          <div class="flame" aria-hidden="true"><svg class="ic"><use href="#i-flame"/></svg></div>
-          <div>
-            <h2 class="streak-title" id="streakTitle"><b id="streakBig">1</b>일 연속 출석</h2>
-            <p class="streak-sub" id="streakSub">내일 또 오면 2일 연속!</p>
-          </div>
-        </div>
-        <ol class="week" id="week" aria-label="이번 주 출석"></ol>
-      </section>
-    </aside>
-  </div>
-
-  <div class="tools">
-    <section class="card vault" id="vault" aria-labelledby="vaultTitle">
-      <div class="sec-head">
-        <h2 class="sec-title" id="vaultTitle">내 번호 보관함 <span class="badge" id="vaultCount">0</span></h2>
-      </div>
-      <div id="vaultList" class="vault-list"></div>
+  <div class="wrap">
+    <section class="card shared" id="shared" hidden aria-labelledby="sharedTitle">
+      <p class="shared-kicker" id="sharedKicker">친구가 보낸 행운 번호</p>
+      <h2 id="sharedTitle" class="shared-title">이 번호, 나랑도 맞을까?</h2>
+      <div class="balls" id="sharedBalls"></div>
+      <button class="btn btn-primary btn-block" id="sharedCta" type="button">나도 오늘의 번호 뽑기<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
     </section>
+
+    <div class="layout">
+      <div class="col-main">
+        <nav class="profiles" id="profiles" aria-label="프로필 선택" hidden></nav>
+
+        <!-- ===== Form ===== -->
+        <section class="card form-card" id="formCard" hidden aria-labelledby="stepTitle1">
+          <div class="form-top">
+            <button class="icon-btn" id="formBack" type="button" aria-label="이전 단계"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg></button>
+            <div class="progress" role="progressbar" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1" aria-label="입력 단계" id="progress"><span id="progressBar"></span></div>
+            <span class="step-count" id="stepCount">1/3</span>
+          </div>
+
+          <form id="profileForm" novalidate autocomplete="on">
+            <div class="step on" data-step="1">
+              <h2 class="step-title" id="stepTitle1">누구의 번호를 뽑을까요?</h2>
+              <label class="field">
+                <span class="field-label">이름</span>
+                <input id="fName" name="name" type="text" maxlength="12" placeholder="이름 또는 별명" autocomplete="given-name" enterkeyhint="next" aria-describedby="errName">
+              </label>
+              <p class="err" id="errName" role="alert"></p>
+              <fieldset class="field">
+                <legend class="field-label">성별</legend>
+                <div class="tiles tiles-2">
+                  <label class="tile"><input type="radio" name="gender" value="M"><span>남성</span></label>
+                  <label class="tile"><input type="radio" name="gender" value="F"><span>여성</span></label>
+                </div>
+              </fieldset>
+              <p class="err" id="errGender" role="alert"></p>
+            </div>
+
+            <div class="step" data-step="2">
+              <h2 class="step-title" id="stepTitle2">생년월일을 알려주세요</h2>
+              <label class="field">
+                <span class="field-label">생년월일 8자리 <small>(양력)</small></span>
+                <input id="fBirth" name="bday" type="text" inputmode="numeric" maxlength="10" placeholder="예) 19900115" autocomplete="bday" enterkeyhint="next" aria-describedby="birthHint errBirth">
+              </label>
+              <p class="hint" id="birthHint">숫자만 입력하면 돼요 · 만 19세 이상만 이용할 수 있어요</p>
+              <p class="err" id="errBirth" role="alert"></p>
+              <fieldset class="field">
+                <legend class="field-label">태어난 시간 <small>(선택)</small></legend>
+                <div class="tiles tiles-time" id="timeTiles"></div>
+              </fieldset>
+            </div>
+
+            <div class="step" data-step="3">
+              <h2 class="step-title" id="stepTitle3">어디에서 사세요?</h2>
+              <p class="step-sub">가까운 행운 판매점 방향을 알려드려요</p>
+              <div class="field-row">
+                <label class="field">
+                  <span class="field-label">시/도</span>
+                  <select id="fSido" name="sido"><option value="">선택</option></select>
+                </label>
+                <label class="field">
+                  <span class="field-label">시/군/구</span>
+                  <input id="fGugun" name="gugun" type="text" maxlength="20" list="gugunList" placeholder="직접 입력" enterkeyhint="done">
+                </label>
+              </div>
+              <datalist id="gugunList"></datalist>
+              <div class="chips" id="gugunChips" aria-label="시/군/구 빠른 선택"></div>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn btn-text" id="skipBtn" type="button" hidden>건너뛰기</button>
+              <button class="btn btn-primary btn-grow" id="nextBtn" type="submit">다음<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+            </div>
+            <div class="form-sub">
+              <p class="privacy-line"><svg class="ic" aria-hidden="true"><use href="#i-lock"/></svg>입력 정보는 내 기기에만 저장돼요</p>
+              <button class="btn-link danger" id="deleteProfile" type="button" hidden>이 프로필 삭제</button>
+              <button class="btn-link" id="cancelForm" type="button" hidden>취소</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- ===== Result (공은 첫 화면에, 여기엔 풀이) ===== -->
+        <section class="card result" id="result" hidden aria-labelledby="resultTitle">
+          <div class="rc-head">
+            <div>
+              <p class="rc-date" id="rcDate"></p>
+              <h2 class="rc-title" id="resultTitle"><span id="rcName"></span>님의 오늘 풀이</h2>
+            </div>
+            <button class="icon-btn" id="editBtn" type="button" aria-label="내 정보 수정"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg></button>
+          </div>
+          <div class="tags" id="rcTags"></div>
+
+          <div class="score" id="score">
+            <div class="ring" aria-hidden="true">
+              <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="27" class="ring-bg"/><circle cx="32" cy="32" r="27" class="ring-fg" id="ringFg"/></svg>
+              <b id="scoreNum">0</b>
+            </div>
+            <div class="score-txt">
+              <p class="score-k"><span>행운 점수</span><span class="score-tag" id="scoreTag"></span></p>
+              <p class="score-line" id="scoreLine"></p>
+              <p class="score-tip" id="scoreTip"></p>
+            </div>
+          </div>
+
+          <div class="rc-actions">
+            <button class="btn btn-outline" id="setBtn" type="button" aria-expanded="false" aria-controls="ticket"><svg class="ic" aria-hidden="true"><use href="#i-ticket"/></svg>5게임 세트</button>
+            <button class="btn btn-outline" id="saveBtn" type="button" aria-pressed="false"><svg class="ic" aria-hidden="true"><use href="#i-bookmark"/></svg><span>보관함 저장</span></button>
+          </div>
+
+          <div class="ticket" id="ticket" hidden>
+            <div class="tk-head"><b>LOTTO 6/45</b><span id="tkRound"></span></div>
+            <ol class="tk-rows" id="tkRows"></ol>
+            <div class="tk-foot"><span id="tkDates"></span><button class="btn-link" id="tkSave" type="button">5게임 모두 저장</button></div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="col-side" aria-label="오늘의 행운 정보">
+        <section class="lucky locked" id="lucky" aria-labelledby="luckyTitle">
+          <h2 class="sec-title" id="luckyTitle">언제, 어디서 살까</h2>
+          <div class="lucky-grid">
+            <article class="lk lk-time">
+              <p class="lk-k"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg>행운 시간</p>
+              <p class="lk-v" id="lkTime"></p>
+              <p class="lk-s" id="lkTimeSub"></p>
+              <p class="lk-status" id="lkTimeStatus"></p>
+            </article>
+            <article class="lk lk-dir">
+              <div class="compass" aria-hidden="true">
+                <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" class="cp-ring"/><circle cx="32" cy="32" r="20" class="cp-ring cp-in"/><g class="cp-ticks"><path d="M32 3v7M32 54v7M3 32h7M54 32h7"/><path class="cp-minor" d="m11.5 11.5 4 4m33 33 4 4m0-41-4 4m-33 33-4 4"/></g><text x="32" y="19" class="cp-n">N</text><g class="cp-needle" id="needle"><path d="M32 8v24"/></g><circle cx="32" cy="32" r="2.4" class="cp-hub"/></svg>
+              </div>
+              <p class="lk-k">행운 방향</p>
+              <p class="lk-v" id="lkDir"></p>
+              <p class="lk-s" id="lkDirSub"></p>
+            </article>
+            <article class="lk lk-place">
+              <p class="lk-k"><svg class="ic" aria-hidden="true"><use href="#i-store"/></svg>행운 장소</p>
+              <p class="lk-v" id="lkPlace"></p>
+              <p class="lk-s" id="lkPlaceSub"></p>
+            </article>
+            <article class="lk lk-where">
+              <p class="lk-k"><svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg>어디서 살까</p>
+              <p class="lk-v" id="lkWhere"></p>
+              <div class="maps">
+                <a class="map-btn" id="mapNaver" href="https://map.naver.com/p/search/%EB%B3%B5%EA%B6%8C%ED%8C%90%EB%A7%A4%EC%A0%90" target="_blank" rel="noopener">네이버 지도</a>
+                <a class="map-btn" id="mapKakao" href="https://map.kakao.com/?q=%EB%B3%B5%EA%B6%8C%ED%8C%90%EB%A7%A4%EC%A0%90" target="_blank" rel="noopener">카카오맵</a>
+                <a class="map-btn plain" id="mapHot" href="../lottomap/">명당 지도</a>
+              </div>
+            </article>
+          </div>
+          <p class="lock-msg" id="lockMsg"><svg class="ic" aria-hidden="true"><use href="#i-lock"/></svg><span>정보를 입력하면 열려요</span></p>
+        </section>
+
+        <section class="card streak" id="streak" aria-labelledby="streakTitle">
+          <div class="streak-top">
+            <div class="flame" aria-hidden="true"><svg class="ic"><use href="#i-flame"/></svg></div>
+            <div>
+              <h2 class="streak-title" id="streakTitle"><b id="streakBig">1</b>일 연속 출석</h2>
+              <p class="streak-sub" id="streakSub">내일 또 오면 2일 연속!</p>
+            </div>
+          </div>
+          <ol class="week" id="week" aria-label="이번 주 출석"></ol>
+          <p class="streak-note">매일 자정(한국 시간)에 새 번호가 열려요. 같은 날엔 몇 번을 열어도 번호가 같아요.</p>
+        </section>
+      </aside>
+    </div>
 
     <div class="ad" aria-label="광고">
       <span class="ad-label">광고</span>
       <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
     </div>
 
-    <section class="card checker" id="checker" aria-labelledby="checkerTitle">
-      <div class="sec-head">
-        <h2 class="sec-title" id="checkerTitle">당첨 확인</h2>
-        <a class="btn-link" id="ckLink" href="#" target="_blank" rel="noopener">당첨번호 검색</a>
-      </div>
-      <form id="ckForm" novalidate>
-        <label class="field">
-          <span class="field-label">회차</span>
-          <select id="ckRound"></select>
-        </label>
-        <fieldset class="field">
-          <legend class="field-label">당첨번호 6개 + 보너스</legend>
-          <div class="num-inputs" id="ckInputs">
-            <input type="text" inputmode="numeric" maxlength="2" aria-label="당첨번호 1">
-            <input type="text" inputmode="numeric" maxlength="2" aria-label="당첨번호 2">
-            <input type="text" inputmode="numeric" maxlength="2" aria-label="당첨번호 3">
-            <input type="text" inputmode="numeric" maxlength="2" aria-label="당첨번호 4">
-            <input type="text" inputmode="numeric" maxlength="2" aria-label="당첨번호 5">
-            <input type="text" inputmode="numeric" maxlength="2" aria-label="당첨번호 6">
-            <span class="plus" aria-hidden="true">+</span>
-            <input type="text" inputmode="numeric" maxlength="2" aria-label="보너스 번호" class="bonus-in">
-          </div>
-        </fieldset>
-        <p class="err" id="errCk" role="alert"></p>
-        <button class="btn btn-dark btn-block" type="submit"><svg class="ic" aria-hidden="true"><use href="#i-trophy"/></svg>내 번호와 맞춰보기</button>
-      </form>
-      <div class="ck-result" id="ckResult" aria-live="polite"></div>
-    </section>
-  </div>
+    <div class="tools">
+      <section class="card vault" id="vault" aria-labelledby="vaultTitle">
+        <div class="sec-head">
+          <h2 class="sec-title" id="vaultTitle">내 번호 보관함 <span class="badge" id="vaultCount">0</span></h2>
+        </div>
+        <p class="sec-desc">저장한 번호는 추첨 뒤 당첨번호를 넣으면 한 번에 맞춰 봐요. 이 기기에만 저장돼요.</p>
+        <div id="vaultList" class="vault-list"></div>
+      </section>
 
-  <div class="ad ad-bottom" aria-label="광고">
-    <span class="ad-label">광고</span>
-    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <section class="card checker" id="checker" aria-labelledby="checkerTitle">
+        <div class="sec-head">
+          <h2 class="sec-title" id="checkerTitle">당첨 확인</h2>
+        </div>
+        <p class="sec-desc">회차를 고르고 당첨번호를 넣으면, 보관함 번호와 맞춰 등수를 보여 드려요.</p>
+        <form id="ckForm" novalidate>
+          <label class="field">
+            <span class="field-label">회차</span>
+            <select id="ckRound"></select>
+          </label>
+          <fieldset class="field">
+            <legend class="field-label">당첨번호 6개 + 보너스</legend>
+            <div class="num-inputs" id="ckInputs">
+              <input type="text" inputmode="numeric" maxlength="2" aria-label="당첨번호 1">
+              <input type="text" inputmode="numeric" maxlength="2" aria-label="당첨번호 2">
+              <input type="text" inputmode="numeric" maxlength="2" aria-label="당첨번호 3">
+              <input type="text" inputmode="numeric" maxlength="2" aria-label="당첨번호 4">
+              <input type="text" inputmode="numeric" maxlength="2" aria-label="당첨번호 5">
+              <input type="text" inputmode="numeric" maxlength="2" aria-label="당첨번호 6">
+              <span class="plus" aria-hidden="true">+</span>
+              <input type="text" inputmode="numeric" maxlength="2" aria-label="보너스 번호" class="bonus-in">
+            </div>
+          </fieldset>
+          <p class="err" id="errCk" role="alert"></p>
+          <button class="btn btn-dark btn-block" type="submit"><svg class="ic" aria-hidden="true"><use href="#i-trophy"/></svg>내 번호와 맞춰보기</button>
+          <a class="btn-link ck-link" id="ckLink" href="#" target="_blank" rel="noopener">당첨번호 검색</a>
+        </form>
+        <div class="ck-result" id="ckResult" aria-live="polite"></div>
+      </section>
+    </div>
+
+
+
+
+    <section class="next" aria-labelledby="nextTitle">
+      <h2 class="sec-title" id="nextTitle">다른 서비스</h2>
+      <ul class="next-grid">
+        <li><a href="../lottomap/"><b>명당로드</b><small>로또 1등 명당 지도와 번호 통계</small></a></li>
+        <li><a href="../market/"><b>맛남의 광장</b><small>버려질 농수산물이 어디서 남는지, 버려지기 전에</small></a></li>
+        <li><a href="../season/"><b>제철장보기</b><small>이달 제철 식재료와 지금 싼 품목</small></a></li>
+        <li><a href="../sikdang/"><b>제철식당</b><small>이달 이 지역 제철 음식을 잘하는 집</small></a></li>
+        <li><a href="../roots/"><b>근본 테스트</b><small>사주와 퀴즈로 찾는 나의 근본 코드</small></a></li>
+        <li><a href="../family/"><b>식구궁합</b><small>우리 가족 오행 궁합판</small></a></li>
+        <li><a href="../names/"><b>이름레이더</b><small>내 이름, 전국에 몇 명?</small></a></li>
+        <li><a href="../lifeclock/"><b>남은봄</b><small>남은 주말·명절·벚꽃 세는 인생 시계</small></a></li>
+        <li><a href="../birthyear/"><b>나때연감</b><small>내가 태어난 해 타임캡슐</small></a></li>
+      </ul>
+    </section>
+    <section class="card notice" aria-labelledby="noticeTitle">
+      <h2 class="sec-title" id="noticeTitle">알아 두세요</h2>
+      <ul class="notice-list">
+        <li>도박 문제로 고민된다면 <b>한국도박문제예방치유원 1336</b>에서 24시간 무료로 상담받을 수 있어요. <a href="tel:1336">1336 전화하기</a></li>
+        <li>복권은 <b>만 19세 미만</b>은 살 수 없어요. 정해 둔 돈 안에서만 즐기세요.</li>
+        <li>로또 6/45의 1등 확률은 어떤 번호든 <b>8,145,060분의 1</b>로 같아요. 여기 번호는 재미로 보는 것이고 당첨을 보장하지 않아요. 지난 번호 통계나 명당도 다음 추첨에는 영향을 주지 않아요.</li>
+      </ul>
+    </section>
+    <div class="ad ad-multi" aria-label="광고">
+      <span class="ad-label">광고</span>
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="autorelaxed"></ins>
+    </div>
   </div>
-  <section class="card next" aria-labelledby="nextTitle">
-    <div class="sec-head"><h2 class="sec-title" id="nextTitle">다음에 해볼 테스트</h2></div>
-    <ul class="next-grid">
-      <li><a href="../lottomap/"><span class="nx-dot d-lottomap" aria-hidden="true"></span><span class="nx-txt"><b>명당로드</b><small>로또 1등 명당 지도와 번호 통계</small></span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
-      <li><a href="../roots/"><span class="nx-dot d-roots" aria-hidden="true"></span><span class="nx-txt"><b>근본 테스트</b><small>사주와 퀴즈로 찾는 나의 근본 코드</small></span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
-      <li><a href="../family/"><span class="nx-dot d-family" aria-hidden="true"></span><span class="nx-txt"><b>식구궁합</b><small>우리 가족 오행 궁합판</small></span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
-      <li><a href="../names/"><span class="nx-dot d-names" aria-hidden="true"></span><span class="nx-txt"><b>이름레이더</b><small>내 이름, 전국에 몇 명?</small></span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
-      <li><a href="../lifeclock/"><span class="nx-dot d-lifeclock" aria-hidden="true"></span><span class="nx-txt"><b>남은봄</b><small>남은 주말·명절·벚꽃 세는 인생 시계</small></span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
-      <li><a href="../birthyear/"><span class="nx-dot d-birthyear" aria-hidden="true"></span><span class="nx-txt"><b>나때연감</b><small>내가 태어난 해 타임캡슐</small></span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
-      <li><a href="../sikdang/"><span class="nx-dot d-sikdang" aria-hidden="true"></span><span class="nx-txt"><b>제철식당</b><small>이달 이 지역 제철 음식 잘하는 집</small></span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
-      <li><a href="../season/"><span class="nx-dot d-season" aria-hidden="true"></span><span class="nx-txt"><b>제철장보기</b><small>이달 제철 식재료와 지금 싼 품목</small></span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
-      <li><a href="../market/"><span class="nx-dot d-market" aria-hidden="true"></span><span class="nx-txt"><b>맛남의 광장</b><small>버려질 농수산물이 어디서 남는지, 버려지기 전에</small></span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
-    </ul>
-  </section>
 </main>
 
 <footer class="footer">
   <div class="wrap">
+    <p class="disclaimer">재미로 보는 서비스이며 당첨을 보장하지 않습니다 · <b>만 19세 미만은 복권을 구매할 수 없습니다</b></p>
+    <p class="disclaimer">도박 문제 상담: 한국도박문제예방치유원 <b>☎ 1336</b> (24시간 무료)</p>
+    <p class="copy">© 오늘로또</p>
     <nav class="foot-links" aria-label="하단 메뉴">
-      <a href="../">← 전체 서비스</a>
+      <a href="../">← 재미랩 홈</a>
       <a href="about.html">서비스 소개</a>
       <a href="privacy.html">개인정보처리방침</a>
     </nav>
-    <p class="disclaimer">재미로 보는 서비스이며 당첨을 보장하지 않습니다 · 19세 미만은 복권을 구매할 수 없습니다</p>
-    <p class="copy">© 오늘로또</p>
   </div>
 </footer>
 

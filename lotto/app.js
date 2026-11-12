@@ -121,8 +121,9 @@
     var info = E.drawInfo(), now = info.now;
     var left = Math.max(0, info.next - now);
     var d = Math.floor(left / 864e5), h = Math.floor(left % 864e5 / 36e5), m = Math.floor(left % 36e5 / 6e4), s = Math.floor(left % 6e4 / 1e3);
-    setText('cdRound', '제 ' + info.round + '회');
-    setText('cdDate', fmtTsShort(info.next) + ' 20:35 추첨');
+    setText('cdRound', '제' + info.round + '회');
+    setText('cdDate', fmtTsShort(info.next) + ' 오후 8시 35분 추첨');
+    setText('heroRound', '제' + info.round + '회');
     setText('cdD', String(d)); setText('cdH', E.pad(h)); setText('cdM', E.pad(m)); setText('cdS', E.pad(s));
     setText('cdSr', '추첨까지 ' + d + '일 ' + h + '시간 ' + m + '분');
     var foot, key;
@@ -213,6 +214,7 @@
     $('#formCard').hidden = false;
     $('#result').hidden = true;
     setLucky(null);
+    renderCommon();
     showStep(1);
     renderProfiles();
     if (state.profiles.length) {
@@ -242,6 +244,12 @@
     if (d.length > 4) return d.slice(0, 4) + '.' + d.slice(4);
     return d;
   }
+  /* 만 나이: 올해 생일이 지나지 않았으면 한 살 뺀다 (2월 29일생은 평년엔 3월 1일에 생일이 지난 것으로 본다) */
+  function manAge(b, t) {
+    var age = t.y - b.y;
+    if (t.m < b.m || (t.m === b.m && t.d < b.d)) age--;
+    return age;
+  }
   function birthDigits() { return $('#fBirth').value.replace(/\D/g, ''); }
   function birthError(d) {
     if (d.length !== 8) return '8자리로 입력해 주세요 (예: 19900115)';
@@ -249,7 +257,7 @@
     if (!b) return '없는 날짜예요. 다시 확인해 주세요';
     var t = E.parseKey(today);
     if (b.y < 1900 || d > today) return '생년월일을 다시 확인해 주세요';
-    if (t.y - b.y < 19) return '19세 미만은 로또를 구매할 수 없어요';
+    if (manAge(b, t) < 19) return '만 19세 미만은 복권을 살 수 없어요 (오늘 기준 만 ' + Math.max(0, manAge(b, t)) + '세)';
     return '';
   }
   function updateBirthHint() {
@@ -259,7 +267,7 @@
       var bi = E.birthInfo(d);
       h.textContent = bi.y + '년 ' + bi.m + '월 ' + bi.d + '일 · ' + D.ZODIAC[bi.zodiac] + '띠 · ' + elName(bi.el) + '의 기운';
       h.classList.add('good');
-    } else h.textContent = '숫자만 입력하면 돼요';
+    } else h.textContent = '숫자만 입력하면 돼요 · 만 19세 이상만 이용할 수 있어요';
   }
   function setErr(id, msg, input) {
     $('#' + id).textContent = msg || '';
@@ -361,39 +369,40 @@
   function clearAnim() { animTimers.forEach(clearTimeout); animTimers = []; }
   function renderBalls(container, g, opts) {
     opts = opts || {};
-    clearAnim();
+    if (!opts.keepAnim) clearAnim();
     container.innerHTML = '';
-    var balls = [];
+    var all = [];
     g.nums.forEach(function (n) {
       var b = opts.sealed ? ballEl(0) : ballEl(n, { star: g.digits.indexOf(n % 10) >= 0 });
-      container.appendChild(b); balls.push({ el: b, n: n });
+      container.appendChild(b); all.push(b);
     });
-    container.appendChild(el('span', { class: 'plus', 'aria-hidden': 'true' }, '+'));
-    var bw = el('span', { class: 'bonus-wrap' });
+    var bw = el('span', { class: 'bonus-row' });
+    bw.appendChild(el('span', { class: 'plus', 'aria-hidden': 'true' }, '+'));
     var bb = opts.sealed ? ballEl(0) : ballEl(g.bonus);
-    bw.appendChild(bb); bw.appendChild(el('span', { class: 'bonus-cap' }, '행운 번호'));
-    container.appendChild(bw); balls.push({ el: bb, n: g.bonus, bonus: true });
+    bb.classList.add('bonus');
+    bw.appendChild(bb); bw.appendChild(el('span', { class: 'bonus-cap' }, opts.bonusCap || '행운 번호'));
+    container.appendChild(bw); all.push(bb);
+    // 하나뿐인 움직임: 공이 80ms 간격으로 하나씩 떨어져 자리를 잡는다 (400ms 이하, 1회)
     if (opts.animate && !reduceMotion) {
-      balls.forEach(function (o, i) {
-        var b = o.el;
-        b.className = 'ball q drop'; b.textContent = '';
-        animTimers.push(setTimeout(function () {
-          b.classList.remove('drop'); b.classList.add('spin');
-          var iv = setInterval(function () {
-            var r = 1 + Math.floor(Math.random() * 45);
-            b.className = 'ball spin ' + colorClass(r); b.textContent = r;
-          }, 55);
-          animTimers.push(setTimeout(function () {
-            clearInterval(iv);
-            b.className = 'ball pop ' + colorClass(o.n) + (!o.bonus && g.digits.indexOf(o.n % 10) >= 0 ? ' star' : '');
-            b.textContent = o.n; buzz(12);
-            if (i === balls.length - 1 && opts.done) opts.done();
-          }, 420));
-          animTimers.push(iv);
-        }, i * 330 + (i === balls.length - 1 ? 260 : 0)));
-      });
-      // clearTimeout works on interval ids too in browsers
+      all.forEach(function (b, i) { b.style.animationDelay = (i * 80) + 'ms'; b.classList.add('drop'); });
+      if (opts.done) animTimers.push(setTimeout(opts.done, (all.length - 1) * 80 + 360));
     } else if (opts.done) opts.done();
+  }
+
+  /* ---------- 첫 화면: 누구나 같은 오늘의 공 (예시) ---------- */
+  var commonShown = null;
+  function renderCommon() {
+    $('#hero').classList.remove('mine');
+    $('#heroNew').hidden = false; $('#heroMine').hidden = true;
+    $('#revealBtn').hidden = true;
+    $('#drawTabs').hidden = true;
+    $('#digitNote').innerHTML = '';
+    $('#heroWho').innerHTML = '<span class="ex">예시</span>오늘 날짜로 뽑은 모두의 번호예요. 내 번호는 이름과 생일로 따로 뽑아요';
+    var g = E.commonDraw(today);
+    var first = commonShown !== today;
+    commonShown = today;
+    renderBalls($('#balls'), g, { animate: first, bonusCap: '보너스' });
+    $('#ballsLive').textContent = '';
   }
 
   /* ---------- result ---------- */
@@ -404,6 +413,9 @@
     cur = computeView(p);
     var R = cur.R, g = cur.g, dr = cur.dr;
     $('#result').hidden = false;
+    $('#hero').classList.add('mine');
+    $('#heroNew').hidden = true; $('#heroMine').hidden = false;
+    $('#heroWho').innerHTML = '<b>' + esc(p.name) + '</b>님의 오늘 번호';
     $('#rcName').textContent = p.name;
     $('#rcDate').textContent = fmtKeyLong(today);
     var tags = $('#rcTags'); tags.innerHTML = '';
@@ -433,7 +445,7 @@
     renderDrawControls();
     renderSaveState();
     if (!$('#ticket').hidden) renderTicket();
-    if (opts.scroll) $('#result').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    if (opts.scroll) $('#hero').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
   }
   function doReveal() {
     var p = cur.p;
@@ -464,15 +476,8 @@
     $('#scoreTip').textContent = R.tip;
     var color = 'var(--brand)';
     fg.style.stroke = color;
-    requestAnimationFrame(function () { fg.style.strokeDashoffset = String(169.65 * (1 - R.score / 100)); });
-    if (animated && !reduceMotion) {
-      var t0 = performance.now();
-      (function step(t) {
-        var k = Math.min(1, (t - t0) / 1100), e = 1 - Math.pow(1 - k, 3);
-        num.textContent = Math.round(R.score * e);
-        if (k < 1) requestAnimationFrame(step);
-      })(t0);
-    } else num.textContent = R.score;
+    fg.style.strokeDashoffset = String(169.65 * (1 - R.score / 100));
+    num.textContent = R.score;
   }
   function setLucky(R, sealedProfile) {
     var box = $('#lucky');
@@ -480,11 +485,12 @@
       box.classList.add('locked'); box.classList.remove('unlock');
       $('#lockMsg span').textContent = sealedProfile ? '번호를 열면 함께 공개돼요' : '정보를 입력하면 열려요';
       $('#lkTimeStatus').textContent = '';
+      ['#lkTime', '#lkDir', '#lkPlace', '#lkWhere'].forEach(function (id) { $(id).textContent = '아직 몰라요'; });
+      ['#lkTimeSub', '#lkDirSub', '#lkPlaceSub'].forEach(function (id) { $(id).textContent = '—'; });
+      $('#needle').style.setProperty('--deg', '0deg');
       return;
     }
-    var wasLocked = box.classList.contains('locked');
     box.classList.remove('locked');
-    if (wasLocked && !reduceMotion) { box.classList.remove('unlock'); void box.offsetWidth; box.classList.add('unlock'); }
     var t = R.time;
     $('#lkTime').textContent = t.label;
     $('#lkTimeSub').textContent = D.BRANCHES[t.branch] + '시(' + D.BRANCHES_H[t.branch] + '時) · ' + E.pad(t.hour) + '–' + E.pad((t.hour + 1) % 24) + '시';
@@ -500,10 +506,8 @@
     var q = ((s ? s.k + ' ' : '') + (p.gugun ? p.gugun + ' ' : '')) + '복권판매점';
     $('#mapNaver').href = 'https://map.naver.com/p/search/' + encodeURIComponent(q);
     $('#mapKakao').href = 'https://map.kakao.com/?q=' + encodeURIComponent(q);
-    $('#mapHot').href = 'https://search.naver.com/search.naver?query=' + encodeURIComponent((p.gugun || (s ? s.k : '')) + ' 로또 명당').replace(/%20/g, '+');
     $('#mapNaver').setAttribute('aria-label', '네이버 지도에서 ' + q + ' 찾기 (새 창)');
     $('#mapKakao').setAttribute('aria-label', '카카오맵에서 ' + q + ' 찾기 (새 창)');
-    $('#mapHot').setAttribute('aria-label', '로또 명당 검색 (새 창)');
   }
   function updateTimeStatus() {
     if (!cur || $('#lucky').classList.contains('locked')) return;
@@ -544,7 +548,6 @@
     if (dr.count >= REDRAWS) { toast('오늘 다시 뽑기를 모두 썼어요 · 자정에 새 번호가 열려요'); return; }
     dr.count++; dr.sel = dr.count; save();
     renderResult({ animate: true });
-    $('#redrawLeft').classList.remove('bump'); void $('#redrawLeft').offsetWidth; $('#redrawLeft').classList.add('bump');
   }
 
   /* ---------- ticket (5 games) ---------- */
@@ -896,9 +899,10 @@
 
   /* ================= ads ================= */
   function pushAds() {
-    // on wide screens the in-content slot already sits right above the footer; drop the duplicate
-    if (window.matchMedia && matchMedia('(min-width: 720px)').matches) { var b = $('.ad-bottom'); if (b) b.parentNode.removeChild(b); }
-    $$('ins.adsbygoogle').forEach(function () {
+    // 슬롯마다 한 번만 push. 비어 있는 슬롯은 CSS(data-ad-status="unfilled")로 접는다
+    $$('ins.adsbygoogle').forEach(function (ins) {
+      if (ins.getAttribute('data-pushed') || ins.getAttribute('data-adsbygoogle-status')) return;
+      ins.setAttribute('data-pushed', '1');
       try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { /* ad blocked or not ready */ }
     });
   }
@@ -915,10 +919,11 @@
     buildRounds();
   }
 
+  function renderHeroDate() { setText('heroDate', fmtKeyLong(today)); }
   function tick() {
     renderCountdown();
     var k = E.dateKey();
-    if (k !== today) { today = k; touchVisit(); if (!formOpen) renderAll({}); else renderStreak(); }
+    if (k !== today) { today = k; touchVisit(); renderHeroDate(); if (!formOpen) renderAll({}); else { renderStreak(); renderCommon(); } }
     updateTimeStatus();
   }
 
@@ -936,9 +941,14 @@
     $('#editBtn').addEventListener('click', function () { openForm(activeProfile()); });
     $('#streakPill').addEventListener('click', function () {
       $('#streak').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
-      var f = $('#streak .flame'); f.classList.remove('bump'); void f.offsetWidth; f.classList.add('bump');
+    });
+    $('#heroCta').addEventListener('click', function () {
+      if (!formOpen) openForm(null);
+      $('#formCard').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+      setTimeout(function () { try { $('#fName').focus({ preventScroll: true }); } catch (x) { } }, 350);
     });
     touchVisit();
+    renderHeroDate();
     renderCountdown();
     renderShared();
     renderAll({});

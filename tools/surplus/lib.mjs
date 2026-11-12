@@ -1,7 +1,7 @@
 // 남는 지도 수집기 — 출처별 요청 URL·응답 파싱·신호 계산 (네트워크 없이 테스트할 수 있게 분리)
 import {
   SIGUNGU, SIDO_ALIAS, STEM_BLOCK, ITEMS, ITEM_ALIAS, SHORT_ITEM_SUFFIX, normItem, categoryOf,
-  PRICE_STABILIZATION_ITEMS, SIDO_SLUG, romanize,
+  PRICE_STABILIZATION_ITEMS, SIDO_SLUG, romanize, AMBIGUOUS,
 } from './dict.mjs';
 
 export const SOURCE_INFO = {
@@ -96,6 +96,17 @@ const ITEM_LIST = Object.values(ITEMS).flatMap((s) => s.split(' '))
 const PREFIX_OK = '햇풋생건깐통·';
 const SUFFIX_OK = SHORT_ITEM_SUFFIX + '농산류철';
 
+/** 일반어와 겹치는 품목(조기·김·배·무…)이 정말 품목으로 쓰였는지 문맥으로 확인 */
+export function contextOk(text, i, name) {
+  const rule = AMBIGUOUS[name];
+  if (!rule) return true;
+  const t = String(text);
+  if (rule.reject && rule.reject.test(t.slice(i, i + name.length + 14))) return false;
+  if (rule.before && rule.before.test(t.slice(Math.max(0, i - 4), i))) return false;
+  if (rule.require && !rule.require.test(t)) return false;
+  return true;
+}
+
 /** 문자열에서 품목들을 찾아 대표 이름 배열로 (등장 순) */
 export function findItems(text) {
   const t = String(text || '').replace(/배춧/g, '배추').replace(/귤값/g, '귤 값');
@@ -114,6 +125,7 @@ export function findItems(text) {
         const okNext = name.length === 1 ? SHORT_ITEM_SUFFIX : SUFFIX_OK;
         if (isHangul(next) && !okNext.includes(next)) continue;
       }
+      if (!contextOk(t, i, name)) continue;
       for (let k = i; k < i + name.length; k++) taken[k] = true;
       found.push({ i, item: normItem(name) });
     }
@@ -531,6 +543,29 @@ export function mergeEvents(existing, incoming) {
     out.push(e); ids.add(e.id); urls.add(e.url + '|' + (e.item || ''));
   }
   return out;
+}
+
+/**
+ * 저장된 사건 다시 검사 (사전·문맥 규칙이 바뀐 뒤 --offline으로도 반영되게)
+ * - 사람이 확인하지 않은(verified:false) 자동 수집 사건 중, 제목에서 그 품목이 더는 찾아지지 않으면 버림
+ *   (예: 「대책 조기 추진」 → 수산물 조기 아님)
+ * - 같은 원문(url)·같은 품목이 두 번 들어 있으면 하나만 남김
+ */
+export function revalidateEvents(events) {
+  const out = [];
+  const seen = new Set();
+  const dropped = [];
+  for (const e of events || []) {
+    const key = `${e.url || e.id}|${normItem(e.item) || ''}`;
+    if (seen.has(key)) { dropped.push({ id: e.id, why: 'duplicate' }); continue; }
+    if (!e.verified && e.item && e.title && !findItems(e.title).includes(normItem(e.item))) {
+      dropped.push({ id: e.id, why: 'item-not-in-title' });
+      continue;
+    }
+    seen.add(key);
+    out.push(e);
+  }
+  return { events: out, dropped };
 }
 
 // ───────────── 신호 계산 ─────────────

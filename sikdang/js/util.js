@@ -85,3 +85,15 @@ export const store = {
 
 export const naverMap = (name, addr) => `https://map.naver.com/p/search/${enc(`${name} ${addr}`)}`;
 export const norm = (s) => String(s || '').replace(/\(.*?\)/g, '').replace(/\s+/g, '').toLowerCase();
+
+/** 받침에 따라 조사 고르기: josa('여수', '은/는') → 여수는 */
+export function josa(word, pair) {
+  const [a, b] = pair.split('/');
+  const ch = String(word || '').trim().slice(-1);
+  const c = ch.charCodeAt(0) - 0xac00;
+  if (c < 0 || c > 11171) return `${word}${a}(${b})`;
+  const jong = c % 28;
+  if (pair === '으로/로') return `${word}${jong && jong !== 8 ? '으로' : '로'}`;
+  return `${word}${jong ? a : b}`;
+}
+export const hostOf = (u) => { try { return new URL(u).hostname.replace(/^(www|m)\./, ''); } catch { return ''; } };

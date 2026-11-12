@@ -22,8 +22,11 @@
 <meta name="twitter:title" content="벚꽃, 앞으로 몇 번 더 볼까? — 남은봄">
 <meta name="twitter:description" content="남은 주말·추석·벚꽃·월드컵 · 인생 주 단위 달력 · 정신 나이 테스트">
 <meta name="twitter:image" content="https://leebeesoo.github.io/gene/lifeclock/og.png">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23C2456A'/%3E%3Cg fill='none' stroke='%23fff' stroke-width='4' stroke-linecap='round'%3E%3Ccircle cx='32' cy='32' r='20'/%3E%3Cpath d='M32 20v12l8 5'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg fill='%231E1B1F'%3E%3Crect x='8' y='8' width='12' height='12' rx='2'/%3E%3Crect x='26' y='8' width='12' height='12' rx='2'/%3E%3Crect x='44' y='8' width='12' height='12' rx='2'/%3E%3Crect x='8' y='26' width='12' height='12' rx='2'/%3E%3C/g%3E%3Cg fill='%23C2456A'%3E%3Crect x='26' y='26' width='12' height='12' rx='2'/%3E%3Crect x='44' y='26' width='12' height='12' rx='2'/%3E%3Crect x='8' y='44' width='12' height='12' rx='2'/%3E%3C/g%3E%3C/svg%3E">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="css/style.css">
 <script>try{var t=localStorage.getItem('lifeclock.theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
@@ -66,12 +69,8 @@
 <a class="sr-only" href="#main">본문 바로가기</a>
 <header class="top">
   <div class="top-in">
-    <a class="brand" href="./" aria-label="남은봄 처음으로">
-      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/></svg>
-      남은봄<small>인생 시계</small>
-    </a>
+    <a class="brand" href="./" aria-label="남은봄 처음으로">남은봄</a>
     <span class="top-sp"></span>
-    <button class="txt-btn" type="button" id="btnEdit" hidden>다시 입력</button>
     <button class="icon-btn" type="button" id="btnTheme" aria-label="화면 테마 바꾸기">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
     </button>
@@ -80,12 +79,27 @@
 
 <main id="main" tabindex="-1">
   <div id="viewHome">
-    <div class="wrap">
-      <section class="hero" id="intro" aria-labelledby="introTitle">
-        <span class="eyebrow">2024년 생명표 기준</span>
-        <h1 id="introTitle">벚꽃,<br>앞으로 <em>몇 번</em> 더 볼까?</h1>
-        <p class="lead">생일과 성별만 넣으면 남은 주말·명절·벚꽃을 세어 드려요. 숫자를 보면 오늘이 조금 달라 보일 거예요.</p>
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="wrap hero-head">
+        <p class="hero-k"><span class="ex-tag" id="heroTag">예시</span><span id="heroWho">34세 여성의 인생 · 2024년 생명표 기준</span></p>
+        <h1 class="hero-t" id="heroTitle">벚꽃, 앞으로 <span class="num" id="heroN">50</span>번</h1>
+        <p class="hero-sub" id="heroSub">한 칸이 1주, 한 줄이 1년이에요. 지나온 주는 잉크, 앞으로 남은 봄은 분홍으로 칠했어요.</p>
+        <button class="btn btn-primary hero-btn" type="button" id="btnFill">내 격자 채우기</button>
+      </div>
+      <div class="grid-band">
+        <div class="grid-box" id="gridBox">
+          <canvas id="lifeGrid" role="img" aria-label="인생 주 단위 격자"></canvas>
+        </div>
+      </div>
+      <div class="wrap hero-foot">
+        <div class="legend" aria-hidden="true"><span><i class="lg-lived"></i>지나온 주</span><span><i class="lg-spring"></i>남은 봄</span><span><i class="lg-left"></i>남은 주(평균)</span><span><i class="lg-bonus"></i>평균 이후</span></div>
+      </div>
+    </section>
 
+    <div class="wrap">
+      <section class="intro" id="intro" aria-labelledby="introTitle" hidden>
+        <h2 class="sec-h" id="introTitle">생일과 성별만 넣어 주세요</h2>
+        <p class="sec-sub">남은 주말·명절·벚꽃을 세어 드려요. 입력값은 서버로 보내지 않고 이 기기에만 저장돼요.</p>
         <form class="card form" id="form" novalidate>
           <div class="field">
             <label class="lbl" for="birth">생년월일</label>
@@ -126,19 +140,15 @@
           </details>
           <p class="form-err" id="formErr" role="alert"></p>
           <button class="btn btn-primary" type="submit" style="margin-top:12px">내 인생 시계 보기</button>
-          <p class="fine">입력값은 서버로 보내지 않고 이 기기에만 저장돼요.</p>
         </form>
       </section>
 
       <div id="result" hidden aria-live="polite"></div>
 
       <section class="sec" aria-labelledby="nextTitle">
-        <h2 class="sec-h" id="nextTitle">다음에 해볼 테스트</h2>
-        <p class="sec-sub">재미랩의 다른 놀이도 구경해 보세요.</p>
-        <div class="next" id="nextGrid"></div>
+        <h2 class="sec-h" id="nextTitle">다른 서비스</h2>
+        <ul class="next" id="nextGrid"></ul>
       </section>
-
-      <div class="ad-wrap" data-ad="bottom"><span class="ad-label">광고</span><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></div>
 
       <details class="src card" id="sources">
         <summary>데이터 출처와 계산 방법</summary>
@@ -146,13 +156,16 @@
           <li><b>기대여명</b>: 국가데이터처(구 통계청) 「2024년 생명표」(2025.12.3. 공표) 완전생명표의 성별·단일연령 기대여명. 현재 나이(소수점)로 두 연령 사이를 선형 보간했어요.</li>
           <li><b>기대수명</b> = 현재 나이 + 기대여명. 같은 나이·성별 한국인 <b>평균</b>이며 개인의 수명을 예측하지 않아요.</li>
           <li><b>설·추석·벚꽃</b>은 해마다 1번으로 세고 날짜는 근사(설 2/1, 벚꽃 4/5, 추석 9/25 기준)했어요. 실제 음력 날짜와 며칠 다를 수 있어요.</li>
+          <li><b>격자의 봄</b>은 3~5월에 걸친 주를 칠한 거예요. 90년을 다 그리고, 평균 기대수명 이후는 흐리게 그렸어요.</li>
           <li><b>월드컵</b>: 2030년부터 4년 주기. <b>대선</b>: 현행 5년 단임제가 유지된다고 가정, 2030년부터 5년 주기.</li>
           <li><b>심장박동</b>은 분당 80회로 가정한 어림값이에요.</li>
           <li><b>생활습관</b>: Jha 외 NEJM 2013(흡연), Wen 외 Lancet 2011(운동), Cappuccio 외 Sleep 2010(수면). 다른 나라 집단 연구라 참고용이에요.</li>
           <li><b>만 나이 통일</b>: 「민법」·「행정기본법」 개정으로 2023년 6월 28일부터 법령·계약·공문서 나이는 원칙적으로 만 나이.</li>
         </ul>
       </details>
-      <p class="disc">이 서비스는 재미와 동기 부여를 위한 통계 계산기예요. 의학적 진단·조언이 아니며, 건강 관련 결정은 전문가와 상의하세요.</p>
+      <p class="disc">이 서비스는 재미와 동기 부여를 위한 통계 계산기예요. 의학적 진단·조언이 아니며, 건강 관련 결정은 전문가와 상의하세요. 통계는 평균일 뿐, 오늘은 당신 거예요.</p>
+
+      <div class="ad-wrap" data-ad="bottom"><span class="ad-label">광고</span><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></div>
     </div>
   </div>
 
@@ -164,11 +177,11 @@
 <footer>
   <div class="wrap">
     <nav aria-label="바닥글">
-      <a href="../">재미랩 홈</a>
+      <a href="../">← 재미랩 홈</a>
       <a href="privacy.html">개인정보처리방침</a>
       <a href="#sources" id="lnkSources">데이터 출처</a>
     </nav>
-    <div>© 2026 남은봄 · 통계는 평균일 뿐, 오늘은 당신 거예요.</div>
+    <div>© 2026 남은봄 · 재미랩</div>
   </div>
 </footer>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>

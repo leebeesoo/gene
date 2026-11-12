@@ -7,7 +7,7 @@
 | `collect.mjs` | 실행 진입점. 출처별 수집 → 병합 → 신호 계산 → 저장 |
 | `lib.mjs` | 요청 URL 구성, 응답 파싱, 신호 규칙(네트워크 없이 테스트 가능) |
 | `dict.mjs` | 시도·시군구(lotto/data.js 목록), 품목·별칭 사전, 채소가격안정제 품목 |
-| `test.mjs` | `fixtures/`로 파서·규칙 확인 (`node tools/surplus/test.mjs`) |
+| `test.mjs` | `fixtures/`로 파서·규칙·품목 문맥 규칙(조기·김·배·무…) 확인 (`node tools/surplus/test.mjs`) |
 | `fixtures/` | `mafra-rss.xml`, `datago-error.json`은 실제 응답(작성자 이름만 지움). 나머지(`at-realtime.json` 포함)는 공식 명세(필드명·구조)를 따른 합성 예시 |
 
 ## 실행
@@ -32,3 +32,5 @@ node tools/surplus/collect.mjs --only=mafra,season --verbose
 | season | `season/js/prices.js` (KAMIS 월평균 소매, 매월 사람이 갱신) | 없음 | 평년·전년 대비 % |
 
 수동으로 확인한 지표는 `metrics`에 `origin: "manual"`과 근거 `url`을 붙여 넣으면 45일 동안 유지됩니다.
+
+저장된 사건은 매번(`--offline` 포함) 다시 검사합니다: 사람이 확인하지 않은 자동 수집 사건 중 제목에서 그 품목이 더는 찾아지지 않는 것(예: 「대책 **조기** 추진」 → 수산물 조기 아님)과 같은 원문·같은 품목 중복은 버립니다. 일반어와 겹치는 품목의 문맥 규칙은 `dict.mjs`의 `AMBIGUOUS`에 있습니다.

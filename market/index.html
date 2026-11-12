@@ -3,23 +3,26 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>맛남의 광장 — 오늘 어디서 무엇이 남는지, 버려지기 전에</title>
-  <meta name="description" content="산지폐기·갈아엎기·가격 폭락 신호를 지역×품목 지도로 매일 보여줘요. 농가는 갈아엎기·판매·기부 손익을 따져보고, 가공 방법과 푸드뱅크 기부로 버려지기 전에 살려요.">
-  <meta name="theme-color" content="#F5F5F0" media="(prefers-color-scheme: light)">
+  <title>맛남의 광장 — 버려질 농수산물이 어디서 남는지, 버려지기 전에</title>
+  <meta name="description" content="오늘 어느 지역에서 어떤 농수산물이 남고 값이 떨어지는지 품목별로 보여 드려요. 갈아엎기·시장격리 소식, 과잉 예보, 농가 손익 계산, 가공·푸드뱅크 안내, 농가와 받을 곳을 이어 주는 연결 신청까지.">
+  <meta name="theme-color" content="#F3F3EC" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#121412" media="(prefers-color-scheme: dark)">
   <meta name="color-scheme" content="light dark">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="맛남의 광장">
-  <meta property="og:title" content="맛남의 광장 — 오늘 어디서 무엇이 남는지, 버려지기 전에">
-  <meta property="og:description" content="오늘 어느 지역에서 어떤 농산물이 남고 버려지는지 지도로 보고, 갈아엎기 전에 가공·기부·직접 수확으로 살려요.">
+  <meta property="og:title" content="맛남의 광장 — 버려질 농수산물이 어디서 남는지, 버려지기 전에">
+  <meta property="og:description" content="오늘 남는 농수산물을 품목별로 보고, 갈아엎기 전에 받을 곳·가공·푸드뱅크·구출 원정대로 이어 드려요. 물건을 팔지 않는 정보·연결 서비스예요.">
   <link rel="canonical" href="https://leebeesoo.github.io/gene/market/">
   <meta property="og:url" content="https://leebeesoo.github.io/gene/market/">
   <meta property="og:image" content="https://leebeesoo.github.io/gene/market/og.png">
   <meta property="og:locale" content="ko_KR">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='7' fill='%233E6B3A'/%3E%3Cpath d='M7 17c0-5.5 3.5-9.5 10-9.5 0 6.5-4 10-9.5 10M7 17c2-2.6 4-4.3 6.5-5.6' fill='none' stroke='%23fff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 20c0-8.5 5-14.5 16-15 0 11-6.5 16-15 16' fill='%233E6B3A'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@800&display=swap">
   <link rel="stylesheet" href="css/style.css">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
   <script type="application/ld+json">
@@ -32,94 +35,61 @@
         "alternateName": "남는 지도",
         "url": "https://leebeesoo.github.io/gene/market/",
         "inLanguage": "ko-KR",
-        "description": "지역×품목별 농산물 과잉·폭락·산지폐기 신호를 보여주고, 버려지기 전에 가공·기부·직접 수확하도록 잇는 서비스"
+        "description": "버려질 농수산물이 어디서 남는지 지역·품목별로 보여 주고, 버려지기 전에 가공·푸드뱅크 기부·구출 원정대·농가와 받을 곳 소개로 잇는 정보 서비스"
       },
       {
         "@type": "Organization",
         "name": "맛남의 광장",
-        "description": "남는 농산물 정보를 먼저 보여주고, 지역별 참여 신청이 모이면 산지 거래를 여는 서비스"
+        "description": "남는 농수산물 정보를 모으고, 양쪽 동의를 받아 농가와 식당·가공업체를 서로 소개하는 정보·연결 서비스. 물건을 팔거나 사지 않으며 거래 당사자가 아닙니다."
       }
     ]
   }
   </script>
 </head>
-<body data-role="buyer">
+<body>
   <a class="skip" href="#app" onclick="event.preventDefault();document.getElementById('app').focus();">본문 바로가기</a>
 
-  <header class="topbar">
-    <div class="topbar-in">
-      <a class="logo" href="#/" aria-label="맛남의 광장 홈">
-        <svg class="logo-mark" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><rect class="lm-bg" width="24" height="24" rx="7"/><path class="lm-fg" d="M7 17c0-5.5 3.5-9.5 10-9.5 0 6.5-4 10-9.5 10M7 17c2-2.6 4-4.3 6.5-5.6" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span class="logo-text"><b>맛남의 광장</b><small>남는 지도</small></span>
-      </a>
-      <nav class="topnav" aria-label="주요 메뉴">
-        <a href="#/" data-nav="map">남는 지도</a>
-        <a href="#/market" data-nav="market" data-trade hidden>장터</a>
-        <a href="#/process" data-nav="process">가공 연결</a>
+  <header class="top">
+    <div class="wrap top-in">
+      <a class="word" href="#/" aria-label="맛남의 광장, 오늘 남는 것">맛남의 광장</a>
+      <nav class="nav" aria-label="주요 메뉴">
+        <a href="#/" data-nav="home">오늘 남는 것</a>
         <a href="#/farmer" data-nav="farmer">농가 판단</a>
-        <a href="#/sell" data-nav="sell" data-sell-link data-trade hidden><span data-sell-label>판매</span><span class="badge-dot" data-badge="sell" hidden></span></a>
-        <a href="#/cart" data-nav="cart" data-trade hidden>장바구니<span class="badge-dot" data-badge="cart" hidden></span></a>
-        <a href="#/join" data-nav="join">참여</a>
-        <a href="#/me" data-nav="me" data-trade hidden>MY<span class="badge-dot" data-badge="me" hidden></span></a>
+        <a href="#/process" data-nav="process">가공 연결</a>
+        <a href="#/join" data-nav="join">연결 신청</a>
       </nav>
-      <div class="top-actions">
-        <a class="icon-btn" href="#/search" aria-label="상품 검색" data-trade hidden><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></a>
-        <div class="role-toggle" role="group" aria-label="이용 모드" data-trade hidden>
-          <button type="button" data-role-btn="buyer" aria-pressed="true">구매</button>
-          <button type="button" data-role-btn="seller" aria-pressed="false">판매</button>
-        </div>
-        <a class="icon-btn bell" href="#/alerts" aria-label="알림 받기" data-trade hidden>
-          <svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15L6 16Z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg>
-          <span class="badge-dot" data-badge="alerts" hidden></span>
-        </a>
-        <a class="btn primary sm top-join" href="#/join" data-info>참여 신청</a>
-      </div>
     </div>
   </header>
 
   <main id="app" tabindex="-1">
-    <noscript><p class="page">맛남의 광장은 JavaScript가 필요해요. 브라우저 설정에서 JavaScript를 켜주세요.</p></noscript>
-    <div class="boot" aria-hidden="true"><div class="boot-dot"></div></div>
+    <noscript><p class="page wrap">맛남의 광장은 JavaScript가 필요해요. 브라우저 설정에서 JavaScript를 켜 주세요.</p></noscript>
   </main>
 
   <footer class="footer">
-    <section class="next" aria-labelledby="next-title">
-      <h2 class="next-title" id="next-title">다음에 해볼 테스트</h2>
-      <ul class="next-grid">
-        <li><a href="../lotto/" style="--dot:#D9381E;--dot-d:#FF5C41"><span class="nx-dot" aria-hidden="true"></span><span class="nx-txt"><b>오늘로또</b><small>사주로 뽑는 오늘의 로또 번호와 살 시간·방향</small></span></a></li>
-        <li><a href="../lottomap/" style="--dot:#C8361F;--dot-d:#F06A50"><span class="nx-dot" aria-hidden="true"></span><span class="nx-txt"><b>명당로드</b><small>로또 1등 명당 지도와 번호 통계</small></span></a></li>
-        <li><a href="../season/" style="--dot:#2F6B4F;--dot-d:#6DB08C"><span class="nx-dot" aria-hidden="true"></span><span class="nx-txt"><b>제철장보기</b><small>이달 제철 식재료와 지금 싼 품목</small></span></a></li>
-        <li><a href="../sikdang/" style="--dot:#B4532A;--dot-d:#E07F52"><span class="nx-dot" aria-hidden="true"></span><span class="nx-txt"><b>제철식당</b><small>이달 이 지역 제철 음식을 잘하는 집</small></span></a></li>
-        <li><a href="../roots/" style="--dot:#8E2B22;--dot-d:#C9584A"><span class="nx-dot" aria-hidden="true"></span><span class="nx-txt"><b>근본 테스트</b><small>사주와 퀴즈로 찾는 나의 근본 코드</small></span></a></li>
-        <li><a href="../family/" style="--dot:#1F5F57;--dot-d:#5FA79B"><span class="nx-dot" aria-hidden="true"></span><span class="nx-txt"><b>식구궁합</b><small>우리 가족 오행 궁합판</small></span></a></li>
-        <li><a href="../names/" style="--dot:#2B50D8;--dot-d:#7A93F0"><span class="nx-dot" aria-hidden="true"></span><span class="nx-txt"><b>이름레이더</b><small>내 이름, 전국에 몇 명?</small></span></a></li>
-        <li><a href="../lifeclock/" style="--dot:#C2456A;--dot-d:#E07A97"><span class="nx-dot" aria-hidden="true"></span><span class="nx-txt"><b>남은봄</b><small>남은 주말·명절·벚꽃 세는 인생 시계</small></span></a></li>
-        <li><a href="../birthyear/" style="--dot:#B23A26;--dot-d:#E0664E"><span class="nx-dot" aria-hidden="true"></span><span class="nx-txt"><b>나때연감</b><small>내가 태어난 해 타임캡슐</small></span></a></li>
-      </ul>
-    </section>
-    <div class="footer-in">
-      <p class="footer-brand"><b>맛남의 광장</b> · 오늘 어디서 무엇이 남는지, 버려지기 전에</p>
-      <p class="muted small"><b>남는 지도 데이터</b> · 도매가격·반입량: <a href="https://www.kamis.or.kr" target="_blank" rel="noopener noreferrer">KAMIS 농산물유통정보</a> · 수급 전망: <a href="https://aglook.krei.re.kr" target="_blank" rel="noopener noreferrer">한국농촌경제연구원 농업관측</a> · 갈아엎기·시장격리 소식: 언론 보도와 정부·지자체 보도자료. 뉴스는 제목·링크만 표시하며 기사 저작권은 각 언론사에 있어요. 폐기 보상·약정 여부는 참고 정보이니 지역농협·시군에 꼭 확인하세요.</p>
-      <p class="muted small" data-info>맛남의 광장은 지금 정보 서비스로만 운영해요. 거래·결제를 하지 않고, 기부금이나 물품도 직접 받지 않아요(기부는 푸드뱅크로 연결). 가공 안내는 일반 정보이며 판매 목적 가공의 인허가는 관할 시·군·구에 확인하세요.</p>
-      <p class="muted small" data-trade hidden>맛남의 광장은 판매자와 구매자를 연결하는 통신판매중개 플랫폼이며, 거래 당사자가 아닙니다. 상품의 품질·식품 안전·표시 책임은 각 판매자에게 있습니다. 리퍼브 상품은 품질은 정상이나 외관·규격이 정상품과 다를 수 있습니다.</p>
-      <nav class="footer-links" aria-label="정책">
-        <a href="./terms.html">이용약관</a><a href="./privacy.html"><b>개인정보처리방침</b></a><a href="../">← 전체 서비스</a>
-      </nav>
+    <div class="wrap">
+      <p class="hub"><a href="../">← 재미랩 홈</a></p>
+      <section class="others" aria-labelledby="others-title">
+        <h2 id="others-title">다른 서비스</h2>
+        <ul>
+          <li><a href="../lotto/"><b>오늘로또</b><span>사주로 뽑는 오늘의 로또 번호와 살 시간·방향</span></a></li>
+          <li><a href="../lottomap/"><b>명당로드</b><span>로또 1등 명당 지도와 번호 통계</span></a></li>
+          <li><a href="../season/"><b>제철장보기</b><span>이달 제철 식재료와 지금 싼 품목</span></a></li>
+          <li><a href="../sikdang/"><b>제철식당</b><span>이달 이 지역 제철 음식을 잘하는 집</span></a></li>
+          <li><a href="../roots/"><b>근본 테스트</b><span>사주와 퀴즈로 찾는 나의 근본 코드</span></a></li>
+          <li><a href="../family/"><b>식구궁합</b><span>우리 가족 오행 궁합판</span></a></li>
+          <li><a href="../names/"><b>이름레이더</b><span>내 이름, 전국에 몇 명?</span></a></li>
+          <li><a href="../lifeclock/"><b>남은봄</b><span>남은 주말·명절·벚꽃 세는 인생 시계</span></a></li>
+          <li><a href="../birthyear/"><b>나때연감</b><span>내가 태어난 해 타임캡슐</span></a></li>
+        </ul>
+      </section>
+      <div class="fine">
+        <p><b>맛남의 광장</b> · 버려질 농수산물이 어디서 남는지, 버려지기 전에</p>
+        <p>맛남의 광장은 정보와 연결만 하는 서비스예요. 물건을 팔거나 사지 않고, 결제·배송을 하지 않으며, 기부금이나 물품도 받지 않아요. 소개 뒤의 거래 조건·식품 안전·법령 준수는 당사자 책임이에요.</p>
+        <p>데이터: 도매가격·반입량 <a href="https://www.kamis.or.kr" target="_blank" rel="noopener noreferrer">KAMIS 농산물유통정보</a> · 수급 전망 <a href="https://aglook.krei.re.kr" target="_blank" rel="noopener noreferrer">한국농촌경제연구원 농업관측</a> · 갈아엎기·시장격리 소식은 언론 보도와 정부·지자체 보도자료. 뉴스는 제목·링크만 보여 드리며 저작권은 각 언론사에 있어요. 폐기 보상·약정 여부는 참고 정보이니 지역농협·시군에 꼭 확인하세요.</p>
+        <nav class="fine-links" aria-label="정책"><a href="./terms.html">이용약관</a><a href="./privacy.html"><b>개인정보처리방침</b></a></nav>
+      </div>
     </div>
   </footer>
-
-  <nav class="tabbar" aria-label="하단 메뉴">
-    <a href="#/" data-nav="map"><svg class="ic" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 3.5 6v14L9 18l6 2 5.5-2V4L15 6 9 4Z"/><path d="M9 4v14M15 6v14"/></svg><span>지도</span></a>
-    <a href="#/market" data-nav="market" data-trade hidden><svg class="ic" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5 5.5 4h13L20 9.5"/><path d="M4 9.5a2.7 2.7 0 0 0 5.3 0 2.7 2.7 0 0 0 5.4 0 2.7 2.7 0 0 0 5.3 0"/><path d="M5.5 12v8h13v-8"/><path d="M10 20v-4.5h4V20"/></svg><span>장터</span></a>
-    <a href="#/process" data-nav="process" data-info><svg class="ic" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3h8v3H8z"/><path d="M7 6h10l1 3v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9l1-3Z"/><path d="M6 12h12"/></svg><span>가공</span></a>
-    <a href="#/sell" data-nav="sell" data-sell-link data-trade hidden><svg class="ic" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span data-sell-label>판매</span><span class="badge-dot" data-badge="sell" hidden></span></a>
-    <a href="#/farmer" data-nav="farmer" data-info><svg class="ic" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7.5h8"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01M8.5 16h.01M12 16h.01M15.5 16h.01"/></svg><span>농가 판단</span></a>
-    <a href="#/cart" data-nav="cart" data-trade hidden><svg class="ic" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.2 11.2a1.5 1.5 0 0 0 1.5 1.2h8.6a1.5 1.5 0 0 0 1.5-1.1L21 8H6.2"/><circle cx="9.5" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/></svg><span>장바구니</span><span class="badge-dot" data-badge="cart" hidden></span></a>
-    <a href="#/join" data-nav="join" data-info><svg class="ic" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 21V4"/><path d="M5 4h12l-2.5 4.5L17 13H5"/></svg><span>참여</span></a>
-    <a href="#/me" data-nav="me" data-trade hidden><svg class="ic" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-4 4.4-6 8-6s6.8 2 8 6"/></svg><span>MY</span><span class="badge-dot" data-badge="me" hidden></span></a>
-  </nav>
-
-  <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
   <script type="module" src="js/app.js"></script>
 </body>

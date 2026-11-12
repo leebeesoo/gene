@@ -4,35 +4,37 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>제철식당 소개 — 제철식당</title>
-  <meta name="description" content="제철식당가 제철 음식과 식당을 고르는 기준: 지역별 제철 달, 공공 자료, 정부 영업 명단 대조, 협찬 없음.">
+  <meta name="description" content="제철식당이 제철 메뉴와 식당을 고르는 기준: 지역별 제철 달, 공공 자료, 정부 영업 명단 대조, 협찬 없음.">
   <meta name="color-scheme" content="light dark">
   <link rel="canonical" href="https://leebeesoo.github.io/gene/sikdang/about.html">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23B4532A'/%3E%3Cpath d='M14 34h36c0 10-8 17-18 17s-18-7-18-17Z' fill='%23F6F4F0'/%3E%3Cpath d='M26 14c-3 4 3 6 0 11M36 13c-3 4 3 6 0 11' stroke='%23F6F4F0' stroke-width='3' stroke-linecap='round' fill='none'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M8 30h48c0 14-10.7 24-24 24S8 44 8 30Z' fill='%23B4532A'/%3E%3Cpath d='M24 8c-4 5 4 8 0 14M38 8c-4 5 4 8 0 14' stroke='%23B4532A' stroke-width='3.5' stroke-linecap='round' fill='none'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&display=swap">
   <link rel="stylesheet" href="css/style.css">
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous" onerror="document.documentElement.classList.add('no-ads')"></script>
 </head>
 <body>
   <header class="topbar">
     <div class="topbar-in">
-      <a class="logo" href="./" aria-label="제철식당 처음으로">제철식당<small>먹으러 가기</small></a>
+      <a class="logo" href="./#/" aria-label="제철식당 처음으로">제철식당</a>
+      <nav class="topnav" aria-label="주요 메뉴"><a href="./#/" data-nav="home">이달의 메뉴</a><a href="./#/regions" data-nav="regions">지역</a><a href="./about.html" data-nav="about" aria-current="page">소개</a></nav>
       <a class="icon-btn" href="./#/search" aria-label="찾기"><svg class="ic lg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg></a>
       <details class="menu" id="menu">
         <summary class="icon-btn" aria-label="메뉴"><svg class="ic lg open-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="ic lg close-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></summary>
         <nav class="menu-panel" aria-label="메뉴">
           <ul>
-            <li><a href="./#/">이달의 제철</a></li>
-            <li><a href="./#/regions">지역 전체</a></li>
-            <li><a href="./#/search">찾기</a></li>
+            <li><a href="./#/" data-nav="home">이달의 메뉴</a></li>
+            <li><a href="./#/regions" data-nav="regions">지역 전체</a></li>
+            <li><a href="./#/search" data-nav="search">찾기</a></li>
             <li class="sep" aria-hidden="true"></li>
             <li><a href="about.html" aria-current="page">제철식당 소개</a></li>
             <li><a href="contact.html">문의·제보</a></li>
             <li><a class="small" href="privacy.html">개인정보처리방침</a></li>
             <li><a class="small" href="terms.html">이용약관</a></li>
-            <li><a class="small" href="../">전체 서비스</a></li>
+            <li><a class="small" href="../">← 재미랩 홈</a></li>
           </ul>
         </nav>
       </details>
@@ -40,30 +42,48 @@
   </header>
   <main class="wrap doc">
     <p class="eyebrow">제철식당 소개</p>
-    <h1>이달 이 지역에서 꼭 먹을 제철 음식,<br>그걸 잘하는 집까지</h1>
-    <p>제철식당는 「지금, 여기서 무엇을 먹으면 좋을까」에 답하려고 만든 서비스예요. 같은 음식이라도 지역마다 제철이 달라서, 시·군마다 제철 달을 따로 적고 그 음식을 내는 식당을 함께 모았어요.</p>
+    <h1>이달 이 지역 제철 메뉴를<br>잘하는 식당</h1>
+    <p>제철식당은 「지금, 여기서 어디 가서 무엇을 먹으면 좋을까」에 답하려고 만든 식당 안내 서비스예요. 여수 전어구이, 통영 굴전처럼 그 지역의 제철 메뉴마다 그 메뉴를 내는 식당을 모았어요. 같은 재료라도 지역마다 제철이 달라서, 시·군마다 제철 달을 따로 적어요.</p>
+    <p>둘러보는 화면에는 <b>식당이 한 곳 이상 있는 메뉴만</b> 나와요. 내는 집을 아직 못 찾은 메뉴는 찾기에서 「아직 식당 정보가 없어요」로만 보여 드려요.</p>
     <h2 id="how">식당을 고르는 기준</h2>
     <ol>
       <li><b>공식·공공 자료에 소개된 집</b> — 시·군 관광 누리집의 맛집·향토음식점 목록, 한국관광공사, 지역 문화대전, 언론 보도에서 그 음식을 내는 집을 찾았어요.</li>
-      <li><b>정부 영업 명단과 맞춰 보기</b> — 행정안전부 지방행정 인허가 데이터(일반음식점)에서 상호·주소가 맞고 영업 중인 곳만 남겨요. 폐업했거나 명단에 없는 곳은 뺍니다.</li>
-      <li><b>근거 한 줄과 출처</b> — 왜 이 집인지 짧게 적고 원문 링크를 붙여요. 근거 문장은 제철식당가 직접 정리한 말이에요.</li>
+      <li><b>정부 영업 명단과 맞춰 보기</b> — 행정안전부 지방행정 인허가 데이터(일반음식점)에서 상호·주소가 맞고 영업 중인 곳만 남겨요. 맞는 곳에는 식당마다 「공식 명단 일치」를 붙여요. 폐업했거나 명단에 없는 곳은 뺍니다.</li>
+      <li><b>근거 한 줄과 출처</b> — 왜 이 집인지 짧게 적고 원문 링크를 붙여요. 근거 문장은 제철식당이 직접 정리한 말이에요.</li>
       <li><b>협찬 없음</b> — 돈을 받고 싣거나 순서를 바꾸지 않아요. 광고는 화면 안의 「광고」 칸에만 나오고 식당 목록과 섞이지 않아요.</li>
     </ol>
     <h2>제철 달은 이렇게 정해요</h2>
     <p>시·군과 수산·농업 기관 자료에 나온 시기를 우선으로 쓰고, 계절로만 나온 경우는 달로 바꿔 적었어요. 「사철」은 계절을 덜 타서 언제 먹어도 좋은 음식이에요. 화면의 「○월이 지나면 다음 제철은 …」 같은 안내는 이 제철 달을 기준으로만 보여 드려요.</p>
-    <h2>요리 방식과 분위기</h2>
-    <p>음식마다 회·구이·무침처럼 맛있게 먹는 방식을 정리했고, 식당마다 내는 방식을 붙여 골라 볼 수 있어요. 「노포」·「가족」 같은 분위기 표시는 인허가 연도나 매장 규모처럼 확인할 수 있는 근거가 있을 때만 붙이고, 근거를 한 줄로 함께 보여 드려요.</p>
-    <h2>「검수 중」 표시</h2>
-    <p>자료를 모은 뒤 운영자가 한 줄씩 다시 확인하고 있어요. 아직 확인 전인 정보에는 「검수 중」을 붙였어요. 메뉴나 영업시간은 바뀔 수 있으니 가기 전에 한 번 더 확인해 주세요.</p>
+    <h2>메뉴와 요리 방식</h2>
+    <p>메뉴 이름은 시·군이 소개하는 대표 음식 이름을 먼저 쓰고, 없으면 재료와 식당이 내는 방식(회·구이·무침 등)을 이어 붙여 정해요. 식당마다 내는 방식을 붙여 골라 볼 수 있어요. 「노포」·「가족」 같은 분위기 표시는 인허가 연도나 매장 규모처럼 확인할 수 있는 근거가 있을 때만 붙이고, 근거를 한 줄로 함께 보여 드려요.</p>
+    <h2>검수 중인 정보</h2>
+    <p>지금 보이는 식당 정보는 모두 <b>초안</b>이에요. 자료를 모은 뒤 운영자가 한 줄씩 다시 확인하고 있어서, 화면마다 「검수 중인 정보예요, 틀린 곳은 제보해 주세요」라고 적어 두었어요. 메뉴나 영업시간은 바뀔 수 있으니 가기 전에 한 번 더 확인해 주세요.</p>
     <h2>잘못된 정보 알리기</h2>
-    <p>식당 카드의 「문 닫았어요」·「이 메뉴 없어요」를 누르거나 <a href="contact.html">문의·제보</a>로 알려 주세요. 확인해서 고치거나 뺄게요.</p>
+    <p>식당마다 있는 「틀린 정보 제보」를 누르거나 <a href="contact.html">문의·제보</a>로 알려 주세요. 확인해서 고치거나 뺄게요.</p>
     <h2>만든 곳</h2>
-    <p>제철식당는 제철장보기(<a href="../season/">이달 제철 식재료 사러 가기</a>)와 함께 운영하는 개인 프로젝트예요. 회원 가입 없이 쓸 수 있고, 광고 수익으로 운영해요.</p>
+    <p>제철식당은 제철장보기(<a href="../season/">이달 제철 식재료 사러 가기</a>)와 함께 운영하는 개인 프로젝트예요. 회원 가입 없이 쓸 수 있고, 광고 수익으로 운영해요.</p>
   </main>
   <footer class="footer">
     <div class="wrap">
-      <nav aria-label="바닥글"><a href="./">제철식당</a><a href="about.html">소개</a><a href="contact.html">문의·제보</a><a href="privacy.html">개인정보처리방침</a><a href="terms.html">이용약관</a><a href="../">전체 서비스</a></nav>
-      <p>협찬·광고비를 받고 싣는 식당은 없어요.</p>
+      <nav class="foot-nav" aria-label="바닥글">
+        <a class="hub" href="../">← 재미랩 홈</a><a href="./">제철식당</a><a href="about.html">소개</a><a href="contact.html">문의·제보</a><a href="privacy.html">개인정보처리방침</a><a href="terms.html">이용약관</a>
+      </nav>
+      <section class="xsell" aria-labelledby="xsell-title">
+        <h2 id="xsell-title">다른 서비스</h2>
+        <ul>
+          <li><a href="../lotto/"><b>오늘로또</b><span>사주로 뽑는 오늘의 로또 번호와 살 시간·방향</span></a></li>
+          <li><a href="../lottomap/"><b>명당로드</b><span>로또 1등 명당 지도와 번호 통계</span></a></li>
+          <li><a href="../market/"><b>맛남의 광장</b><span>버려질 농수산물이 어디서 남는지, 버려지기 전에</span></a></li>
+          <li><a href="../season/"><b>제철장보기</b><span>이달 제철 식재료와 지금 싼 품목</span></a></li>
+          <li><a href="../roots/"><b>근본 테스트</b><span>사주와 퀴즈로 찾는 나의 근본 코드</span></a></li>
+          <li><a href="../family/"><b>식구궁합</b><span>우리 가족 오행 궁합판</span></a></li>
+          <li><a href="../names/"><b>이름레이더</b><span>내 이름, 전국에 몇 명?</span></a></li>
+          <li><a href="../lifeclock/"><b>남은봄</b><span>남은 주말·명절·벚꽃 세는 인생 시계</span></a></li>
+          <li><a href="../birthyear/"><b>나때연감</b><span>내가 태어난 해 타임캡슐</span></a></li>
+        </ul>
+      </section>
+      <p>식당 정보는 시·군 관광 누리집, 공공 자료, 언론 보도를 근거로 정리하고 정부 일반음식점 인허가 명단과 상호·주소를 맞춰 봤어요. 지금은 모두 검수 중인 정보예요, 틀린 곳은 <a href="contact.html">제보해 주세요</a>.</p>
+      <p>협찬·광고비를 받고 싣는 식당은 없어요. 광고는 「광고」 표시가 붙은 칸에만 나와요.</p>
     </div>
   </footer>
 </body>

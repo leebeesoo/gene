@@ -184,6 +184,12 @@
     };
   }
 
+  /* 첫 화면 예시: 날짜만으로 뽑는 모두의 번호 (사람마다 같음) */
+  function commonDraw(key) {
+    var hex = seedHex('오늘의공|' + key);
+    return genNumbers(hex, parseInt(hex.slice(0, 2), 16) % 5);
+  }
+
   var DIR_DEG = { '북': 0, '북동': 45, '동': 90, '남동': 135, '남': 180, '남서': 225, '서': 270, '북서': 315 };
 
   function rank(nums, win) {
@@ -198,7 +204,7 @@
     pad: pad, kst: kst, kstTs: kstTs, dateKey: dateKey, parseKey: parseKey, addDays: addDays, dowOfKey: dowOfKey,
     drawInfo: drawInfo, drawTsOf: drawTsOf, roundOf: roundOf,
     seedHex: seedHex, rng: rng, parseBirth: parseBirth, birthInfo: birthInfo,
-    genNumbers: genNumbers, drawHex: drawHex, setRows: setRows, reading: reading, rangeLabel: rangeLabel,
+    genNumbers: genNumbers, commonDraw: commonDraw, drawHex: drawHex, setRows: setRows, reading: reading, rangeLabel: rangeLabel,
     DIR_DEG: DIR_DEG, rank: rank
   };
 })();

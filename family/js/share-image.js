@@ -6,7 +6,7 @@ const W = 1080, H = 1350;
 // 한지 바탕 · 먹 글씨 · 청록 포인트 (그라데이션·그림자 없음)
 const C = { paper: '#F3F1EC', paper2: '#EAE7E0', card: '#FBFAF7', ink: '#1C1C1E', ink2: '#45423D', muted: '#6F6B64', accent: '#1F5F57', good: '#3F7D62', mid: '#A39E95', bad: '#B5574B', line: '#DDD8CE' };
 const SANS = '"Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
-const SERIF = '"Noto Serif KR", serif';
+const SERIF = '"Gowun Batang", "Noto Serif KR", serif';
 const TONE = { good: C.good, mid: C.mid, bad: C.bad };
 
 async function fontsReady() {

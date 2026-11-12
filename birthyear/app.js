@@ -14,7 +14,7 @@
   var TTI = ['쥐', '소', '호랑이', '토끼', '용', '뱀', '말', '양', '원숭이', '닭', '개', '돼지'];
   var FAM_KEY = 'birthyear.family.v1';
 
-  var state = { y: null, m: null, r: '', quiz: null };
+  var state = { y: 1994, home: null, m: null, r: '', quiz: null };
 
   function $(s, el) { return (el || document).querySelector(s); }
   function $$(s, el) { return Array.prototype.slice.call((el || document).querySelectorAll(s)); }
@@ -63,20 +63,50 @@
   }
   function cpiFactor(from) { var a = S.cpi[from], b = S.cpi[NOW.year]; return a && b ? b / a : null; }
 
-  /* ---------------- render: card ---------------- */
-  function renderCard() {
-    var y = state.y, m = state.m, g = ganji(y), pres = presidents(y);
-    var el = $('#ilYear'); el.textContent = y; el.classList.remove('anim'); void el.offsetWidth; el.classList.add('anim');
+  /* ---------------- render: front page (그해 신문 1면) ---------------- */
+  function fpPriceItems(y) {
+    var out = [];
+    ['jjajang', 'bus', 'subway', 'ramen'].forEach(function (k) {
+      var it = P[k], p = priceAt(k, y, 3); if (!it || !p) return;
+      out.push('<li><span class="k">' + esc(it.label) + (p.y !== y ? ' <small>(' + p.y + ')</small>' : '') + '</span><b class="num">' + won(p.v) + '</b></li>');
+    });
+    var f = cpiFactor(y);
+    if (f && y !== NOW.year) out.push('<li><span class="k">그해 1만 원은 지금</span><b class="num">약 ' + won(10000 * f) + '</b></li>');
+    return out.slice(0, 5).join('') || '<li class="none">이 해 앞뒤 3년 안에 확인된 가격 기록이 없어요.</li>';
+  }
+  function renderCard(dir) {
+    var y = state.y, g = ganji(y), pres = presidents(y), d = Y[y] || {}, home = state.home, mine = home === y;
+    var el = $('#ilYear');
+    el.textContent = y;
+    el.setAttribute('aria-label', y + '년. 눌러서 내 출생연도 넣기');
+    el.classList.remove('flip-up', 'flip-down'); void el.offsetWidth;
+    if (dir) el.classList.add(dir > 0 ? 'flip-up' : 'flip-down');
+    $('#fpTag').hidden = !!home;
     $('#ilGanji').textContent = g.name + ' · ' + g.tti + '띠';
-    $('#ilAge').textContent = ageText(y, m);
-    $('#ilSub').textContent = (m ? m + '월, ' : '') + (state.r ? (state.r === '해외' ? '바다 건너에서' : state.r + '에서') + ' ' : '') + '태어난 당신에게';
-    var hi = (Y[y] && Y[y].ko && Y[y].ko[0]) ? Y[y].ko[0][1] : '';
-    $('#ilWho').textContent = hi ? '그해의 첫 장면 — ' + hi : '';
+    var m = mine ? state.m : null;
+    $('#ilAge').textContent = (home ? '' : '지금 ') + ageText(y, m);
+    var sub;
+    if (!home) sub = y + '년에 태어났다면';
+    else if (mine) sub = y + '년 ' + (m ? m + '월, ' : '') + (state.r ? (state.r === '해외' ? '바다 건너에서' : state.r + '에서') + ' ' : '') + '태어난 당신에게';
+    else sub = '내가 태어난 ' + home + '년보다 ' + Math.abs(y - home) + '년 ' + (y < home ? '전' : '뒤');
+    $('#ilSub').textContent = sub;
     $('#ilPres').textContent = pres.length ? pres.join('→') : '—';
     $('#ilBirths').textContent = S.births[y] ? man(S.births[y]) + '명' : '—';
     $('#ilGdp').textContent = S.gdp[y] ? '$' + fmt(S.gdp[y]) : '—';
     if (m && m <= 2) $('#ilGanji').title = '띠는 음력 설 기준이라 1~2월생은 앞 해 띠일 수 있어요';
     else $('#ilGanji').removeAttribute('title');
+    var news = (d.ko || []).concat(d.world || []);
+    $('#fpHead').textContent = news.length ? news[0][1] : '이 해의 기록은 아직 정리 중이에요.';
+    $('#fpNews').innerHTML = news.slice(1, 4).map(function (e) {
+      return '<li><span class="mo num">' + (e[0] ? e[0] + '월' : '연중') + '</span>' + esc(e[1]) + '</li>';
+    }).join('');
+    $('#fpSongs').innerHTML = d.songs && d.songs.length
+      ? d.songs.slice(0, 3).map(function (s) { return '<li><b>「' + esc(s[0]) + '」</b> ' + esc(s[1]) + '</li>'; }).join('')
+      : '<li class="none">확실히 확인된 그해 히트곡이 없어 비워 두었어요.</li>';
+    $('#fpMovie').innerHTML = d.movie
+      ? '<b>' + esc(d.movie.t) + '</b>' + (d.movie.a ? ' · 관객 약 ' + fmt(d.movie.a) + '만 명' : '')
+      : '<span class="none">' + (y < 1998 ? '전국 관객 통합 집계 이전이라 비워 두었어요.' : '확인된 기록이 없어요.') + '</span>';
+    $('#fpPrices').innerHTML = fpPriceItems(y);
   }
 
   function renderReel() {
@@ -92,7 +122,7 @@
       b.classList.toggle('is-mine', by === state.home);
     });
     var cur = reel.querySelector('[aria-current="true"]');
-    if (cur) reel.scrollTo({ left: cur.offsetLeft - reel.clientWidth / 2 + cur.clientWidth / 2, behavior: 'smooth' });
+    if (cur) reel.scrollTo({ left: cur.offsetLeft - reel.clientWidth / 2 + cur.clientWidth / 2, behavior: reduceMotion() ? 'auto' : 'smooth' });
     $('#prevBtn').disabled = state.y <= MIN;
     $('#nextBtn').disabled = state.y >= MAX;
   }
@@ -440,14 +470,17 @@
   }
 
   /* ---------------- flow ---------------- */
+  function reduceMotion() { try { return matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } }
   function go(y, opts) {
     opts = opts || {};
     if (!valid(y)) return;
+    var dir = state.y ? y - state.y : 0;
     state.y = y;
     var res = $('#result');
     var first = res.hidden;
     res.hidden = false;
-    renderReel(); renderCard(); renderNews(); renderSongs(); renderMovie(); renderPeers(); renderPrices(); renderNames(); renderPeople(); scheduleCard();
+    $('#openSec').hidden = true;
+    renderReel(); renderCard(opts.home ? 0 : dir); renderNews(); renderSongs(); renderMovie(); renderPeers(); renderPrices(); renderNames(); renderPeople(); scheduleCard();
     if (!state.quiz || opts.home) { state.quiz = buildQuiz(state.home); renderQuiz(); }
     if (opts.home) { renderFamily(); $('#cmpBox').innerHTML = ''; }
     var u = new URL(location.href);
@@ -457,10 +490,21 @@
     if (y !== state.home) u.searchParams.set('v', y); else u.searchParams.delete('v');
     try { history.replaceState(null, '', u.toString()); } catch (e) {}
     document.title = y + '년 · 나때연감 — 내가 태어난 해 타임캡슐';
-    if (first || opts.scroll) { var top = res.getBoundingClientRect().top + window.scrollY - 60; window.scrollTo({ top: top, behavior: first ? 'smooth' : 'auto' }); }
+    if (opts.home && opts.scroll !== false) window.scrollTo({ top: 0, behavior: reduceMotion() ? 'auto' : 'smooth' });
     pushAds();
   }
-  function step(d) { var n = state.y + d; if (valid(n)) go(n); }
+  function step(d) {
+    var n = state.y + d; if (!valid(n)) return;
+    if (state.home) go(n);
+    else { state.y = n; renderReel(); renderCard(d); }
+  }
+  function openForm() {
+    var sec = $('#openSec');
+    sec.hidden = false;
+    if (!state.home) $('#yearIn').value = state.y;
+    sec.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'start' });
+    setTimeout(function () { $('#yearIn').focus({ preventScroll: true }); $('#yearIn').select(); }, 300);
+  }
 
   function submit(e) {
     if (e) e.preventDefault();
@@ -471,11 +515,11 @@
     state.m = parseInt($('#monthIn').value, 10) || null;
     state.r = $('#regionIn').value || '';
     go(y, { home: true });
-    setTimeout(function () { $('#card').setAttribute('tabindex', '-1'); $('#card').focus({ preventScroll: true }); }, 50);
+    setTimeout(function () { $('#ilYear').focus({ preventScroll: true }); }, 50);
   }
 
   function initSwipe() {
-    var card = $('#card'), sx = 0, sy = 0, on = false;
+    var card = $('#front'), sx = 0, sy = 0, on = false;
     card.addEventListener('touchstart', function (e) { var t = e.touches[0]; sx = t.clientX; sy = t.clientY; on = true; }, { passive: true });
     card.addEventListener('touchend', function (e) {
       if (!on) return; on = false;
@@ -504,9 +548,10 @@
     $$('.chip[data-y]').forEach(function (c) { c.addEventListener('click', function () { $('#yearIn').value = c.dataset.y; submit(); }); });
     $('#prevBtn').addEventListener('click', function () { step(-1); });
     $('#nextBtn').addEventListener('click', function () { step(1); });
-    $('#reel').addEventListener('click', function (e) { var b = e.target.closest('button[data-y]'); if (b) go(+b.dataset.y); });
+    $('#reel').addEventListener('click', function (e) { var b = e.target.closest('button[data-y]'); if (b) step(+b.dataset.y - state.y); });
+    $('#ilYear').addEventListener('click', openForm);
     document.addEventListener('keydown', function (e) {
-      if ($('#result').hidden || /INPUT|SELECT|TEXTAREA/.test((e.target || {}).tagName || '')) return;
+      if (/INPUT|SELECT|TEXTAREA/.test((e.target || {}).tagName || '')) return;
       if (e.key === 'ArrowLeft') step(-1); else if (e.key === 'ArrowRight') step(1);
     });
     initSwipe();
@@ -536,9 +581,9 @@
       var qm = parseInt(q.get('m'), 10); if (qm >= 1 && qm <= 12) ms.value = qm;
       var qr = q.get('r'); if (qr && REGIONS.indexOf(qr) >= 0) rs.value = qr;
       state.home = qy; state.m = qm >= 1 && qm <= 12 ? qm : null; state.r = rs.value;
-      go(qy, { home: true });
+      go(qy, { home: true, scroll: false });
       var qv = parseInt(q.get('v'), 10); if (valid(qv) && qv !== qy) go(qv);
-    }
+    } else { renderReel(); renderCard(0); }
     if (document.readyState === 'complete') pushAds(); else window.addEventListener('load', pushAds);
   }
 

@@ -15,7 +15,7 @@
       "sido": "전남",                             // 17개 시도 약칭: 서울 부산 대구 인천 광주 대전 울산 세종 경기 강원 충북 충남 전북 전남 경북 경남 제주
       "sigungu": "장흥군",                        // 모르면 null
       "item": "쪽파",
-      "category": "veg",                          // veg | fruit | sea | mushroom | grain | etc  (market/js/meta.js 카테고리와 동일)
+      "category": "veg",                          // veg | fruit | sea | mushroom | grain | etc  (market 화면의 품목 분류)
       "level": "crash",                           // watch(주의) | surplus(과잉) | crash(폭락) | disposal(폐기 진행)
       "metrics": {
         "price": 1200, "unit": "kg", "price_basis": "도매 평균",   // 없으면 null

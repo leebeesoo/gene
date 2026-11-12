@@ -56,9 +56,12 @@ function render() {
   const ready = model.people.length >= 2;
   for (const id of ['#balance-panel', '#roles-panel', '#saju-panel', '#share-panel']) $(id).hidden = !ready;
   if (model.people.length === 1) $('#saju-panel').hidden = false;
-  const ad1 = document.querySelector('.ad-slot[data-ad="1"]');
-  ad1.hidden = !ready;
-  if (ready) pushAd(ad1);
+  // 광고는 결과가 나온 뒤(2명 이상)에만 보이고, 보인 다음에 한 번만 요청 (docs/ads-plan.md)
+  for (const n of ['1', '2']) {
+    const slot = document.querySelector(`.ad-slot[data-ad="${n}"]`);
+    slot.hidden = !ready;
+    if (ready) pushAd(slot);
+  }
 }
 
 const dateText = p => `${p.cal === 'lunar' ? '음력 ' : ''}${p.y}.${pad(p.m)}.${pad(p.d)}${p.leap ? ' 윤달' : ''}${p.time ? ' ' + p.time : ''}`;
@@ -381,6 +384,44 @@ function setupDrag(handle, li, idx) {
 }
 
 /* ── 예시 ─────────────────────────────────────────── */
+const DEMO = [
+  { name: '아빠', rel: '아빠', y: 1962, m: 9, d: 14, cal: 'solar', leap: false, time: '' },
+  { name: '엄마', rel: '엄마', y: 1965, m: 3, d: 2, cal: 'solar', leap: false, time: '06:30' },
+  { name: '나', rel: '나', y: 1992, m: 7, d: 21, cal: 'solar', leap: false, time: '14:10' },
+  { name: '동생', rel: '형제자매', y: 1996, m: 12, d: 5, cal: 'solar', leap: false, time: '' },
+];
+/* 첫 화면: 오행 오각형 위에 예시 가족 4명 + 관계선 (실제 계산값) */
+function renderHero() {
+  const svg = $('#hero-svg'); if (!svg) return;
+  const people = DEMO.map(p => ({ ...p, ...compute(p) })).filter(p => p.saju);
+  if (people.length < 2) return;
+  const pairs = allPairs(people);
+  const cx = 170, cy = 158, R = 118;
+  const V = {}; ELS.forEach((e, i) => { const a = -Math.PI / 2 + (i * 2 * Math.PI) / 5; V[e] = { x: cx + R * Math.cos(a), y: cy + R * Math.sin(a), a }; });
+  // 같은 오행끼리는 꼭짓점 양옆으로 벌려 놓기
+  const byEl = {}; people.forEach((p, i) => { const e = STEM_EL[p.saju.day.stem]; (byEl[e] = byEl[e] || []).push(i); });
+  const pos = [];
+  Object.entries(byEl).forEach(([e, ids]) => ids.forEach((i, k) => {
+    const off = (k - (ids.length - 1) / 2) * 52; const v = V[e];
+    pos[i] = { x: v.x - Math.sin(v.a) * off, y: v.y + Math.cos(v.a) * off };
+  }));
+  const tone = { good: 'var(--good)', mid: 'var(--mid)', bad: 'var(--bad)' };
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const pent = ELS.map(e => `${V[e].x.toFixed(1)},${V[e].y.toFixed(1)}`).join(' ');
+  const lab = ELS.map(e => { const v = V[e]; const lx = cx + (R + 30) * Math.cos(v.a), ly = cy + (R + 30) * Math.sin(v.a); return `<text class="hb-el" x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" dominant-baseline="central">${EL_H[e]}</text>`; }).join('');
+  const order = pairs.map((p, k) => k).sort((a, b) => pairs[b].score - pairs[a].score);
+  const lines = order.map((k, n) => { const p = pairs[k]; const a = pos[p.i], b = pos[p.j];
+    return `<line class="hb-line" x1="${a.x.toFixed(1)}" y1="${a.y.toFixed(1)}" x2="${b.x.toFixed(1)}" y2="${b.y.toFixed(1)}" stroke="${tone[p.tone]}" stroke-width="${(1.8 + Math.min(4, Math.abs(p.score - 50) / 9)).toFixed(1)}" stroke-linecap="round" pathLength="1" ${p.tone === 'mid' ? 'stroke-dasharray=".02 .02"' : `style="--d:${n * 90}ms"`}/>`; }).join('');
+  const best = pairs[order[0]];
+  const bm = { x: (pos[best.i].x + pos[best.j].x) / 2, y: (pos[best.i].y + pos[best.j].y) / 2 };
+  const nodes = people.map((p, i) => { const e = STEM_EL[p.saju.day.stem]; const { x, y } = pos[i];
+    return `<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)})"><circle r="21" fill="${EL_COLOR[e]}" stroke="var(--bg)" stroke-width="3"/><text text-anchor="middle" dominant-baseline="central" fill="${EL_INK[e]}" class="hb-stem">${STEMS[p.saju.day.stem]}</text><text class="hb-name" y="36" text-anchor="middle">${esc(p.name)}</text></g>`; }).join('');
+  const dots = ELS.map(e => `<circle cx="${V[e].x.toFixed(1)}" cy="${V[e].y.toFixed(1)}" r="4" fill="${EL_COLOR[e]}"/>`).join('');
+  svg.innerHTML = `<polygon points="${pent}" fill="none" class="hb-pent"/>${dots}${lab}<g class="hb-lines${reduce ? '' : ' draw'}">${lines}</g>
+    <g transform="translate(${bm.x.toFixed(1)} ${bm.y.toFixed(1)})"><rect x="-17" y="-11" width="34" height="22" rx="11" class="hb-badge" stroke="var(--good)"/><text text-anchor="middle" dominant-baseline="central" class="hb-score" fill="var(--good)">${best.score}</text></g>${nodes}`;
+  $('#hero-cap').textContent = `예시 · 아빠·엄마·나·동생 — ${josa(people[best.i].name, '과', '와')} ${josa(people[best.j].name, '이', '가')} ${best.score}점으로 가장 잘 맞아요`;
+}
+
 function loadDemo() {
   board = {
     title: '우리 가족',
@@ -579,10 +620,15 @@ function init() {
     }
   }
   $('#board-title').value = board.title;
-  setupForm(); setupShare(); setupSheet(); setupFestival(); renderHow();
+  setupForm(); setupShare(); setupSheet(); setupFestival(); renderHow(); renderHero();
+  $('#hero-start').addEventListener('click', () => {
+    $('#table').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    $('#f-name').focus({ preventScroll: true });
+  });
+  $('#hero-demo').addEventListener('click', () => { loadDemo(); $('#board-panel').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
   $('#engine-note').textContent = { 'roots-v2': '사주 계산: 근본 테스트 엔진 (절입 시각·한국 표준시 이력 반영)', 'roots-v1': '사주 계산: 근본 테스트 엔진 (평균 절입일 근사)', fallback: '사주 계산: 내장 근사식 (평균 절입일)' }[engine.source];
   render();
-  pushAd(document.querySelector('.ad-slot[data-ad="2"]'));
+  pushAd(document.querySelector('.ad-slot[data-ad="3"]'));
   window.addEventListener('hashchange', () => { if (importFromHash()) { $('#board-title').value = board.title; resetForm(); commit(); } });
 }
 init();

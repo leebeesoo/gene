@@ -145,11 +145,7 @@
     var wins = 0;
     stores.forEach(function (s) { wins += s.wins.length; });
     var top = rankStores(stores, 'all')[0];
-    $('#hs-stores').innerHTML = fmt(stores.length) + '<small>곳</small>';
-    $('#hs-wins').innerHTML = fmt(wins) + '<small>건</small>';
-    $('#hs-top').innerHTML = top ? top.n + '<small>회</small>' : '–';
-    if (top) $('#hs-top').title = top.s.name;
-    $('#hero-coverage').textContent = FIRST + '~' + LATEST + '회 1등 판매점 · ' + ST.updated + ' 기준';
+    $('#hero-sub').textContent = '1등 배출 판매점 ' + fmt(stores.length) + '곳' + (top ? ' · 최다 ' + top.s.name + ' ' + top.n + '회' : '') + ' · ' + ST.updated + ' 기준';
   }
   function tick() {
     var now = Date.now();
@@ -236,14 +232,17 @@
       var p = e.target.closest('.rg');
       if (p && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); selectRegion(p.getAttribute('data-rk'), true); }
     });
+    svg.classList.toggle('no-dots', !$('#map-dots').checked);
     $('#map-dots').addEventListener('change', function () { svg.classList.toggle('no-dots', !this.checked); });
+    $('#hero-geo').addEventListener('click', locateMe);
     segment('#map-period', function (v) { mapState.period = v; mapState.page = 1; renderMap(); });
     $('#rp-more').addEventListener('click', function () { mapState.page++; renderRegionList(); });
   }
+  var drawnRegion = null;
   function rampColor(v, max) {
     if (!v) return 'var(--c0)';
     var t = Math.sqrt(v / max);
-    var i = Math.min(6, Math.max(1, Math.ceil(t * 6)));
+    var i = Math.min(5, Math.max(1, Math.ceil(t * 5)));
     return 'var(--c' + i + ')';
   }
   function renderMap() {
@@ -257,10 +256,14 @@
       p.setAttribute('aria-pressed', mapState.region === k);
     });
     $('#korea').classList.toggle('has-sel', !!mapState.region);
-    $('#korea .sel-outline').innerHTML = mapState.region ? '<path class="sel-line" d="' + GEO.regions[mapState.region].d + '"/>' : '';
+    if (drawnRegion !== mapState.region) {
+      drawnRegion = mapState.region;
+      // 하나뿐인 움직임: 고른 지역 경계선이 한 번 그려진다
+      $('#korea .sel-outline').innerHTML = mapState.region ? '<path class="sel-line draw" pathLength="1" d="' + GEO.regions[mapState.region].d + '"/>' : '';
+    }
     $$('#korea [data-n]').forEach(function (t) { t.textContent = fmt(tot[t.getAttribute('data-n')]); });
     // legend
-    $('#map-legend').innerHTML = '<span>적음</span><span class="ramp">' + [1, 2, 3, 4, 5, 6].map(function (i) { return '<i style="background:var(--c' + i + ')"></i>'; }).join('') + '</span><span>많음</span>';
+    $('#map-legend').innerHTML = '<span>적음</span><span class="ramp">' + [1, 2, 3, 4, 5].map(function (i) { return '<i style="background:var(--c' + i + ')"></i>'; }).join('') + '</span><span>많음</span>';
     // top dots
     var top = rankStores(stores, mapState.period).slice(0, 30);
     var maxN = top.length ? top[0].n : 1;
@@ -283,8 +286,9 @@
     var k = mapState.region, pLabel = mapState.period === 'all' ? FIRST + '~' + LATEST + '회 누적' : '최근 ' + (mapState.period === '52' ? '1년(52회)' : '5년(260회)');
     if (!k) {
       var sum = 0; REGIONS.forEach(function (r) { sum += tot[r[0]]; });
-      $('#rp-kicker').textContent = pLabel + ' · 지역을 누르면 판매점이 보여요';
+      $('#rp-kicker').textContent = pLabel + ' · 지도에서 지역을 누르면 판매점이 보여요';
       $('#rp-name').textContent = '전국';
+      $('#rp-title').textContent = '시·도별 1등 횟수';
       $('#rp-count').textContent = fmt(sum);
       var sorted = REGIONS.slice().sort(function (a, b) { return tot[b[0]] - tot[a[0]]; });
       var mx = tot[sorted[0][0]] || 1;
@@ -323,6 +327,14 @@
     var k = mapState.region; if (!k) return;
     var list = rankStores(stores.filter(function (s) { return s.rk === k && (!mapState.sgg || s.sgg === mapState.sgg); }), mapState.period);
     var shown = list.slice(0, mapState.page * 10);
+    if (mapState.sgg) {
+      $('#rp-name').textContent = RNAME[k] + ' ' + mapState.sgg;
+      $('#rp-count').textContent = fmt(list.reduce(function (a, x) { return a + x.n; }, 0));
+    } else {
+      $('#rp-name').textContent = RFULL[k];
+      $('#rp-count').textContent = fmt(regionTotals(mapState.period)[k]);
+    }
+    $('#rp-title').innerHTML = esc($('#rp-name').textContent) + ' 판매점 순위 <span>' + fmt(list.length) + '곳</span>';
     $('#rp-list').innerHTML = shown.map(function (x, i) { return storeCard(x.s, { rank: i + 1, count: x.n, period: mapState.period }); }).join('') ||
       '<li class="empty">이 기간에 1등이 나온 판매점이 없어요.</li>';
     $('#rp-more').hidden = shown.length >= list.length;
@@ -375,6 +387,24 @@
     });
     fillSgg();
     renderNear();
+  }
+  function locateMe() {
+    var btn = $('#hero-geo');
+    if (!navigator.geolocation) { toast('이 브라우저는 위치 기능을 지원하지 않아요. 지도에서 지역을 눌러 보세요'); return; }
+    btn.disabled = true; btn.lastChild.textContent = '위치 확인 중…';
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      btn.disabled = false; btn.lastChild.textContent = '내 위치로 보기';
+      var c = [pos.coords.latitude, pos.coords.longitude], best = null, bd = 1e9;
+      stores.forEach(function (s) { if (!s.lat) return; var d = km(c, [s.lat, s.lng]); if (d < bd) { bd = d; best = s; } });
+      if (!best || bd > 60) { toast('근처에서 1등 판매점을 찾지 못했어요'); return; }
+      mapState.region = best.rk; mapState.sgg = best.sgg || ''; mapState.page = 1;
+      renderMap();
+      near.coords = c; near.page = 1; renderNear();
+      toast((RNAME[best.rk] || '') + (best.sgg ? ' ' + best.sgg : '') + ' 기준으로 보여 드려요');
+    }, function () {
+      btn.disabled = false; btn.lastChild.textContent = '내 위치로 보기';
+      toast('위치를 가져오지 못했어요. 지도에서 지역을 눌러 보세요');
+    }, { enableHighAccuracy: false, timeout: 10000, maximumAge: 600000 });
   }
   function km(a, b) {
     var R = 6371, toR = Math.PI / 180;
@@ -521,24 +551,24 @@
     var k = $('#share-region').value;
     var F = '"Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif';
     var W = 1080, H = 1080;
-    var BG = '#F6F6F4', SURF = '#FFFFFF', INK = '#16171A', MUTED = '#6B6E75', LINE = '#E4E4E1', ACC = '#C8361F';
+    var BG = '#F5F5F2', SURF = '#FFFFFF', INK = '#17181B', MUTED = '#6A6C70', LINE = '#E3E3DE', ACC = '#B8452A';
     x.textAlign = 'left';
     x.fillStyle = BG; x.fillRect(0, 0, W, H);
     // map silhouette
     x.save(); x.translate(620, 150); x.scale(1.75, 1.75); x.translate(-72, 0);
     REGIONS.forEach(function (r) {
       var p = new Path2D(GEO.regions[r[0]].d);
-      x.fillStyle = r[0] === k ? ACC : '#E4E4E1'; x.fill(p);
+      x.fillStyle = r[0] === k ? ACC : '#E3E3DE'; x.fill(p);
       x.strokeStyle = BG; x.lineWidth = .8; x.stroke(p);
     });
     x.restore();
     var list = rankStores(k ? stores.filter(function (s) { return s.rk === k; }) : stores, 'all');
     var total = list.reduce(function (a, b) { return a + b.n; }, 0);
-    x.fillStyle = ACC; x.beginPath(); x.arc(82, 101, 9, 0, Math.PI * 2); x.fill();
-    x.fillStyle = INK; x.font = '700 32px ' + F; x.textBaseline = 'alphabetic';
-    x.fillText('명당로드', 104, 112);
+    var FT = '"IBM Plex Sans KR", ' + F;
+    x.fillStyle = INK; x.font = '600 34px ' + FT; x.textBaseline = 'alphabetic';
+    x.fillText('명당로드', 72, 112);
     var bw = x.measureText('명당로드').width;
-    x.fillStyle = MUTED; x.font = '500 32px ' + F; x.fillText('· 로또 1등 명당 지도', 116 + bw, 112);
+    x.fillStyle = MUTED; x.font = '500 30px ' + F; x.fillText('로또 1등 명당 지도', 92 + bw, 112);
     x.fillStyle = INK; x.font = '700 92px ' + F;
     x.fillText(k ? RNAME[k] : '전국', 72, 240);
     x.font = '500 40px ' + F; x.fillStyle = MUTED;
@@ -600,7 +630,7 @@
     var drawn = Math.floor((Date.now() - ROUND1) / WEEK) + 1;
     var lag = drawn > LATEST ? ' 최신 ' + (LATEST + 1) + (drawn > LATEST + 1 ? '~' + drawn : '') + '회 결과는 아직 반영 전이에요.' : '';
     $('#map-note').textContent = FIRST + '회(2007.12)~' + LATEST + '회 판매점 1등 ' + fmt(stores.reduce(function (a, s) { return a + s.wins.length; }, 0)) +
-      '건 기준(인터넷 구매 ' + fmt(ST.online.length) + '건 제외). 노란 점은 기간 내 상위 30개 명당이에요. 2026년 7월 출범한 전남광주통합특별시는 옛 광주(5개 구)·전남 경계로 나눠 보여드려요. 울릉도 등 일부 섬은 지도에서 생략했어요.' + lag;
+      '건 기준(인터넷 구매 ' + fmt(ST.online.length) + '건 제외). 색이 진할수록 1등이 많이 나온 시·도예요. 점을 켜면 기간 내 상위 30개 명당이 보여요. 2026년 7월 출범한 전남광주통합특별시는 옛 광주(5개 구)·전남 경계로 나눠 보여드려요. 울릉도 등 일부 섬은 지도에서 생략했어요.' + lag;
   }
 
   /* ================= ads ================= */

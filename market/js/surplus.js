@@ -40,7 +40,7 @@ export function stabItem(item) {
 
 /**
  * 신호의 보상 배지/설명.
- * kind: 'free'(보상 대상 아님 → 판매·나눔 자유) | 'stab'(채소가격안정제 품목, 계약 물량만) | 'isolation'(수급대책·지자체 시장격리)
+ * kind: 'free'(보상 대상 아님 → 연결·나눔 자유) | 'stab'(채소가격안정제 품목, 계약 물량만) | 'isolation'(수급대책·지자체 시장격리)
  */
 export function supportOf(sig) {
   const program = sig?.support?.program || null;
@@ -48,16 +48,16 @@ export function supportOf(sig) {
   if (program === '수급대책' || program === '지자체') {
     return {
       kind: 'isolation', badge: `${program === '지자체' ? '지자체' : '정부'} 시장격리·폐기 지원 진행`,
-      line: '신청·약정한 물량만 보상 · 그 물량은 판매·기부 불가',
+      line: '신청·약정한 물량만 보상 · 그 물량은 연결·기부 불가',
     };
   }
   if (program === '채소가격안정제' || st) {
     return {
       kind: 'stab', badge: '채소가격안정제 대상 품목(계약 물량만)',
-      line: `계약재배 약정 물량만 보상${st?.note ? ` · ${st.note}` : ''} · 계약 외 물량은 판매·나눔 가능`,
+      line: `계약재배 약정 물량만 보상${st?.note ? ` · ${st.note}` : ''} · 계약 외 물량은 연결·나눔 가능`,
     };
   }
-  return { kind: 'free', badge: '보상 대상 아님 → 판매·나눔 가능', line: '정부 폐기 보상이 없는 품목이라 갈아엎으면 비용은 모두 농가 부담' };
+  return { kind: 'free', badge: '폐기 보상 대상 아님', line: '정부 폐기 보상이 없는 품목이라 갈아엎으면 비용은 모두 농가 부담' };
 }
 
 // ── 품목별 기본값 (평당 수확량 kg, 이미 쓴 생산비 원/평). 지역·작형별 차이가 커서 '대략값'으로만 씀 ──
@@ -101,12 +101,12 @@ function normalize(raw, fixture) {
     title: str(e.title), url: okUrl(e.url), publisher: str(e.publisher) || null, verified: e.verified === true,
   })).sort((a, b) => String(b.date).localeCompare(String(a.date)));
   const signals = (Array.isArray(raw?.signals) ? raw.signals : [])
-    .filter((s) => s && s.id && s.item && REGION_NAMES.includes(s.sido))
+    .filter((s) => s && s.id && s.item && (s.sido == null || REGION_NAMES.includes(s.sido)))
     .map((s) => {
       const m = s.metrics || {};
       const hist = Array.isArray(m.history) ? m.history : Array.isArray(s.history) ? s.history : [];
       return {
-        id: String(s.id), sido: s.sido, sigungu: str(s.sigungu) || null, item: str(s.item), category: str(s.category) || 'etc',
+        id: String(s.id), sido: s.sido || null, sigungu: s.sido ? (str(s.sigungu) || null) : null, item: str(s.item), category: str(s.category) || 'etc',
         level: LEVEL[s.level] ? s.level : 'watch',
         metrics: {
           price: numOr(m.price), unit: str(m.unit) || 'kg', price_basis: str(m.price_basis) || null,
@@ -178,7 +178,7 @@ export const isRecent = (iso, days = 45) => !!iso && Date.now() - new Date(iso).
 export function regionSummary(data) {
   const out = {};
   for (const r of REGION_NAMES) out[r] = { level: null, count: 0, signals: [], events: [] };
-  for (const s of data.signals) out[s.sido].signals.push(s);
+  for (const s of data.signals) if (s.sido) out[s.sido].signals.push(s);
   for (const e of data.events) if (e.sido) out[e.sido].events.push(e);
   for (const r of REGION_NAMES) {
     const o = out[r];
@@ -200,19 +200,6 @@ export const isStale = (data) => !!data.generatedAt && Date.now() - new Date(dat
 export const pctText = (v) => (v == null ? '–' : `${v > 0 ? '+' : ''}${Math.round(v)}%`);
 export const ratioText = (v) => (v == null ? '–' : `${Math.round(v * 10) / 10}배`);
 export const placeText = (o) => [o.sido, o.sigungu].filter(Boolean).join(' ');
-
-/** 장터 상품 중 이 품목과 맞는 것 */
-export function listingsForItem(list, item, sido = null) {
-  const key = String(item || '').replace(/\s+/g, '');
-  const st = stabItem(key);
-  const names = st ? st.alias : [key];
-  const match = (title) => {
-    const tokens = title.split(/[\s()·,/]+/).filter(Boolean);
-    return names.some((n) => n && (n.length === 1 ? tokens.some((t) => t === n || t.endsWith(n)) : title.replace(/\s+/g, '').includes(n)));
-  };
-  const hit = list.filter((l) => match(l.title));
-  return sido ? [...hit.filter((l) => l.region === sido), ...hit.filter((l) => l.region !== sido)] : hit;
-}
 
 // ── 헐값 경매 (auction_lows) ──
 const ymd = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -256,4 +243,66 @@ export function groupAuctionLows(rows) {
     out.push({ item, lines, total: lines.reduce((s, l) => s + l.n, 0), minRatio: rs.length ? Math.min(...rs) : null });
   }
   return out.sort((a, b) => (a.minRatio ?? 1) - (b.minRatio ?? 1) || b.total - a.total);
+}
+
+/** 「10kg」「20kg」「1kg」 단위 가격 → kg당. 그 밖의 단위(포기·개·g)는 null */
+export function perKgPrice(m) {
+  if (!m || m.price == null) return null;
+  const u = String(m.unit || '').replace(/\s+/g, '');
+  const k = u === 'kg' ? 1 : (u.match(/^(\d+(?:\.\d+)?)kg$/) || [])[1];
+  return k ? Math.round(m.price / Number(k)) : null;
+}
+
+/** 가격 기준 설명: 「가락시장 도매 · 전국 값」처럼 지역 신호에 전국 값이 붙은 경우를 밝혀요 */
+export function basisText(sig) {
+  const m = sig.metrics;
+  if (m.price == null && m.price_vs_normal_pct == null && m.price_vs_last_year_pct == null) return '';
+  const nat = !!sig.sido && (/전국/.test(m.market || '') || /전국/.test(m.price_basis || ''));
+  const basis = /소매/.test(m.price_basis || '') ? '소매' : '도매';
+  const month = /^\d{4}-\d{2}$/.test(m.as_of || '') ? `${Number(m.as_of.slice(5))}월 평균` : '';
+  return [`${nat || !sig.sido ? '전국 ' : ''}${basis}`, month].filter(Boolean).join(' ');
+}
+
+/** 대표 낙폭: 평년 대비가 있으면 그것, 없으면 전년 대비 */
+export function headlinePct(sig) {
+  const m = sig.metrics;
+  if (m.price_vs_normal_pct != null) return { v: m.price_vs_normal_pct, vs: '평년 대비' };
+  if (m.price_vs_last_year_pct != null) return { v: m.price_vs_last_year_pct, vs: '전년 대비' };
+  return null;
+}
+
+/** 같은 원문(url)을 한 번만: 품목이 여럿인 보도자료는 품목을 합쳐요 */
+export function dedupeEvents(events) {
+  const out = [];
+  const byUrl = new Map();
+  for (const e of events) {
+    const k = e.url || e.id;
+    const hit = byUrl.get(k);
+    if (hit) {
+      if (e.item && !hit.items.includes(e.item)) hit.items.push(e.item);
+      continue;
+    }
+    const x = { ...e, items: e.item ? [e.item] : [] };
+    byUrl.set(k, x);
+    out.push(x);
+  }
+  return out;
+}
+
+/** 품목별 묶음 (첫 화면 헤드라인): [{ item, top, signals, places }] — 위험도 순 */
+export function itemHeadlines(data) {
+  const by = new Map();
+  for (const s of data.signals) {
+    if (!by.has(s.item)) by.set(s.item, []);
+    by.get(s.item).push(s);
+  }
+  return [...by.entries()].map(([item, sigs]) => {
+    const sorted = [...sigs].sort(compareSignals);
+    // 대표: 가장 심한 신호. 지역 신호를 전국 신호보다 앞에
+    const top = sorted.find((s) => s.sido && s.level === sorted[0].level) || sorted[0];
+    const withPct = sorted.find((s) => headlinePct(s)) || null;
+    const places = [...new Set(sorted.map((s) => s.sigungu ? s.sigungu.replace(/(시|군|구)$/, '') : s.sido).filter(Boolean))];
+    const events = new Set(sorted.flatMap((s) => s.event_ids));
+    return { item, top, sigs: sorted, pctSig: withPct, places, eventCount: events.size };
+  }).sort((a, b) => compareSignals(a.top, b.top));
 }

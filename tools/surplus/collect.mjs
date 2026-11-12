@@ -196,6 +196,9 @@ async function main() {
   if (args.season && OFFLINE) { try { await collectSeason(doc, status); } catch (e) { status.season = `fail: ${e.message}`; } }
   for (const [k, v] of Object.entries(status)) log(k.padEnd(6), v);
 
+  const rv = L.revalidateEvents(doc.events);
+  doc.events = rv.events;
+  if (rv.dropped.length) log(`사건 ${rv.dropped.length}건 제외(문맥·중복):`, rv.dropped.map((d) => `${d.id}(${d.why})`).join(', '));
   L.prune(doc, TODAY);
   for (const f of doc.forecasts) if (f.source_id) used[f.source_id] = [f.published, used[f.source_id]].filter(Boolean).sort().pop() || null;
   doc.signals = L.deriveSignals({ metrics: doc.metrics, events: doc.events, today: TODAY });

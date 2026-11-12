@@ -25,11 +25,11 @@
 <meta name="twitter:description" content="그해 뉴스·히트곡·영화·물가·출생아 수를 한 장의 일력으로.">
 <meta name="twitter:image" content="https://leebeesoo.github.io/gene/birthyear/og.png">
 
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23B23A26'/%3E%3Cg fill='none' stroke='%23fff' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='14' y='16' width='36' height='34' rx='4'/%3E%3Cpath d='M14 26h36M24 12v7M40 12v7'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M6 14h52M6 50h52' stroke='%23222020' stroke-width='3'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='Georgia,serif' font-weight='900' font-size='26' fill='%23B23A26'%3E94%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="style.css">
 
@@ -86,178 +86,191 @@
 
 <header class="topbar">
   <div class="wrap topbar-in">
-    <a class="logo" href="./" aria-label="나때연감 처음으로">
-      <svg class="logo-mark" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4.5" width="16" height="16" rx="2"/><path d="M4 9h16" style="stroke:var(--red)"/><path d="M8.5 3v3M15.5 3v3M8.5 13.5h7M8.5 16.5h4.5"/></svg>
-      <span>나때연감 <small>since 1950</small></span>
-    </a>
+    <a class="logo" href="./" aria-label="나때연감 처음으로">나때연감</a>
     <button class="icon-btn" id="themeBtn" type="button" aria-label="다크 모드 전환"><svg><use href="#i-moon"/></svg></button>
   </div>
 </header>
 
-<main id="main" class="wrap">
-  <section class="hero" aria-labelledby="heroTitle">
-    <p class="eyebrow"><span>내가 태어난 해 타임캡슐</span><span>1950–2025</span></p>
-    <h1 id="heroTitle">그해, 우리는<br><em>어떤 세상</em>에 태어났을까</h1>
-    <p class="lead">출생연도만 넣으면 그해 뉴스·노래·영화·물가·출생아 수를 일력 한 장에 담아 드려요.</p>
-
-    <form class="form-card" id="yearForm" novalidate>
-      <label class="field">
-        <span>출생연도 <small>(1950~2025)</small></span>
-        <input class="input year-input num" id="yearIn" name="y" type="number" inputmode="numeric" min="1950" max="2025" placeholder="1994" autocomplete="bday-year" required aria-describedby="yearErr">
-      </label>
-      <p class="err" id="yearErr" role="alert"></p>
-      <div class="chips" aria-label="빠른 선택">
-        <button type="button" class="chip" data-y="1965">1965</button>
-        <button type="button" class="chip" data-y="1975">1975</button>
-        <button type="button" class="chip" data-y="1988">1988</button>
-        <button type="button" class="chip" data-y="1995">1995</button>
-        <button type="button" class="chip" data-y="2002">2002</button>
-        <button type="button" class="chip" data-y="2012">2012</button>
+<main id="main">
+  <section class="front" id="front" aria-labelledby="frontTitle">
+    <div class="wrap fp">
+      <div class="fp-mast">
+        <span>내가 태어난 해 타임캡슐</span>
+        <span id="ilGanji"></span>
       </div>
-      <div class="row2">
-        <label class="field">
-          <span>태어난 달 <small>(선택)</small></span>
-          <select class="select" id="monthIn" name="m">
-            <option value="">모름</option>
-          </select>
-        </label>
-        <label class="field">
-          <span>태어난 곳 <small>(선택)</small></span>
-          <select class="select" id="regionIn" name="r">
-            <option value="">선택 안 함</option>
-          </select>
-        </label>
-      </div>
-      <button class="btn btn-primary" type="submit">타임캡슐 열기</button>
-    </form>
-  </section>
-
-  <div class="ad" aria-label="광고">
-    <span class="ad-label">광고</span>
-    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
-  </div>
-
-  <section class="result" id="result" hidden aria-live="polite">
-    <nav class="yearnav" aria-label="연도 이동">
-      <div class="yearnav-in">
+      <h1 class="sr-only" id="frontTitle">나때연감 — 그해 신문 1면</h1>
+      <div class="fp-yearrow">
         <button class="yn-btn" id="prevBtn" type="button" aria-label="이전 해"><svg><use href="#i-left"/></svg></button>
-        <div class="reel" id="reel" role="list"></div>
+        <button class="fp-year num" id="ilYear" type="button" aria-describedby="yearHint">1994</button>
         <button class="yn-btn" id="nextBtn" type="button" aria-label="다음 해"><svg><use href="#i-right"/></svg></button>
       </div>
-    </nav>
-
-    <article class="ilryeok" id="card" aria-labelledby="ilYear">
-      <div class="il-top"><span id="ilGanji"></span><span id="ilAge"></span></div>
-      <h2 class="il-year" id="ilYear">1994</h2>
-      <p class="il-sub" id="ilSub"></p>
-      <p class="il-who" id="ilWho"></p>
+      <p class="fp-dateline"><span class="ex-tag" id="fpTag">예시</span><span id="ilSub"></span><span class="dot" aria-hidden="true">·</span><span id="ilAge"></span></p>
       <dl class="il-meta">
         <div><dt>대통령</dt><dd id="ilPres">—</dd></div>
         <div><dt>출생아</dt><dd id="ilBirths" class="num">—</dd></div>
         <div><dt>1인당 GDP</dt><dd id="ilGdp" class="num">—</dd></div>
       </dl>
-    </article>
-    <p class="swipe-hint">카드를 좌우로 밀면 앞뒤 해로 넘어가요</p>
-
-    <section class="sec" aria-labelledby="newsH">
-      <div class="sec-h"><h2 id="newsH"><span class="tag">NEWS</span> 그해의 뉴스</h2><span class="note" id="newsNote"></span></div>
-      <div id="newsBox"></div>
-    </section>
-
-    <div class="grid2">
-      <section class="sec" aria-labelledby="songH">
-        <div class="sec-h"><h2 id="songH"><svg class="ico" aria-hidden="true"><use href="#i-music"/></svg>그해의 노래</h2></div>
-        <div id="songBox"></div>
-      </section>
-      <section class="sec" aria-labelledby="movieH">
-        <div class="sec-h"><h2 id="movieH"><svg class="ico" aria-hidden="true"><use href="#i-film"/></svg>흥행 1위 영화</h2></div>
-        <div id="movieBox"></div>
-      </section>
-    </div>
-
-    <section class="sec" aria-labelledby="peerH">
-      <div class="sec-h"><h2 id="peerH"><svg class="ico" aria-hidden="true"><use href="#i-people"/></svg>내 또래는 몇 명?</h2></div>
-      <div id="peerBox"></div>
-    </section>
-
-    <div class="ad" aria-label="광고">
-      <span class="ad-label">광고</span>
-      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
-    </div>
-
-    <section class="sec" aria-labelledby="priceH">
-      <div class="sec-h"><h2 id="priceH"><svg class="ico" aria-hidden="true"><use href="#i-coin"/></svg>물가 타임머신</h2></div>
-      <div id="priceBox"></div>
-    </section>
-
-    <div class="grid2">
-      <section class="sec" aria-labelledby="nameH">
-        <div class="sec-h"><h2 id="nameH"><svg class="ico" aria-hidden="true"><use href="#i-tag"/></svg>그 시절 인기 이름</h2></div>
-        <div id="nameBox"></div>
-      </section>
-      <section class="sec" aria-labelledby="peopleH" id="peopleSec">
-        <div class="sec-h"><h2 id="peopleH"><svg class="ico" aria-hidden="true"><use href="#i-star"/></svg>이 해에 태어난 사람</h2></div>
-        <div id="peopleBox"></div>
-      </section>
-    </div>
-
-    <section class="sec share-sec" aria-labelledby="shareH">
-      <div class="sec-h"><h2 id="shareH"><svg class="ico" aria-hidden="true"><use href="#i-card"/></svg>내 연감 카드</h2><span class="note">1080×1350</span></div>
-      <canvas id="shareCanvas" width="1080" height="1350" role="img" aria-label="공유용 연감 카드 미리보기"></canvas>
-      <div class="btn-row">
-        <button class="btn btn-ghost" id="shareBtn" type="button"><svg><use href="#i-share"/></svg>카드 공유</button>
-        <button class="btn btn-ghost" id="saveBtn" type="button"><svg><use href="#i-down"/></svg>이미지 저장</button>
-        <button class="btn btn-ghost" id="linkBtn" type="button"><svg><use href="#i-link"/></svg>링크 복사</button>
+      <div class="fp-cols" id="card">
+        <article class="fp-col fp-lead">
+          <h2 class="fp-kicker">그해의 뉴스</h2>
+          <p class="fp-head" id="fpHead"></p>
+          <ul class="fp-list" id="fpNews"></ul>
+        </article>
+        <article class="fp-col">
+          <h2 class="fp-kicker">그해의 노래</h2>
+          <ul class="fp-list" id="fpSongs"></ul>
+          <h2 class="fp-kicker">흥행 1위 영화</h2>
+          <p class="fp-movie" id="fpMovie"></p>
+        </article>
+        <article class="fp-col">
+          <h2 class="fp-kicker">그해 물가</h2>
+          <ul class="fp-list fp-prices" id="fpPrices"></ul>
+        </article>
       </div>
-    </section>
-
-    <section class="sec" aria-labelledby="quizH">
-      <div class="sec-h"><h2 id="quizH"><svg class="ico" aria-hidden="true"><use href="#i-mic"/></svg>그해 히트곡 맞히기</h2><span class="quiz-progress" id="quizProg"></span></div>
-      <div id="quizBox"></div>
-    </section>
-
-    <section class="sec" aria-labelledby="cmpH">
-      <div class="sec-h"><h2 id="cmpH"><svg class="ico" aria-hidden="true"><use href="#i-compare"/></svg>나 vs 친구·부모님</h2></div>
-      <p class="desc">비교할 사람의 출생연도를 넣어 보세요.</p>
-      <form class="cmp-form" id="cmpForm" novalidate>
-        <label class="sr-only" for="cmpIn">비교할 출생연도</label>
-        <input class="input num" id="cmpIn" type="number" inputmode="numeric" min="1950" max="2025" placeholder="예: 1965">
-        <button class="btn btn-ghost" type="submit">비교</button>
-      </form>
-      <div id="cmpBox"></div>
-    </section>
-
-    <section class="sec" aria-labelledby="famH">
-      <div class="sec-h"><h2 id="famH"><svg class="ico" aria-hidden="true"><use href="#i-family"/></svg>우리 가족 타임라인</h2></div>
-      <p class="desc">가족의 이름(호칭)과 출생연도를 차례로 더해 보세요. 이 기기에만 저장돼요.</p>
-      <form class="fam-form" id="famForm" novalidate>
-        <label class="sr-only" for="famName">호칭</label>
-        <input class="input" id="famName" type="text" maxlength="10" placeholder="엄마" autocomplete="off">
-        <label class="sr-only" for="famYear">출생연도</label>
-        <input class="input num" id="famYear" type="number" inputmode="numeric" min="1950" max="2025" placeholder="1965">
-        <button class="btn btn-ghost" type="submit">추가</button>
-      </form>
-      <p class="err" id="famErr" role="alert"></p>
-      <ol class="fam-list" id="famList"></ol>
-    </section>
+      <div class="reel" id="reel" role="list" aria-label="연도 고르기"></div>
+      <p class="swipe-hint" id="yearHint">연도 숫자를 누르면 내 출생연도를 넣을 수 있어요. 1면을 좌우로 밀거나 화살표로 해를 넘겨요.</p>
+    </div>
   </section>
 
-  <h2 class="block-title">다음에 해볼 테스트</h2>
-  <nav class="next-grid" aria-label="다른 테스트">
-    <a href="../lotto/"><span class="ni" aria-hidden="true"><svg><use href="#n-lotto"/></svg></span><b>오늘로또</b><span>사주로 뽑는 오늘의 로또 번호와 살 시간·방향</span></a>
-    <a href="../lottomap/"><span class="ni" aria-hidden="true"><svg><use href="#n-lottomap"/></svg></span><b>명당로드</b><span>로또 1등 명당 지도와 번호 통계</span></a>
-    <a href="../market/"><span class="ni" aria-hidden="true"><svg><use href="#n-market"/></svg></span><b>맛남의 광장</b><span>버려질 뻔한 못난이 농수산물 장터</span></a>
-    <a href="../season/"><span class="ni" aria-hidden="true"><svg><use href="#n-season"/></svg></span><b>제철장보기</b><span>이달의 제철 식재료와 지금 싼 품목</span></a>
-    <a href="../sikdang/"><span class="ni" aria-hidden="true"><svg><use href="#n-sikdang"/></svg></span><b>제철식당</b><span>이달 이 지역 제철 음식 잘하는 집</span></a>
-    <a href="../roots/"><span class="ni" aria-hidden="true"><svg><use href="#n-roots"/></svg></span><b>근본 테스트</b><span>사주와 퀴즈로 찾는 나의 근본 코드</span></a>
-    <a href="../family/"><span class="ni" aria-hidden="true"><svg><use href="#n-family"/></svg></span><b>식구궁합</b><span>우리 가족 오행 궁합판</span></a>
-    <a href="../names/"><span class="ni" aria-hidden="true"><svg><use href="#n-names"/></svg></span><b>이름레이더</b><span>내 이름, 전국에 몇 명?</span></a>
-    <a href="../lifeclock/"><span class="ni" aria-hidden="true"><svg><use href="#n-lifeclock"/></svg></span><b>남은봄</b><span>남은 주말·명절·벚꽃 세는 인생 시계</span></a>
-  </nav>
+  <div class="wrap">
+    <section class="open" id="openSec" aria-labelledby="openH">
+      <h2 class="block-title" id="openH">내가 태어난 해 열기</h2>
+      <p class="desc">출생연도만 넣으면 그해 뉴스·노래·영화·물가·출생아 수를 연감 한 권으로 엮어 드려요.</p>
+      <form class="form-card" id="yearForm" novalidate>
+        <label class="field">
+          <span>출생연도 <small>(1950~2025)</small></span>
+          <input class="input year-input num" id="yearIn" name="y" type="number" inputmode="numeric" min="1950" max="2025" placeholder="1994" autocomplete="bday-year" required aria-describedby="yearErr">
+        </label>
+        <p class="err" id="yearErr" role="alert"></p>
+        <div class="chips" aria-label="빠른 선택">
+          <button type="button" class="chip" data-y="1965">1965</button>
+          <button type="button" class="chip" data-y="1975">1975</button>
+          <button type="button" class="chip" data-y="1988">1988</button>
+          <button type="button" class="chip" data-y="1995">1995</button>
+          <button type="button" class="chip" data-y="2002">2002</button>
+          <button type="button" class="chip" data-y="2012">2012</button>
+        </div>
+        <div class="row2">
+          <label class="field">
+            <span>태어난 달 <small>(선택)</small></span>
+            <select class="select" id="monthIn" name="m">
+              <option value="">모름</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>태어난 곳 <small>(선택)</small></span>
+            <select class="select" id="regionIn" name="r">
+              <option value="">선택 안 함</option>
+            </select>
+          </label>
+        </div>
+        <button class="btn btn-primary" type="submit">타임캡슐 열기</button>
+      </form>
+    </section>
 
-  <div class="ad" aria-label="광고">
-    <span class="ad-label">광고</span>
-    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <section class="result" id="result" hidden aria-live="polite">
+      <section class="sec" aria-labelledby="newsH">
+        <div class="sec-h"><h2 id="newsH">그해의 뉴스 전문</h2><span class="note" id="newsNote"></span></div>
+        <div id="newsBox"></div>
+      </section>
+
+      <div class="ad" data-ad="news"><span class="ad-label">광고</span><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></div>
+
+      <div class="grid2">
+        <section class="sec" aria-labelledby="songH">
+          <div class="sec-h"><h2 id="songH">그해의 노래</h2></div>
+          <div id="songBox"></div>
+        </section>
+        <section class="sec" aria-labelledby="movieH">
+          <div class="sec-h"><h2 id="movieH">흥행 1위 영화</h2></div>
+          <div id="movieBox"></div>
+        </section>
+      </div>
+
+      <section class="sec" aria-labelledby="peerH">
+        <div class="sec-h"><h2 id="peerH">내 또래는 몇 명?</h2></div>
+        <div id="peerBox"></div>
+      </section>
+
+      <div class="ad" data-ad="peer"><span class="ad-label">광고</span><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></div>
+
+      <section class="sec" aria-labelledby="priceH">
+        <div class="sec-h"><h2 id="priceH">물가 타임머신</h2></div>
+        <div id="priceBox"></div>
+      </section>
+
+      <section class="sec" aria-labelledby="quizH">
+        <div class="sec-h"><h2 id="quizH">그해 히트곡 맞히기</h2><span class="quiz-progress" id="quizProg"></span></div>
+        <div id="quizBox"></div>
+      </section>
+
+      <div class="grid2">
+        <section class="sec" aria-labelledby="nameH">
+          <div class="sec-h"><h2 id="nameH">그 시절 인기 이름</h2></div>
+          <div id="nameBox"></div>
+        </section>
+        <section class="sec" aria-labelledby="peopleH" id="peopleSec">
+          <div class="sec-h"><h2 id="peopleH">이 해에 태어난 사람</h2></div>
+          <div id="peopleBox"></div>
+        </section>
+      </div>
+
+      <div class="ad" data-ad="after-quiz"><span class="ad-label">광고</span><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></div>
+
+      <section class="sec share-sec" aria-labelledby="shareH">
+        <div class="sec-h"><h2 id="shareH">내 연감 카드</h2><span class="note">1080×1350</span></div>
+        <canvas id="shareCanvas" width="1080" height="1350" role="img" aria-label="공유용 연감 카드 미리보기"></canvas>
+        <div class="btn-row">
+          <button class="btn btn-ghost" id="shareBtn" type="button"><svg><use href="#i-share"/></svg>카드 공유</button>
+          <button class="btn btn-ghost" id="saveBtn" type="button"><svg><use href="#i-down"/></svg>이미지 저장</button>
+          <button class="btn btn-ghost" id="linkBtn" type="button"><svg><use href="#i-link"/></svg>링크 복사</button>
+        </div>
+      </section>
+
+      <section class="sec" aria-labelledby="cmpH">
+        <div class="sec-h"><h2 id="cmpH">나 vs 친구·부모님</h2></div>
+        <p class="desc">비교할 사람의 출생연도를 넣어 보세요.</p>
+        <form class="cmp-form" id="cmpForm" novalidate>
+          <label class="sr-only" for="cmpIn">비교할 출생연도</label>
+          <input class="input num" id="cmpIn" type="number" inputmode="numeric" min="1950" max="2025" placeholder="예: 1965">
+          <button class="btn btn-ghost" type="submit">비교</button>
+        </form>
+        <div id="cmpBox"></div>
+      </section>
+
+      <section class="sec" aria-labelledby="famH">
+        <div class="sec-h"><h2 id="famH">우리 가족 타임라인</h2></div>
+        <p class="desc">가족의 이름(호칭)과 출생연도를 차례로 더해 보세요. 이 기기에만 저장돼요.</p>
+        <form class="fam-form" id="famForm" novalidate>
+          <label class="sr-only" for="famName">호칭</label>
+          <input class="input" id="famName" type="text" maxlength="10" placeholder="엄마" autocomplete="off">
+          <label class="sr-only" for="famYear">출생연도</label>
+          <input class="input num" id="famYear" type="number" inputmode="numeric" min="1950" max="2025" placeholder="1965">
+          <button class="btn btn-ghost" type="submit">추가</button>
+        </form>
+        <p class="err" id="famErr" role="alert"></p>
+        <ol class="fam-list" id="famList"></ol>
+      </section>
+    </section>
+
+    <section class="others" aria-labelledby="othersH">
+      <h2 class="block-title" id="othersH">다른 서비스</h2>
+      <ul class="next">
+        <li><a href="../lotto/"><b>오늘로또</b><small>사주로 뽑는 오늘의 로또 번호와 살 시간·방향</small></a></li>
+        <li><a href="../lottomap/"><b>명당로드</b><small>로또 1등 명당 지도와 번호 통계</small></a></li>
+        <li><a href="../market/"><b>맛남의 광장</b><small>버려질 농수산물이 어디서 남는지, 버려지기 전에</small></a></li>
+        <li><a href="../season/"><b>제철장보기</b><small>이달 제철 식재료와 지금 싼 품목</small></a></li>
+        <li><a href="../sikdang/"><b>제철식당</b><small>이달 이 지역 제철 음식을 잘하는 집</small></a></li>
+        <li><a href="../roots/"><b>근본 테스트</b><small>사주와 퀴즈로 찾는 나의 근본 코드</small></a></li>
+        <li><a href="../family/"><b>식구궁합</b><small>우리 가족 오행 궁합판</small></a></li>
+        <li><a href="../names/"><b>이름레이더</b><small>내 이름, 전국에 몇 명?</small></a></li>
+        <li><a href="../lifeclock/"><b>남은봄</b><small>남은 주말·명절·벚꽃 세는 인생 시계</small></a></li>
+      </ul>
+    </section>
+
+    <p class="colophon">나때연감의 수치는 통계청·한국은행·World Bank·영화진흥위원회 등 공개 자료를 정리한 것이며, 확인되지 않은 값은 비워 두었어요. 오류 제보는 언제든 환영합니다.</p>
+
+    <div class="ad" data-ad="bottom"><span class="ad-label">광고</span><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></div>
   </div>
 </main>
 
@@ -268,8 +281,7 @@
       <a href="privacy.html">개인정보처리방침</a>
       <a href="SOURCES.md">데이터 출처</a>
     </nav>
-    <p>나때연감의 수치는 통계청·한국은행·World Bank·영화진흥위원회 등 공개 자료를 정리한 것이며, 확인되지 않은 값은 비워 두었어요. 오류 제보는 언제든 환영합니다.</p>
-    <p>© 2026 나때연감</p>
+    <p>© 2026 나때연감 · 재미랩</p>
   </div>
 </footer>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>

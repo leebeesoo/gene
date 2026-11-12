@@ -1,55 +1,29 @@
-// 앱 셸: 해시 라우터, 배지, 카운트다운, 공통 이벤트
-import { store } from './store.js';
-import { $, $$, countdown, toast, kg, num } from './util.js';
+// 앱 셸: 해시 라우터, 메타 갱신, 광고 push, 숫자 카운트업(1회)
 import { pushAds } from './components.js';
-import { marketView, searchView } from './views/home.js';
 import { homeView, regionView, signalView } from './views/map.js';
 import { farmerView } from './views/farmer.js';
-import { itemView } from './views/item.js';
-import { sellView } from './views/sell.js';
-import { cartView, checkoutView, ordersView } from './views/cart.js';
-import { sellerView } from './views/seller.js';
-import { meView, wishView, alertsView } from './views/me.js';
-import { joinView, closedView } from './views/join.js';
+import { joinView } from './views/join.js';
 import { processView } from './views/process.js';
-import { TRADING_OPEN } from './config.js';
 
-// 거래 화면: TRADING_OPEN이 false면 안내 화면으로 대체 (거래 코드는 그대로 둠)
-const T = (view) => (TRADING_OPEN ? view : closedView);
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
 const ROUTES = [
-  [/^\/$/, homeView, 'map'],
-  [/^\/region\/([^/]+)$/, regionView, 'map', ['sido']],
-  [/^\/signal\/([^/]+)$/, signalView, 'map', ['id']],
+  [/^\/$/, homeView, 'home'],
+  [/^\/region\/([^/]+)$/, regionView, 'home', ['sido']],
+  [/^\/signal\/([^/]+)$/, signalView, 'home', ['id']],
   [/^\/farmer$/, farmerView, 'farmer'],
   [/^\/process$/, processView, 'process'],
   [/^\/join$/, joinView, 'join'],
-  [/^\/market$/, T(marketView), 'market'],
-  [/^\/search$/, T(searchView), 'market'],
-  [/^\/item\/([\w-]+)$/, T(itemView), 'market', ['id']],
-  [/^\/sell$/, T(sellView), 'sell'],
-  [/^\/sell\/([\w-]+)$/, T(sellView), 'sell', ['id']],
-  [/^\/cart$/, T(cartView), 'cart'],
-  [/^\/checkout$/, T(checkoutView), 'cart'],
-  [/^\/orders$/, T(ordersView), 'me'],
-  [/^\/seller$/, T(sellerView), 'sell'],
-  [/^\/me$/, T(meView), 'me'],
-  [/^\/wish$/, T(wishView), 'me'],
-  [/^\/alerts$/, T(alertsView), 'me'],
 ];
+// 없는 주소(예전 #/market, #/item/…, #/cart, #/sell, #/search …)는 모두 첫 화면으로 보내요.
 
-// 정보 우선 모드: 거래 메뉴(data-trade)와 정보 메뉴(data-info) 전환
-document.body.dataset.trading = TRADING_OPEN ? 'open' : 'closed';
-$$('[data-trade]').forEach((el) => { el.hidden = !TRADING_OPEN; });
-$$('[data-info]').forEach((el) => { el.hidden = TRADING_OPEN; });
-
-const DEFAULT_DESC = document.querySelector('meta[name=description]').content;
+const DEFAULT_DESC = $('meta[name=description]').content;
 const app = $('#app');
 const positions = new Map();
 const stack = [];
 let token = 0;
-let cleanup = null;
-let firstRender = true;
+let first = true;
 
 function parse() {
   const raw = location.hash.replace(/^#/, '') || '/';
@@ -63,144 +37,78 @@ async function route() {
   let match = null;
   for (const [re, view, nav, names = []] of ROUTES) {
     const m = path.match(re);
-    if (m) {
-      let params;
-      try { params = Object.fromEntries(names.map((n, i) => [n, decodeURIComponent(m[i + 1])])); } catch { params = null; }
-      if (params) { match = { view, nav, params }; break; }
-    }
+    if (!m) continue;
+    try { match = { view, nav, params: Object.fromEntries(names.map((n, i) => [n, decodeURIComponent(m[i + 1])])) }; } catch { match = null; }
+    if (match) break;
   }
-  if (!match) { location.replace('#/'); return; }
+  if (!match) {
+    history.replaceState(null, '', `${location.pathname}${location.search}#/`);
+    return route();
+  }
 
-  // 뒤로가기 판별 (스크롤 복원용)
   const isBack = stack.length >= 2 && stack[stack.length - 2] === key;
   if (isBack) stack.pop();
   else if (stack[stack.length - 1] !== key) stack.push(key);
 
   const el = document.createElement('div');
   el.className = 'view';
-  const ctx = { el, params: match.params, query, nav: match.nav, title: '', description: '', jsonld: null, cleanup: null, afterMount: null, noAds: false };
-  document.body.classList.add('loading');
+  const ctx = { el, params: match.params, query, title: '', description: '', afterMount: null, noAds: false, countUp: false };
   try {
     await match.view(ctx);
   } catch (err) {
     console.error(err);
-    el.innerHTML = `<section class="page"><div class="empty"><h3>화면을 불러오지 못했어요</h3><p>잠시 후 다시 시도해 주세요.</p><a class="btn primary" href="#/">홈으로</a></div></section>`;
+    ctx.noAds = true;
+    el.innerHTML = '<section class="page wrap"><div class="empty"><h2>화면을 불러오지 못했어요</h2><p>잠시 후 다시 시도해 주세요.</p><a class="btn primary" href="#/">오늘 남는 것으로</a></div></section>';
   }
-  if (my !== token) { ctx.cleanup?.(); return; } // 더 최근 이동이 있음
-  document.body.classList.remove('loading');
-  cleanup?.();
-  cleanup = ctx.cleanup;
+  if (my !== token) return undefined;
   app.replaceChildren(el);
 
   document.title = ctx.title || '맛남의 광장';
-  const ogd = document.querySelector('meta[property="og:description"]');
-  if (ogd) ogd.content = ctx.description || DEFAULT_DESC;
-  document.querySelector('meta[name=description]').content = ctx.description || DEFAULT_DESC;
-  document.querySelector('meta[property="og:title"]').content = document.title;
-  let ld = document.getElementById('ld-page');
-  if (ctx.jsonld) {
-    if (!ld) { ld = document.createElement('script'); ld.type = 'application/ld+json'; ld.id = 'ld-page'; document.head.appendChild(ld); }
-    ld.textContent = JSON.stringify(ctx.jsonld);
-  } else ld?.remove();
+  const desc = ctx.description || DEFAULT_DESC;
+  $('meta[name=description]').content = desc;
+  $('meta[property="og:description"]').content = desc;
+  $('meta[property="og:title"]').content = document.title;
 
-  setNav(match.nav);
-  window.scrollTo(0, isBack ? positions.get(key) || 0 : 0);
-  if (!firstRender) app.focus({ preventScroll: true });
-  if (!ctx.noAds) pushAds(el);
-  if (TRADING_OPEN && (firstRender || path === '/' || path === '/market')) animateCounts(el);
-  firstRender = false;
-  ctx.afterMount?.();
-  tick();
-  refreshBadges();
-}
-
-function setNav(nav) {
   $$('[data-nav]').forEach((a) => {
-    const on = a.dataset.nav === nav;
+    const on = a.dataset.nav === match.nav;
     a.classList.toggle('active', on);
     if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
   });
+  window.scrollTo(0, isBack ? positions.get(key) || 0 : 0);
+  if (!first) app.focus({ preventScroll: true });
+  first = false;
+  if (ctx.noAds) el.querySelectorAll('.ad').forEach((a) => a.remove());
+  else pushAds(el);
+  if (ctx.countUp) countUp(el);
+  ctx.afterMount?.();
+  return undefined;
 }
 
-// ── 배지 & 모드 ──
-async function refreshBadges() {
-  if (!TRADING_OPEN) return;
-  const [cart, alerts, prefs, sellerOrders, threadsB, threadsS] = await Promise.all([
-    store.getCart(), store.getAlertMatches(), store.getPrefs(), store.getOrders({ as: 'seller' }),
-    store.getThreads({ as: 'buyer' }), store.getThreads({ as: 'seller' }),
-  ]);
-  const set = (sel, n) => $$(sel).forEach((b) => { b.textContent = n > 99 ? '99+' : String(n); b.hidden = !n; });
-  set('[data-badge=cart]', cart.length);
-  set('[data-badge=me]', alerts.length + threadsB.filter((t) => t.unread === 'buyer').length);
-  set('[data-badge=sell]', sellerOrders.filter((o) => o.status === 'requested').length + threadsS.filter((t) => t.unread === 'seller').length);
-  set('[data-badge=alerts]', alerts.length);
-  const seller = prefs.role === 'seller';
-  document.body.dataset.role = seller ? 'seller' : 'buyer';
-  $$('[data-role-btn]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.roleBtn === prefs.role)));
-  $$('[data-sell-link]').forEach((a) => { a.href = seller ? '#/seller' : '#/sell'; });
-  $$('[data-sell-label]').forEach((s) => { s.textContent = seller ? '판매센터' : '판매'; });
-}
-
-// ── 카운트다운 (1초) ──
-function tick() {
-  $$('[data-countdown]').forEach((node) => {
-    const c = countdown(node.dataset.countdown);
-    const span = node.lastElementChild;
-    if (span && span.textContent !== c.text) span.textContent = c.text;
-    node.classList.toggle('urgent', c.urgent);
-    node.classList.toggle('over', c.over);
-  });
-}
-
-// ── 임팩트 숫자 카운트업 ──
-function animateCounts(root) {
+// 가격 하락 숫자: 화면에 들어올 때 0에서 실제 값까지 한 번 (400ms). 모션 줄이기면 최종값 그대로.
+function countUp(root) {
   const nodes = $$('[data-count]', root);
-  if (!nodes.length || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const fmt = (v, f) => (f === 'won' ? `${num(Math.round(v / 10000))}만원` : kg(v));
-  const t0 = performance.now();
-  const dur = 1200;
-  const step = (t) => {
-    const p = Math.min(1, (t - t0) / dur);
-    const e = 1 - Math.pow(1 - p, 3);
-    nodes.forEach((n) => { n.textContent = fmt(Number(n.dataset.count) * e, n.dataset.fmt); });
-    if (p < 1) requestAnimationFrame(step);
+  if (!nodes.length || !('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const fmt = (v) => `${v < 0 ? '−' : v > 0 ? '+' : ''}${Math.abs(v)}`;
+  const run = (n) => {
+    const target = Number(n.dataset.count);
+    const t0 = performance.now();
+    const step = (t) => {
+      const p = Math.min(1, (t - t0) / 400);
+      n.textContent = fmt(Math.round(target * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) requestAnimationFrame(step);
+    };
+    n.textContent = fmt(0);
+    requestAnimationFrame(step);
   };
-  requestAnimationFrame(step);
+  const io = new IntersectionObserver((ents) => {
+    for (const e of ents) if (e.isIntersecting) { io.unobserve(e.target); run(e.target); }
+  }, { threshold: 0.6 });
+  nodes.forEach((n) => io.observe(n));
 }
-
-// ── 전역 이벤트 ──
-document.addEventListener('click', async (e) => {
-  const w = e.target.closest('[data-wish]');
-  if (w) {
-    e.preventDefault();
-    const id = w.dataset.wish;
-    const on = await store.toggleWish(id);
-    $$(`[data-wish="${CSS.escape(id)}"]`).forEach((b) => { b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on); });
-    toast(on ? '찜했어요. 마감 전에 MY에서 다시 볼 수 있어요' : '찜을 해제했어요', on ? { action: '찜 목록', href: '#/wish' } : {});
-    return;
-  }
-  const r = e.target.closest('[data-role-btn]');
-  if (r) {
-    const role = r.dataset.roleBtn;
-    await store.setPrefs({ role });
-    toast(role === 'seller' ? '판매자 모드예요. 주문 요청과 내 상품을 관리하세요' : '구매자 모드예요');
-    location.hash = role === 'seller' ? '#/seller' : '#/';
-    refreshBadges();
-  }
-});
-document.addEventListener('mn:rendered', (e) => { pushAds(e.target); tick(); });
 
 window.addEventListener('hashchange', (e) => {
-  try { positions.set(new URL(e.oldURL).hash || '#/', window.scrollY); } catch {}
+  try { positions.set(new URL(e.oldURL).hash || '#/', window.scrollY); } catch { /* 무시 */ }
   route();
 });
 history.scrollRestoration = 'manual';
-
-(async function boot() {
-  await store.init();
-  if (TRADING_OPEN) store.on((topic) => { if (['cart', 'orders', 'prefs', 'threads', 'listings', 'all'].includes(topic)) refreshBadges(); });
-  setInterval(tick, 1000);
-  await route();
-  // 다른 탭에서 시간이 지나 상태가 바뀐 경우 대비
-  document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshBadges(); });
-})();
+route();

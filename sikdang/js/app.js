@@ -3,13 +3,14 @@ import { $, $$ } from './util.js';
 import { pushAds } from './components.js';
 import { homeView } from './views/home.js';
 import { regionView, regionsView } from './views/region.js';
-import { foodView } from './views/food.js';
+import { foodView, dishView } from './views/food.js';
 import { searchView } from './views/search.js';
 
 const ROUTES = [
   [/^\/$/, homeView, 'home'],
   [/^\/regions$/, regionsView, 'regions'],
   [/^\/region\/([^/]+)$/, regionView, 'regions', ['id']],
+  [/^\/dish\/([^/]+)\/([^/]+)$/, dishView, 'regions', ['id', 'dish']],
   [/^\/food\/([^/]+)$/, foodView, 'food', ['food']],
   [/^\/search$/, searchView, 'search'],
 ];
@@ -48,7 +49,7 @@ async function route() {
     await match.view(ctx);
   } catch (err) {
     console.warn(err);
-    el.innerHTML = `<section class="wrap page"><div class="empty"><h3>화면을 불러오지 못했어요</h3><p class="small">잠시 뒤 다시 시도해 주세요.</p><p style="margin-top:12px"><a class="btn primary" href="#/">처음으로</a></p></div></section>`;
+    el.innerHTML = `<section class="wrap page"><div class="empty"><h3>화면을 불러오지 못했어요</h3><p class="small">잠시 뒤 다시 시도해 주세요.</p><p style="margin-top:12px"><a class="btn ink" href="#/">처음으로</a></p></div></section>`;
   }
   if (my !== token) { ctx.cleanup?.(); return; }
   if (ctx.redirect) { ctx.cleanup?.(); location.replace(ctx.redirect); return; }

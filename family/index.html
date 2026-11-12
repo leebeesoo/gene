@@ -6,8 +6,8 @@
 <title>식구궁합 — 우리 가족 오행 궁합판 | 가족·친구 사주 궁합 한 장으로</title>
 <meta name="description" content="가족·친구 2~8명의 생일을 넣으면 사주 일간 오행, 띠, 지지 육합·삼합·충·형·파·해로 서로의 궁합을 한 장의 관계도로 그려 드려요. 우리 가족 오행 밸런스와 가족 역할까지, 명절 단톡방에 바로 공유.">
 <meta name="keywords" content="가족 궁합, 식구궁합, 오행 궁합, 사주 궁합, 띠 궁합, 가족 사주, 육합, 삼합, 충, 명절, 설날, 추석, 단톡방">
-<meta name="theme-color" content="#F3F1EC" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#141413" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F5F1EA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#151412" media="(prefers-color-scheme: dark)">
 <meta name="color-scheme" content="light dark">
 <link rel="canonical" href="https://leebeesoo.github.io/gene/family/">
 <meta property="og:type" content="website">
@@ -26,10 +26,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&display=swap">
 <link rel="stylesheet" href="css/style.css">
 <link rel="modulepreload" href="js/app.js">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous" onerror="document.documentElement.classList.add('no-ads')"></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -51,32 +51,36 @@
 <a class="skip-link" href="#main">본문 바로가기</a>
 <header class="top">
   <div class="top-in">
-    <a class="brand" href="./" aria-label="식구궁합 처음으로"><span class="seal" aria-hidden="true">食</span>식구궁합<small>근본 테스트</small></a>
-    <a class="top-link" href="../roots/">내 근본 코드</a>
+    <a class="brand" href="./" aria-label="식구궁합 처음으로">식구궁합</a>
+    <a class="top-link" href="../roots/">근본 테스트</a>
   </div>
 </header>
 
 <main id="main" tabindex="-1">
   <div id="festival" class="festival" hidden></div>
 
-  <section class="hero">
+  <section class="hero" aria-labelledby="hero-h">
     <div class="hero-in">
-      <p class="kicker">가족·친구 2~8명 · 1분이면 끝</p>
-      <h1>우리 식구, 오행으로 보면<br><em>누가 누굴 살릴까?</em></h1>
-      <p class="lead">생일만 넣으면 서로의 궁합이 관계도 한 장으로. 누가 중재자고 누가 분위기메이커인지 단톡방에 던져 보세요.</p>
+      <div class="hero-text">
+        <p class="kicker">가족·친구 2~8명 · 생일만 있으면 1분</p>
+        <h1 id="hero-h">우리 식구,<br>오행으로 보면<br>누가 누굴 살릴까?</h1>
+        <p class="lead">생일을 넣으면 식구끼리의 궁합이 오행판 한 장으로 그려져요. 누가 중재자고 누가 분위기메이커인지 단톡방에 던져 보세요.</p>
+        <div class="hero-cta">
+          <button class="btn btn-primary" type="button" id="hero-start">우리 가족 넣기</button>
+          <button class="btn btn-ghost" type="button" id="hero-demo">예시 가족으로 보기</button>
+        </div>
+      </div>
+      <figure class="hero-board" aria-labelledby="hero-cap">
+        <span class="ex-tag">예시</span>
+        <svg id="hero-svg" viewBox="0 0 340 320" role="img" aria-label="예시 가족 4명의 오행 궁합판"></svg>
+        <figcaption id="hero-cap"></figcaption>
+      </figure>
     </div>
-    <svg class="hero-art" viewBox="0 0 200 200" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5">
-      <g stroke-opacity=".35"><path d="M100 30L166 78L141 157H59L34 78Z"/><path d="M100 30L141 157L34 78H166L59 157Z" stroke-dasharray="3 4"/></g>
-      <g style="fill:var(--bg)"><circle cx="100" cy="30" r="18"/><circle cx="166" cy="78" r="18"/><circle cx="141" cy="157" r="18"/><circle cx="59" cy="157" r="18"/><circle cx="34" cy="78" r="18"/></g>
-      <g fill="currentColor" stroke="none" font-family="Noto Serif KR, serif" font-weight="700" font-size="16" text-anchor="middle" dominant-baseline="central">
-        <text x="100" y="30">木</text><text x="166" y="78">火</text><text x="141" y="157">土</text><text x="59" y="157">金</text><text x="34" y="78">水</text>
-      </g>
-    </svg>
   </section>
 
   <div id="shared-note" class="shell" hidden></div>
 
-  <div class="shell layout">
+  <div class="shell layout" id="table">
     <!-- 입력 -->
     <section class="panel input-panel" aria-labelledby="people-h">
       <div class="panel-head">
@@ -125,9 +129,8 @@
       </form>
     </section>
 
-    <!-- 결과 -->
-    <div class="results" id="results">
-      <section class="panel board-panel" aria-labelledby="board-h">
+    <!-- 궁합판 -->
+    <section class="panel board-panel" id="board-panel" aria-labelledby="board-h">
         <div class="panel-head">
           <h2 id="board-h"><span id="board-name">우리 가족</span> 궁합판</h2>
           <span class="avg" id="avg"></span>
@@ -144,12 +147,9 @@
         <p class="tap-hint" id="tap-hint" hidden>선이나 아래 목록을 누르면 두 사람 궁합 풀이가 열려요.</p>
         <ol class="pair-list" id="pair-list" aria-label="궁합 순위"></ol>
       </section>
+  </div>
 
-      <div class="ad-slot" data-ad="1" hidden>
-        <span class="ad-label">광고</span>
-        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
-      </div>
-
+  <div class="shell more" id="results">
       <section class="panel" id="balance-panel" aria-labelledby="bal-h" hidden>
         <h2 id="bal-h">우리 가족 오행 밸런스</h2>
         <p class="sub">모두의 사주 글자(천간·지지)를 오행별로 더했어요.</p>
@@ -158,18 +158,16 @@
         <div id="sanhe"></div>
       </section>
 
+      <div class="ad-slot" data-ad="1" hidden>
+        <span class="ad-label">광고</span>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </div>
+
       <section class="panel" id="roles-panel" aria-labelledby="roles-h" hidden>
         <h2 id="roles-h">가족 역할</h2>
         <p class="sub">일간 오행끼리의 생(生)·극(剋)으로만 정해요. 규칙은 각 카드에 적혀 있어요.</p>
         <div class="roles" id="roles"></div>
       </section>
-
-      <section class="panel" id="saju-panel" aria-labelledby="saju-h" hidden>
-        <h2 id="saju-h">한 사람씩 보기</h2>
-        <p class="sub" id="saju-sub">년·월·일·시주 (시를 모르면 3기둥)</p>
-        <div class="saju-cards" id="saju-cards"></div>
-      </section>
-
       <section class="panel share-panel" id="share-panel" aria-labelledby="share-h" hidden>
         <h2 id="share-h">단톡방에 던지기</h2>
         <div class="share-grid">
@@ -183,56 +181,75 @@
           <button class="link-btn" type="button" id="dl-img">이미지 저장</button>
         </div>
       </section>
-    </div>
+      <section class="panel" id="saju-panel" aria-labelledby="saju-h" hidden>
+        <h2 id="saju-h">한 사람씩 보기</h2>
+        <p class="sub" id="saju-sub">년·월·일·시주 (시를 모르면 3기둥)</p>
+        <div class="saju-cards" id="saju-cards"></div>
+      </section>
+
+      <div class="ad-slot ad-multi" data-ad="2" hidden>
+        <span class="ad-label">광고</span>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="autorelaxed"></ins>
+      </div>
   </div>
 
-  <section class="shell" id="saved-wrap" hidden>
+  <section class="shell narrow" id="saved-wrap" hidden>
     <div class="panel">
       <h2>저장한 보드</h2>
       <ul class="saved" id="saved"></ul>
     </div>
   </section>
 
-  <section class="shell">
-    <details class="panel how" id="how">
+  <section class="shell narrow guide" aria-labelledby="guide-h">
+    <h2 id="guide-h">궁합판 읽는 법</h2>
+    <div class="guide-cols">
+      <div><h3>선의 색</h3><p>초록 선은 서로 기운을 살려 주는 사이, 붉은 선은 부딪히기 쉬운 사이, 회색 점선은 무난한 사이예요. 50점에서 멀수록 선이 굵어져요.</p></div>
+      <div><h3>점수</h3><p>두 사람의 태어난 날 천간 오행(상생·상극)과 일지·띠의 합·충·형·파·해를 더해 50점에서 시작해요. 항목별 점수는 선을 누르면 다 보여요.</p></div>
+      <div><h3>가족 역할</h3><p>누가 누구를 생(生)하고 극(剋)하는지 세어서 정해요. 같은 생일이면 언제 넣어도 같은 결과가 나와요.</p></div>
+    </div>
+  </section>
+
+  <div class="shell narrow">
+    <div class="ad-slot" data-ad="3">
+      <span class="ad-label">광고</span>
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <section class="shell narrow guide" aria-labelledby="note-h">
+    <h2 id="note-h">알아 두기</h2>
+    <p>띠는 설날이 아니라 입춘을 기준으로 바뀌어요. 그래서 1~2월생은 흔히 아는 띠와 다르게 나올 수 있어요. 태어난 시를 모르면 년·월·일 세 기둥만으로 계산하고, 음력 생일은 한국천문연구원 음력표로 양력으로 바꿔서 계산해요.</p>
+    <p>전통 명리 이론을 재미로 옮긴 콘텐츠라 실제 관계를 판단하는 근거로 쓰지는 마세요.</p>
+  </section>
+
+  <section class="shell narrow">
+    <details class="how" id="how">
       <summary><h2>어떻게 계산했나요?</h2></summary>
       <div id="how-body"></div>
     </details>
   </section>
 
-  <section class="shell">
-    <a class="roots-cta" href="../roots/">
-      <span class="seal big" aria-hidden="true">根</span>
-      <span><b>내 근본 코드 알아보기</b><small>16가지 조상 유형 · 상상 가계도 · 시대별 내 인생</small></span>
-      <span aria-hidden="true" class="arrow">→</span>
-    </a>
-    <h2 class="next-h">다음에 해볼 테스트</h2>
-    <ul class="next-grid">
-      <li><a href="../lotto/"><span aria-hidden="true">福</span><b>오늘로또</b><small>사주로 뽑는 오늘의 로또 번호와 살 시간·방향</small></a></li>
-      <li><a href="../lottomap/"><span aria-hidden="true">地</span><b>명당로드</b><small>로또 1등 명당 지도와 번호 통계</small></a></li>
-      <li><a href="../market/"><span aria-hidden="true">市</span><b>맛남의 광장</b><small>버려질 농수산물이 어디서 남는지, 버려지기 전에</small></a></li>
-      <li><a href="../season/"><span aria-hidden="true">節</span><b>제철장보기</b><small>이달 제철 식재료와 지금 싼 품목</small></a></li>
-      <li><a href="../sikdang/"><span aria-hidden="true">味</span><b>제철식당</b><small>이달 이 지역 제철 음식 잘하는 집</small></a></li>
-      <li><a href="../roots/"><span aria-hidden="true">根</span><b>근본 테스트</b><small>사주와 퀴즈로 찾는 나의 근본 코드</small></a></li>
-      <li><a href="../names/"><span aria-hidden="true">名</span><b>이름레이더</b><small>내 이름, 전국에 몇 명?</small></a></li>
-      <li><a href="../lifeclock/"><span aria-hidden="true">春</span><b>남은봄</b><small>남은 주말·명절·벚꽃 세는 인생 시계</small></a></li>
-      <li><a href="../birthyear/"><span aria-hidden="true">年</span><b>나때연감</b><small>내가 태어난 해 타임캡슐</small></a></li>
+  <section class="shell narrow others" aria-labelledby="others-h">
+    <h2 id="others-h">다른 서비스</h2>
+    <ul class="svc-list">
+      <li><a href="../lotto/"><b>오늘로또</b><span>사주로 뽑는 오늘의 로또 번호와 살 시간·방향</span></a></li>
+      <li><a href="../lottomap/"><b>명당로드</b><span>로또 1등 명당 지도와 번호 통계</span></a></li>
+      <li><a href="../market/"><b>맛남의 광장</b><span>버려질 농수산물이 어디서 남는지, 버려지기 전에</span></a></li>
+      <li><a href="../season/"><b>제철장보기</b><span>이달 제철 식재료와 지금 싼 품목</span></a></li>
+      <li><a href="../sikdang/"><b>제철식당</b><span>이달 이 지역 제철 음식을 잘하는 집</span></a></li>
+      <li><a href="../roots/"><b>근본 테스트</b><span>사주와 퀴즈로 찾는 나의 근본 코드</span></a></li>
+      <li><a href="../names/"><b>이름레이더</b><span>내 이름, 전국에 몇 명?</span></a></li>
+      <li><a href="../lifeclock/"><b>남은봄</b><span>남은 주말·명절·벚꽃 세는 인생 시계</span></a></li>
+      <li><a href="../birthyear/"><b>나때연감</b><span>내가 태어난 해 타임캡슐</span></a></li>
     </ul>
   </section>
-
-  <div class="shell">
-    <div class="ad-slot" data-ad="2">
-      <span class="ad-label">광고</span>
-      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
-    </div>
-  </div>
 </main>
 
 <footer class="foot">
   <div class="shell">
     <p class="disclaimer">전통 명리 이론을 재미로 옮긴 엔터테인먼트예요. 과학적 근거는 없어요.</p>
     <p class="engine-note" id="engine-note"></p>
-    <nav class="foot-links" aria-label="바닥글"><a href="../">재미랩 홈</a><a href="../roots/">근본 테스트</a><a href="privacy.html">개인정보처리방침</a></nav>
+    <nav class="foot-links" aria-label="바닥글"><a href="../">← 재미랩 홈</a><a href="../roots/">근본 테스트</a><a href="privacy.html">개인정보처리방침</a></nav>
     <p class="copy">입력한 정보는 내 기기에만 저장돼요.</p>
   </div>
 </footer>

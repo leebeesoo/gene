@@ -2,7 +2,7 @@ import { TYPES, ELEMENTS, AXES } from './data.js';
 import { emblemSVG } from './emblems.js';
 import { typeBits } from './engine.js';
 
-const SERIF = '"Noto Serif KR", "Nanum Myeongjo", serif';
+const SERIF = '"Nanum Myeongjo", "Noto Serif KR", serif';
 const SANS = '"Pretendard Variable", Pretendard, system-ui, sans-serif';
 
 function loadImg(src) {

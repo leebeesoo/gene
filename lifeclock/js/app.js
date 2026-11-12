@@ -108,11 +108,6 @@
     showResult(true);
   });
 
-  $('#btnEdit').addEventListener('click', function () {
-    $('#intro').hidden = false;
-    $('#intro').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    setTimeout(function () { $('#birth').focus({ preventScroll: true }); }, 350);
-  });
 
   /* ---------- 테마 ---------- */
   $('#btnTheme').addEventListener('click', function () {
@@ -258,10 +253,9 @@
     var diffTxt = diff === 0 ? '실제 나이(만 ' + s.ages.man + '세)와 딱 같아요. 몸과 마음의 시계가 맞춰져 있네요.' :
       '실제 나이(만 ' + s.ages.man + '세)보다 <b>' + Math.abs(diff) + '살 ' + (diff > 0 ? '많아요' : '어려요') + '</b>.';
     var rows = q.rows.map(function (r, i) { return '<tr><td>' + (i + 1) + '. ' + esc(r.a) + '</td><td>' + r.pts + '세</td></tr>'; }).join('');
-    return '<div class="card mres"><div class="head"><div><div class="type">' + t.name + '</div><div class="age num">정신 나이 ' + q.age + '세</div></div></div>' +
-      '<p class="diff">' + diffTxt + ' ' + t.desc + '</p>' +
+    return '<div class="card mres"><div class="head"><div><div class="type">' + t.name + '</div><div class="age num">정신 나이 ' + q.age + '세</div></div><button class="btn btn-ghost btn-sm" type="button" data-action="quiz">다시 하기</button></div>' +
       '<details><summary>점수 계산 보기</summary><p style="margin:8px 0 0">선택지마다 나이 점수가 있고, 12개 점수의 평균이 정신 나이예요: ' + fmt(q.sum) + ' ÷ ' + q.n + ' = ' + fmt1(q.exact) + ' → ' + q.age + '세. 재미로 보는 테스트예요.</p><table class="score"><thead><tr><th>내 선택</th><th>점수</th></tr></thead><tbody>' + rows + '</tbody></table></details>' +
-      '<div class="btns" style="margin-top:14px"><button class="btn btn-ghost btn-sm" type="button" data-action="quiz">다시 하기</button></div></div>';
+      '<p class="diff">' + diffTxt + ' ' + t.desc + '</p></div>';
   }
 
   function familyHtml() {
@@ -310,10 +304,6 @@
       tile('cake', '남은 생일', fmt(c.birthdays), '번', '다음 생일 D-' + s.ages.daysToBirthday, 'wide') +
       '</div></section>' +
 
-      '<section class="sec" aria-labelledby="wkT"><h2 class="sec-h" id="wkT">인생 주 단위 달력</h2><p class="sec-sub">한 칸이 1주, 한 줄이 1년이에요. 지금까지 ' + fmt(s.lived.weeks) + '주를 살았어요.</p>' +
-      '<div class="card weeks-card"><div class="weeks-wrap"><canvas id="weeks" role="img" aria-label="인생 주 단위 달력: 52주 × ' + Math.ceil(s.expectedAge) + '년 중 ' + fmt(s.lived.weeks) + '주 지남"></canvas></div>' +
-      '<div class="legend"><span><i style="background:var(--dot-lived)"></i>지나온 주</span><span><i style="background:var(--dot-now)"></i>이번 주</span><span><i style="background:var(--dot-left)"></i>남은 주(평균)</span></div></div></section>' +
-
       '<section class="sec" aria-labelledby="livT"><h2 class="sec-h" id="livT">지금까지 살아온 시간</h2><div class="card stats">' +
       '<div><div class="l">살아온 날</div><div class="v num">' + fmt(s.lived.days) + '일</div></div>' +
       '<div><div class="l">살아온 주</div><div class="v num">' + fmt(s.lived.weeks) + '주</div></div>' +
@@ -321,22 +311,25 @@
       '<div><div class="l">심장박동 (약)</div><div class="v num">약 ' + koBig(s.lived.heartbeats) + ' 번</div></div>' +
       '</div><p class="note">자정 출생 기준. 심장박동은 분당 80회로 가정한 어림값이에요.</p></section>' +
 
+      adSlot('mid') +
+
       lifestyleHtml(s, p) +
 
       '<section class="sec" aria-labelledby="msT"><h2 class="sec-h" id="msT">다가오는 인생 기념일</h2><p class="sec-sub">10,000일, 10억 초… 놓치지 말고 챙겨요.</p>' + milestonesHtml(s, now) + '</section>' +
-
-      adSlot('mid') +
 
       parentsHtml() +
 
       '<section class="sec" id="mentalSec" aria-labelledby="mtT"><h2 class="sec-h" id="mtT">실제 나이 vs 정신 나이</h2>' + mentalHtml(s) + '</section>' +
 
-      '<section class="sec" aria-labelledby="shT"><h2 class="sec-h" id="shT">카드로 공유하기</h2><p class="sec-sub">개인정보(생년월일)는 카드에 넣지 않아요.</p><canvas class="share-prev" id="shareCanvas" width="1080" height="1350" role="img" aria-label="공유 카드 미리보기"></canvas>' +
-      '<div class="btns"><button class="btn btn-primary btn-sm" type="button" data-action="share">공유하기</button><button class="btn btn-ghost btn-sm" type="button" data-action="download">이미지 저장</button><button class="btn btn-ghost btn-sm" type="button" data-action="copy">링크 복사</button></div></section>' +
+      (state.quiz && state.quiz.done ? adSlot('mental') : '') +
+
+      '<section class="sec" aria-labelledby="shT"><h2 class="sec-h" id="shT">카드로 공유하기</h2><p class="sec-sub">개인정보(생년월일)는 카드에 넣지 않아요.</p>' +
+      '<div class="btns"><button class="btn btn-primary btn-sm" type="button" data-action="share">공유하기</button><button class="btn btn-ghost btn-sm" type="button" data-action="download">이미지 저장</button><button class="btn btn-ghost btn-sm" type="button" data-action="copy">링크 복사</button></div>' +
+      '<canvas class="share-prev" id="shareCanvas" width="1080" height="1350" role="img" aria-label="공유 카드 미리보기"></canvas><p class="note" style="text-align:center">카드 미리보기 · 1080×1350</p></section>' +
+
+      adSlot('share') +
 
       familyHtml() +
-
-      adSlot('result') +
 
       '<p style="text-align:center"><button class="btn btn-ghost btn-sm" type="button" data-action="reset">내 정보 지우기</button></p>';
 
@@ -344,7 +337,7 @@
     box.innerHTML = html;
     box.hidden = false;
     $('#intro').hidden = true;
-    $('#btnEdit').hidden = false;
+    setHeroText();
     drawWeeks();
     renderParents();
     renderFamily();
@@ -352,9 +345,9 @@
     startTick();
     pushAds();
     if (scroll) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      $('#todayT').setAttribute('tabindex', '-1');
-      $('#todayT').focus({ preventScroll: true });
+      window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+      $('#heroTitle').setAttribute('tabindex', '-1');
+      $('#heroTitle').focus({ preventScroll: true });
     }
   }
 
@@ -369,47 +362,107 @@
     }, 1000);
   }
 
-  /* ---------- 주 단위 캔버스 ---------- */
+  /* ---------- 첫 화면: 인생 주 격자 (예시 → 내 격자) ---------- */
+  var reduceMotion = false;
+  try { reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+  var heroPlayed = false, heroRaf = 0;
+  function exampleSummary(now) {
+    var y = now.getFullYear() - 34;
+    return C.summary(D.LIFE_TABLE, { birth: y + '-03-20', sex: 'f' }, now);
+  }
+  function heroSummary() { return cur || exampleSummary(new Date()); }
+  function setHeroText() {
+    var s = heroSummary(), mine = !!cur;
+    $('#heroTag').hidden = mine;
+    $('#heroN').textContent = fmt(s.counts.blossom);
+    $('#heroWho').textContent = mine
+      ? dateKo(s.birth) + '생 · ' + (state.profile.sex === 'f' ? '여성' : '남성') + ' · 기대수명 약 ' + fmt1(s.expectedAge) + '세'
+      : '34세 여성의 인생 · 2024년 생명표 기준';
+    $('#heroSub').textContent = mine
+      ? '지금까지 ' + fmt(s.lived.weeks) + '주를 살았어요. 평균대로라면 분홍 칸만큼의 봄이 남았어요.'
+      : '한 칸이 1주, 한 줄이 1년이에요. 지나온 주는 잉크, 앞으로 남은 봄은 분홍으로 칠했어요.';
+    $('#btnFill').textContent = mine ? '다른 생일로 채우기' : '내 격자 채우기';
+  }
   function drawWeeks() {
-    var cv = $('#weeks'); if (!cv || !cur) return;
-    var g = C.weeksGrid(cur, new Date());
+    var cv = $('#lifeGrid'); if (!cv) return;
+    var now = new Date(), s = heroSummary();
+    var g = C.weeksGrid(s, now);
+    var years = Math.max(90, g.curRow + 1);
     var css = getComputedStyle(document.documentElement);
     var col = function (n) { return css.getPropertyValue(n).trim(); };
-    var w = cv.parentNode.clientWidth;
-    var gutter = 24;
-    var cell = (w - gutter) / g.cols;
-    var decGap = Math.max(3, cell * 0.6);
-    var h = Math.ceil(g.rows * cell + Math.floor((g.rows - 1) / 10) * decGap + 2);
+    var cLived = col('--dot-lived'), cNow = col('--dot-now'), cLeft = col('--dot-left'), cBonus = col('--dot-bonus'), cSpring = col('--spring'), cSpringFaint = col('--spring-faint'), cMuted = col('--muted');
+    var box = cv.parentNode, w = box.clientWidth;
+    var wide = w >= 720;
+    var gut = wide ? 18 : 22, cell, cols, rows, h;
+    if (wide) { cols = years; rows = 52; cell = Math.min(8.6, (w - 4) / cols); gut = 18; h = Math.ceil(rows * cell + gut); }
+    else { cols = 52; rows = years; cell = (w - gut) / cols; }
+    var decGap = Math.max(2, cell * 0.5);
+    if (wide) { w = Math.ceil(cols * cell + Math.floor((cols - 1) / 10) * decGap) + 2; h = Math.ceil(rows * cell + gut); }
+    else h = Math.ceil(rows * cell + Math.floor((rows - 1) / 10) * decGap + 8);
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
-    cv.style.height = h + 'px';
+    cv.style.width = w + 'px'; cv.style.height = h + 'px';
     var ctx = cv.getContext('2d');
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, w, h);
-    var dot = Math.max(1.5, cell * 0.68), rad = dot * 0.3;
-    var cLived = col('--dot-lived'), cNow = col('--dot-now'), cLeft = col('--dot-left'), cBonus = col('--dot-bonus'), cMuted = col('--muted');
-    var expW = g.expWeeks;
-    ctx.font = '600 ' + Math.max(9, Math.min(11, cell * 1.4)) + 'px ' + getComputedStyle(document.body).fontFamily;
-    ctx.textBaseline = 'middle'; ctx.textAlign = 'right';
-    for (var r = 0; r < g.rows; r++) {
-      var y = r * cell + Math.floor(r / 10) * decGap;
-      if (r % 10 === 0) { ctx.fillStyle = cMuted; ctx.fillText(String(r), gutter - 6, y + dot / 2); }
-      for (var c = 0; c < g.cols; c++) {
-        var x = gutter + c * cell;
-        var idx = r * 52 + c;
-        if (r < g.curRow || (r === g.curRow && c < g.curCol)) ctx.fillStyle = cLived;
-        else if (r === g.curRow && c === g.curCol) ctx.fillStyle = cNow;
-        else if (idx < expW) ctx.fillStyle = cLeft;
-        else ctx.fillStyle = cBonus;
-        if (ctx.roundRect) { ctx.beginPath(); ctx.roundRect(x, y, dot, dot, rad); ctx.fill(); }
-        else ctx.fillRect(x, y, dot, dot);
+    var dot = Math.max(1.5, cell * 0.74), rad = dot * 0.25;
+    var bY = s.birth.getFullYear(), bM = s.birth.getMonth(), bD = s.birth.getDate();
+    function colorAt(age, wk) {
+      var idx = age * 52 + wk;
+      if (age < g.curRow || (age === g.curRow && wk < g.curCol)) return cLived;
+      if (age === g.curRow && wk === g.curCol) return cNow;
+      var m = new Date(bY + age, bM, bD + wk * 7 + 3).getMonth();
+      var spring = m >= 2 && m <= 4;
+      if (idx < g.expWeeks) return spring ? cSpring : cLeft;
+      return spring ? cSpringFaint : cBonus;
+    }
+    function pos(age, wk) {
+      if (wide) return [age * cell + Math.floor(age / 10) * decGap, gut + wk * cell];
+      return [gut + wk * cell, 6 + age * cell + Math.floor(age / 10) * decGap];
+    }
+    function drawAge(age) {
+      for (var wk = 0; wk < 52; wk++) {
+        var p = pos(age, wk);
+        ctx.fillStyle = colorAt(age, wk);
+        if (ctx.roundRect) { ctx.beginPath(); ctx.roundRect(p[0], p[1], dot, dot, rad); ctx.fill(); }
+        else ctx.fillRect(p[0], p[1], dot, dot);
       }
     }
-    // 현재 주 강조 링
-    var nx = gutter + g.curCol * cell, ny = g.curRow * cell + Math.floor(g.curRow / 10) * decGap;
-    ctx.strokeStyle = cNow; ctx.lineWidth = 1.5;
-    ctx.beginPath(); ctx.arc(nx + dot / 2, ny + dot / 2, dot * 1.25, 0, Math.PI * 2); ctx.stroke();
+    function labels() {
+      ctx.fillStyle = cMuted;
+      ctx.font = '600 ' + (wide ? 11 : 10) + 'px ' + getComputedStyle(document.body).fontFamily;
+      ctx.textBaseline = 'middle';
+      for (var a = 0; a < years; a += 10) {
+        var p = pos(a, 0);
+        if (wide) { ctx.textAlign = 'left'; ctx.fillText(a + '세', p[0], gut / 2 - 1); }
+        else { ctx.textAlign = 'right'; ctx.fillText(String(a), gut - 5, p[1] + dot / 2); }
+      }
+    }
+    function ring() {
+      var p = pos(g.curRow, g.curCol);
+      ctx.strokeStyle = cNow; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(p[0] + dot / 2, p[1] + dot / 2, Math.max(4, dot * 1.3), 0, Math.PI * 2); ctx.stroke();
+    }
+    cancelAnimationFrame(heroRaf);
+    ctx.clearRect(0, 0, w, h);
+    labels();
+    cv.setAttribute('aria-label', '인생 주 단위 격자: 1년 52주 × ' + years + '년. 지나온 ' + fmt(s.lived.weeks) + '주, 기대수명 약 ' + fmt1(s.expectedAge) + '세까지 남은 봄 약 ' + s.counts.blossom + '번' + (cur ? '' : ' (예시)'));
+    if (heroPlayed || reduceMotion) { for (var a = 0; a < years; a++) drawAge(a); ring(); return; }
+    heroPlayed = true;
+    var t0 = performance.now(), done = 0, dur = 560;
+    (function step(t) {
+      var upto = Math.min(years, Math.ceil((t - t0) / dur * years));
+      for (; done < upto; done++) drawAge(done);
+      if (done < years) heroRaf = requestAnimationFrame(step); else ring();
+    })(t0);
   }
+  function openForm() {
+    var intro = $('#intro');
+    intro.hidden = false;
+    intro.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    setTimeout(function () { $('#birth').focus({ preventScroll: true }); }, 350);
+  }
+  $('#btnFill').addEventListener('click', openForm);
+
   var rzT;
   window.addEventListener('resize', function () { clearTimeout(rzT); rzT = setTimeout(drawWeeks, 120); });
   try {
@@ -444,7 +497,7 @@
     return S.draw(cv, shareData()).catch(function () {});
   }
   function shareText() {
-    return '오늘은 내 인생의 ' + fmt(cur.lived.nthDay) + '번째 날. 남은 벚꽃은 약 ' + cur.counts.blossom + '번이래요. 당신은? 🌸';
+    return '오늘은 내 인생의 ' + fmt(cur.lived.nthDay) + '번째 날. 남은 벚꽃은 약 ' + cur.counts.blossom + '번이래요. 당신은?';
   }
   function pageUrl() { return location.origin + location.pathname.replace(/index\.html$/, ''); }
 
@@ -502,7 +555,7 @@
     var body = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//nameunbom//lifeclock//KO', 'CALSCALE:GREGORIAN', 'BEGIN:VEVENT',
       'UID:' + day + '-' + Math.random().toString(36).slice(2) + '@nameunbom', 'DTSTAMP:' + stamp,
       'DTSTART;VALUE=DATE:' + day, 'DTEND;VALUE=DATE:' + day2,
-      'SUMMARY:인생 ' + label + ' 🎉', 'DESCRIPTION:남은봄 인생 시계에서 계산한 기념일', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+      'SUMMARY:인생 ' + label, 'DESCRIPTION:남은봄 인생 시계에서 계산한 기념일', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
     var blob = new Blob([body], { type: 'text/calendar;charset=utf-8' });
     var a = document.createElement('a');
     a.href = URL.createObjectURL(blob); a.download = 'life-' + day + '.ics';
@@ -525,8 +578,9 @@
       state = load(); state.profile = null; state.family = []; state.quiz = null;
       cur = null; clearInterval(tickT);
       $('#result').hidden = true; $('#result').innerHTML = '';
-      $('#intro').hidden = false; $('#btnEdit').hidden = true;
+      $('#intro').hidden = false;
       form.reset();
+      setHeroText(); drawWeeks();
       toast('모두 지웠어요');
       window.scrollTo({ top: 0 });
       return;
@@ -600,11 +654,12 @@
 
   /* ---------- 기타 ---------- */
   $('#nextGrid').innerHTML = D.NEXT_TESTS.map(function (t) {
-    return '<a href="' + t.href + '"><span class="ic" aria-hidden="true">' + svgIc(t.icon) + '</span><span><b>' + t.name + '</b><small>' + t.desc + '</small></span></a>';
+    return '<li><a href="' + t.href + '"><b>' + t.name + '</b><small>' + t.desc + '</small></a></li>';
   }).join('');
   $('#lnkSources').addEventListener('click', function () { $('#sources').open = true; });
 
   fillForm(state.profile);
   if (state.profile) showResult(false);
+  else { $('#intro').hidden = false; setHeroText(); drawWeeks(); }
   if (document.readyState === 'complete') pushAds(); else window.addEventListener('load', pushAds);
 })();
