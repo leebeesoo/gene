@@ -428,7 +428,8 @@
       sums.push(older + '년 → ' + newer + '년 사이 물가는 약 ' + times(S.cpi[newer] / S.cpi[older]) + '배 올랐어요');
     }
     if (sums.length) html += '<p class="callout cmp-sum">' + sums.map(esc).join('<br>') + '</p>';
-    $('#cmpBox').innerHTML = html;
+    $('#cmpBox').innerHTML = html + adSlot('gap-b');
+    mountAds($('#cmpBox'));
   }
 
   /* ---------------- family ---------------- */
@@ -460,12 +461,19 @@
     });
   }
 
-  /* ---------------- ads ---------------- */
-  function pushAds() {
-    $$('ins.adsbygoogle').forEach(function (ins) {
-      if (ins.dataset.pushed || !ins.offsetWidth) return;
-      ins.dataset.pushed = '1';
-      try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { /* blocked or not ready */ }
+  /* ---------------- ads (공용 ../common/ads.js) ---------------- */
+  // 해(화면)를 새로 그릴 때마다 광고 칸을 새로 만들고 JLAds.mount로 새 칸만 요청한다
+  var AD_CLS = { news: '', peer: '', price: 'gap-b', 'after-quiz': 'gap-b', bottom: 'gap-t ad-end' };
+  function adSlot(cls) {
+    return '<aside class="jl-ad' + (cls ? ' ' + cls : '') + '" aria-label="광고"><small>광고</small><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></aside>';
+  }
+  function mountAds(root) { if (window.JLAds) window.JLAds.mount(root); }
+  function renderAds(names) {
+    $$('.ad-host').forEach(function (h) {
+      var k = h.getAttribute('data-ad');
+      if (names && names.indexOf(k) < 0) return;
+      h.innerHTML = adSlot(AD_CLS[k] || '');
+      mountAds(h);
     });
   }
 
@@ -491,7 +499,7 @@
     try { history.replaceState(null, '', u.toString()); } catch (e) {}
     document.title = y + '년 · 나때연감 — 내가 태어난 해 타임캡슐';
     if (opts.home && opts.scroll !== false) window.scrollTo({ top: 0, behavior: reduceMotion() ? 'auto' : 'smooth' });
-    pushAds();
+    renderAds();
   }
   function step(d) {
     var n = state.y + d; if (!valid(n)) return;
@@ -583,8 +591,7 @@
       state.home = qy; state.m = qm >= 1 && qm <= 12 ? qm : null; state.r = rs.value;
       go(qy, { home: true, scroll: false });
       var qv = parseInt(q.get('v'), 10); if (valid(qv) && qv !== qy) go(qv);
-    } else { renderReel(); renderCard(0); }
-    if (document.readyState === 'complete') pushAds(); else window.addEventListener('load', pushAds);
+    } else { renderReel(); renderCard(0); renderAds(['bottom']); }
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();

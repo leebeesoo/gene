@@ -31,18 +31,47 @@ export const nickOf = id => NICKNAMES[id];
 /* ---------------- 근본 공식 ---------------- */
 export const WEIGHTS = { quiz: 0.6, saju: 0.25, era: 0.15 };
 
-/** 퀴즈: 질문마다 선택지 평균을 빼서(중심화) 합하고, 축별 최대 가능 폭으로 나눔 → −1~1 */
+/** 퀴즈: 질문마다 선택지 평균을 빼서(중심화) 합하고, 축별 최대 가능 폭으로 나눔 → −1~1
+ *  건너뛴 질문(answers[i]가 비어 있음)은 점수에도, 나누는 폭(reach)에도 넣지 않아요.
+ *  즉 답한 질문들만으로 −1~1을 만들고, 얼마나 답했는지는 quizCoverage가 따로 알려 줘요. */
 export function quizAxes(set, answers) {
   const s = [0, 0, 0, 0], reach = [0, 0, 0, 0];
   set.forEach((q, qi) => {
+    const a = answers[qi];
+    if (a === undefined || a === null || !q.opts[a]) return; // 건너뜀
     for (let k = 0; k < 4; k++) {
-      const mean = q.opts.reduce((a, o) => a + o.v[k], 0) / q.opts.length;
+      const mean = q.opts.reduce((acc, o) => acc + o.v[k], 0) / q.opts.length;
       reach[k] += Math.max(...q.opts.map(o => Math.abs(o.v[k] - mean)));
-      const a = answers[qi];
-      if (a !== undefined && a !== null && q.opts[a]) s[k] += q.opts[a].v[k] - mean;
+      s[k] += q.opts[a].v[k] - mean;
     }
   });
-  return s.map((v, k) => clamp(v / (reach[k] * 0.55)));
+  return s.map((v, k) => (reach[k] > 0 ? clamp(v / (reach[k] * 0.55)) : 0));
+}
+
+/** 축별 퀴즈 반영 비율(0~1) = 답한 질문들의 폭 ÷ 전체 질문의 폭. 모두 답하면 1, 모두 건너뛰면 0. */
+export function quizCoverage(set, answers) {
+  const got = [0, 0, 0, 0], all = [0, 0, 0, 0];
+  set.forEach((q, qi) => {
+    const a = answers[qi];
+    const answered = a !== undefined && a !== null && !!q.opts[a];
+    for (let k = 0; k < 4; k++) {
+      const mean = q.opts.reduce((acc, o) => acc + o.v[k], 0) / q.opts.length;
+      const r = Math.max(...q.opts.map(o => Math.abs(o.v[k] - mean)));
+      all[k] += r; if (answered) got[k] += r;
+    }
+  });
+  return all.map((v, k) => (v > 0 ? got[k] / v : 0));
+}
+
+/** 축별 실제 가중치. 질문을 건너뛰면 그만큼 퀴즈 몫(60% × 반영 비율)이 줄고,
+ *  줄어든 몫은 사주 : 시대·지역 = 25 : 15 비율대로 나눠 가져요(합은 늘 100%).
+ *  모두 답하면 60·25·15 그대로, 모두 건너뛰면 사주 62.5% · 시대·지역 37.5%. */
+export function axisWeights(coverage) {
+  const rest = WEIGHTS.saju + WEIGHTS.era;
+  return coverage.map(c => {
+    const quiz = WEIGHTS.quiz * c, left = 1 - quiz;
+    return { quiz, saju: left * WEIGHTS.saju / rest, era: left * WEIGHTS.era / rest };
+  });
 }
 
 /** 사주: 오행 상징을 축에 대응 (기대 비율을 빼서 중심화). 해석 근거는 화면의 '어떻게 계산했나요?'에 그대로 표시. */
@@ -86,8 +115,11 @@ export function computeResult(profile, answers) {
   const set = QUESTION_SETS[stage] || QUESTION_SETS.young;
   const seed = hash(`${profile.name}|${profile.birth}|${profile.hour}|${profile.bongwan || ''}`);
   const q = quizAxes(set, answers), s = sajuAxes(saju), e = eraAxes(by, profile.region);
+  const coverage = quizCoverage(set, answers), weights = axisWeights(coverage);
+  const answered = set.filter((qq, i) => answers[i] !== undefined && answers[i] !== null && qq.opts[answers[i]]).length;
   const axes = q.map((v, k) => {
-    const x = WEIGHTS.quiz * v + WEIGHTS.saju * s[k] + WEIGHTS.era * e[k];
+    const w = weights[k];
+    const x = w.quiz * v + w.saju * s[k] + w.era * e[k];
     return Math.abs(x) < 1e-9 ? ((seed >> k) & 1 ? 0.001 : -0.001) : x;
   });
   const typeId = typeFromBits(axes.map(x => (x > 0 ? 0 : 1)));
@@ -100,7 +132,7 @@ export function computeResult(profile, answers) {
   const blend = top.map(t => ({ id: t.id, pct: Math.round((t.p / sum) * 100) }));
   blend[0].pct = 100 - blend[1].pct - blend[2].pct;
   return {
-    typeId, blend, saju, axes, posPct, parts: { quiz: q, saju: s, era: e }, seed, stage, by,
+    typeId, blend, saju, axes, posPct, parts: { quiz: q, saju: s, era: e }, weights, coverage, answered, total: set.length, seed, stage, by,
     code: codeOf(typeId), nick: nickOf(typeId), mbti: mbtiOf(typeId), cohort: cohortOf(by),
   };
 }

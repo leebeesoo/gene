@@ -153,7 +153,7 @@
       var bi = E.birthInfo(p.birth);
       var b = el('button', { class: 'pchip', type: 'button', 'aria-pressed': String(p.id === state.activeId && !formOpen) });
       b.style.setProperty('--el', 'var(--el' + (bi ? bi.el : 2) + ')');
-      b.innerHTML = '<span class="av" aria-hidden="true">' + esc(p.name.slice(0, 1)) + '</span>' + esc(p.name);
+      b.innerHTML = '<span class="av" aria-hidden="true">' + esc(p.name.slice(0, 1)) + '</span><span class="pn">' + esc(p.name) + '</span>';
       b.addEventListener('click', function () {
         state.activeId = p.id; save(); closeForm(); renderAll({});
       });
@@ -217,6 +217,7 @@
     renderCommon();
     showStep(1);
     renderProfiles();
+    refreshScreenAd();
     if (state.profiles.length) {
       $('#formCard').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
       setTimeout(function () { $('#fName').focus({ preventScroll: true }); }, 350);
@@ -898,13 +899,22 @@
   }
 
   /* ================= ads ================= */
-  function pushAds() {
-    // 슬롯마다 한 번만 push. 비어 있는 슬롯은 CSS(data-ad-status="unfilled")로 접는다
-    $$('ins.adsbygoogle').forEach(function (ins) {
-      if (ins.getAttribute('data-pushed') || ins.getAttribute('data-adsbygoogle-status')) return;
-      ins.setAttribute('data-pushed', '1');
-      try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { /* ad blocked or not ready */ }
-    });
+  // 광고는 공용 ../common/ads.js(JLAds)가 요청·접기를 맡는다.
+  // 입력 화면 ↔ 결과 화면, 다른 프로필로 바뀌면 = 새 화면 → 본문 아래 광고 칸을 새로 그린다(같은 칸 재요청 없음).
+  var AD_AUTO = '<aside class="jl-ad" aria-label="광고"><small>광고</small>' +
+    '<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></aside>';
+  var adScreen = null;
+  function refreshScreenAd() {
+    var p = activeProfile();
+    var key = formOpen ? 'form' : 'result:' + (p ? p.id : '');
+    if (key === adScreen) return;
+    var first = adScreen === null;
+    adScreen = key;
+    if (first) return; // 첫 화면은 HTML에 있는 칸을 그대로 쓴다
+    var box = $('#adMain');
+    if (!box) return;
+    box.innerHTML = AD_AUTO;
+    if (window.JLAds) window.JLAds.mount(box);
   }
 
   /* ================= main ================= */
@@ -917,6 +927,7 @@
     renderStreak();
     renderVault();
     buildRounds();
+    refreshScreenAd();
   }
 
   function renderHeroDate() { setText('heroDate', fmtKeyLong(today)); }
@@ -954,7 +965,7 @@
     renderAll({});
     setInterval(tick, 1000);
     document.addEventListener('visibilitychange', function () { if (!document.hidden) tick(); });
-    pushAds();
+    if (window.JLAds) window.JLAds.mount(document);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();

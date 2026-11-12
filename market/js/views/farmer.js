@@ -4,6 +4,7 @@ import { REGION_NAMES } from '../meta.js';
 import { loadSurplus, stabItem, itemDefaults, ITEM_DEFAULTS, STAB_LABEL, placeText, perKgPrice } from '../surplus.js';
 import { joinCta, updateJoinLink, foodbankHTML } from '../participate.js';
 import { procFor } from '../processing.js';
+import { adSlot } from '../components.js';
 
 const NH_URL = 'https://www.nonghyup.com';
 
@@ -37,7 +38,6 @@ function verdict(v, r) {
 }
 
 export async function farmerView(ctx) {
-  ctx.noAds = true;
   const data = await loadSurplus();
   const q = ctx.query;
   const sig = q.get('signal') ? data.signals.find((s) => s.id === q.get('signal')) : null;
@@ -128,6 +128,7 @@ export async function farmerView(ctx) {
         <p class="verdict" id="verdict"></p>
         <p class="hint" id="breakeven"></p>
         <p class="notice warn" id="comp-note" hidden><span>보상을 받는 물량은 넘기거나 나눌 수 없어요. 같은 물량으로는 보상과 출하 중 하나만 고를 수 있어요.</span></p>
+        ${adSlot('display', 'bottom')}
         <details class="formula"><summary>계산식 보기</summary>
           <ul>
             <li><b>갈아엎기</b> = 폐기 보상 × 면적 − 이미 들어간 생산비</li>

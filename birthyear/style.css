@@ -102,11 +102,6 @@ button, input, select { font: inherit; color: inherit; }
 .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
 .btn-row .btn { flex: 1 1 140px; }
 
-/* ---------- ads ---------- */
-.ad { margin: 24px 0; min-height: 120px; border-radius: var(--radius); background: var(--card); border: 1px solid var(--line); padding: 18px 8px 8px; position: relative; overflow: hidden; }
-.ad-label { position: absolute; top: 4px; left: 10px; font-size: 12px; color: var(--muted); }
-.ad ins { min-height: 100px; }
-
 /* ---------- year nav ---------- */
 .result { padding-top: 8px; }
 .yearnav { position: sticky; top: 56px; z-index: 15; background: var(--bg); margin: 0 -16px; padding: 8px 16px; border-bottom: 1px solid var(--line); }
@@ -258,21 +253,8 @@ button, input, select { font: inherit; color: inherit; }
 .fam-list .between::before { display: none; }
 
 /* next tests */
-.next-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-@media (min-width: 620px) { .next-grid { grid-template-columns: repeat(3, 1fr); } }
-.next-grid a { display: block; text-decoration: none; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; min-height: 92px; transition: border-color .15s; }
-.next-grid a:hover { border-color: var(--ink-2); }
-.next-grid .ni { display: grid; place-items: center; width: 40px; height: 40px; border-radius: var(--radius-s); background: var(--bg); color: var(--ink-2); }
-.next-grid .ni svg { width: 24px; height: 24px; }
-.next-grid b { display: block; margin-top: 8px; font-size: 14px; font-weight: 700; }
-.next-grid span:not(.ni) { font-size: 12px; color: var(--muted); }
 .block-title { font-family: var(--serif); font-size: 20px; font-weight: 700; margin: 28px 0 12px; letter-spacing: -0.02em; padding-bottom: 10px; border-bottom: 1px solid var(--ink); }
 
-/* footer */
-.footer { margin-top: 32px; padding: 24px 0 40px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
-.footer nav { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; }
-.footer a { color: var(--ink-2); text-decoration: none; font-weight: 500; font-size: 14px; min-height: 32px; display: inline-flex; align-items: center; }
-.footer a:hover { text-decoration: underline; }
 
 .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: var(--radius-s); font-weight: 500; font-size: 14px; opacity: 0; pointer-events: none; transition: .25s; z-index: 60; max-width: calc(100% - 32px); box-shadow: var(--sheet-shadow); }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
@@ -350,22 +332,12 @@ button, input, select { font: inherit; color: inherit; }
 .block-title { font-family: var(--serif); font-weight: 900; }
 .result { padding-top: 20px; }
 
-.others { margin-top: 40px; }
-.next { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
-.next li { border-bottom: 1px solid var(--line); }
-.next a { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; padding: 14px 2px; text-decoration: none; }
-.next a:hover b { text-decoration: underline; }
-.next b { font-family: var(--serif); font-size: 16px; min-width: 88px; }
-.next small { font-size: 14px; color: var(--muted); }
-.colophon { margin: 28px 0 0; font-size: 12px; color: var(--muted); }
 
-/* ads: 자리 예약 · 라벨 · 빈 슬롯 접기 */
-.ad { position: relative; margin: 56px 0; min-height: 298px; padding-top: 18px; border: 0; background: none; border-radius: 0; }
-.ad .ad-label { position: absolute; top: 0; left: 0; font-size: 12px; color: var(--muted); }
-.ad ins { min-height: 280px; }
-.ad:has(ins[data-ad-status="unfilled"]) { display: none; }
-ins[data-ad-status="unfilled"] { display: none !important; }
-.footer nav a:first-child { color: var(--ink); font-weight: 700; }
+/* 광고: 공용 .jl-ad(../common/ads.css). 해를 넘길 때마다 칸을 새로 그린다. 버튼·입력과 150px 넘게 띄운다 */
+.jl-ad { margin: 56px auto; }
+.jl-ad.gap-t { margin-top: 150px; }
+.jl-ad.gap-b { margin-bottom: 120px; }
+.jl-ad.ad-end { margin-bottom: 124px; }
 
 @media (min-width: 720px) {
   .fp-cols { grid-template-columns: 1.4fr 1fr 1fr; }
@@ -373,7 +345,6 @@ ins[data-ad-status="unfilled"] { display: none !important; }
   .fp-col:first-child { border-left: 0; padding-left: 0; }
   .fp-col:last-child { padding-right: 0; }
   .fp-head { font-size: 26px; }
-  .next { display: grid; grid-template-columns: 1fr 1fr; column-gap: 24px; }
 }
 @media (min-width: 1000px) {
   .wrap { max-width: 1040px; }

@@ -193,9 +193,10 @@
     $('#week-meta').innerHTML = d
       ? '1등 <b>' + fmt(d[9]) + '명</b> · 1인당 <b>' + won(d[10]) + '</b><br>판매점 ' + list.length + '곳' + (online ? ' · 인터넷 구매 ' + online + '건' : '')
       : '';
-    $('#week-list').innerHTML = list.map(function (x) {
+    fillFeed($('#week-list'), list.map(function (x) {
       return storeCard(x.s, { weekType: x.t, count: x.s.wins.length, countLabel: '회', meta: '통산 1등 ' + x.s.wins.length + '회 · ' + (RNAME[x.s.rk] || '') });
-    }).join('') || '<li class="empty">이 회차의 판매점 1등 정보가 없어요.</li>';
+    }), 'w' + round, '<li class="empty">이 회차의 판매점 1등 정보가 없어요.</li>');
+    freshAd('ad-week', 'w' + round);
   }
 
   /* ================= map ================= */
@@ -283,6 +284,7 @@
     }
   }
   function renderRegionPanel(tot) {
+    freshAd('ad-map', (mapState.region || '') + '|' + mapState.period);
     var k = mapState.region, pLabel = mapState.period === 'all' ? FIRST + '~' + LATEST + '회 누적' : '최근 ' + (mapState.period === '52' ? '1년(52회)' : '5년(260회)');
     if (!k) {
       var sum = 0; REGIONS.forEach(function (r) { sum += tot[r[0]]; });
@@ -296,7 +298,7 @@
         return '<button type="button" class="rbar" data-go="' + r[0] + '"><span>' + r[1] + '</span><span class="track"><span class="fill" style="width:' + (tot[r[0]] / mx * 100).toFixed(1) + '%"></span></span><span class="v">' + fmt(tot[r[0]]) + '</span></button>';
       }).join('');
       $('#rp-chips').innerHTML = '';
-      $('#rp-list').innerHTML = '';
+      fillFeed($('#rp-list'), [], '', '');
       $('#rp-more').hidden = true;
       $$('#rp-bars [data-go]').forEach(function (b) { b.addEventListener('click', function () { selectRegion(b.getAttribute('data-go'), true); }); });
       return;
@@ -335,8 +337,8 @@
       $('#rp-count').textContent = fmt(regionTotals(mapState.period)[k]);
     }
     $('#rp-title').innerHTML = esc($('#rp-name').textContent) + ' 판매점 순위 <span>' + fmt(list.length) + '곳</span>';
-    $('#rp-list').innerHTML = shown.map(function (x, i) { return storeCard(x.s, { rank: i + 1, count: x.n, period: mapState.period }); }).join('') ||
-      '<li class="empty">이 기간에 1등이 나온 판매점이 없어요.</li>';
+    fillFeed($('#rp-list'), shown.map(function (x, i) { return storeCard(x.s, { rank: i + 1, count: x.n, period: mapState.period }); }),
+      k + '|' + mapState.sgg + '|' + mapState.period, '<li class="empty">이 기간에 1등이 나온 판매점이 없어요.</li>');
     $('#rp-more').hidden = shown.length >= list.length;
     $('#rp-more').textContent = '더 보기 (' + shown.length + '/' + list.length + ')';
   }
@@ -413,7 +415,7 @@
     return 2 * R * Math.asin(Math.sqrt(x));
   }
   function renderNear() {
-    var list, html, total;
+    var list, cards, key, total;
     if (near.coords) {
       var withD = stores.filter(function (s) { return s.lat && s.open; })
         .map(function (s) { return { s: s, d: km(near.coords, [s.lat, s.lng]) }; })
@@ -424,16 +426,18 @@
       $('#near-hint').textContent = within.length >= 3
         ? '현재 위치 반경 3km 안 영업 중인 1등 배출점 ' + within.length + '곳을 1등 횟수 순으로 보여드려요.'
         : '반경 3km 안 1등 배출점이 적어 가까운 순으로 보여드려요.';
-      html = list.slice(0, near.page * 10).map(function (x, i) { return storeCard(x.s, { rank: i + 1, dist: x.d }); }).join('');
+      cards = list.slice(0, near.page * 10).map(function (x, i) { return storeCard(x.s, { rank: i + 1, dist: x.d }); });
+      key = 'geo|' + near.coords.join(',');
       if (withD[0]) { $('#near-sido').value = withD[0].s.rk; }
     } else {
       var rk = $('#near-sido').value, sg = $('#near-sgg').value;
       list = rankStores(stores.filter(function (s) { return s.rk === rk && (!sg || s.sgg === sg); }), 'all');
       total = list.length;
       $('#near-hint').textContent = (RNAME[rk] + (sg ? ' ' + sg : '')) + '에서 1등이 나온 판매점 ' + fmt(total) + '곳 · 위치는 기기 안에서만 거리 계산에 쓰여요.';
-      html = list.slice(0, near.page * 10).map(function (x, i) { return storeCard(x.s, { rank: i + 1, count: x.n }); }).join('');
+      cards = list.slice(0, near.page * 10).map(function (x, i) { return storeCard(x.s, { rank: i + 1, count: x.n }); });
+      key = rk + '|' + sg;
     }
-    $('#near-list').innerHTML = html || '<li class="empty">1등 배출 판매점이 없어요.</li>';
+    fillFeed($('#near-list'), cards, key, '<li class="empty">1등 배출 판매점이 없어요.</li>');
     var shown = Math.min(total, near.page * 10);
     $('#near-more').hidden = shown >= total;
     $('#near-more').textContent = '더 보기 (' + shown + '/' + total + ')';
@@ -461,8 +465,9 @@
     });
     var list = rankStores(pool, rank.period).slice(0, 50);
     var shown = list.slice(0, rank.page * 10);
-    $('#rank-list').innerHTML = shown.map(function (x, i) { return storeCard(x.s, { rank: i + 1, count: x.n, period: rank.period }); }).join('') ||
-      '<li class="empty">조건에 맞는 판매점이 없어요.</li>';
+    // 검색어를 칠 때마다 목록이 바뀌므로 검색 결과에는 인피드 광고를 넣지 않는다(광고 요청 남발 방지)
+    fillFeed($('#rank-list'), shown.map(function (x, i) { return storeCard(x.s, { rank: i + 1, count: x.n, period: rank.period }); }),
+      rank.period + '|' + rank.open + '|' + q, '<li class="empty">조건에 맞는 판매점이 없어요.</li>', !!q);
     $('#rank-more').hidden = shown.length >= list.length;
     $('#rank-more').textContent = '더 보기 (' + shown.length + '/' + list.length + ')';
     $('#rank-title').lastChild.textContent = q ? '‘' + rank.q + '’ 검색 결과' : (rank.period === 'all' ? '역대' : rank.period === '52' ? '최근 1년' : '최근 5년') + ' 1등 최다 배출 명당 TOP 50';
@@ -634,12 +639,36 @@
   }
 
   /* ================= ads ================= */
-  function pushAds() {
-    $$('ins.adsbygoogle').forEach(function (el) {
-      if (el.getAttribute('data-pushed')) return;
-      el.setAttribute('data-pushed', '1');
-      try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { /* blocked */ }
-    });
+  // 요청·접기는 공용 ../common/ads.js(JLAds)가 맡는다. 여기선 칸을 그리기만 한다.
+  // 지역·기간·회차를 바꿔 목록을 다시 그리면 = 새 화면 → 새 광고 칸(<ins>)을 만들고 그 칸만 요청한다.
+  var AD_INS = '<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>';
+  var AD_HTML = '<aside class="jl-ad" aria-label="광고"><small>광고</small>' + AD_INS + '</aside>';
+  var FEED_EVERY = 6;
+  function mountAds(root) { if (window.JLAds) window.JLAds.mount(root); }
+  var adKeys = {};
+  function freshAd(id, key) {
+    if (adKeys[id] === key) return;
+    var first = !(id in adKeys);
+    adKeys[id] = key;
+    if (first) return; // 첫 화면은 HTML에 있는 칸을 그대로 쓴다
+    var box = document.getElementById(id);
+    if (!box) return;
+    box.innerHTML = AD_HTML;
+    mountAds(box);
+  }
+  // 판매점 목록 + 인피드 광고(카드 6개마다, 카드 사이에만 → 「더 보기」와 붙지 않음).
+  // 같은 조건에서 「더 보기」를 누르면 새 카드만 덧붙여 이미 본 광고 칸은 다시 요청하지 않는다.
+  function fillFeed(ul, cards, key, emptyHtml, noAds) {
+    var i, html = '';
+    if (!cards.length) { ul.innerHTML = emptyHtml; ul._feedKey = null; ul._feedN = 0; return; }
+    var from = (ul._feedKey === key && ul._feedN && cards.length > ul._feedN) ? ul._feedN : 0;
+    for (i = from; i < cards.length; i++) {
+      if (!noAds && i > 0 && i % FEED_EVERY === 0) html += '<li class="feed-ad">' + AD_HTML + '</li>';
+      html += cards[i];
+    }
+    if (from) ul.insertAdjacentHTML('beforeend', html); else ul.innerHTML = html;
+    ul._feedKey = key; ul._feedN = cards.length;
+    mountAds(ul);
   }
 
   /* ================= init ================= */
@@ -653,5 +682,5 @@
   initStats();
   initShare();
   notes();
-  pushAds();
+  mountAds(document);
 })();

@@ -1,29 +1,20 @@
-// 재사용 UI 조각: 광고 슬롯, 빈 상태
+// 재사용 UI 조각: 광고 칸, 빈 상태
 import { esc } from './util.js';
 
 export const AD_CLIENT = 'ca-pub-XXXXXXXXXXXXXXXX';
 
 /**
- * 광고 슬롯 (ads-plan: min-height 예약, 「광고」 라벨, 버튼과 150px 이상, 시트·모달 안 금지).
- * kind: 'display'(280px) | 'multiplex'(400px)
+ * 광고 칸 — 모든 서비스 공용 마크업(common/ads.js·ads.css). 요청은 라우터가 JLAds.mount(뷰)로 해요.
+ * 규칙: 「광고」 표시, 높이 예약, 버튼·링크·입력과 150px 이상, 시트·모달·입력 단계 사이 금지.
+ * kind: 'display' | 'multiplex'(본문 끝)
+ * gap: 바로 위/아래에 버튼·링크가 있어 150px을 못 지키는 쪽을 넓혀요 — 'top' | 'bottom' | 'both'
  */
-export function adSlot(kind = 'display') {
-  const fmt = kind === 'multiplex' ? 'data-ad-format="autorelaxed"' : 'data-ad-format="auto" data-full-width-responsive="true"';
-  return `<aside class="ad ad-${kind}" aria-label="광고"><span class="ad-label">광고</span>
+export function adSlot(kind = 'display', gap = '') {
+  const multi = kind === 'multiplex';
+  const g = gap === 'both' ? ' ad-gap-top ad-gap-bottom' : gap ? ` ad-gap-${gap}` : '';
+  const fmt = multi ? 'data-ad-format="autorelaxed"' : 'data-ad-format="auto" data-full-width-responsive="true"';
+  return `<aside class="jl-ad${multi ? ' jl-ad--multiplex' : ''}${g}" aria-label="광고"><small>광고</small>
     <ins class="adsbygoogle" style="display:block" data-ad-client="${AD_CLIENT}" data-ad-slot="0000000000" ${fmt}></ins></aside>`;
-}
-
-/** SPA: 새로 그린 슬롯만 한 번씩 push (숨겨진 슬롯은 건너뜀) */
-export function pushAds(root = document) {
-  root.querySelectorAll('ins.adsbygoogle:not([data-mn-pushed]):not([data-adsbygoogle-status])').forEach((ins) => {
-    if (ins.closest('[hidden]')) return;
-    ins.setAttribute('data-mn-pushed', '1');
-    try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch {
-      /* 광고 차단·미승인 — 무시 */
-    }
-  });
 }
 
 export function emptyState(title, body = '', cta = '') {

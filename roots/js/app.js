@@ -50,12 +50,8 @@ function toast(msg) {
   clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 2000);
 }
 const adSlot = kind => adSlotTpl(kind);
-function pushAds(root = document) {
-  $$('ins.adsbygoogle:not([data-ad-pushed])', root).forEach(el => {
-    el.setAttribute('data-ad-pushed', '1');
-    try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch { /* ad blocked or not loaded */ }
-  });
-}
+/* 광고: 공용 common/ads.js — 화면을 새로 그릴 때마다 새 칸이 생기고, 그린 뒤 새 칸만 요청 */
+function pushAds(root = document) { if (window.JLAds) window.JLAds.mount(root); }
 async function copyText(text) {
   try { await navigator.clipboard.writeText(text); return true; } catch {
     try {
@@ -69,9 +65,12 @@ const inviteUrl = (name, id) => `${BASE}?invite=${encodeInvite(name, id)}`;
 /* ---------- state ---------- */
 const BASE_STEPS = ['name', 'bongwan', 'birth', 'region'];
 const blankProfile = () => ({ name: '', surname: '', bongwan: '', cal: 'solar', leap: false, birth: '', hour: '', minute: '', region: '', stage: '' });
-let state = { step: 0, profile: blankProfile(), answers: [] };
+let state = { step: 0, profile: blankProfile(), answers: [], skipped: new Set() };
 const steps = () => [...BASE_STEPS, ...(QUESTION_SETS[state.profile.stage || 'young']).map((_, i) => 'q' + i)];
 let stickyObs = null;
+let usingKeyboard = false;
+document.addEventListener('keydown', e => { if (e.key === 'Tab' || e.key.startsWith('Arrow') || e.key === 'Enter') usingKeyboard = true; }, true);
+document.addEventListener('pointerdown', () => { usingKeyboard = false; }, true);
 
 (function readInvite() {
   const p = new URLSearchParams(location.search);
@@ -90,22 +89,7 @@ function setFlowMode(on) {
 }
 function clearHash() { if (location.hash) { try { history.replaceState(null, '', location.pathname + location.search); } catch { location.hash = ''; } } }
 
-/* ---------- 다른 서비스 · 미니 테스트 · 예시 카드 ---------- */
-const SERVICES = [
-  ['lotto', '오늘로또', '사주로 뽑는 오늘의 로또 번호와 살 시간·방향'],
-  ['lottomap', '명당로드', '로또 1등 명당 지도와 번호 통계'],
-  ['market', '맛남의 광장', '버려질 농수산물이 어디서 남는지, 버려지기 전에'],
-  ['season', '제철장보기', '이달 제철 식재료와 지금 싼 품목'],
-  ['sikdang', '제철식당', '이달 이 지역 제철 음식을 잘하는 집'],
-  ['family', '식구궁합', '우리 가족 오행 궁합판'],
-  ['names', '이름레이더', '내 이름, 전국에 몇 명?'],
-  ['lifeclock', '남은봄', '남은 주말·명절·벚꽃 세는 인생 시계'],
-  ['birthyear', '나때연감', '내가 태어난 해 타임캡슐'],
-];
-function otherServices() {
-  return `<section class="others" aria-labelledby="h-others"><h2 id="h-others" class="others-h">다른 서비스</h2>
-    <ul class="svc-list">${SERVICES.map(([k, n, d]) => `<li><a href="../${k}/"><b>${n}</b><span>${d}</span></a></li>`).join('')}</ul></section>`;
-}
+/* ---------- 미니 테스트 · 예시 카드 (다른 서비스 목록은 공용 푸터가 보여 줌) ---------- */
 function miniTests(exclude = '') {
   const cards = [
     { k: 'main', href: './', h: '根', t: '나의 근본 코드 찾기', d: '질문 10개 · 만세력 사주 · 조상 타임라인' },
@@ -117,7 +101,7 @@ function miniTests(exclude = '') {
 }
 function adSlotTpl(kind = 'display') {
   const multi = kind === 'multiplex';
-  return `<div class="ad-wrap${multi ? ' ad-multi' : ''}"><span class="ad-label">광고</span><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" ${multi ? 'data-ad-format="autorelaxed"' : 'data-ad-format="auto" data-full-width-responsive="true"'}></ins></div>`;
+  return `<aside class="jl-ad${multi ? ' jl-ad--multiplex' : ''}" aria-label="광고"><small>광고</small><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" ${multi ? 'data-ad-format="autorelaxed"' : 'data-ad-format="auto" data-full-width-responsive="true"'}></ins></aside>`;
 }
 /* 인주 도장: 유형 한자를 세로로 찍은 낙관 */
 function sealHTML(id, cls = '') {
@@ -198,7 +182,7 @@ function renderLanding() {
     <h3>내 정보는 어디에 저장되나요?</h3><p>이름, 생일 등 모든 입력은 서버로 보내지 않고 이 기기의 브라우저에만 저장돼요.</p>
   </section>
 
-  <div class="wrap">${miniTests('main')}</div>
+  <div class="wrap">${adSlotTpl('multiplex')}</div>
 
   <section class="section wrap facts" aria-labelledby="h-facts">
     <h2 class="sec-title left" id="h-facts">알고 보면 더 재밌는 숫자</h2>
@@ -209,13 +193,8 @@ function renderLanding() {
     </dl>
   </section>
 
-  <div class="wrap">${adSlotTpl('multiplex')}</div>
+  <div class="wrap">${miniTests('main')}</div>
 
-  <section class="wrap sources-note">
-    <p>성씨·본관 인구는 통계청 2015 인구주택총조사, 음력은 한국천문연구원, 장래 인구는 통계청 장래인구추계(2022~2072)를 썼어요. 근본 코드와 사주 해석은 전통 상징을 빌린 재미 콘텐츠이고, 과학적인 성격 검사가 아니에요.</p>
-  </section>
-
-  <div class="wrap">${otherServices()}</div>
   <div class="bottom-cta wrap"><button class="btn btn-primary btn-block" data-action="start">도장 찍고 내 근본 코드 찾기</button></div>`;
   pushAds(app);
   window.scrollTo(0, 0);
@@ -226,9 +205,23 @@ function startFlow(prefill) {
   clearHash();
   const saved = store.get(RKEY);
   state.profile = prefill && saved ? { ...blankProfile(), ...saved.profile } : blankProfile();
-  state.answers = []; state.step = 0;
+  state.answers = []; state.skipped = new Set(); state.step = 0;
   renderStep();
 }
+/** 결과 화면에서 '질문에 답하기': 저장된 정보·답은 그대로 두고 첫 번째 안 한 질문부터 */
+function resumeQuestions() {
+  clearHash();
+  const saved = store.get(RKEY);
+  if (!saved || !saved.profile) { startFlow(false); return; }
+  state.profile = { ...blankProfile(), ...saved.profile };
+  state.answers = (saved.answers || []).map(a => (a === null ? undefined : a));
+  state.skipped = new Set();
+  const n = QUESTION_SETS[state.profile.stage || 'young'].length;
+  let first = 0; while (first < n && isAnswered(first)) first++;
+  state.step = BASE_STEPS.length + (first < n ? first : 0);
+  renderStep();
+}
+const isAnswered = qi => state.answers[qi] !== undefined && state.answers[qi] !== null;
 
 function yearOpts(sel, min = 1920) {
   let h = '<option value="">년</option>';
@@ -304,19 +297,32 @@ function renderStep() {
       <div class="q-label">고향의 기운 · 공식의 일부(작은 비중)</div>
       <h1 class="q-title">어디에서 자랐나요?</h1>
       <p class="q-sub">가장 오래 자란 곳을 골라 주세요</p>
-      <div class="opts two">${REGIONS.map(r => `<button class="opt center ${pf.region === r.t ? 'sel' : ''}" data-action="region" data-v="${r.t}">${r.t}</button>`).join('')}</div>`;
+      <div class="opts two" role="radiogroup" aria-label="자란 곳">${REGIONS.map(r => `<button class="opt center ${pf.region === r.t ? 'sel' : ''}" role="radio" aria-checked="${pf.region === r.t}" data-action="region" data-v="${r.t}">${r.t}</button>`).join('')}</div>`;
   } else {
     const qi = +key.slice(1); const set = QUESTION_SETS[pf.stage]; const q = set[qi];
     const stg = STAGES.find(s => s.key === pf.stage);
     body = `
       <div class="q-art" aria-hidden="true">${q.art}</div>
       <div class="q-label">질문 ${qi + 1} / ${set.length} · ${stg.label} 질문</div>
-      <h1 class="q-title">${esc(q.q)}</h1>
-      <div class="opts" style="margin-top:20px">${q.opts.map((o, oi) => `<button class="opt ${state.answers[qi] === oi ? 'sel' : ''}" data-action="answer" data-v="${oi}">${esc(o.t)}</button>`).join('')}</div>`;
+      <h1 class="q-title" id="q-title">${esc(q.q)}</h1>
+      <div class="opts" style="margin-top:20px" role="radiogroup" aria-labelledby="q-title">${q.opts.map((o, oi) => `<button class="opt ${state.answers[qi] === oi ? 'sel' : ''}" role="radio" aria-checked="${state.answers[qi] === oi}" data-action="answer" data-v="${oi}">${esc(o.t)}</button>`).join('')}</div>`;
   }
-  const needsNext = ['name', 'bongwan', 'birth'].includes(key);
+  const isQ = key.startsWith('q');
   const nBase = BASE_STEPS.length;
-  const progTxt = state.step < nBase ? `기본 정보 ${state.step + 1}/${nBase}` : `질문 ${state.step - nBase + 1}/${total - nBase}`;
+  const nQ = total - nBase;
+  const qi = isQ ? +key.slice(1) : -1;
+  const isLast = state.step === total - 1;
+  let doneN = 0, skipN = 0;
+  for (let i = 0; i < nQ; i++) { if (isAnswered(i)) doneN++; else if (state.skipped.has(i)) skipN++; }
+  const progTxt = state.step < nBase ? `기본 정보 ${state.step + 1}/${nBase}` : `질문 ${qi + 1}/${nQ}`;
+  const answeredHere = isQ ? isAnswered(qi) : key === 'region' ? !!pf.region : true;
+  // 질문 단계: 점으로 답함·건너뜀·현재를 보여 줌 (글로도 같은 내용)
+  const dots = isQ ? `<div class="q-status"><ol class="qdots" aria-hidden="true">${Array.from({ length: nQ }, (_, i) => `<li class="${i === qi ? 'is-cur ' : ''}${isAnswered(i) ? 'is-done' : state.skipped.has(i) ? 'is-skip' : ''}"></li>`).join('')}</ol><span class="q-count">답함 ${doneN} · 건너뜀 ${skipN}</span></div>` : '';
+  const nextLabel = isLast ? '결과 보기' : '다음';
+  const navRow = state.step > 0 ? `<div class="nav-row">
+          <button class="btn btn-ghost" data-action="back">이전</button>
+          <button class="btn btn-dark" data-action="next" id="next-btn" ${answeredHere ? '' : 'disabled'}>${nextLabel}</button>
+        </div>` : `<button class="btn btn-dark btn-block" data-action="next" id="next-btn">다음</button>`;
   app.innerHTML = `
     <div class="flow">
       <div class="flow-top">
@@ -324,13 +330,23 @@ function renderStep() {
         <div class="prog" role="progressbar" aria-label="진행" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${state.step + 1}" aria-valuetext="${progTxt}"><i style="width:${((state.step + 1) / total) * 100}%"></i></div>
         <span class="prog-n">${progTxt}</span>
       </div>
+      ${dots}
       <div class="q-wrap">${body}</div>
       <div class="flow-foot">
-        ${needsNext ? `<button class="btn btn-dark btn-block" data-action="next" id="next-btn">다음</button>` : ''}
+        ${navRow}
         ${key === 'bongwan' ? `<button class="skip" data-action="skip-bon">잘 모르겠어요, 건너뛰기</button>` : ''}
+        ${isQ ? `<div class="skip-row"><button class="skip" data-action="skip-q">${isLast ? '이 질문 건너뛰고 결과 보기' : '이 질문 건너뛰기'}</button>${isLast ? '' : `<button class="skip" data-action="skip-all">질문 건너뛰고 결과 보기</button>`}</div>
+        <p class="skip-note">건너뛴 질문은 사주와 시대·지역 정보로 채워 계산해요.</p>` : ''}
       </div>
     </div>`;
   window.scrollTo(0, 0);
+  const group = $('.opts[role="radiogroup"]', app);
+  if (group) {
+    const radios = $$('.opt', group); const cur = radios.find(o => o.classList.contains('sel')) || radios[0];
+    radios.forEach(o => { o.tabIndex = o === cur ? 0 : -1; });
+    // 키보드로 오가는 중이거나 이미 고른 답이 있을 때만 포커스 (Enter 한 번에 첫 선택지가 골라지는 일 방지)
+    if (usingKeyboard || cur.classList.contains('sel')) setTimeout(() => { try { cur.focus({ preventScroll: true }); } catch { /* noop */ } }, 30);
+  }
   if (key === 'name') {
     const inp = $('#f-name'), sur = $('#f-sur'), sp = $('#sp');
     const upd = () => {
@@ -368,6 +384,8 @@ function next() {
     if (!pf.surname) pf.surname = splitName(pf.name).surname;
   }
   if (key === 'bongwan') pf.bongwan = ($('#f-bon')?.value || '').trim().slice(0, 12);
+  if (key === 'region' && !pf.region) return;
+  if (key.startsWith('q') && !isAnswered(+key.slice(1))) return; // 답하지 않았으면 '건너뛰기'를 써요
   if (key === 'birth') {
     const y = $('#f-y').value, m = $('#f-m').value, d = $('#f-d').value;
     const lunar = pf.cal === 'lunar', leap = lunar && $('#f-leap').checked;
@@ -382,7 +400,7 @@ function next() {
     pf.hour = $('#f-h').value; pf.minute = pf.hour === '' ? '' : $('#f-mi').value;
     const sy = lunar ? solar.y : +y;
     const newStage = stageOf(sy, NOW_Y).key;
-    if (newStage !== pf.stage) state.answers = [];
+    if (newStage !== pf.stage) { state.answers = []; state.skipped = new Set(); }
     pf.stage = newStage;
   }
   if (state.step < steps().length - 1) { state.step++; renderStep(); } else renderLoading();
@@ -405,7 +423,8 @@ function renderLoading() {
   window.scrollTo(0, 0);
   let i = 0;
   const iv = setInterval(() => { i++; const el = $('#lmsg'); if (el) el.textContent = msgs[i % msgs.length]; }, 420);
-  store.set(RKEY, { v: 2, profile: { ...state.profile }, answers: [...state.answers], at: Date.now() });
+  const nQ = QUESTION_SETS[state.profile.stage || 'young'].length;
+  store.set(RKEY, { v: 2, profile: { ...state.profile }, answers: Array.from({ length: nQ }, (_, i) => (isAnswered(i) ? state.answers[i] : null)), at: Date.now() });
   setTimeout(() => { clearInterval(iv); renderResult(true); }, 2000);
 }
 
@@ -439,13 +458,18 @@ function formulaBox(res, pf) {
   const f = v => (v >= 0 ? '+' : '') + v.toFixed(2);
   const q = res.parts.quiz, s = res.parts.saju, e = res.parts.era;
   const regionWhy = REGION_WHY[pf.region] || '반영 안 함';
+  const W = res.weights, full = res.answered === res.total, none = res.answered === 0;
+  const pc = v => `${Math.round(v * 100)}%`;
+  const wTxt = k => `${pc(W[k].quiz)}·${pc(W[k].saju)}·${pc(W[k].era)}`;
   return `<details class="formula"><summary>어떻게 계산했나요? (근본 공식)</summary>
     <p><b>축 점수 = 퀴즈 ${WEIGHTS.quiz * 100}% + 사주 오행 ${WEIGHTS.saju * 100}% + 출생 시대·지역 ${WEIGHTS.era * 100}%</b><br>각 성분은 −1(뒤 글자)~+1(앞 글자). 합이 0보다 크면 앞 글자(T·K·L·S), 작으면 뒤 글자(A·R·H·G)예요. 비율(%) = 50 + 50 × 축 점수.</p>
+    ${full ? '' : `<p class="f-skip"><b>${none ? '질문을 모두 건너뛰었어요.' : `질문 ${res.total}개 중 ${res.answered}개에 답했어요.`}</b> 건너뛴 질문만큼 퀴즈 몫이 줄고, 줄어든 몫은 사주 : 시대·지역 = 25 : 15 비율로 나눠 가져요. 이번 계산에 쓴 비중(퀴즈·사주·시대지역): ${res.axes.map((_, k) => `${AXES[k].pos.h}/${AXES[k].neg.h} ${wTxt(k)}`).join(' · ')}</p>`}
     <div class="ftable" role="table" aria-label="축별 계산">
       <div role="row" class="fh"><span role="columnheader">축</span><span role="columnheader">퀴즈</span><span role="columnheader">사주</span><span role="columnheader">시대·지역</span><span role="columnheader">합</span></div>
-      ${res.axes.map((x, k) => `<div role="row"><span role="cell">${AXES[k].pos.h}/${AXES[k].neg.h}</span><span role="cell">${f(q[k])}</span><span role="cell">${f(s[k])}</span><span role="cell">${f(e[k])}</span><span role="cell"><b>${f(x)}</b></span></div>`).join('')}
+      ${res.axes.map((x, k) => `<div role="row"><span role="cell">${AXES[k].pos.h}/${AXES[k].neg.h}</span><span role="cell">${none ? '—' : f(q[k])}</span><span role="cell">${f(s[k])}</span><span role="cell">${f(e[k])}</span><span role="cell"><b>${f(x)}</b></span></div>`).join('')}
     </div>
     <ul>
+      <li><b>건너뛴 질문은?</b> 점수에 넣지 않아요. 답한 질문만으로 퀴즈 점수(−1~+1)를 내고, 퀴즈 비중은 60% × (답한 질문이 그 축에서 차지하는 몫)으로 줄여요. 남은 비중은 사주와 시대·지역이 25 : 15로 나눠요. 모두 건너뛰면 사주 62.5% · 시대·지역 37.5%예요.</li>
       <li><b>왜 퀴즈 60%?</b> 지금의 성향을 직접 묻는 유일한 입력이라 가장 크게 잡았어요. 질문 10개는 각각 두 축을 묻고, 선택지는 양극이 거울처럼 짝지어져 있어 무작위로 답하면 축마다 약 50:50이 나와요(2만 회 시뮬레이션 확인).</li>
       <li><b>사주 25%</b> — 전통 오행 상징을 빌린 우리 공식의 가정이에요(과학적 성격 측정이 아님): ${SAJU_RULES.join(' · ')}.</li>
       <li><b>시대·지역 15%</b> — ${esc(res.cohort.label)}(${esc(res.cohort.why)}) · ${esc(pf.region || '비밀')}(${esc(regionWhy)})을 작은 값으로 더했어요. 역시 사실이 아니라 가정이에요.</li>
@@ -570,7 +594,7 @@ function codeCard(res) {
     <p class="code-meta">16개 코드 중 하나 · 시뮬레이션상 <b>${RARITY[res.typeId]}%</b> · MBTI로 치면 <b>${mbtiOf(res.typeId)}</b>와 비슷한 결 (참고용 비유)</p>
     <ul class="code-sum">
       <li>가장 뚜렷한 기질은 <b>${lines[0].txt}</b> — 네 축 가운데 합산 점수가 가장 한쪽으로 기운 축이에요.</li>
-      <li>답변(60%)에 사주 일간 ${STEMS[res.saju.dayMaster]}·${ELEMENTS[res.saju.dayEl].h}(25%)와 ${esc(res.cohort.label)} 배경(15%)이 더해졌어요.</li>
+      <li>${res.answered === 0 ? `질문을 건너뛰어 사주 일간 ${STEMS[res.saju.dayMaster]}·${ELEMENTS[res.saju.dayEl].h}와 ${esc(res.cohort.label)} 배경만으로 정했어요.` : `답변${res.answered < res.total ? `(${res.answered}개)` : '(60%)'}에 사주 일간 ${STEMS[res.saju.dayMaster]}·${ELEMENTS[res.saju.dayEl].h}${res.answered < res.total ? '' : '(25%)'}와 ${esc(res.cohort.label)} 배경${res.answered < res.total ? '' : '(15%)'}이 더해졌어요.`}</li>
       <li>가장 덜 뚜렷한 축은 <b>${lines[3].txt}</b> — 상황에 따라 반대 모습도 자주 보일 수 있어요.</li>
     </ul>
     <div class="code-match">
@@ -609,6 +633,12 @@ function renderResult(fresh = false) {
     store.del('invite');
   }
   const stg = STAGES.find(s => s.key === res.stage);
+  const skipNote = res.answered === 0
+    ? `<section class="skip-notice" aria-label="질문 건너뜀 안내"><p><b>질문을 건너뛰어 사주·출생 정보로만 계산했어요.</b> 질문 ${res.total}개에 답하면 지금의 나에 더 가까운 코드가 나와요.</p><button class="btn btn-dark btn-sm" data-action="answer-qs">질문에 답하기</button></section>`
+    : res.answered < res.total
+      ? `<section class="skip-notice" aria-label="질문 건너뜀 안내"><p>질문 ${res.total}개 중 <b>${res.answered}개</b>에 답했어요. 건너뛴 질문은 사주·출생 정보로 채워 계산했어요.</p><button class="btn btn-ghost btn-sm" data-action="answer-qs">남은 질문 답하기</button></section>`
+      : '';
+  const partTxt = res.answered === 0 ? '사주 오행과 출생 시대·지역' : res.answered < res.total ? `질문 ${res.answered}/${res.total}개 + 사주 + 출생 시대·지역` : `${stg ? stg.label : ''} 질문 ${res.total}개 + 사주 + 출생 시대·지역`;
 
   app.innerHTML = `
   <section class="stage stage-result" id="r-hero" aria-labelledby="r-title">
@@ -625,6 +655,7 @@ function renderResult(fresh = false) {
     </div>
   </section>
   <div class="result wrap">
+    ${skipNote}
     <section class="daily" aria-label="오늘의 조상님 한마디">
       <div class="daily-top"><span>오늘의 조상님 한마디 · ${daily.ilJin}</span><span class="streak">${streak.n}일 연속 문안</span></div>
       <div class="daily-msg">${emblemSVG(res.typeId, 52, 'aria-hidden="true"')}<p>“${esc(daily.msg)}”<small>— ${res.code} ${t.name}형 조상님 · ${esc(daily.mood)}</small></p></div>
@@ -638,7 +669,7 @@ function renderResult(fresh = false) {
 
     <section class="card" aria-labelledby="h-axes">
       <h2 id="h-axes">내 안의 네 가지 기질</h2>
-      <p class="sub">${stg ? stg.label : ''} 질문 10개 + 사주 + 출생 시대·지역으로 계산</p>
+      <p class="sub">${partTxt}으로 계산</p>
       ${axisBars(res)}
       <h3 class="mini-h">가까운 근본 3가지</h3>
       <div class="blend-bars">${res.blend.map(b => {
@@ -715,11 +746,19 @@ function renderResult(fresh = false) {
       <div id="history"></div>
     </section>
 
+    <section class="read-note" aria-labelledby="h-cmp-read">
+      <h2 id="h-cmp-read">궁합 점수 읽는 법</h2>
+      <p>총점은 오행 궁합 40%, 코드 궁합 42%, 띠 궁합 18%를 더해요. 두 사람의 일간 오행이 서로 살리는 상생이면 90점대, 같은 오행이면 76점, 누르는 상극이면 60점대예요.</p>
+      <p>띠는 육합 96점, 삼합 90점, 충 52점이고 띠를 모르면 72점으로 계산해요. 88점 이상은 천생연분, 75점 이상은 찰떡궁합, 62점 이상은 티키타카, 그 아래는 불꽃 케미예요.</p>
+    </section>
+
+    ${adSlot()}
+
     <section class="card" id="dex-sec" aria-labelledby="h-dex"></section>
 
     <section class="read-note" aria-labelledby="h-read">
       <h2 id="h-read">이 결과를 읽는 법</h2>
-      <p>근본 코드는 답변(60%)에 사주 오행(25%)과 출생 시대·지역(15%)을 더한 우리만의 공식이에요. 네 축 중 한쪽으로 크게 기운 축일수록 평소 모습에 가깝고, 50%에 가까운 축은 상황에 따라 반대 모습도 자주 나와요.</p>
+      <p>네 축 중 한쪽으로 크게 기운 축일수록 평소 모습에 가깝고, 50%에 가까운 축은 상황에 따라 반대 모습도 자주 나와요. 계산식은 위 ‘어떻게 계산했나요?’에 있어요.</p>
       <p>조상 타임라인은 한 세대를 30년으로 잡은 계산이고, 성씨·본관 숫자는 통계청 2015 인구주택총조사 값이에요. 사주 해석과 '닮은 조상'은 재미로 보는 상상이에요.</p>
     </section>
 
@@ -731,7 +770,6 @@ function renderResult(fresh = false) {
     </section>
 
     ${miniTests('main')}
-    ${otherServices()}
 
     <div class="retry">
       <button class="btn btn-ghost" data-action="retry">다시 테스트하기</button>
@@ -860,11 +898,11 @@ function renderSurnameTest() {
     <section class="card"><h2>성씨 TOP 10</h2><p class="sub">2015년 내국인 ${nf(POP_2015)}명 기준</p>
       <div class="rank">${top10.map(s => `<div><b>${s.rank}</b><span>${s.s}</span><div class="rk-track"><i style="width:${(s.n / top10[0].n) * 100}%"></i></div><em>${man(s.n)}</em></div>`).join('')}</div>
       <p class="fine">김·이·박 세 성씨만 합쳐도 약 ${((top10[0].n + top10[1].n + top10[2].n) / POP_2015 * 100).toFixed(1)}%예요.</p></section>
+    ${adSlot('multiplex')}
     <section class="read-note"><h2>성씨·본관 통계 읽는 법</h2><p>2015년 인구주택총조사는 성씨와 본관을 함께 조사한 가장 최근 자료예요. 같은 한자 성씨라도 '유'와 '류'처럼 한글 표기가 다르면 따로 셌고, 본관은 신고한 대로 집계했어요. 이 앱에는 상위 45개 성씨와 약 80개 본관의 값이 들어 있어요.</p></section>
     ${adSlot()}
     <section class="read-note"><h2>시조 이야기는 어디서 왔나요?</h2><p>시조 정보는 각 문중에서 전하는 내용이라 전설이 섞여 있어요. 같은 본관이라도 문중마다 계보가 다를 수 있어요.</p></section>
-    ${miniTests('surname')}
-    ${otherServices()}`);
+    ${miniTests('surname')}`);
   const out = $('#sur-out');
   const fill = () => { const s = $('#s-sur').value.trim(); $('#bon-list').innerHTML = bongwanOptions(s).map(b => `<option value="${esc(b.split(' ')[0])}">`).join(''); };
   const show = () => {
@@ -893,8 +931,9 @@ function renderAncestorTest() {
     <section class="read-note"><h2>왜 두 배씩 늘어날까?</h2><p>누구에게나 부모는 2명, 조부모는 4명이에요. 한 세대 올라갈 때마다 조상 자리는 두 배가 되니 n대 위는 2ⁿ명이에요. 한 세대는 평균 30년으로 잡았어요.</p></section>
     ${adSlot()}
     <section class="read-note"><h2>조상 겹침</h2><p>25대쯤 올라가면 조상 자리가 당시 한반도 인구보다 많아져요. 같은 사람이 여러 자리를 차지하기 때문이고, 그래서 우리는 생각보다 가까운 먼 친척이에요.</p></section>
-    ${miniTests('ancestors')}
-    ${otherServices()}`);
+    ${adSlot('multiplex')}
+    <section class="read-note"><h2>한 세대는 몇 년일까?</h2><p>이 계산은 한 세대를 평균 ${GEN_YEARS}년으로 잡았어요. 실제 부모와 자식의 나이 차는 시대와 집안마다 달라요. 한 세대를 25년으로 잡으면 같은 10대 위 조상도 50년 더 가까운 시대 사람이 돼요.</p></section>
+    ${miniTests('ancestors')}`);
   const draw = () => {
     const by = +$('#a-y').value || by0; const n = +$('#a-n').value || 10;
     const born = by - GEN_YEARS * n; const cnt = 2 ** n; const cum = 2 ** (n + 1) - 2;
@@ -1023,12 +1062,23 @@ document.addEventListener('click', e => {
     case 'bon': pf.bongwan = el.dataset.v; $('#f-bon').value = el.dataset.v; $$('.chip', app).forEach(c => c.classList.toggle('sel', c === el)); setTimeout(next, 180); break;
     case 'skip-bon': pf.bongwan = ''; state.step++; renderStep(); break;
     case 'region': case 'answer': {
-      $$('.opt', app).forEach(o => o.classList.toggle('sel', o === el));
-      if (a === 'region') pf.region = el.dataset.v;
-      if (a === 'answer') state.answers[+steps()[state.step].slice(1)] = +el.dataset.v;
+      chooseOpt(el);
+      // 누르면 고른 채로 바로 다음 단계 (방향키로 고를 땐 넘어가지 않음)
       $$('.opt', app).forEach(o => { o.disabled = true; });
       setTimeout(next, 200); break;
     }
+    case 'skip-q': {
+      const qi = +steps()[state.step].slice(1);
+      state.answers[qi] = undefined; state.skipped.add(qi);
+      if (state.step < steps().length - 1) { state.step++; renderStep(); } else renderLoading();
+      break;
+    }
+    case 'skip-all': {
+      const n = steps().length - BASE_STEPS.length;
+      for (let i = +steps()[state.step].slice(1); i < n; i++) if (!isAnswered(i)) state.skipped.add(i);
+      renderLoading(); break;
+    }
+    case 'answer-qs': resumeQuestions(); break;
     case 'type': openTypeModal(+el.dataset.id, R && document.querySelector('.result') ? 'full' : 'preview'); break;
     case 'dex': {
       const id = +el.dataset.id; const got = id === R?.res.typeId || getDex().some(x => x.t === id);
@@ -1056,7 +1106,25 @@ document.addEventListener('click', e => {
     case 'close': closeModal(); break;
   }
 });
+/** 선택지 하나를 고른 상태로 표시하고 값 저장 (넘어가지는 않음) */
+function chooseOpt(el) {
+  $$('.opt', app).forEach(o => { const on = o === el; o.classList.toggle('sel', on); o.setAttribute('aria-checked', String(on)); o.tabIndex = on ? 0 : -1; });
+  if (el.dataset.action === 'region') state.profile.region = el.dataset.v;
+  else state.answers[+steps()[state.step].slice(1)] = +el.dataset.v;
+  const nb = $('#next-btn'); if (nb) nb.disabled = false;
+}
 document.addEventListener('keydown', e => {
+  if (document.body.classList.contains('in-flow') && !modal.classList.contains('open') && !e.isComposing) {
+    const opt = e.target.closest?.('.opts[role="radiogroup"] .opt');
+    const dir = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+    if (opt && dir) {
+      e.preventDefault();
+      const list = $$('.opt', opt.parentElement); const nx = list[(list.indexOf(opt) + dir + list.length) % list.length];
+      chooseOpt(nx); nx.focus(); return;
+    }
+    // 선택지에서 Enter = 고른 채로 다음
+    if (opt && e.key === 'Enter') { e.preventDefault(); chooseOpt(opt); next(); return; }
+  }
   if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
   if (modal.classList.contains('open') && e.key === 'Tab') {
     const f = $$('button, a[href], input, select', sheet).filter(x => !x.disabled);

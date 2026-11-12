@@ -263,33 +263,15 @@ select.input { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://ww
 
 /* 읽는 법 · 다른 서비스 */
 .guide { margin-top: 40px; }
-.guide h2, .others h2, .how summary h2 { font-family: var(--serif); font-weight: 700; font-size: 20px; margin: 0 0 10px; letter-spacing: -.03em; }
+/* 결과 끝 광고 아래로 저장한 보드(버튼)가 올 때도 150px 이상 떨어지게 */
+#results > .jl-ad--multiplex { margin-bottom: 88px; }
+.guide h2, .how summary h2 { font-family: var(--serif); font-weight: 700; font-size: 20px; margin: 0 0 10px; letter-spacing: -.03em; }
 .guide p { margin: 0 0 8px; font-size: 14px; color: var(--ink-2); }
 .guide h3 { font-size: 14px; margin: 0 0 4px; }
 .guide-cols { display: grid; gap: 14px; border-top: 1px solid var(--ink); padding-top: 14px; }
 @media (min-width: 640px) { .guide-cols { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
-.others { margin-top: 40px; }
-.svc-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
-.svc-list a { display: grid; grid-template-columns: 96px 1fr; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--line); text-decoration: none; align-items: baseline; }
-.svc-list a:hover b { text-decoration: underline; text-underline-offset: 3px; }
-.svc-list b { font-size: 14px; }
-.svc-list span { font-size: 14px; color: var(--muted); }
 
-/* ads (docs/ads-plan.md): 자리 미리 잡기 · 「광고」 라벨 · 안 채워지면 접기 */
-.ad-slot { min-height: 280px; margin: 16px 0; }
-.ad-slot.ad-multi { min-height: 400px; }
-.shell > .ad-slot { margin: 32px 0; }
-.ad-label { display: block; font-size: 12px; color: var(--muted); letter-spacing: .08em; margin-bottom: 6px; }
-.ad-slot ins { min-height: 250px; }
-.ad-slot.ad-multi ins { min-height: 370px; }
-ins.adsbygoogle[data-ad-status="unfilled"] { display: none !important; }
-.ad-slot:has(ins[data-ad-status="unfilled"]), .no-ads .ad-slot { display: none !important; }
 
-/* footer */
-.foot { margin-top: 24px; padding: 22px 0 calc(28px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
-.foot p { margin: 4px 0; }
-.foot-links { display: flex; gap: 16px; flex-wrap: wrap; margin: 8px 0; font-size: 14px; }
-.foot-links a { font-weight: 500; color: var(--ink-2); }
 
 /* sheet */
 .sheet { border: 1px solid var(--line); padding: 0; margin: auto auto 0; width: 100%; max-width: 560px; max-height: 88dvh; border-radius: var(--r-card) var(--r-card) 0 0; background: var(--surface); color: var(--ink); box-shadow: var(--sheet-shadow); }

@@ -158,14 +158,13 @@ img, svg { max-width: 100%; }
 .chip:hover { border-color: var(--ink-3); }
 .chip small { font-weight: 500; color: var(--ink-3); font-size: 12px; }
 
-/* ads: 자리 예약, 라벨, 빈 슬롯 접기 */
-.ad-wrap { position: relative; margin: 56px 0; min-height: 298px; padding-top: 18px; }
-.ad-wrap.ad-multi { min-height: 418px; }
-.ad-label { position: absolute; top: 0; left: 0; font-size: 12px; color: var(--ink-3); }
-.ad-wrap ins { min-height: 280px; }
-.ad-wrap.ad-multi ins { min-height: 400px; }
-.ad-wrap:has(ins[data-ad-status="unfilled"]) { display: none; }
-ins[data-ad-status="unfilled"] { display: none !important; }
+/* ads: 공용 .jl-ad(../common/ads.css). 버튼·링크와 150px 넘게 띄우는 자리만 쓴다 */
+.jl-ad { margin: 56px auto; }
+.jl-ad.gap-t { margin-top: 150px; }   /* 바로 위가 버튼·접기(summary)인 자리 */
+.jl-ad.gap-t2 { margin-top: 124px; }  /* 위 버튼과 사이에 설명 한 줄이 있는 자리 */
+.jl-ad.gap-b { margin-bottom: 80px; } /* 아래 카드의 첫 버튼까지 제목·설명이 있는 자리 */
+.jl-ad.gap-b2 { margin-bottom: 110px; } /* 아래 제목 바로 뒤가 접기(summary)인 자리 */
+.jl-ad.ad-end { margin-bottom: 124px; }
 
 /* blocks */
 .block { margin: 44px auto; }
@@ -290,23 +289,9 @@ td.num { text-align: right; }
 .era button:hover { color: var(--brand-ink); }
 .era button small { font-size: 12px; font-weight: 500; margin-right: 6px; color: var(--ink-3); }
 
-.next { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; border-top: 1px solid var(--line); }
-.next li { border-bottom: 1px solid var(--line); }
-.next a { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; padding: 14px 2px; text-decoration: none; color: var(--ink); }
-.next a:hover b { text-decoration: underline; }
-.next b { font-size: 16px; font-weight: 700; letter-spacing: -.02em; min-width: 88px; }
-.next small { font-size: 14px; color: var(--ink-3); line-height: 1.45; }
-
 .faq details { border-bottom: 1px solid var(--line); padding: 12px 2px; }
 .faq summary { cursor: pointer; font-weight: 700; font-size: 16px; }
 .faq p { margin: 8px 0 0; color: var(--ink-2); font-size: 14px; }
-
-.foot { margin-top: 30px; padding: 26px 0 40px; border-top: 1px solid var(--line); color: var(--ink-3); font-size: 12px; }
-.foot nav { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-bottom: 10px; }
-.foot nav a { color: var(--ink-2); font-weight: 500; font-size: 14px; text-decoration: none; }
-.foot nav a:first-child { color: var(--ink); font-weight: 700; }
-.foot nav a:hover { text-decoration: underline; }
-.foot p { margin: 6px 0; }
 
 .toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom)); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: var(--r-btn); font-size: 14px; font-weight: 500; z-index: 50; max-width: calc(100% - 32px); box-shadow: var(--sheet-shadow); }
 
@@ -316,8 +301,6 @@ td.num { text-align: right; }
 
 @media (min-width: 720px) {
   .stats { grid-template-columns: repeat(4, 1fr); }
-  .next { grid-template-columns: 1fr 1fr; column-gap: 24px; border-top: 0; }
-  .next li:nth-child(-n+2) { border-top: 1px solid var(--line); }
   .t10 { grid-template-columns: 1fr 1fr; }
   .toplist { grid-template-columns: repeat(5, 1fr); }
   .opts { grid-template-columns: 180px 220px 1fr; }

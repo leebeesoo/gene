@@ -64,17 +64,14 @@
     clearTimeout(toastT); toastT = setTimeout(function () { t.classList.remove('on'); }, 2200);
   }
 
-  /* ---------- 광고 ---------- */
-  function adSlot(name) {
-    return '<div class="ad-wrap" data-ad="' + name + '"><span class="ad-label">광고</span><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></div>';
+  /* ---------- 광고 (공용 ../common/ads.js) ---------- */
+  // 화면을 그릴 때마다 새 광고 칸을 만들고, 그린 뒤 JLAds.mount로 새 칸만 요청한다
+  function adSlot(cls) {
+    return '<aside class="jl-ad' + (cls ? ' ' + cls : '') + '" aria-label="광고"><small>광고</small><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></aside>';
   }
-  function pushAds() {
-    $$('ins.adsbygoogle:not([data-lc-pushed])').forEach(function (el) {
-      if (!el.offsetParent) return; // 보이는 슬롯만
-      el.setAttribute('data-lc-pushed', '1');
-      try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { /* 광고 차단 등 */ }
-    });
-  }
+  function mountAds(root) { if (window.JLAds) window.JLAds.mount(root); }
+  // 홈 화면 맨 아래 칸: 홈을 다시 그릴 때마다 새로 만든다
+  function renderBottomAd() { var h = $('#adBottom'); if (!h) return; h.innerHTML = adSlot('gap-t ad-end'); mountAds(h); }
 
   /* ---------- 폼 ---------- */
   var form = $('#form');
@@ -290,6 +287,8 @@
       '<div class="trio" role="list"><div class="main" role="listitem"><div class="v num">' + s.ages.man + '<small>세</small></div><div class="l">만 나이</div></div><div role="listitem"><div class="v num">' + s.ages.yeon + '<small>세</small></div><div class="l">연 나이</div></div><div role="listitem"><div class="v num">' + s.ages.korean + '<small>세</small></div><div class="l">한국(세는) 나이</div></div></div>' +
       '<p class="note">2023년 6월 28일부터 법령·계약·공문서의 나이는 원칙적으로 만 나이로 통일됐어요. 연 나이는 병역·청소년 보호 등 일부 법에서 써요. 다음 생일까지 ' + s.ages.daysToBirthday + '일.</p>' +
 
+      adSlot('') +
+
       '<section class="sec" aria-labelledby="clockT"><h2 class="sec-h" id="clockT">내 인생 시계</h2><p class="sec-sub">2024년 생명표 기준, 같은 나이·성별 한국인의 평균이에요.</p>' +
       '<div class="card"><div class="clockcard">' + dial(s.progress) + '<div><div class="k">인생을 하루로 치면 지금은</div><div class="t">' + ct + '</div><p>기대수명 약 <b>' + fmt1(s.expectedAge) + '세</b>, 앞으로 약 <b>' + fmt1(s.remaining) + '년</b>(' + fmt(s.remDays) + '일) 남았어요.</p></div></div>' +
       '<div class="bar" role="progressbar" aria-label="기대수명 대비 지나온 시간" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + Math.round(s.progress * 100) + '"><i style="width:' + (s.progress * 100).toFixed(1) + '%"></i></div><div class="bar-l"><span>지나온 ' + (s.progress * 100).toFixed(1) + '%</span><span>남은 약 ' + fmt(s.remHours) + '시간</span></div></div></section>' +
@@ -311,9 +310,9 @@
       '<div><div class="l">심장박동 (약)</div><div class="v num">약 ' + koBig(s.lived.heartbeats) + ' 번</div></div>' +
       '</div><p class="note">자정 출생 기준. 심장박동은 분당 80회로 가정한 어림값이에요.</p></section>' +
 
-      adSlot('mid') +
+      adSlot('') +
 
-      lifestyleHtml(s, p) +
+      (function () { var ls = lifestyleHtml(s, p); return ls ? ls + adSlot('gap-b') : ''; })() +
 
       '<section class="sec" aria-labelledby="msT"><h2 class="sec-h" id="msT">다가오는 인생 기념일</h2><p class="sec-sub">10,000일, 10억 초… 놓치지 말고 챙겨요.</p>' + milestonesHtml(s, now) + '</section>' +
 
@@ -321,13 +320,13 @@
 
       '<section class="sec" id="mentalSec" aria-labelledby="mtT"><h2 class="sec-h" id="mtT">실제 나이 vs 정신 나이</h2>' + mentalHtml(s) + '</section>' +
 
-      (state.quiz && state.quiz.done ? adSlot('mental') : '') +
+      (state.quiz && state.quiz.done ? adSlot('gap-t gap-b') : '') +
 
       '<section class="sec" aria-labelledby="shT"><h2 class="sec-h" id="shT">카드로 공유하기</h2><p class="sec-sub">개인정보(생년월일)는 카드에 넣지 않아요.</p>' +
       '<div class="btns"><button class="btn btn-primary btn-sm" type="button" data-action="share">공유하기</button><button class="btn btn-ghost btn-sm" type="button" data-action="download">이미지 저장</button><button class="btn btn-ghost btn-sm" type="button" data-action="copy">링크 복사</button></div>' +
       '<canvas class="share-prev" id="shareCanvas" width="1080" height="1350" role="img" aria-label="공유 카드 미리보기"></canvas><p class="note" style="text-align:center">카드 미리보기 · 1080×1350</p></section>' +
 
-      adSlot('share') +
+      adSlot('gap-b') +
 
       familyHtml() +
 
@@ -343,7 +342,8 @@
     renderFamily();
     drawShare();
     startTick();
-    pushAds();
+    mountAds(box);
+    renderBottomAd();
     if (scroll) {
       window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
       $('#heroTitle').setAttribute('tabindex', '-1');
@@ -580,7 +580,7 @@
       $('#result').hidden = true; $('#result').innerHTML = '';
       $('#intro').hidden = false;
       form.reset();
-      setHeroText(); drawWeeks();
+      setHeroText(); drawWeeks(); renderBottomAd();
       toast('모두 지웠어요');
       window.scrollTo({ top: 0 });
       return;
@@ -631,7 +631,7 @@
   $('#quiz').addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b) return;
     if (b.getAttribute('data-q') === 'back') {
-      if (qi === 0) { exitQuiz(); var m = $('#mentalSec'); if (m) m.scrollIntoView(); return; }
+      if (qi === 0) { exitQuiz(); showResult(false); var m = $('#mentalSec'); if (m) m.scrollIntoView(); return; }
       qi--; renderQ(); return;
     }
     if (b.hasAttribute('data-k')) {
@@ -653,13 +653,14 @@
   });
 
   /* ---------- 기타 ---------- */
-  $('#nextGrid').innerHTML = D.NEXT_TESTS.map(function (t) {
-    return '<li><a href="' + t.href + '"><b>' + t.name + '</b><small>' + t.desc + '</small></a></li>';
-  }).join('');
-  $('#lnkSources').addEventListener('click', function () { $('#sources').open = true; });
+  // 공용 푸터가 링크를 다시 그리므로 위임으로 처리
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href="#sources"]');
+    if (a) $('#sources').open = true;
+  });
+  if (location.hash === '#sources') $('#sources').open = true;
 
   fillForm(state.profile);
   if (state.profile) showResult(false);
-  else { $('#intro').hidden = false; setHeroText(); drawWeeks(); }
-  if (document.readyState === 'complete') pushAds(); else window.addEventListener('load', pushAds);
+  else { $('#intro').hidden = false; setHeroText(); drawWeeks(); renderBottomAd(); }
 })();

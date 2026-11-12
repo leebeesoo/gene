@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@700&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="../common/footer.css">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 <style>
 .doc { padding: 30px 16px 10px; }
@@ -62,11 +63,18 @@
   <p>방침이 바뀌면 이 페이지에 알립니다. 문의는 서비스 저장소의 이슈 페이지를 이용해 주세요.</p>
   <p><a href="./">← 이름레이더로 돌아가기</a></p>
 </main>
-<footer class="foot">
-  <div class="wrap">
-    <nav aria-label="바닥글"><a href="../">← 재미랩 홈</a><a href="./">이름레이더</a><a href="SOURCES.md">데이터 출처</a></nav>
-    <p>엔터테인먼트용 통계 콘텐츠입니다. 수치는 추정치를 포함합니다.</p>
+<footer class="jl-footer" data-site="names" data-home="../">
+  <div data-notes><p>엔터테인먼트용 통계 콘텐츠입니다. 수치는 추정치를 포함합니다.</p></div>
+  <div data-sources>
+    <ul>
+      <li>성씨 인구: <a href="https://kosis.kr/" rel="noopener">통계청 2015 인구주택총조사 성씨·본관 집계</a></li>
+      <li>연도별 이름 순위: <a href="https://efamily.scourt.go.kr/" rel="noopener">대법원 전자가족관계등록시스템 출생신고 이름 통계</a></li>
+      <li>인구 규모: 행정안전부 주민등록인구통계, <a href="https://www.index.go.kr/unity/potal/main/EachDtlPageDetail.do?idx_cd=1011" rel="noopener">통계청 연간 출생아 수</a></li>
+      <li>자료별 상세와 추정 가정: <a href="SOURCES.md">데이터 출처 전체 보기</a></li>
+    </ul>
   </div>
+  <div data-links><a href="./">이름레이더</a><a href="SOURCES.md">데이터 출처</a></div>
 </footer>
+<script src="../common/footer.js" defer></script>
 </body>
 </html>

@@ -2,6 +2,7 @@
 import { esc, icon } from '../util.js';
 import { PROCESSING, PROC_CATS, PROC_LEGAL, PROC_PLACES, procFor } from '../processing.js';
 import { joinCta } from '../participate.js';
+import { adSlot } from '../components.js';
 
 const list = (items) => `<ul class="pr-list">${items.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>`;
 
@@ -29,7 +30,7 @@ export function processBlock(item, { sido = '', sigungu = '' } = {}) {
   return `<section class="sec" aria-labelledby="h-proc"><header class="sec-head"><h2 id="h-proc">가공해서 살리기</h2><p><a class="link" href="#/process?item=${encodeURIComponent(p.id)}">${esc(p.id)} 가공 자세히${icon('chevron', 14)}</a></p></header>
     <article class="pr-card open">
       ${procBody(p)}
-      <p class="pr-foot">수율·보관 기간은 품종·숙도·기계에 따라 달라요. 팔기 위해 가공하려면 영업 신고가 필요해요(<a class="link inline" href="#/process">자세히</a>).</p>
+      <p class="pr-foot">수율·보관 기간은 품종·숙도·기계에 따라 달라요. 팔기 위해 가공하려면 영업 신고가 필요해요(<a class="link" href="#/process">자세히</a>).</p>
       <div class="btns">${joinCta({ role: 'buyer', sido, sigungu, item }, { label: '가공업체로 연결 신청', cls: 'btn' })}</div>
     </article></section>`;
 }
@@ -56,7 +57,11 @@ export async function processView(ctx) {
     </details>`).join('')}</div>
     <p class="note">수율·보관 기간은 품종·숙도·기계·조리법에 따라 크게 달라 참고값으로만 적었어요.</p>
 
+    ${adSlot('display', 'top')}
+
     <section class="sec" aria-labelledby="h-legal"><header class="sec-head"><h2 id="h-legal">팔기 위한 가공은 신고부터</h2></header>${legalNote()}</section>
+
+    ${adSlot('display')}
 
     <section class="sec" aria-labelledby="h-near"><header class="sec-head"><h2 id="h-near">근처 가공할 수 있는 곳</h2><p>지역별 목록은 준비 중이에요</p></header>
       <p class="muted small">지역별 가공센터·위탁 가공업체 목록은 준비 중이에요. 그 전에는 아래 공식 안내에서 찾아보세요.</p>
@@ -68,6 +73,8 @@ export async function processView(ctx) {
         <div class="btns">${joinCta({ role: 'buyer' }, { label: '받을 곳으로 연결 신청', cls: 'btn primary' })}</div>
       </div>
     </section>
+
+    ${adSlot('multiplex', 'both')}
   </section>`;
 
   if (sel) {

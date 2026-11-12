@@ -56,12 +56,9 @@ function render() {
   const ready = model.people.length >= 2;
   for (const id of ['#balance-panel', '#roles-panel', '#saju-panel', '#share-panel']) $(id).hidden = !ready;
   if (model.people.length === 1) $('#saju-panel').hidden = false;
-  // 광고는 결과가 나온 뒤(2명 이상)에만 보이고, 보인 다음에 한 번만 요청 (docs/ads-plan.md)
-  for (const n of ['1', '2']) {
-    const slot = document.querySelector(`.ad-slot[data-ad="${n}"]`);
-    slot.hidden = !ready;
-    if (ready) pushAd(slot);
-  }
+  // 결과 광고는 결과가 나온 뒤(2명 이상)에만 보임. 요청은 공용 common/ads.js가 보일 때 한 번만 (docs/ads-plan.md)
+  for (const n of ['1', '2']) document.querySelector(`.jl-ad[data-ad="${n}"]`).hidden = !ready;
+  mountAds();
 }
 
 const dateText = p => `${p.cal === 'lunar' ? '음력 ' : ''}${p.y}.${pad(p.m)}.${pad(p.d)}${p.leap ? ' 윤달' : ''}${p.time ? ' ' + p.time : ''}`;
@@ -593,10 +590,15 @@ function toast(msg, actionLabel, action) {
   clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('on'), actionLabel ? 5000 : 2600);
 }
 
-function pushAd(slot) {
-  if (!slot || slot.dataset.pushed) return;
-  slot.dataset.pushed = '1';
-  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch { /* 광고 차단 등 */ }
+/* 광고: 공용 common/ads.js (모든 서비스 같은 방식). 새 칸만 한 번씩 요청해요. */
+const AD_INS = multi => `<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" ${multi ? 'data-ad-format="autorelaxed"' : 'data-ad-format="auto" data-full-width-responsive="true"'}></ins>`;
+function mountAds() { if (window.JLAds) window.JLAds.mount(document.getElementById('main')); }
+/** 공유 링크로 새 보드가 열리면 = 새 화면 → 광고 칸을 새로 만들어 요청 (같은 칸 재요청 금지) */
+function freshAds() {
+  document.querySelectorAll('#main .jl-ad').forEach(a => {
+    a.classList.remove('jl-ad--empty');
+    a.innerHTML = `<small>광고</small>${AD_INS(a.classList.contains('jl-ad--multiplex'))}`;
+  });
 }
 
 function setupFestival() {
@@ -626,9 +628,8 @@ function init() {
     $('#f-name').focus({ preventScroll: true });
   });
   $('#hero-demo').addEventListener('click', () => { loadDemo(); $('#board-panel').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
-  $('#engine-note').textContent = { 'roots-v2': '사주 계산: 근본 테스트 엔진 (절입 시각·한국 표준시 이력 반영)', 'roots-v1': '사주 계산: 근본 테스트 엔진 (평균 절입일 근사)', fallback: '사주 계산: 내장 근사식 (평균 절입일)' }[engine.source];
+  const en = $('#engine-note'); if (en) en.textContent = { 'roots-v2': '사주 계산: 근본 테스트 엔진 (절입 시각·한국 표준시 이력 반영)', 'roots-v1': '사주 계산: 근본 테스트 엔진 (평균 절입일 근사)', fallback: '사주 계산: 내장 근사식 (평균 절입일)' }[engine.source];
   render();
-  pushAd(document.querySelector('.ad-slot[data-ad="3"]'));
-  window.addEventListener('hashchange', () => { if (importFromHash()) { $('#board-title').value = board.title; resetForm(); commit(); } });
+  window.addEventListener('hashchange', () => { if (importFromHash()) { $('#board-title').value = board.title; resetForm(); freshAds(); commit(); } });
 }
 init();

@@ -1,0 +1,7 @@
+/* 재미랩 공용 광고 칸 — 높이를 미리 잡아 화면이 튀지 않게, 「광고」 표시, 버튼과 간격 */
+.jl-ad{display:block;margin:48px auto;max-width:100%;min-height:280px;text-align:center;position:relative}
+.jl-ad > small{display:block;font-size:12px;line-height:1;color:var(--muted,#7a7670);text-align:left;margin:0 0 6px;letter-spacing:0}
+.jl-ad ins.adsbygoogle{display:block;min-height:250px}
+.jl-ad--multiplex{min-height:400px}
+.jl-ad--multiplex ins.adsbygoogle{min-height:360px}
+.jl-ad--empty{display:none!important}

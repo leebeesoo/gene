@@ -1,6 +1,7 @@
 // 연결 신청 #/join — 구글 폼으로 받아, 양쪽 동의를 받은 뒤 서로 소개해요(판매·중개 아님)
 import { esc, icon } from '../util.js';
 import { REGION_NAMES } from '../meta.js';
+import { adSlot } from '../components.js';
 import { ROLES, roleById, formUrl, formReady, loadCounts, countBox, foodbankHTML } from '../participate.js';
 
 function roleCard(r, p, on, ready) {
@@ -26,7 +27,6 @@ export async function joinView(ctx) {
   };
   const focus = roleById(q.get('role'))?.id || '';
   const ready = formReady();
-  ctx.noAds = true;
   ctx.title = '연결 신청 — 농가와 받을 곳을 이어 드려요 | 맛남의 광장';
   ctx.description = '남는 물량이 있는 농가·어가와 받아 쓸 수 있는 식당·가공업체·급식처를, 양쪽 동의를 받은 뒤 서로 소개해 드려요. 제보와 구출 원정대 신청도 받아요.';
 
@@ -40,6 +40,8 @@ export async function joinView(ctx) {
       <li><b>3. 동의 후 소개</b><span>양쪽에 먼저 묻고, 둘 다 동의하면 연락처를 서로 전해 드려요.</span></li>
       <li><b>4. 직접 결정</b><span>값·양·운송은 두 분이 정해요. 저희는 대금·수수료를 받지 않아요.</span></li>
     </ol>
+
+    ${adSlot('display')}
 
     ${ready ? '' : `<p class="notice" id="form-soon"><span><b>신청 폼을 준비하고 있어요.</b> 지금은 아래에서 신청마다 무엇을 하는지만 볼 수 있어요. 폼이 열리면 이 페이지의 버튼이 바로 폼으로 이어져요. 급한 갈아엎기 소식은 지역농협·시군청 농정과에, 기부는 아래 푸드뱅크로 바로 연락해 주세요.</span></p>`}
 

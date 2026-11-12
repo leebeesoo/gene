@@ -31,9 +31,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@600&display=swap">
+<link rel="stylesheet" href="../common/footer.css">
+<link rel="stylesheet" href="../common/ads.css">
 <link rel="stylesheet" href="style.css">
 
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous" onerror="document.documentElement.classList.add('ads-off')"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 
 <script type="application/ld+json">
 {
@@ -70,6 +72,7 @@
 }
 </script>
 
+<script src="../common/ads.js" defer></script>
 <script src="data/geo.js" defer></script>
 <script src="data/draws.js" defer></script>
 <script src="data/stores.js" defer></script>
@@ -145,8 +148,14 @@
         <button class="btn btn-soft btn-block" type="button" id="rp-more" hidden>더 보기</button>
       </div>
     </div>
-    <div class="wrap"><p class="note" id="map-note"></p></div>
+    <div class="wrap"><details class="how"><summary>어떻게 셌나요?</summary><p class="note" id="map-note"></p></details></div>
   </section>
+  <!-- 지역·기간을 바꾸면 app.js가 새 광고 칸으로 다시 그림 -->
+  <div class="wrap"><div class="ad-slot" id="ad-map">
+    <aside class="jl-ad" aria-label="광고"><small>광고</small>
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </aside>
+  </div></div>
 
   <div class="wrap stack">
     <!-- THIS WEEK -->
@@ -168,6 +177,12 @@
       </div>
     </section>
 
+    <!-- 회차를 바꾸면 app.js가 새 광고 칸으로 다시 그림 -->
+    <div class="ad-slot" id="ad-week">
+    <aside class="jl-ad" aria-label="광고"><small>광고</small>
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </aside>
+    </div>
     <!-- NEAR ME -->
     <section class="card" id="near" aria-labelledby="near-title">
       <div class="sec-head">
@@ -209,18 +224,19 @@
       </div>
       <ol class="store-list ranked" id="rank-list"></ol>
       <button class="btn btn-soft btn-block" type="button" id="rank-more" hidden>더 보기</button>
-      <p class="note">순위는 판매점(동행복권 판매점 ID) 단위로 1등 당첨 건수를 센 값이에요. 같은 회차에 한 곳에서 여러 장 당첨되면 각각 1건으로 셉니다. 인터넷 구매분은 제외했어요. 1등이 자주 나온 곳은 대개 많이 팔리는 곳이고, 다음 당첨 확률은 어디서 사든 같아요.</p>
+      <details class="how"><summary>순위는 어떻게 셌나요?</summary><p class="note">순위는 판매점(동행복권 판매점 ID) 단위로 1등 당첨 건수를 센 값이에요. 같은 회차에 한 곳에서 여러 장 당첨되면 각각 1건으로 셉니다. 인터넷 구매분은 제외했어요. 1등이 자주 나온 곳은 대개 많이 팔리는 곳이고, 다음 당첨 확률은 어디서 사든 같아요.</p></details>
     </section>
 
-    <div class="ad" aria-label="광고">
-      <span class="ad-label">광고</span>
+    <div class="ad-slot" id="ad-rank">
+    <aside class="jl-ad" aria-label="광고"><small>광고</small>
       <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </aside>
     </div>
 
     <!-- STATS -->
     <section class="card" id="stats" aria-labelledby="stats-title">
       <h2 class="sec-title" id="stats-title">당첨번호 통계</h2>
-      <p class="sec-desc">어떤 번호가 자주 나오고 뜸했는지, 보너스를 뺀 본번호 6개로 셌어요. 지난 빈도는 다음 추첨에 아무 영향을 주지 않아요. 범위를 바꾸면 최근 회차만 다시 셉니다.</p>
+      <p class="sec-desc">어떤 번호가 자주 나오고 뜸했는지 보여 드려요. 범위를 바꾸면 최근 회차만 다시 셉니다.</p>
       <div class="seg small" role="radiogroup" aria-label="통계 범위" id="stats-range">
         <button type="button" role="radio" aria-checked="true" data-v="all">전체</button>
         <button type="button" role="radio" aria-checked="false" data-v="100">100회</button>
@@ -238,12 +254,13 @@
         <div class="dist"><h3>저고 비율 <small>(1–22 저 · 23–45 고)</small></h3><div id="dist-lh"></div></div>
       </div>
       <details class="table-toggle"><summary>번호별 출현 횟수 표로 보기</summary><div class="freq-table" id="freq-table"></div></details>
-      <p class="note">보너스 번호는 제외한 본번호 6개 기준이에요. 같은 번호가 연달아 나오거나 오래 안 나와도 다음 회차 확률은 45개 번호 모두 같아요. 통계는 재미로만 봐 주세요.</p>
+      <details class="how"><summary>어떻게 셌나요?</summary><p class="note">보너스 번호는 제외한 본번호 6개 기준이에요. 같은 번호가 연달아 나오거나 오래 안 나와도 다음 회차 확률은 45개 번호 모두 같아요. 통계는 재미로만 봐 주세요.</p></details>
     </section>
 
-    <div class="ad" aria-label="광고">
-      <span class="ad-label">광고</span>
+    <div class="ad-slot" id="ad-stats">
+    <aside class="jl-ad" aria-label="광고"><small>광고</small>
       <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </aside>
     </div>
 
     <!-- SHARE -->
@@ -266,21 +283,6 @@
       <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg>
     </a>
 
-    <section class="more" aria-labelledby="more-title">
-      <h2 class="sec-title" id="more-title">다른 서비스</h2>
-      <ul class="more-grid">
-        <li><a href="../lotto/"><b>오늘로또</b><small>사주로 뽑는 오늘의 로또 번호와 살 시간·방향</small></a></li>
-        <li><a href="../market/"><b>맛남의 광장</b><small>버려질 농수산물이 어디서 남는지, 버려지기 전에</small></a></li>
-        <li><a href="../season/"><b>제철장보기</b><small>이달 제철 식재료와 지금 싼 품목</small></a></li>
-        <li><a href="../sikdang/"><b>제철식당</b><small>이달 이 지역 제철 음식을 잘하는 집</small></a></li>
-        <li><a href="../roots/"><b>근본 테스트</b><small>사주와 퀴즈로 찾는 나의 근본 코드</small></a></li>
-        <li><a href="../family/"><b>식구궁합</b><small>우리 가족 오행 궁합판</small></a></li>
-        <li><a href="../names/"><b>이름레이더</b><small>내 이름, 전국에 몇 명?</small></a></li>
-        <li><a href="../lifeclock/"><b>남은봄</b><small>남은 주말·명절·벚꽃 세는 인생 시계</small></a></li>
-        <li><a href="../birthyear/"><b>나때연감</b><small>내가 태어난 해 타임캡슐</small></a></li>
-      </ul>
-    </section>
-
     <section class="card notice" aria-labelledby="notice-title">
       <h2 class="sec-title" id="notice-title">알아 두세요</h2>
       <ul class="notice-list">
@@ -290,26 +292,30 @@
       </ul>
     </section>
 
-    <div class="ad ad-bottom" aria-label="광고">
-      <span class="ad-label">광고</span>
-      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <div class="ad-slot ad-end">
+    <aside class="jl-ad jl-ad--multiplex" aria-label="광고"><small>광고</small>
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="autorelaxed"></ins>
+    </aside>
     </div>
   </div>
 </main>
 
-<footer class="footer">
-  <div class="wrap">
-    <p class="disc" id="foot-data">데이터 출처: 동행복권(dhlottery.co.kr) 당첨번호·당첨판매점 공개 자료. 판매점 상호·주소·영업 여부는 바뀔 수 있으니 방문 전 공식 사이트에서 확인하세요. 본 사이트는 동행복권과 관련이 없어요.</p>
-    <p class="disc"><b>만 19세 미만 구매 불가</b> · 도박 문제 상담 한국도박문제예방치유원 <b>☎ 1336</b> (24시간 무료)</p>
-    <p class="copy">© 명당로드</p>
-    <nav class="foot-links" aria-label="하단 링크">
-      <a href="../">← 재미랩 홈</a>
-      <a href="../lotto/">오늘로또</a>
-      <a href="privacy.html">개인정보처리방침</a>
-      <a href="https://www.dhlottery.co.kr/wnprchsplcsrch/home" rel="noopener" target="_blank">동행복권 당첨판매점</a>
-    </nav>
+<footer class="jl-footer" data-site="lottomap" data-home="../">
+  <div data-notes>
+    <p>재미·정보 제공용이며 당첨을 보장하지 않아요 · <b>만 19세 미만 구매 불가</b></p>
+    <p>도박 문제 상담: 한국도박문제예방치유원 <a href="tel:1336">☎ 1336</a> (24시간 무료)</p>
+    <p>판매점 상호·주소·영업 여부는 바뀔 수 있으니 방문 전 공식 사이트에서 확인하세요. 본 사이트는 동행복권과 관련이 없어요.</p>
   </div>
+  <div data-sources>
+    <ul>
+      <li>당첨번호(1회~): <a href="https://www.dhlottery.co.kr/lt645/result" target="_blank" rel="noopener">동행복권 당첨결과</a></li>
+      <li>1등 배출 판매점(262회~, 판매점 ID 기준 집계): <a href="https://www.dhlottery.co.kr/wnprchsplcsrch/home" target="_blank" rel="noopener">동행복권 당첨판매점</a></li>
+      <li>지도 경계: <a href="https://github.com/southkorea/southkorea-maps" target="_blank" rel="noopener">southkorea-maps</a> (통계청 2013 행정경계 단순화본)</li>
+    </ul>
+  </div>
+  <div data-links><a href="./">명당로드</a><a href="../lotto/">오늘로또</a><a href="privacy.html">개인정보처리방침</a></div>
 </footer>
+<script src="../common/footer.js" defer></script>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>

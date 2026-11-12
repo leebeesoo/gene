@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>재미랩 — 오늘의 재미판</title>
 <meta name="description" content="사주로 뽑는 오늘의 로또 번호, 로또 명당 지도, 근본 테스트, 가족 궁합, 이름 통계, 인생 시계, 출생연도 타임캡슐, 제철 음식 잘하는 집과 제철 장보기, 버려질 농수산물 지도까지. 매일 숫자가 바뀌는 작은 웹 서비스 10가지.">
-<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0B0B0C" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#FAF7F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1B1917" media="(prefers-color-scheme: dark)">
 <meta name="color-scheme" content="light dark">
 <link rel="canonical" href="https://leebeesoo.github.io/gene/">
 <meta property="og:type" content="website">
@@ -20,17 +20,19 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="common/footer.css">
+<link rel="stylesheet" href="common/ads.css">
 <!-- 타일 제목용 글꼴은 각 서비스의 제목 글꼴. 화면에 쓴 글자만 &text=로 받는다(스크립트 끝에서 연결) -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 <style>
 :root{
-  --bg:#FFFFFF;--ink:#191A1C;--muted:#6E7076;--line:#E6E6E3;--chip:#F2F2EF;
+  --bg:#FAF7F2;--ink:#1F1D1A;--muted:#736D64;--line:#E9E3D8;--chip:#F0EAE0;--soft:#F3EEE5;
   --sans:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
   --serif:"Noto Serif KR","Nanum Myeongjo","AppleMyungjo","Batang",serif;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root{
-  --bg:#0B0B0C;--ink:#ECECEA;--muted:#8E9096;--line:#26272A;--chip:#18191B;
+  --bg:#1B1917;--ink:#EEEAE3;--muted:#A39C92;--line:#2E2B27;--chip:#26231F;--soft:#221F1C;
   color-scheme:dark;
 }}
 *{box-sizing:border-box}
@@ -38,50 +40,60 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;font-weight:500;letter-spacing:-.01em;word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased}
 h1,h2,h3,p{margin:0}
 a{color:inherit}
-:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:10px}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:12px}
 .wrap{max-width:1120px;margin:0 auto;padding:0 16px}
 .num{font-variant-numeric:tabular-nums}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
-/* 머리: 글자 로고 + 날짜 한 줄 */
+/* 머리: 동그라미 로고 + 한 줄 소개 + 날짜 */
 .top{background:var(--bg)}
-.top .wrap{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-top:20px;padding-bottom:4px}
-.brand{font-size:20px;font-weight:800;letter-spacing:-.04em;text-decoration:none}
-.today{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.top .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding-top:22px;padding-bottom:6px}
+.brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+.brand .dots{display:grid;grid-template-columns:repeat(2,9px);gap:3px;flex:none}
+.brand .dots i{width:9px;height:9px;border-radius:50%}
+.brand .dots i:nth-child(1){background:#D23A1F}.brand .dots i:nth-child(2){background:#FBC400}
+.brand .dots i:nth-child(3){background:#2F6B4F}.brand .dots i:nth-child(4){background:#2B50D8}
+.brand b{display:block;font-size:21px;font-weight:800;letter-spacing:-.04em;line-height:1.15}
+.brand span{display:block;font-size:13px;color:var(--muted);font-weight:500;line-height:1.3}
+.today{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;background:var(--chip);border-radius:999px;padding:5px 12px}
 .today b{color:var(--ink);font-weight:700}
 
 /* 분류 거르기 */
-.filters{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
-.filters .wrap{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-top:10px;padding-bottom:10px}
+.filters{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.filters .wrap{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-top:10px;padding-bottom:10px}
 .filters .wrap::-webkit-scrollbar{display:none}
-.filters button{flex:none;font:inherit;font-size:14px;font-weight:600;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:999px;padding:0 14px;height:36px;cursor:pointer}
-.filters button span{font-weight:500;margin-left:4px;font-variant-numeric:tabular-nums}
-.filters button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.filters button{flex:none;font:inherit;font-size:14px;font-weight:600;color:var(--muted);background:var(--chip);border:0;border-radius:999px;padding:0 15px;height:36px;cursor:pointer;transition:color .15s,background .15s}
+.filters button span{font-weight:500;margin-left:4px;font-variant-numeric:tabular-nums;opacity:.75}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
 .filters button:not([aria-pressed="true"]):hover{color:var(--ink)}
 
 /* 벤토 그리드 */
-.board{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(196px,auto);gap:8px;padding-top:12px;
+.board{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(200px,auto);gap:14px;padding-top:14px;
   grid-template-areas:
     "lotto lotto"
     "roots market"
+    "ad ad"
     "year names"
     "life life"
-    "ad ad"
+    "ad2 ad2"
     "family season"
     "sikdang map"}
 .t-lotto{grid-area:lotto}.t-roots{grid-area:roots}.t-market{grid-area:market}.t-year{grid-area:year}.t-names{grid-area:names}
-.t-life{grid-area:life}.board>.ad{grid-area:ad}.t-family{grid-area:family}.t-season{grid-area:season}.t-sikdang{grid-area:sikdang}.t-map{grid-area:map}
-.board.filtered{grid-template-areas:none}
+.t-life{grid-area:life}.adtile{grid-area:ad}.adtile.a2{grid-area:ad2}.t-family{grid-area:family}.t-season{grid-area:season}.t-sikdang{grid-area:sikdang}.t-map{grid-area:map}
+.board.filtered{grid-template-areas:none;grid-auto-flow:row dense}
 .board.filtered>*{grid-area:auto}
 .board.filtered>.w{grid-column:span 2}
-.board.filtered>.ad{grid-column:1/-1;order:99}
+.board.filtered>.adtile{grid-column:1/-1;order:99}
+.board.filtered>.adtile.a2{display:none}
 .board [hidden]{display:none}
 
 .tile{--tb:#F5F5F2;--ti:#17181B;--ta:#B8452A;--df:var(--sans);
-  position:relative;display:flex;flex-direction:column;min-width:0;padding:14px 14px 16px;border-radius:16px;background:var(--tb);color:var(--ti);text-decoration:none;overflow:hidden;
-  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ti) 6%,transparent);transition:box-shadow .15s}
-.tile:hover{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ti) 28%,transparent)}
-.tile:focus-visible{outline-offset:3px;border-radius:16px}
+  position:relative;display:flex;flex-direction:column;min-width:0;padding:16px 16px 18px;border-radius:18px;background:var(--tb);color:var(--ti);text-decoration:none;overflow:hidden;
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ti) 5%,transparent);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s}
+.tile:hover{transform:translateY(-2px);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ti) 14%,transparent)}
+.tile:active{transform:translateY(0)}
+.tile:focus-visible{outline-offset:3px;border-radius:18px}
+.t-roots{box-shadow:none}.t-roots:hover{box-shadow:none}
 .tile .hd{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;line-height:1.3;color:color-mix(in srgb,var(--ti) 64%,var(--tb))}
 .tile .hd svg{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s}
 .tile:hover .hd svg{transform:translateX(2px)}
@@ -104,7 +116,8 @@ a{color:inherit}
 .t-life{--tb:#F7F5F2;--ti:#1E1B1F;--ta:#C2456A;--df:"Gowun Batang",var(--serif)}
 .t-year{--tb:#F2EFE8;--ti:#222020;--ta:#B23A26;--df:"Noto Serif KR",var(--serif)}
 @media (prefers-color-scheme:dark){
-  .tile{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ti) 12%,transparent)}
+  .tile{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ti) 7%,transparent)}
+  .tile:hover{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ti) 16%,transparent)}
   .t-lotto{--tb:#121212;--ti:#ECEAE4;--ta:#D9705C}
   .t-map{--tb:#121314;--ti:#E9E9E6;--ta:#CF7A63}
   .t-market{--tb:#121412;--ti:#E6EAE3;--ta:#8FB282}
@@ -176,34 +189,50 @@ a{color:inherit}
 .t-map .best{margin-top:8px;font-size:13px;line-height:1.35}
 .t-map .best b{color:var(--ta);font-weight:700}
 
-/* 광고: 첫 화면 아래, 자리 미리 잡기, 빈 슬롯은 접기 */
-.ad{position:relative;min-height:280px;margin:24px 0;padding-top:22px;text-align:center}
-.ad small{position:absolute;top:0;left:0;font-size:12px;color:var(--muted)}
-.ad:has(ins[data-ad-status="unfilled"]){display:none}
+/* 광고 타일: 그리드 사이 한 줄(모바일은 늘 꽉 찬 한 줄 — 타일 옆에 붙지 않음), 링크 타일과 24px 넘게 띄움(격자 간격 14 + 여백 10).
+   광고 칸은 공용 .jl-ad(common/ads.css). 채워지지 않으면(unfilled·차단·로드 실패) 공용 도우미가 칸을 접고
+   그 자리를 「오늘 바뀐 것」 같은 메모가 채운다 → 격자에 구멍이 안 생김 */
+.adtile{position:relative;min-width:0;margin:10px 0;border-radius:18px;background:var(--soft);box-shadow:inset 0 0 0 1px var(--line);overflow:hidden}
+.adtile.inrow{margin-left:10px}
+.adtile .jl-ad{margin:0;padding:28px 12px 12px;min-height:280px}
+.adtile .jl-ad>small{position:absolute;top:8px;left:14px;margin:0}
+.adtile .note{display:none;padding:18px 20px 20px;height:100%;flex-direction:column;justify-content:center;gap:10px}
+.adtile.empty .note,.adtile:has(.jl-ad--empty) .note{display:flex}
+.note .lab{font-size:12px;color:var(--muted);font-weight:600}
+.note h2{font-size:18px;font-weight:750;letter-spacing:-.025em;line-height:1.3}
+.note ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.note li{font-size:13px;line-height:1.3;background:var(--bg);border-radius:999px;padding:5px 11px;color:var(--ink)}
+.note p{font-size:13px;color:var(--muted);line-height:1.5}
 
-/* 소개·바닥글 */
-.about{margin-top:40px;padding-top:24px;border-top:1px solid var(--line);display:grid;gap:16px}
-.about h2{font-size:20px;font-weight:700;letter-spacing:-.025em}
-.about p{font-size:14px;color:var(--muted);line-height:1.6;max-width:640px}
-footer{margin-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
-footer .wrap{padding-top:20px;padding-bottom:calc(40px + env(safe-area-inset-bottom))}
-footer nav{display:flex;flex-wrap:wrap;gap:4px 14px;margin-bottom:12px;font-size:14px}
-footer nav a{text-decoration:none;color:var(--ink)}
-footer nav a:hover{text-decoration:underline}
-footer p+p{margin-top:4px}
+/* 그리드 아래·푸터 앞 광고(공용 .jl-ad). 푸터 첫 링크와 150px 넘게 띄운다.
+   모바일은 광고가 화면 높이의 30%를 넘지 않게 그리드 아래 칸을 빼고(소개 바로 뒤 칸과 거의 붙어 있어서) 데스크톱에서만 보인다 */
+main>.jl-ad{margin:48px auto 0}
+main>.jl-ad.mid{display:none}
+main>.jl-ad.end{margin:48px auto 128px}
+@media (min-width:880px){main>.jl-ad.mid{display:block}}
+
+/* 소개 */
+.about{margin-top:48px;padding:22px 20px;border-radius:18px;background:var(--soft);display:grid;gap:12px}
+.about h2{font-size:19px;font-weight:700;letter-spacing:-.025em}
+.about p{font-size:14px;color:var(--muted);line-height:1.65;max-width:680px}
+.jl-footer .jf-notes p{margin:0 0 4px}
 
 /* 데스크톱: 4열 벤토 (큰 칸 1, 와이드 2, 세로형 1) */
 @media (min-width:880px){
   .top .wrap{padding-top:28px}
-  .board{grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:minmax(212px,auto);gap:12px;padding-top:16px;
+  .board{grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:minmax(216px,auto);gap:16px;padding-top:16px;
     grid-template-areas:
       "lotto lotto roots year"
       "lotto lotto market year"
-      "life life names family"
       "ad ad ad ad"
+      "life life names family"
+      "ad2 ad2 ad2 ad2"
       "season season sikdang map"}
   .board.filtered>.w{grid-column:span 2}
-  .tile{padding:18px 18px 20px}
+  .tile{padding:20px 20px 22px}
+  .adtile{margin:8px 0}.adtile.inrow{margin-left:8px}
+  .adtile .jl-ad{min-height:250px}
+  .adtile .note{padding:24px 28px}
   .tile .nm{font-size:20px}
   .t-lotto .nm{font-size:34px}
   .code{font-size:24px}
@@ -222,7 +251,7 @@ footer p+p{margin-top:4px}
 .motion .tile:not(.in) .m{opacity:0;transform:translateY(6px)}
 .motion .tile.in .m{animation:settle .24s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i,0) * 28ms)}
 @keyframes settle{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.tile:hover{transform:none}}
 </style>
 </head>
 <body>
@@ -232,7 +261,7 @@ footer p+p{margin-top:4px}
 
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="./">재미랩</a>
+    <a class="brand" href="./"><span class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span><b>재미랩</b><span>매일 숫자가 바뀌는 작은 재미 10가지</span></span></a>
     <p class="today" id="today">오늘의 재미판</p>
   </div>
 </header>
@@ -315,6 +344,30 @@ footer p+p{margin-top:4px}
       <div class="ft"><p class="nm disp">남은봄</p><p class="ol">남은 주말·명절·벚꽃 세는 인생 시계</p></div>
     </a>
 
+    <div class="adtile" id="adTile">
+      <aside class="jl-ad" aria-label="광고"><small>광고</small>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </aside>
+      <div class="note">
+        <p class="lab">재미랩 소개</p>
+        <h2 id="noteH">오늘 바뀐 것</h2>
+        <ul id="noteList"><li>오늘로또 공 6개</li><li>근본 코드</li><li>나때연감 그해</li><li>이름레이더 성씨</li></ul>
+        <p>타일의 숫자와 그림은 오늘 날짜로 계산해서 매일 바뀌어요. 내일 또 들러 보세요.</p>
+      </div>
+    </div>
+
+    <div class="adtile a2" id="adTile2">
+      <aside class="jl-ad" aria-label="광고"><small>광고</small>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </aside>
+      <div class="note">
+        <p class="lab">이번 주 · 이달</p>
+        <h2 id="note2H">이번 주에 챙길 것</h2>
+        <ul id="note2List"><li>로또 추첨 토요일 20:35</li><li>올해 남은 주말</li><li>이달 제철</li></ul>
+        <p>로또 추첨일, 남은 주말, 이달 제철 품목은 날짜가 바뀌면 같이 바뀌어요.</p>
+      </div>
+    </div>
+
     <a class="tile t-family" data-cat="fun" href="family/" aria-label="식구궁합 — 우리 가족 오행 궁합판">
       <div class="hd"><span>운세·재미</span><svg aria-hidden="true"><use href="#go"/></svg></div>
       <div class="pv">
@@ -360,30 +413,32 @@ footer p+p{margin-top:4px}
     </a>
   </div>
 
+  <aside class="jl-ad mid" aria-label="광고"><small>광고</small>
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </aside>
+
   <section class="about" aria-labelledby="about-h">
     <h2 id="about-h">재미랩은</h2>
     <p>운세·재미, 생활 데이터, 먹거리를 다루는 작은 웹 서비스 10가지예요. 타일의 숫자와 그림은 오늘 날짜로 바로 계산해서 매일 바뀝니다. 오늘로또 타일의 공은 날짜로 뽑은 미리보기이고, 내 번호는 들어가서 사주로 뽑아요.</p>
-    <p>데이터 출처: 명당로드는 동행복권 262~1248회 당첨 판매점, 맛남의 광장은 KAMIS·농림축산식품부·농업관측센터·언론 보도, 이름레이더는 통계청 2015 인구주택총조사, 나때연감은 통계청 출생통계예요.</p>
   </section>
 
-  <div class="ad" aria-label="광고"><small>광고</small>
-    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
-  </div>
+  <aside class="jl-ad jl-ad--multiplex end" aria-label="광고"><small>광고</small>
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="autorelaxed"></ins>
+  </aside>
 </main>
 
-<footer>
-  <div class="wrap">
-    <nav aria-label="바닥글">
-      <a href="./">재미랩 홈</a>
-      <a href="lotto/about.html">오늘로또 소개</a>
-      <a href="sikdang/about.html">제철식당 소개</a>
-      <a href="lotto/privacy.html">개인정보 처리방침</a>
-    </nav>
-    <p>운세·궁합 결과는 재미로 보는 콘텐츠예요. 복권은 만 19세 미만은 살 수 없고, 도박 문제 상담은 국번 없이 1336이에요.</p>
-    <p>입력한 정보는 내 기기에만 저장돼요(맛남의 광장 신청 폼 제외). 로그인도, 서버 저장도 없어요.</p>
-    <p>© 재미랩</p>
-  </div>
+<footer class="jl-footer" data-site="" data-home="./" data-copy="입력한 정보는 내 기기에만 저장돼요(맛남의 광장 신청 폼 제외)">
+  <div data-notes><p>운세·궁합 결과는 재미로 보는 콘텐츠예요. 복권은 만 19세 미만은 살 수 없고, 도박 문제 상담은 국번 없이 1336이에요.</p></div>
+  <div data-sources><ul>
+    <li>명당로드: <a href="https://dhlottery.co.kr/" rel="noopener">동행복권</a> 262~1248회 당첨 판매점</li>
+    <li>맛남의 광장: <a href="https://www.kamis.or.kr/" rel="noopener">KAMIS</a>·농림축산식품부·농업관측센터·언론 보도</li>
+    <li>이름레이더: <a href="https://kosis.kr/" rel="noopener">통계청 KOSIS</a> 2015 인구주택총조사</li>
+    <li>나때연감: <a href="https://kosis.kr/" rel="noopener">통계청 KOSIS</a> 출생통계</li>
+  </ul></div>
+  <div data-links><a href="lotto/about.html">오늘로또 소개</a><a href="sikdang/about.html">제철식당 소개</a><a href="lotto/privacy.html">개인정보처리방침</a></div>
 </footer>
+<script src="common/footer.js" defer></script>
+<script src="common/ads.js" defer></script>
 
 <script src="lotto/data.js"></script>
 <script src="lotto/engine.js"></script>
@@ -529,13 +584,36 @@ footer p+p{margin-top:4px}
   if (!window.fetch) loadFonts();
   setTimeout(loadFonts, 1500);
 
-  /* 분류 거르기 (#fun · #life · #food 바로가기도 받는다) */
-  var board = $('board'), btns = document.querySelectorAll('.filters button');
+  /* 광고 타일이 비었을 때 보이는 메모: 오늘 날짜로 바뀐 것 */
+  $('noteH').textContent = T.m + '월 ' + T.d + '일, 오늘 바뀐 것';
+  $('noteList').innerHTML = ['로또 공 ' + picks.join(' '), '근본 코드 ' + $('rCode').textContent, '연감 ' + Y[0] + '년', S[0] + '씨 ' + fmt(S[1]) + '명', T.m + '월 제철 ' + SM[3]]
+    .map(function (x) { return '<li>' + x + '</li>'; }).join('');
+  $('note2H').textContent = T.m + '월, 이번 주에 챙길 것';
+  $('note2List').innerHTML = ['제' + round + '회 추첨 ' + ndp.m + '/' + ndp.d + ' 20:35', '올해 남은 주말 ' + sats + '번', T.m + '월 제철 ' + SM.slice(0, 3).join('·'), '나때연감 ' + Y[0] + '년판']
+    .map(function (x) { return '<li>' + x + '</li>'; }).join('');
+
+  /* 분류 거르기 (#fun · #life · #food 바로가기도 받는다)
+     거른 뒤 마지막 줄이 비면 광고 타일이 남은 칸만큼 넓어져 구멍을 메운다 */
+  var board = $('board'), btns = document.querySelectorAll('.filters button'), adTile = $('adTile');
+  function fitAd() {
+    adTile.style.gridColumn = ''; adTile.classList.remove('inrow');
+    board.querySelectorAll('.tile').forEach(function (t) { t.style.gridColumn = ''; });
+    if (!board.classList.contains('filtered')) return;
+    var cols = getComputedStyle(board).gridTemplateColumns.split(' ').length, used = 0, vis = board.querySelectorAll('.tile:not([hidden])');
+    vis.forEach(function (t) { used += t.classList.contains('w') ? 2 : 1; });
+    var rest = used % cols;
+    if (!rest) return;
+    // 모바일(2열): 광고 타일은 늘 꽉 찬 한 줄 → 마지막 타일을 넓혀 빈칸을 메운다. 데스크톱: 광고 타일이 남은 칸을 메운다(간격 24px)
+    if (cols <= 2) vis[vis.length - 1].style.gridColumn = '1 / -1';
+    else { adTile.style.gridColumn = 'span ' + (cols - rest); adTile.classList.add('inrow'); }
+  }
   function setFilter(f) {
     btns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.f === f)); });
     board.classList.toggle('filtered', f !== 'all');
     board.querySelectorAll('.tile').forEach(function (t) { t.hidden = f !== 'all' && t.dataset.cat !== f; });
+    fitAd();
   }
+  window.addEventListener('resize', fitAd);
   btns.forEach(function (b) { b.addEventListener('click', function () {
     setFilter(b.dataset.f);
     try { history.replaceState(null, '', b.dataset.f === 'all' ? location.pathname : '#' + b.dataset.f); } catch (e) {}
@@ -560,10 +638,12 @@ footer p+p{margin-top:4px}
     board.querySelectorAll('.tile').forEach(function (t) { io.observe(t); });
   }
 
-  /* 광고: 슬롯마다 한 번만 */
-  document.querySelectorAll('ins.adsbygoogle').forEach(function (ins) {
-    if (ins.dataset.pushed) return; ins.dataset.pushed = '1';
-    try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) {}
+  /* 광고는 공용 common/ads.js가 요청·접기를 맡는다. 광고 타일이 접히면 메모가 자리를 채운다
+     (:has를 못 쓰는 브라우저용으로 .empty도 붙여 둔다) */
+  document.querySelectorAll('.adtile').forEach(function (t) {
+    var ad = t.querySelector('.jl-ad'); if (!ad || !('MutationObserver' in window)) return;
+    function sync() { t.classList.toggle('empty', ad.classList.contains('jl-ad--empty')); }
+    new MutationObserver(sync).observe(ad, { attributes: true, attributeFilter: ['class'] }); sync();
   });
 })();
 </script>

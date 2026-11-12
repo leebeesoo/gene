@@ -246,32 +246,18 @@ details.more .field { margin-top: 14px; }
 .fam-form .seg label { min-width: 0; padding: 10px 6px; }
 .empty { font-size: 14px; color: var(--muted); margin: 0 0 12px; }
 
-/* other services */
-.next { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
-.next li { border-bottom: 1px solid var(--line); }
-.next a { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; padding: 14px 2px; text-decoration: none; }
-.next a:hover b { text-decoration: underline; }
-.next b { font-size: 16px; font-weight: 700; min-width: 88px; }
-.next small { font-size: 14px; color: var(--muted); }
-
 /* ads: 자리 예약 · 라벨 · 빈 슬롯 접기 */
-.ad-wrap { position: relative; margin: 56px 0; min-height: 298px; padding-top: 18px; }
-.ad-label { position: absolute; top: 0; left: 0; font-size: 12px; color: var(--muted); }
-.ad-wrap ins { display: block; min-height: 280px; }
-.ad-wrap:has(ins[data-ad-status="unfilled"]) { display: none; }
-ins[data-ad-status="unfilled"] { display: none !important; }
+/* 광고: 공용 .jl-ad(../common/ads.css). 버튼·입력과 150px 넘게 띄우는 자리만 쓴다 */
+.jl-ad { margin: 56px auto; }
+.jl-ad.gap-t { margin-top: 150px; }
+.jl-ad.gap-b { margin-bottom: 110px; }
+.jl-ad.ad-end { margin-bottom: 124px; }
 
-/* sources + footer */
+/* sources */
 .src { font-size: 14px; color: var(--ink-2); }
 .src summary { cursor: pointer; font-weight: 700; }
 .src ul { padding-left: 18px; margin: 8px 0; }
 .src li { margin: 4px 0; }
-.disc { font-size: 12px; color: var(--muted); margin: 14px 0 0; }
-footer { border-top: 1px solid var(--line); margin-top: 30px; padding: 22px 0 40px; font-size: 12px; color: var(--muted); }
-footer nav { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; }
-footer nav a:first-child { color: var(--ink); font-weight: 700; }
-footer a { color: var(--ink-2); font-weight: 500; font-size: 14px; text-decoration: none; }
-footer a:hover { text-decoration: underline; }
 
 .reveal { animation: none; }
 @keyframes up { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
@@ -281,7 +267,6 @@ footer a:hover { text-decoration: underline; }
   .wrap, .top-in { max-width: 760px; }
   .grid { grid-template-columns: repeat(3, 1fr); }
   .tile.wide { grid-column: span 3; }
-  .next { grid-template-columns: repeat(3, 1fr); }
   .hero { padding-top: 48px; }
   .res-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 22px; }
 }

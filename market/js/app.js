@@ -1,5 +1,4 @@
-// 앱 셸: 해시 라우터, 메타 갱신, 광고 push, 숫자 카운트업(1회)
-import { pushAds } from './components.js';
+// 앱 셸: 해시 라우터, 메타 갱신, 광고(공용 common/ads.js), 숫자 카운트업(1회)
 import { homeView, regionView, signalView } from './views/map.js';
 import { farmerView } from './views/farmer.js';
 import { joinView } from './views/join.js';
@@ -77,8 +76,9 @@ async function route() {
   window.scrollTo(0, isBack ? positions.get(key) || 0 : 0);
   if (!first) app.focus({ preventScroll: true });
   first = false;
-  if (ctx.noAds) el.querySelectorAll('.ad').forEach((a) => a.remove());
-  else pushAds(el);
+  // 라우트마다 새로 그린 광고 칸만 공용 도우미가 한 번씩 요청해요(예전 칸 재요청 없음).
+  if (ctx.noAds) el.querySelectorAll('.jl-ad').forEach((a) => a.remove());
+  else window.JLAds?.mount(el);
   if (ctx.countUp) countUp(el);
   ctx.afterMount?.();
   return undefined;

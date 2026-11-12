@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../common/footer.css">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 <script>try{var t=localStorage.getItem('birthyear.theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
 </head>
@@ -55,11 +56,19 @@
     </div>
   </article>
 </main>
-<footer class="footer">
-  <div class="wrap">
-    <nav aria-label="사이트 링크"><a href="../">← 재미랩 홈</a><a href="./">나때연감</a></nav>
-    <p>© 2026 나때연감</p>
+<footer class="jl-footer" data-site="birthyear" data-home="../">
+  <div data-notes><p>공개 자료를 정리한 참고용 연감이에요. 확인되지 않은 값은 비워 두었어요. 오류 제보는 언제든 환영합니다.</p></div>
+  <div data-sources>
+    <ul>
+      <li>출생아 수·합계출산율: <a href="https://kosis.kr/" rel="noopener">통계청 인구동향조사 (KOSIS)</a>, Our World in Data</li>
+      <li>1인당 GDP·소비자물가지수: <a href="https://databank.worldbank.org/source/world-development-indicators" rel="noopener">World Bank WDI</a> (원자료 통계청)</li>
+      <li>품목 가격: 한국물가정보, 한국소비자원 참가격, 최저임금위원회, 대중교통 요금 보도</li>
+      <li>영화 흥행: <a href="https://www.kobis.or.kr/" rel="noopener">영화진흥위원회 KOBIS</a> · 이름: 대법원 출생신고 이름 분석</li>
+      <li><a href="SOURCES.md">데이터 출처 전체 보기</a></li>
+    </ul>
   </div>
+  <div data-links><a href="./">나때연감</a><a href="SOURCES.md">데이터 출처</a></div>
 </footer>
+<script src="../common/footer.js" defer></script>
 </body>
 </html>

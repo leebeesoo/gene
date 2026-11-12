@@ -47,13 +47,15 @@ export function mapSvg(summary, { selected = '', compact = false } = {}) {
     const o = summary[r];
     const [x, y] = LABEL_POS[r];
     const isProv = PROVINCES.includes(r);
-    const name = isProv && !compact ? `<text class="rg-name" x="${x}" y="${y + (o.count ? 18 : 3)}">${r}</text>` : '';
-    const bub = o.count ? `<g class="bub"><circle cx="${x}" cy="${y}" r="8.5"/><text x="${x}" y="${y + 3.3}">${o.count > 9 ? '9+' : o.count}</text></g>` : '';
+    const name = isProv ? `<text class="rg-name" x="${x}" y="${y + (o.count ? 22 : 4)}">${r}</text>` : '';
+    const bub = o.count ? `<g class="bub"><circle cx="${x}" cy="${y}" r="10.5"/><text x="${x}" y="${y + 3.6}">${o.count > 9 ? '9+' : o.count}</text></g>` : '';
     return name + bub;
   }).join('');
+  // 작은 위치 지도(compact)는 글자가 읽히지 않을 만큼 작아서 이름·숫자를 빼요(지역 이름은 제목에 있어요).
+  const labelLayer = compact ? '' : `<g class="rg-labels" aria-hidden="true">${labels}</g>`;
   return `<svg class="kmap" viewBox="80 0 238 388" role="group" aria-label="시·도별 남는 지도. 지역을 누르면 자세히 볼 수 있어요">
     ${PROVINCES.map(shape).join('')}${METROS.map(shape).join('')}
-    <g class="rg-labels" aria-hidden="true">${labels}</g></svg>`;
+    ${labelLayer}</svg>`;
 }
 
 function legend(sum) {
@@ -61,14 +63,16 @@ function legend(sum) {
   return `<ul class="legend" aria-label="범례 (단계별 시·도 수)">${LEVEL_ORDER.map((l) => `<li><i class="sw lv-${l}" aria-hidden="true"></i>${esc(LEVEL[l].label)} <b>${n(l)}곳</b></li>`).join('')}<li><i class="sw lv-none" aria-hidden="true"></i>신호 없음</li></ul>`;
 }
 
+// 기준일만 보여 주고, 정보 출처는 맨 아래 바닥글의 「정보 출처」(접힘)에 모아 둬요.
 export function dataLine(data) {
   const d = asOfDate(data);
-  const srcs = data.sources.filter((s) => s.id !== 'news');
-  const srcHtml = srcs.length
-    ? srcs.map((s) => (s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.name)}</a>` : esc(s.name))).join(', ')
-    : '없음';
-  return `<p class="data-line">${d ? `기준일 ${esc(isoDay(d))}` : '기준일 없음'} · 출처 ${srcHtml}${data.sources.some((s) => s.id === 'news') ? ' · 언론 보도(제목·링크)' : ''}
+  return `<p class="data-line">${d ? `기준일 ${esc(isoDay(d))}` : '기준일 없음'} · 출처는 맨 아래 ‘정보 출처’에 있어요
     ${data.test ? '<b class="tag">테스트 데이터</b>' : ''}${isStale(data) ? '<b class="tag">업데이트 지연</b>' : ''}</p>`;
+}
+
+/** 「어떻게 만들었나요?」 접힌 설명 (한 페이지에 한 번만) */
+function howFold(title, extra = '') {
+  return `<details class="fold"><summary>${esc(title)}${icon('chevron', 20)}</summary>${howItWorks()}${extra}</details>`;
 }
 
 /** 신호 한 줄 (지역·목록용) */
@@ -218,7 +222,8 @@ export async function homeView(ctx) {
     ${data.forecasts.length ? `<section class="sec" aria-labelledby="h-fc">
       <header class="sec-head"><h2 id="h-fc">과잉 예보</h2><p>한국농촌경제연구원 농업관측 요약</p></header>
       <ul class="fc-list">${data.forecasts.map((f) => forecastRow(f, data)).join('')}</ul></section>` : ''}
-  </div>` : ''}
+  </div>
+  <div class="wrap">${adSlot('display', 'top')}</div>` : ''}
 
   <div class="wrap">${knowBox()}</div>
 
@@ -227,12 +232,11 @@ export async function homeView(ctx) {
     <ul class="svc">${SERVICES.map(([href, t, d]) => `<li><a href="${href}"><b>${esc(t)}</b><span>${esc(d)}</span></a></li>`).join('')}</ul>
   </section>
 
-  <section class="sec wrap" aria-labelledby="h-how">
-    <header class="sec-head"><h2 id="h-how">이렇게 만들어요</h2></header>
-    ${howItWorks()}
+  <section class="sec wrap" aria-label="이렇게 만들어요">
+    ${howFold('이 정보는 어떻게 만들었나요?')}
   </section>
 
-  <div class="wrap">${adSlot('multiplex')}</div>`;
+  <div class="wrap">${adSlot('multiplex', 'both')}</div>`;
 
   ctx.el.querySelector('[data-more-btn]')?.addEventListener('click', (e) => {
     const more = ctx.el.querySelector('[data-more]');
@@ -274,7 +278,7 @@ export async function regionView(ctx) {
       <p class="note">가격 숫자 앞의 ‘전국’은 이 지역 값이 아니라 같은 품목의 전국 도매·소매 값이라는 뜻이에요.</p>
     </section>
 
-    ${evs.length ? adSlot('display') : ''}
+    ${adSlot('display', 'top')}
 
     ${evs.length ? `<section class="sec" aria-labelledby="h-re"><header class="sec-head"><h2 id="h-re">최근 소식</h2></header>
       <ul class="ev-list">${evs.map(eventRow).join('')}</ul></section>` : ''}
@@ -358,7 +362,7 @@ export async function signalView(ctx) {
       <div><dt>반입량</dt><dd>${m.volume_vs_normal_ratio != null ? `평소 ${esc(ratioText(m.volume_vs_normal_ratio))}` : '–'}</dd></div>
     </dl>
     ${sparkline(m.history, m.unit)}
-    <p class="data-line">${esc([m.market, m.as_of ? `${/^\d{4}-\d{2}$/.test(m.as_of) ? `${Number(m.as_of.slice(5))}월 평균` : `${isoDay(m.as_of)} 기준`}` : null].filter(Boolean).join(' · ') || '가격 자료 없음')}${srcs.length ? ` · 출처 ${srcs.map((s) => (s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.name)}</a>` : esc(s.name))).join(', ')}` : ''}${data.test ? ' <b class="tag">테스트 데이터</b>' : ''}</p>
+    <p class="data-line">${esc([m.market, m.as_of ? `${/^\d{4}-\d{2}$/.test(m.as_of) ? `${Number(m.as_of.slice(5))}월 평균` : `${isoDay(m.as_of)} 기준`}` : null].filter(Boolean).join(' · ') || '가격 자료 없음')}${data.test ? ' <b class="tag">테스트 데이터</b>' : ''}</p>
 
     <section class="sec" aria-labelledby="h-sup"><header class="sec-head"><h2 id="h-sup">폐기 보상과 연결 가능 여부</h2></header>${supportExplain(sig)}</section>
 
@@ -394,12 +398,12 @@ export async function signalView(ctx) {
       <div class="btns"><a class="btn primary" href="#/farmer?signal=${encodeURIComponent(sig.id)}">손익 계산하기</a></div>
     </section>
 
-    <section class="sec" aria-labelledby="h-src"><header class="sec-head"><h2 id="h-src">이 신호는 이렇게 만들었어요</h2></header>
-      ${howItWorks()}
+    <section class="sec" aria-label="이 신호는 이렇게 만들었어요">
+      ${howFold('이 신호는 어떻게 만들었나요?', `${srcs.length ? `<p class="note">이 신호의 출처: ${srcs.map((s) => (s.url ? `<a class="link" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.name)}</a>` : esc(s.name))).join(', ')}</p>` : ''}`)}
       <p class="note">단계는 자동 계산이에요. 사실과 다르면 <a class="link" href="#/join?role=report">제보</a>로 알려 주세요.</p>
     </section>
 
-    ${adSlot('display')}
+    ${adSlot('multiplex', 'top')}
   </section>`;
 
   if (ctx.query.get('to') === 'act') {

@@ -31,14 +31,10 @@
   function saveRecent(list) { try { localStorage.setItem(STORE, JSON.stringify(list.slice(0, 8))); } catch (e) { /* 저장 불가 환경 */ } }
   function clearRecent() { try { localStorage.removeItem(STORE); } catch (e) { /* noop */ } }
 
-  /* ---------- 광고 ---------- */
-  const AD_HTML = '<div class="ad-wrap"><span class="ad-label">광고</span><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></div>';
-  function pushAds(root = document) {
-    $$('ins.adsbygoogle:not([data-nr-pushed])', root).forEach(el => {
-      el.setAttribute('data-nr-pushed', '1');
-      try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { /* 광고 차단·미로딩 */ }
-    });
-  }
+  /* ---------- 광고 (공용 ../common/ads.js) ---------- */
+  // 결과를 새로 그릴 때마다 새 광고 칸을 만들고, 그린 뒤 JLAds.mount로 새 칸만 요청한다
+  const AD_HTML = '<aside class="jl-ad" aria-label="광고"><small>광고</small><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></aside>';
+  const mountAds = root => { if (window.JLAds) window.JLAds.mount(root); };
 
   /* ---------- 토스트 ---------- */
   let toastT;
@@ -160,6 +156,8 @@
     }
 
     $('#result').hidden = false; // 차트 폭 계산을 위해 먼저 표시
+    // 차트 카드 뒤에 붙는 카드들. 없으면 아래 광고가 차트의 「표로 보기」와 붙으니 위를 더 띄운다
+    const extra = (birthYearCard(st, res) + hanjaCard(st) + syllableCard(st, res)).trim();
     const html = `
       <div class="r-hero">
         <span class="tag">${esc(gLabel)} · ${esc(st.sur)} + ${esc(st.given)}</span>
@@ -175,15 +173,14 @@
         <div class="stat"><span class="k">평균 출생연도 추정</span><span class="v">${avg ? avg + '<small>년생</small>' : '—'}</span><span class="d">${avg ? `지금 이 이름을 가진 사람의 평균 · 약 ${age}살` : ''}</span></div>
         <div class="stat"><span class="k">성 상관없이 ‘${esc(st.given)}’</span><span class="v">약 ${approx(res.total)}</span><span class="d">${a.bestRank ? `순위로는 ${bestYr ? bestYr.y + '년 ' : ''}${a.bestRank}위가 최고(2008년 이후) · 상위 100위에 ${a.hitYears}번 등장` : (a.hitEras ? `시대별 TOP 10에 ${a.hitEras}번 등장` : '연도별 상위 100위 기록 없음')}${res.unisex ? ' · 남녀 모두 쓰는 이름' : ''}</span></div>
       </div>
-      <div id="resultAd"></div>
+      ${AD_HTML}
       <div class="card">
         <h3>‘${esc(st.given)}’ 순위 변화</h3>
         <p class="cap">1940~1990년은 그해 인기 이름 TOP 10, 2008년부터는 출생신고 상위 100위 기준이에요. 위로 갈수록 인기가 높아요.</p>
         ${chartHTML(res)}
       </div>
-      ${birthYearCard(st, res)}
-      ${hanjaCard(st)}
-      ${syllableCard(st, res)}
+      ${extra}
+      ${AD_HTML.replace('jl-ad"', extra ? 'jl-ad gap-b"' : 'jl-ad gap-t gap-b"')}
       <div class="card">
         <h3>결과 공유하기</h3>
         <p class="cap">친구에게 보내고 누가 더 흔한 이름인지 겨뤄 보세요.</p>
@@ -198,16 +195,13 @@
         <form class="friend-form" id="friendForm" autocomplete="off"><label class="sr" for="friendIn">친구 이름</label><input id="friendIn" type="text" maxlength="8" placeholder="친구 이름 (예: 이서연)" spellcheck="false"><button class="btn btn-solid" type="submit">검색</button></form>
         <div class="chips" id="friendChips">${FRIENDS.filter(f => f !== st.full).slice(0, 10).map(f => `<button type="button" class="chip" data-raw="${f}">${f}</button>`).join('')}</div>
       </div>
-      ${howCard(st, res, sur, same)}`;
+      ${howCard(st, res, sur, same)}
+      ${AD_HTML.replace('jl-ad"', 'jl-ad gap-t gap-b"')}`;
 
     const box = $('#result');
-    // 결과 광고 슬롯은 한 번만 만들고 재사용
-    const prevAd = $('#resultAd .ad-wrap', box);
     box.innerHTML = html;
     box.hidden = false;
-    const adHost = $('#resultAd', box);
-    if (prevAd) adHost.appendChild(prevAd);
-    else { adHost.innerHTML = AD_HTML; pushAds(adHost); }
+    mountAds(box);
     bindResult();
   }
 
@@ -613,7 +607,6 @@
   renderTop10();
   renderRecent();
   updateLive();
-  pushAds(document);
   try {
     const q = new URLSearchParams(location.search);
     const n = q.get('n');
