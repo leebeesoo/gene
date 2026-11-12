@@ -1,5 +1,5 @@
 name: Surplus data
-# 남는 지도(market) 데이터: 매일 06:17 KST(21:17 UTC) 수집 → market/data/surplus*.json 커밋
+# 남는 지도(market) 데이터: 매일 06:17 KST(21:17 UTC) 수집 → market/data/surplus*.json 을 실행한 브랜치(예약 실행은 기본 브랜치)에 커밋
 # 배포는 Cloudflare Pages(Git 연동)가 main 푸시를 보고 자동으로 합니다(DEPLOY.md). 커밋 메시지에 skip-ci 류 표시(대괄호 skip ci·ci skip 등)를 넣지 마세요 — Cloudflare가 배포를 건너뜁니다.
 on:
   schedule:
@@ -15,9 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
+      # 실행된 브랜치(예약 실행은 저장소 기본 브랜치)를 그대로 씁니다.
       - uses: actions/checkout@v4
-        with:
-          ref: main
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -40,5 +39,5 @@ jobs:
             echo "변경 없음"
           else
             git commit -m "data(market): 남는 지도 $(TZ=Asia/Seoul date +%F) 갱신"
-            git push origin HEAD:main
+            git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
