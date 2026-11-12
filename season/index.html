@@ -27,6 +27,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@700&display=swap">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="../common/footer.css">
+  <link rel="stylesheet" href="../common/ads.css">
+  <script src="../common/ads.js" defer></script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
   <script type="application/ld+json">
   {
@@ -64,27 +67,18 @@
       <nav class="topnav" aria-label="섹션">
         <a href="#now">이달 제철</a><a href="#cheap">지금 싼 것</a><a href="#news">남는 소식</a><a href="#calendar">12개월</a>
       </nav>
-      <div class="top-actions">
-        <button class="icon-btn" type="button" data-open="alerts" aria-label="제철 알림 품목">
-          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16v-5a6 6 0 1 1 12 0v5l1.5 2h-15L6 16Z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg>
-          <span class="badge-dot" data-badge="alerts" hidden></span>
-        </button>
-        <button class="icon-btn" type="button" data-open="list" aria-label="장보기 리스트">
-          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.4 10.2a2 2 0 0 1-2 1.8H8.4a2 2 0 0 1-2-1.8L5 8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
-          <span class="badge-dot" data-badge="list" hidden></span>
-        </button>
-      </div>
     </div>
   </header>
 
   <main id="main" tabindex="-1">
+    <div id="view-home">
     <!-- 첫 화면: 이달의 장바구니 메모 -->
     <section class="memo" aria-labelledby="hero-title">
       <div class="wrap memo-in">
         <div class="memo-head">
           <p class="memo-date" id="today">오늘</p>
           <h1 id="hero-title" class="memo-month"><span id="hero-month">11</span><span class="memo-unit">월</span><span class="sr-only"> 장보기 메모: 이달 제철 식재료</span></h1>
-          <p class="memo-lead" id="hero-lead">이달 장바구니에 먼저 담을 것</p>
+          <p class="memo-lead" id="hero-lead">이달 먼저 살 만한 것</p>
         </div>
         <ol class="memo-picks" id="picks" aria-live="polite"></ol>
         <div class="memo-cta">
@@ -116,7 +110,7 @@
       </div>
     </section>
 
-    <div class="wrap ad-wrap" data-ad><p class="ad-label">광고</p><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></div>
+    <div class="wrap" data-ad="auto"></div>
 
     <section class="section" id="cheap" aria-labelledby="cheap-title">
       <div class="wrap">
@@ -137,7 +131,7 @@
       </div>
     </section>
 
-    <div class="wrap ad-wrap" data-ad><p class="ad-label">광고</p><ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-layout="in-article" data-ad-format="fluid"></ins></div>
+    <div class="wrap" data-ad="article"></div>
 
     <section class="section" id="news" aria-labelledby="news-title">
       <div class="wrap">
@@ -150,13 +144,13 @@
       </div>
     </section>
 
-    <div class="wrap ad-wrap" data-ad><p class="ad-label">광고</p><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></div>
+    <div class="wrap" data-ad="auto"></div>
 
     <section class="section" id="calendar" aria-labelledby="cal-title">
       <div class="wrap">
         <div class="sec-head">
           <h2 id="cal-title">12개월 제철 달력</h2>
-          <p class="muted">품목 이름을 누르면 고르는 법·보관법을 볼 수 있어요. 위 분류 필터가 함께 적용돼요.</p>
+          <p class="muted">품목 이름을 누르면 고르는 법·원산지 동네·어디서 사면 좋은지를 볼 수 있어요. 위 분류 필터가 함께 적용돼요.</p>
         </div>
         <div class="cal-scroll" tabindex="0" aria-label="12개월 제철 달력 표, 좌우로 스크롤">
           <table class="cal" id="cal"></table>
@@ -164,39 +158,25 @@
       </div>
     </section>
 
-    <section class="section" id="more" aria-labelledby="more-title">
-      <div class="wrap">
-        <div class="sec-head"><h2 id="more-title">다른 서비스</h2></div>
-        <ul class="more-list">
-          <li><a href="../sikdang/"><b>제철식당</b><small>이달 이 지역 제철 음식을 잘하는 집</small></a></li>
-          <li><a href="../market/"><b>맛남의 광장</b><small>버려질 농수산물이 어디서 남는지, 버려지기 전에</small></a></li>
-          <li><a href="../lotto/"><b>오늘로또</b><small>사주로 뽑는 오늘의 로또 번호와 살 시간·방향</small></a></li>
-          <li><a href="../lottomap/"><b>명당로드</b><small>로또 1등 명당 지도와 번호 통계</small></a></li>
-          <li><a href="../roots/"><b>근본 테스트</b><small>사주와 퀴즈로 찾는 나의 근본 코드</small></a></li>
-          <li><a href="../family/"><b>식구궁합</b><small>우리 가족 오행 궁합판</small></a></li>
-          <li><a href="../names/"><b>이름레이더</b><small>내 이름, 전국에 몇 명?</small></a></li>
-          <li><a href="../lifeclock/"><b>남은봄</b><small>남은 주말·명절·벚꽃 세는 인생 시계</small></a></li>
-          <li><a href="../birthyear/"><b>나때연감</b><small>내가 태어난 해 타임캡슐</small></a></li>
-        </ul>
-      </div>
-    </section>
-
-    <div class="wrap ad-wrap" data-ad><p class="ad-label">광고</p><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></div>
+    <div class="wrap" data-ad="multiplex"></div>
+    </div>
+    <div id="view-item" hidden></div>
   </main>
 
-  <footer class="footer">
-    <div class="wrap">
-      <nav class="footer-links" aria-label="바로가기">
-        <a href="../" class="home">← 재미랩 홈</a><a href="./SOURCES.md">출처·기준일</a><a href="./privacy.html"><b>개인정보처리방침</b></a>
-      </nav>
-      <p class="footer-brand"><b>제철장보기</b> · 이달 제철 식재료와 지금 싼 품목</p>
-      <p class="muted small">가격: KAMIS(aT 농산물유통정보) 소매가격 월평균, 2026-11-05 수집. 제철·주산지는 농촌진흥청·해양수산부·통계청 공개 자료를 참고해 정리했으며 지역·기상에 따라 다를 수 있어요. 남는 소식은 맛남의 광장이 모은 기사 원문 링크예요. 알림·장보기 목록은 이 기기에만 저장돼요.</p>
+  <footer class="jl-footer" data-site="season" data-home="../">
+    <div data-notes><p>가격은 전국 평균 소매가 기준이라 동네 가게와 다를 수 있어요.</p></div>
+    <div data-sources>
+    <ul>
+      <li>가격: <a href="https://www.kamis.or.kr/" rel="noopener">KAMIS(aT 농산물유통정보)</a> 소매가격 월평균, 2026-11-05 수집</li>
+      <li>제철·주산지: 농촌진흥청·해양수산부·통계청 공개 자료를 참고해 정리 (지역·기상에 따라 다를 수 있어요)</li>
+      <li>남는 소식: 맛남의 광장이 모은 기사 원문 링크</li>
+      <li><a href="./SOURCES.md">출처·기준일 전체 보기</a></li>
+    </ul>
     </div>
+    <div data-links><a href="./privacy.html">개인정보처리방침</a><a href="./SOURCES.md">출처·기준일</a></div>
   </footer>
+  <script src="../common/footer.js" defer></script>
 
-  <dialog class="sheet" id="dlg-item" aria-labelledby="item-title"><div class="sheet-in" id="item-body"></div></dialog>
-  <dialog class="sheet" id="dlg-alerts" aria-labelledby="alerts-title"><div class="sheet-in" id="alerts-body"></div></dialog>
-  <dialog class="sheet" id="dlg-list" aria-labelledby="list-title"><div class="sheet-in" id="list-body"></div></dialog>
   <dialog class="sheet" id="dlg-share" aria-labelledby="share-title"><div class="sheet-in" id="share-body"></div></dialog>
 
   <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>

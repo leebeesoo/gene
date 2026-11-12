@@ -16,6 +16,7 @@ const catLabel = (id) => CATS.find((c) => c.id === id)?.label || '';
 const MARKET = '../market/';
 const SIKDANG = '../sikdang/';
 const baseName = (it) => it.n.replace(/\(.*\)/, '').trim();
+const itemHref = (id) => `#/item/${id}`;
 const sikdangFood = (it) => `${SIKDANG}#/food/${encodeURIComponent(baseName(it))}`;
 // 선 그림 아이콘: 같은 모양 템플릿을 선으로만 그림(CSS .lic)
 const lineIc = (it, size, label = '') => iconSVG(it.ic, size, label).replace('<svg ', '<svg class="lic" ');
@@ -62,10 +63,7 @@ function restaurantCount(F, name) {
 // 1.5px 선 아이콘(인라인)
 const I = (d, cls = 'ic') => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
 const IC = {
-  bell: I('<path d="M6 16v-5a6 6 0 1 1 12 0v5l1.5 2h-15L6 16Z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>'),
-  bellOn: I('<path d="M6 16v-5a6 6 0 1 1 12 0v5l1.5 2h-15L6 16Z" fill="currentColor"/><path d="M10 20.5a2 2 0 0 0 4 0"/>'),
-  plus: I('<path d="M12 5v14M5 12h14"/>'),
-  check: I('<path d="m5 12.5 4.5 4.5L19 7.5"/>'),
+  share: I('<path d="M12 15V4M8 8l4-4 4 4"/><path d="M5 12v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/>'),
   x: I('<path d="M6 6l12 12M18 6 6 18"/>'),
   arrow: I('<path d="M5 12h14M13 6l6 6-6 6"/>'),
 };
@@ -75,11 +73,6 @@ function kstNow() {
   return { y: d.getUTCFullYear(), m: d.getUTCMonth() + 1, d: d.getUTCDate(), w: d.getUTCDay() };
 }
 const NOW = kstNow();
-
-const ls = {
-  get(k, f) { try { const v = localStorage.getItem(k); return v == null ? f : JSON.parse(v); } catch { return f; } },
-  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch { return false; } },
-};
 
 let toastT;
 function toast(msg) {
@@ -95,13 +88,6 @@ const nextM = (m) => (m === 12 ? 1 : m + 1);
 const yearRound = (it) => it.m.length === 12;
 const starts = (it, m) => inSeason(it, m) && !yearRound(it) && !inSeason(it, prevM(m));
 const ends = (it, m) => inSeason(it, m) && !yearRound(it) && !inSeason(it, nextM(m));
-function seasonKey(it, y = NOW.y, m = NOW.m) {
-  if (!inSeason(it, m)) return '';
-  if (yearRound(it)) return 'all';
-  let s = m, guard = 0;
-  while (inSeason(it, prevM(s)) && guard++ < 12) s = prevM(s);
-  return `${s > m ? y - 1 : y}-${s}`;
-}
 function monthsUntil(it, m = NOW.m) {
   for (let i = 1; i <= 12; i++) { const mm = ((m - 1 + i) % 12) + 1; if (inSeason(it, mm)) return { i, mm }; }
   return null;
@@ -118,32 +104,8 @@ function seasonText(it) {
 }
 const SUMS = Object.fromEntries(Object.entries(PRICES).map(([k, p]) => [k, summary(p)]));
 
-// ── 저장소: 알림·장보기 ──
-let watch = ls.get('season.watch', {});
-let list = ls.get('season.list', []);
-if (typeof watch !== 'object' || Array.isArray(watch) || !watch) watch = {};
-if (!Array.isArray(list)) list = [];
-watch = Object.fromEntries(Object.entries(watch).filter(([id]) => BY_ID[id]));
-list = list.filter((x) => x && BY_ID[x.id]);
-const isWatched = (id) => Object.prototype.hasOwnProperty.call(watch, id);
-const isNewAlert = (id) => { if (!isWatched(id)) return false; const k = seasonKey(BY_ID[id]); return !!k && k !== 'all' && watch[id] !== k; };
-const inList = (id) => list.some((x) => x.id === id);
-function toggleWatch(id) {
-  if (isWatched(id)) { delete watch[id]; toast(`${BY_ID[id].n} 알림을 껐어요`); }
-  else {
-    watch[id] = seasonKey(BY_ID[id]);
-    const u = monthsUntil(BY_ID[id]);
-    toast(inSeason(BY_ID[id], NOW.m) ? `${BY_ID[id].n}: 지금 제철이에요. 다음 제철에도 알려드릴게요` : `${BY_ID[id].n}: ${u.mm}월 제철이 되면 배지로 알려드려요`);
-  }
-  if (!ls.set('season.watch', watch)) toast('이 브라우저에선 저장이 안 돼요(사생활 보호 모드 등)');
-  refresh();
-}
-function toggleList(id) {
-  if (inList(id)) { list = list.filter((x) => x.id !== id); toast(`장보기에서 ${BY_ID[id].n} 뺐어요`); }
-  else { list.push({ id, done: false }); toast(`장보기에 ${BY_ID[id].n} 담았어요`); }
-  if (!ls.set('season.list', list)) toast('이 브라우저에선 저장이 안 돼요(사생활 보호 모드 등)');
-  refresh();
-}
+// ── 예전 버전의 알림·장보기 저장값 정리(기능 삭제) ──
+try { localStorage.removeItem('season.watch'); localStorage.removeItem('season.list'); } catch { /* 무시 */ }
 
 // ── 상태 ──
 const state = { month: NOW.m, cat: '', q: '', sort: 'cheap' };
@@ -184,22 +146,12 @@ function renderHero() {
 }
 function renderPicks() {
   $('#picks').innerHTML = picksFor(state.month).map(({ it, why, where }, k) => `<li class="pick">
-      <button type="button" class="pick-open" data-item="${it.id}" aria-label="${esc(it.n)}, ${esc(why)}. 고르는 법 보기">
+      <a class="pick-open" href="${itemHref(it.id)}" aria-label="${esc(it.n)}, ${esc(why)}. 고르는 법·어디서 살지 보기">
         <span class="pick-no num" aria-hidden="true">0${k + 1}</span>
         <span class="pick-art">${lineIc(it, 64)}</span>
         <span class="pick-txt"><b>${esc(baseName(it))}</b><small>${esc(why)}${where ? ` · ${esc(where)}` : ''}</small></span>
-      </button>
-      <button type="button" class="pick-add" data-list="${it.id}" aria-pressed="${inList(it.id)}" aria-label="${esc(it.n)} 장보기에 담기">${inList(it.id) ? IC.check : IC.plus}</button>
+      </a>
     </li>`).join('');
-}
-
-function renderBadges() {
-  const alerts = Object.keys(watch).filter(isNewAlert).length;
-  const b = $('[data-badge=alerts]'); b.textContent = alerts; b.hidden = !alerts;
-  const l = list.filter((x) => !x.done).length;
-  const c = $('[data-badge=list]'); c.textContent = l; c.hidden = !l;
-  $('[data-open=alerts]').setAttribute('aria-label', `제철 알림 품목${alerts ? `, 새로 제철 ${alerts}개` : ''}`);
-  $('[data-open=list]').setAttribute('aria-label', `장보기 리스트${l ? `, ${l}개` : ''}`);
 }
 
 // ── 렌더: 월·분류 ──
@@ -231,23 +183,18 @@ function sbar(it, cur) {
 function card(it) {
   const m = state.month;
   const flags = [
-    isNewAlert(it.id) ? '<span class="flag alert">제철 도착</span>' : '',
     yearRound(it) ? '<span class="flag last">연중</span>' : starts(it, m) ? '<span class="flag new">제철 시작</span>' : ends(it, m) ? '<span class="flag last">끝물</span>' : '',
     priceFlag(it),
   ].join('');
   const sub = state.q && !inSeason(it, m) ? `제철 ${seasonText(it)}` : (it.r || it.note || catLabel(it.cat));
   return `<article class="card">
-    <button type="button" class="card-open" data-item="${it.id}" aria-label="${esc(it.n)} 자세히 보기, 제철 ${seasonText(it)}">
+    <a class="card-open" href="${itemHref(it.id)}" aria-label="${esc(it.n)} 자세히 보기, 제철 ${seasonText(it)}">
       <span class="card-art">${lineIc(it, 48)}</span>
       <h3>${esc(it.n)}</h3>
       <span class="where">${esc(sub)}</span>
       ${sbar(it, m)}
-    </button>
+    </a>
     <div class="card-flags">${flags}</div>
-    <div class="card-actions">
-      <button type="button" class="mini-btn" data-watch="${it.id}" aria-pressed="${isWatched(it.id)}" aria-label="${esc(it.n)} 제철 알림">${isWatched(it.id) ? `${IC.bellOn}알림중` : `${IC.bell}알림`}</button>
-      <button type="button" class="mini-btn" data-list="${it.id}" aria-pressed="${inList(it.id)}" aria-label="${esc(it.n)} 장보기에 담기">${inList(it.id) ? `${IC.check}담음` : `${IC.plus}장보기`}</button>
-    </div>
   </article>`;
 }
 function filtered() {
@@ -322,7 +269,7 @@ function renderPrices() {
       <div class="prow-main">
         <div class="prow-name"><b>${esc(p.name)}</b><small>${esc(p.kind)} · ${esc(p.unit)}</small></div>
         <div class="prow-val"><b>${won(s.v)}</b> <span class="muted">${s.y}년 ${s.m}월${s.stale ? ' (최근 조사월)' : ''}</span></div>
-        ${it ? `<button type="button" class="linkish" data-item="${it.id}" data-tab="price">고르는 법·가격 추이</button>` : ''}
+        ${it ? `<a class="linkish" href="${itemHref(it.id)}">고르는 법·어디서 살지·가격 추이</a>` : ''}
       </div>
       <div class="prow-spark">${sparkSVG(p)}</div>
       <div class="prow-right">${pctBadge(s)}</div>
@@ -371,7 +318,7 @@ function renderNews(D) {
 function renderCal() {
   const head = `<thead><tr><th scope="col"><span class="sr-only">품목</span></th>${Array.from({ length: 12 }, (_, i) => `<th scope="col" class="${i + 1 === NOW.m ? 'cur' : ''}">${i + 1}월</th>`).join('')}</tr></thead>`;
   const cats = state.cat ? CATS.filter((c) => c.id === state.cat) : CATS;
-  const body = cats.map((c) => `<tbody><tr class="grp"><th colspan="13" scope="rowgroup">${c.label}</th></tr>${ITEMS.filter((i) => i.cat === c.id).map((it) => `<tr><th scope="row"><button type="button" data-item="${it.id}">${lineIc(it, 22)}${esc(it.n)}</button></th>${Array.from({ length: 12 }, (_, i) => {
+  const body = cats.map((c) => `<tbody><tr class="grp"><th colspan="13" scope="rowgroup">${c.label}</th></tr>${ITEMS.filter((i) => i.cat === c.id).map((it) => `<tr><th scope="row"><a href="${itemHref(it.id)}">${lineIc(it, 22)}${esc(it.n)}</a></th>${Array.from({ length: 12 }, (_, i) => {
     const m = i + 1, on = inSeason(it, m);
     const cls = [on ? 'on' : '', on && (!inSeason(it, prevM(m)) || m === 1) ? 'first' : '', on && (!inSeason(it, nextM(m)) || m === 12) ? 'end' : '', m === NOW.m ? 'cur' : ''].filter(Boolean).join(' ');
     return `<td class="${cls}"${on ? ` title="${esc(it.n)} ${m}월 제철"` : ''}><span></span>${on ? `<span class="sr-only">제철</span>` : ''}</td>`;
@@ -437,45 +384,183 @@ function bindChart(root, c) {
   });
 }
 
-// ── 다이얼로그 ──
+// ── 다이얼로그(공유 카드만) ──
 const X_BTN = `<button type="button" class="x" data-close aria-label="닫기">${IC.x}</button>`;
-const watchLbl = (id) => (isWatched(id) ? `${IC.bellOn}제철 알림 중` : `${IC.bell}제철 알림`);
-const listLbl = (id) => (inList(id) ? `${IC.check}장보기에 있음` : `${IC.plus}장보기 담기`);
 function openDlg(id) {
   const d = document.getElementById(id);
   if (!d.open) { try { d.showModal(); } catch { d.setAttribute('open', ''); } }
   return d;
 }
-function openItem(id, focusPrice = false) {
-  const it = BY_ID[id]; if (!it) return;
-  const p = it.k && PRICES[it.k];
-  const s = it.k && SUMS[it.k];
-  const c = p ? bigChart(p) : null;
-  const status = inSeason(it, NOW.m)
-    ? (starts(it, NOW.m) ? '<span class="status new">이번 달부터 제철</span>' : '<span class="status in">지금 제철</span>')
-    : `<span class="status muted">${monthsUntil(it).i}개월 뒤 제철 (${monthsUntil(it).mm}월)</span>`;
-  $('#item-body').innerHTML = `
-    <div class="sheet-head"><span class="sheet-art">${lineIc(it, 56, it.n)}</span><div><p class="muted small">${catLabel(it.cat)} · ${status}</p><h2 id="item-title">${esc(it.n)}</h2></div>${X_BTN}</div>
-    <div><div class="sbar sbar-lg" aria-label="제철 ${seasonText(it)}">${Array.from({ length: 12 }, (_, i) => `<i class="${inSeason(it, i + 1) ? 'on' : ''}${i + 1 === NOW.m ? ' cur' : ''}" >${i + 1}</i>`).join('')}</div></div>
-    <dl class="facts">
-      ${it.r ? `<div><dt>주산지</dt><dd>${esc(it.r)}</dd></div>` : ''}
-      ${it.note ? `<div><dt>참고</dt><dd>${esc(it.note)}</dd></div>` : ''}
-      <div><dt>고르는 법</dt><dd>${esc(it.pick)}</dd></div>
-      <div><dt>보관법</dt><dd>${esc(it.keep)}</dd></div>
-      <div><dt>손질 팁</dt><dd>${esc(it.prep)}</dd></div>
-    </dl>
-    ${c && s ? `<section class="price-box" id="item-price" aria-label="가격 동향"><h3>${esc(p.name)} 소매가 <small>${esc(p.kind)} · ${esc(p.unit)} · KAMIS 소매 월평균</small></h3>
-      <p class="prow-val" style="margin-top:4px"><b>${won(s.v)}</b> <span class="muted">${s.y}년 ${s.m}월</span> ${pctBadge(s).replace('pct-sub', 'pct-sub" style="margin-left:4px')}</p>${c.html}</section>` : ''}
-    <div class="sheet-actions">
-      <button type="button" class="btn ghost" data-watch="${it.id}" aria-pressed="${isWatched(it.id)}">${watchLbl(it.id)}</button>
-      <button type="button" class="btn ghost" data-list="${it.id}" aria-pressed="${inList(it.id)}">${listLbl(it.id)}</button>
-    </div>
-    <div class="ctas" id="item-ctas">${marketCta(it, null)}</div>`;
-  const d = openDlg('dlg-item');
-  fillCtas(it);
-  if (c) bindChart(d, c);
-  history.replaceState(null, '', `#item=${it.id}`);
-  if (focusPrice) setTimeout(() => $('#item-price')?.scrollIntoView({ block: 'nearest' }), 60);
+
+// ── 광고 칸: 화면(라우트)을 그릴 때마다 새 <ins>를 만들고 JLAds.mount로 그 칸만 요청 ──
+const AD_INS = {
+  auto: '<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>',
+  article: '<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-layout="in-article" data-ad-format="fluid"></ins>',
+  multiplex: '<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="autorelaxed"></ins>',
+};
+const adBox = (kind = 'auto') => `<aside class="jl-ad${kind === 'multiplex' ? ' jl-ad--multiplex' : ''}" aria-label="광고"><small>광고</small>${AD_INS[kind] || AD_INS.auto}</aside>`;
+const mountAds = (root) => { if (window.JLAds) window.JLAds.mount(root); };
+
+const josa = (w, a, b) => { const c = w.charCodeAt(w.length - 1) - 0xAC00; return c >= 0 && c <= 11171 && c % 28 ? a : b; };
+
+// ── 원산지 동네: 주산지 글을 동네 단위로 나눔 ──
+const SIDO = ['서울', '부산', '대구', '인천', '광주', '대전', '울산', '세종', '경기', '강원', '충북', '충남', '전북', '전남', '경북', '경남', '제주'];
+const SIDO_FULL = { 경기: '경기', 강원: '강원', 충북: '충청북', 충남: '충청남', 전북: '전북', 전남: '전남', 경북: '경상북', 경남: '경상남', 제주: '제주' };
+const SIDO_RE = new RegExp(`(^|\\s)(${SIDO.join('|')})(?=[\\s_(]|$)`);
+const SIDO_PAIR = new RegExp(`(${SIDO.join('|')})·(?=${SIDO.join('|')})`, 'g');
+function parseTowns(r, pre = '') {
+  if (!r) return [];
+  r = r.replace(SIDO_PAIR, '$1, '); // 전남·경남 남해안 → 전남, 경남 남해안
+  // 괄호 안의 , · 는 나누지 않음
+  let depth = 0, prot = '';
+  for (const ch of r) { if (ch === '(') depth++; if (ch === ')') depth = Math.max(0, depth - 1); prot += depth && (ch === ',' || ch === '·') ? (ch === ',' ? '\u0001' : '\u0002') : ch; }
+  const back = (t) => t.replace(/\u0001/g, ',').replace(/\u0002/g, '·');
+  const out = []; let prev = '';
+  for (const raw of prot.split(/\s*,\s*|\s+·\s+/)) {
+    const g = raw.trim(); if (!g) continue;
+    const masked = g.replace(/\([^)]*\)/g, (m) => '_'.repeat(m.length));
+    const mm = masked.match(SIDO_RE);
+    let sido = '', qual = '', rest = g;
+    if (mm) { const at = mm.index + mm[1].length; sido = mm[2]; qual = g.slice(0, at).trim(); rest = g.slice(at + sido.length).trim(); }
+    else if (prev) sido = prev;
+    else {
+      // 동해(강원·경북 울릉)처럼 바다 이름 뒤 괄호에 산지가 있으면 괄호 안을 동네로
+      const pm = back(g).match(/^([^(]+)\((.+)\)$/);
+      if (pm && SIDO_RE.test(pm[2].replace(/,/g, ' '))) { out.push(...parseTowns(pm[2], [pre, pm[1].trim()].filter(Boolean).join(' · '))); continue; }
+    }
+    if (!sido || rest.startsWith('·')) { out.push({ label: back(g).replace(/\s*등$/, ''), sido: '', name: '', note: '' }); continue; }
+    prev = sido;
+    for (const p of (rest ? rest.split('·') : [''])) {
+      const note = [pre, qual, back((p.match(/\(([^)]*)\)/) || [])[1] || '')].filter(Boolean).join(' · ');
+      const name = p.replace(/\([^)]*\)/g, '').replace(/(^|\s)등(\s|$)/g, ' ').trim();
+      out.push({ label: name ? `${sido} ${name}` : sido, sido, name, note });
+    }
+  }
+  return out;
+}
+const regionsP = getJSON(`${SIKDANG}data/regions.json`).catch(() => null);
+function regionFor(R, t) {
+  if (!Array.isArray(R) || !t.sido) return null;
+  const metro = !SIDO_FULL[t.sido];
+  const ok = (x) => x && typeof x.id === 'string' && (metro ? String(x.sido).startsWith(t.sido) : String(x.sido).includes(SIDO_FULL[t.sido]));
+  const want = t.name.replace(/(시|군)$/, '');
+  const hit = want && !/\s/.test(want) ? R.find((x) => ok(x) && String(x.name).replace(/\(.*\)/, '') === want) : null;
+  // 광역시 안의 군·구(예: 부산 기장)는 그 광역시 페이지로
+  return hit || (metro ? R.find((x) => ok(x) && String(x.name) === t.sido) || null : null);
+}
+function townSignal(D, it, t) {
+  if (!t.name) return null;
+  const sig = Array.isArray(D?.signals) ? D.signals : [];
+  const names = new Set([baseName(it), it.q].filter(Boolean));
+  return sig.filter((x) => x && typeof x.id === 'string' && names.has(x.item) && x.sido === t.sido && typeof x.sigungu === 'string' && x.sigungu.replace(/(시|군|구)$/, '') === t.name)
+    .sort((a, b) => (LEVEL_RANK[b.level] || 0) - (LEVEL_RANK[a.level] || 0))[0] || null;
+}
+function townsHTML(it, R, D) {
+  const ts = parseTowns(it.r);
+  if (!ts.length) return `<p class="muted small">${it.note ? `${esc(it.note)}이라 특정 산지를 꼽기 어려워요.` : '대표 산지 정보가 아직 없어요.'}</p>`;
+  return `<ul class="towns">${ts.map((t) => {
+    const rg = regionFor(R, t), sg = D ? townSignal(D, it, t) : null;
+    const name = `<b>${esc(t.label)}</b>${t.note ? `<small>${esc(t.note)}</small>` : ''}`;
+    const links = [
+      rg ? `<a class="town-link" href="${SIKDANG}#/region/${encodeURIComponent(rg.id)}">${esc(rg.name.replace(/\(.*\)/, ''))} 식당${typeof rg.nr === 'number' ? ` ${rg.nr.toLocaleString('ko-KR')}곳` : ''} → 제철식당</a>` : '',
+      sg ? `<a class="town-link sig" href="${MARKET}#/signal/${encodeURIComponent(sg.id)}">${esc(baseName(it))} ${esc(LEVEL_TXT[sg.level] || '신호')} → 맛남의 광장</a>` : '',
+    ].filter(Boolean).join('');
+    return `<li class="town"><span class="town-name">${name}</span>${links ? `<span class="town-links">${links}</span>` : ''}</li>`;
+  }).join('')}</ul>`;
+}
+
+// ── 어디서 사면 좋은지: 분류별 일반 안내(특정 가게 이름은 쓰지 않음) ──
+const BUY = {
+  veg: [
+    ['지역 로컬푸드 직매장', '농협 등이 운영하는 로컬푸드 직매장은 그 지역 농가가 수확한 것을 직접 진열해요. 생산자 이름이 붙어 있어 누가 길렀는지 볼 수 있어요.'],
+    ['산지 농협 하나로마트', '주산지 지역농협 매장에는 그 동네에서 난 물건이 먼저 들어와요. 산지 근처를 지난다면 들러 볼 만해요.'],
+    ['오일장·전통시장', '제철 한창일 때 동네 농가가 소량으로 들고 나와요. 덤이나 묶음 값 흥정이 되는 곳도 있어요.'],
+    ['온라인 산지직송', '생산자·작목반·지역농협이 직접 보내는 산지직송은 수확일과 산지가 적혀 있는지 보고 고르세요.'],
+  ],
+  sea: [
+    ['산지 위판장 근처 수산시장·직판장', '수협 위판장이 있는 항구 근처에는 그날 들어온 물건을 파는 수산시장·직판장이 모여 있어요. 산지에 간다면 가장 싱싱하게 살 수 있는 곳이에요.'],
+    ['지역 어시장·전통시장 생선 가게', '손질(비늘·내장 제거, 회 뜨기)을 바로 해 주는 곳이 많아요. 그날 들어온 것이 무엇인지 물어보고 고르세요.'],
+    ['대형마트 수산 코너', '가격표·포장에 원산지와 냉동·해동 여부가 적혀 있어요. 같은 품목이라도 국산과 수입산이 나란히 놓이니 꼭 확인하세요.'],
+    ['온라인 산지직송', '산지 수협·어촌계·어민이 직접 보내는 상품은 잡은 곳(해역·항구)과 발송일을 확인하고 고르세요.'],
+  ],
+  fruit: null, // 채소와 같음
+  mushroom: [
+    ['지역 로컬푸드 직매장', '그 지역 버섯 농가가 수확한 것을 바로 진열해요. 생산자 이름이 붙어 있어요.'],
+    ['산지 농협 하나로마트·산림조합 판매장', '주산지 매장이나 산림조합 임산물 판매장에 그 동네 버섯이 먼저 들어와요.'],
+    ['오일장·전통시장', '제철에는 산지 오일장에 농가가 직접 들고 나와요. 송이처럼 귀한 버섯은 산지·등급 표시를 꼭 확인하세요.'],
+    ['온라인 산지직송', '수확일·산지·등급이 적혀 있는지 보고 고르세요.'],
+  ],
+  grain: [
+    ['산지 농협 하나로마트', '주산지 지역농협이 직접 거두고 정리한 곡물이 들어와요. 쌀은 지역농협 미곡종합처리장(RPC) 브랜드 쌀이 많아요.'],
+    ['지역 로컬푸드 직매장', '그 지역 농가의 곡물·옥수수를 소포장으로 팔아요. 생산자 이름이 붙어 있어요.'],
+    ['오일장·전통시장', '햇곡이 나는 때에 농가가 직접 들고 나와요. 됫박·되 단위로 조금씩 살 수 있어요.'],
+    ['온라인 산지직송', '생산연도(햇것 여부)와 산지가 적혀 있는지 보고 고르세요.'],
+  ],
+};
+const ORIGIN_TIPS = {
+  farm: [
+    '국산 농산물은 「국산」·「국내산」 또는 시·도 이름이나 시·군·구 이름으로 표시해요. 수입품은 나라 이름을 써요.',
+    '농수산물을 파는 곳(대형마트·전통시장·온라인)은 원산지를 표시해야 해요. 표시가 없거나 흐릿하면 물어보세요.',
+    '여러 산지가 섞였으면 섞은 비율이 높은 순서로 함께 적어요.',
+  ],
+  sea: [
+    '국산 수산물은 「국산」·「국내산」 또는 「연근해산」으로, 원양에서 잡은 것은 「원양산」(해역 이름을 함께 쓰기도 해요)으로, 수입품은 나라 이름으로 표시해요.',
+    '수산물을 파는 곳(대형마트·전통시장·온라인)은 원산지를 표시해야 해요. 수족관·좌판에 표시가 없으면 물어보세요.',
+    '냉동했다 녹인 것인지(해동)도 물어보세요. 해동한 것은 다시 얼리지 않는 게 좋아요.',
+  ],
+};
+function cheapMonth(p) {
+  if (!p?.y) return null;
+  const ys = Object.keys(p.y).map(Number).filter((y) => (p.y[y] || []).filter((v) => v != null).length >= 8);
+  if (ys.length < 3) return null;
+  const acc = Array.from({ length: 12 }, () => []);
+  for (const y of ys) {
+    const row = p.y[y], vals = row.filter((v) => v != null), mean = vals.reduce((a, b) => a + b, 0) / vals.length;
+    row.forEach((v, i) => { if (v != null) acc[i].push(v / mean); });
+  }
+  let best = null;
+  acc.forEach((a, i) => { if (a.length >= 3) { const r = a.reduce((x, y) => x + y, 0) / a.length; if (!best || r < best.r) best = { m: i + 1, r }; } });
+  if (!best || best.r > 0.97) return null;
+  return { m: best.m, pct: Math.round((1 - best.r) * 100), y0: Math.min(...ys), y1: Math.max(...ys) };
+}
+function peakText(it) {
+  if (yearRound(it)) return '';
+  // 가장 긴 연속 구간의 가운데 달
+  let best = [];
+  for (let m = 1; m <= 12; m++) if (inSeason(it, m) && !inSeason(it, prevM(m))) {
+    const run = [m]; let e = m; while (inSeason(it, nextM(e)) && nextM(e) !== m) { e = nextM(e); run.push(e); }
+    if (run.length > best.length) best = run;
+  }
+  if (!best.length) return '';
+  const last = best[best.length - 1];
+  const mid = best.length >= 3 ? best.slice(1, -1) : best;
+  return { mid: mid.length > 1 ? `${mid[0]}~${mid[mid.length - 1]}월` : `${mid[0]}월`, last };
+}
+function buyHTML(it) {
+  const places = BUY[it.cat] || BUY.veg;
+  const tips = it.cat === 'sea' ? ORIGIN_TIPS.sea : ORIGIN_TIPS.farm;
+  const pk = peakText(it);
+  const cm = it.k && PRICES[it.k] ? cheapMonth(PRICES[it.k]) : null;
+  const when = [];
+  if (pk) {
+    when.push(`출하가 몰리는 제철 한가운데(${pk.mid})가 보통 값이 가장 안정적이에요. 이때는 맛도 가장 좋아요.`);
+    when.push(`끝물(${pk.last}월)에는 크기·모양이 고르지 않은 것을 묶어서 싸게 파는 경우가 많아요. ${it.cat === 'fruit' ? '잼·청 담글 용도라면 이때가 좋아요.' : it.cat === 'sea' ? '찌개·조림용이라면 이때 사도 충분해요.' : '국·조림·저장용이라면 이때가 좋아요.'}`);
+  } else {
+    when.push(`${it.note ? esc(it.note) : '연중 나오는 품목'}이라 계절보다 그날 들어온 물량에 따라 값이 달라져요.`);
+  }
+  if (cm) when.push(`KAMIS 소매가(${cm.y0}~${cm.y1}년 월평균)로 보면 보통 <b>${cm.m}월</b>이 그해 평균보다 약 ${cm.pct}% 싼 달이었어요.`);
+  when.push(it.cat === 'sea' ? '어시장·전통시장은 문 닫을 무렵 남은 물건을 싸게 넘기기도 해요. 대신 신선도는 꼭 눈으로 확인하세요.'
+    : '전통시장·마트는 문 닫을 무렵 그날 들어온 신선 품목을 할인하기도 해요.');
+  const towns = parseTowns(it.r).filter((t) => t.sido).map((t) => t.label);
+  return `
+    <ol class="buy">${places.map(([t, d], i) => `<li><span class="buy-no num" aria-hidden="true">${i + 1}</span><div><b>${esc(t)}</b><p>${esc(d)}${i === 1 && towns.length ? ` 이 품목은 ${esc(towns.slice(0, 3).join(', '))} 쪽이 대표 산지예요.` : ''}</p></div></li>`).join('')}</ol>
+    <h3 class="sub-h">원산지 표시 확인하는 법</h3>
+    <ul class="tips">${tips.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
+    <p class="small muted src-line">표시가 이상하면 ${it.cat === 'sea'
+      ? '<a class="textlink" href="https://www.nfqs.go.kr/" target="_blank" rel="noopener">국립수산물품질관리원</a>'
+      : '<a class="textlink" href="https://www.naqs.go.kr/" target="_blank" rel="noopener">국립농산물품질관리원</a>'}에 신고할 수 있어요. 기준: 「농수산물의 원산지 표시 등에 관한 법률」</p>
+    <h3 class="sub-h">싸게 사는 때</h3>
+    <ul class="tips">${when.map((t) => `<li>${t}</li>`).join('')}</ul>`;
 }
 
 // 바깥 연결: 식당이 있는 재료만 제철식당, 남는 신호가 있으면 그 신호로
@@ -496,47 +581,169 @@ function sikdangCta(it, F, DS) {
   if (!n) return '';
   return `<a class="cta-row" href="${sikdangFood(it)}"><span><b>이 재료로 하는 식당 → 제철식당</b><small>${esc(baseName(it))} 요리를 내는 집 ${n.toLocaleString('ko-KR')}곳</small></span>${IC.arrow}</a>`;
 }
-function fillCtas(it) {
-  Promise.all([foodsP, surplusP, dishesP]).then(([F, D, DS]) => {
-    const box = $('#item-ctas');
-    if (!box || !$('#dlg-item').open || location.hash !== `#item=${it.id}`) return;
-    box.innerHTML = sikdangCta(it, F, DS) + marketCta(it, D);
+
+// ── 품목 페이지 (#/item/<id>) ──
+const VIEW_HOME = $('#view-home'), VIEW_ITEM = $('#view-item');
+function sameMonthCards(it) {
+  const m = state.month;
+  const others = ITEMS.filter((x) => x.id !== it.id && inSeason(x, m) && !yearRound(x));
+  // 같은 분류 먼저, 그다음 나머지
+  const list = [...others.filter((x) => x.cat === it.cat), ...others.filter((x) => x.cat !== it.cat)].slice(0, 8);
+  return list.map((x) => `<article class="card">
+      <a class="card-open" href="${itemHref(x.id)}" aria-label="${esc(x.n)} 자세히 보기, 제철 ${seasonText(x)}">
+        <span class="card-art">${lineIc(x, 48)}</span>
+        <h3>${esc(x.n)}</h3>
+        <span class="where">${esc(x.r || x.note || catLabel(x.cat))}</span>
+        ${sbar(x, m)}
+      </a>
+    </article>`).join('');
+}
+function renderItem(id) {
+  const it = BY_ID[id];
+  if (!it) {
+    VIEW_ITEM.innerHTML = `<div class="wrap item"><div class="empty-page"><h1 class="item-title">품목을 찾을 수 없어요</h1><p class="muted">주소가 바뀌었거나 없는 품목이에요.</p><p><a class="btn ink" href="#/">이달 제철 보러 가기</a></p></div></div>`;
+    setMeta(null);
+    return;
+  }
+  const p = it.k && PRICES[it.k];
+  const s = it.k && SUMS[it.k];
+  const c = p ? bigChart(p) : null;
+  const u = monthsUntil(it);
+  const status = inSeason(it, NOW.m)
+    ? (starts(it, NOW.m) ? '<span class="status new">이번 달부터 제철</span>' : ends(it, NOW.m) ? '<span class="status in">이번 달이 끝물</span>' : '<span class="status in">지금 제철</span>')
+    : `<span class="status muted">${u.i}개월 뒤 제철 (${u.mm}월)</span>`;
+  const [by, bm] = PRICE_META.baseYM;
+  VIEW_ITEM.innerHTML = `<article class="wrap item" aria-labelledby="item-title">
+    <nav class="crumb" aria-label="위치"><a class="textlink" href="#/" data-back>← ${state.month}월 제철 전체</a></nav>
+    <header class="item-head">
+      <span class="item-art">${lineIc(it, 80, it.n)}</span>
+      <div class="item-hd">
+        <p class="muted small">${catLabel(it.cat)} · ${status}</p>
+        <h1 id="item-title" class="item-title" tabindex="-1">${esc(it.n)}</h1>
+        <p class="item-season">제철 <b>${seasonText(it)}</b>${it.r ? ` · ${esc(parseTowns(it.r).filter((t) => t.sido).slice(0, 2).map((t) => t.label).join(', ') || it.r)}` : ''}</p>
+      </div>
+      <button type="button" class="btn ghost share-btn" data-share-item="${it.id}" aria-label="${esc(it.n)} 페이지 공유">${IC.share}<span>공유</span></button>
+    </header>
+    <div class="sbar sbar-lg" role="img" aria-label="제철 ${seasonText(it)}${inSeason(it, NOW.m) ? `, 이번 달(${NOW.m}월) 제철` : ''}">${Array.from({ length: 12 }, (_, i) => `<i class="${inSeason(it, i + 1) ? 'on' : ''}${i + 1 === NOW.m ? ' cur' : ''}">${i + 1}</i>`).join('')}</div>
+
+    <section class="item-sec" aria-labelledby="h-pick">
+      <h2 id="h-pick">고르는 법·보관·손질</h2>
+      <dl class="facts">
+        ${it.note ? `<div><dt>참고</dt><dd>${esc(it.note)}</dd></div>` : ''}
+        <div><dt>고르는 법</dt><dd>${esc(it.pick)}</dd></div>
+        <div><dt>보관법</dt><dd>${esc(it.keep)}</dd></div>
+        <div><dt>손질 팁</dt><dd>${esc(it.prep)}</dd></div>
+      </dl>
+    </section>
+
+    ${adBox('auto')}
+
+    <section class="item-sec" aria-labelledby="h-town">
+      <h2 id="h-town">원산지 동네</h2>
+      <p class="sec-lead">${it.r ? `${esc(baseName(it))}${josa(baseName(it), '이', '가')} 많이 나는 곳이에요. 제철식당에 지역 페이지가 있는 동네는 바로 이어져요.` : ''}</p>
+      <div id="towns">${townsHTML(it, null, null)}</div>
+    </section>
+
+    <section class="item-sec" aria-labelledby="h-buy">
+      <h2 id="h-buy">어디서 사면 좋을까</h2>
+      <p class="sec-lead">산지에 가까운 곳부터 정리했어요. 특정 가게가 아니라 어디서나 찾을 수 있는 곳들이에요.</p>
+      ${buyHTML(it)}
+    </section>
+
+    ${adBox('article')}
+
+    ${c && s ? `<section class="item-sec price-box" aria-labelledby="h-price">
+      <h2 id="h-price">${esc(p.name)} 소매가</h2>
+      <p class="basis">KAMIS 소매가격 월평균 · 전국 평균 · ${esc(p.kind)} ${esc(p.unit)} · 기준 ${by}년 ${bm}월</p>
+      <p class="prow-val price-now"><b>${won(s.v)}</b> <span class="muted">${s.y}년 ${s.m}월${s.stale ? ' (최근 조사월)' : ''}</span> ${pctBadge(s)}</p>
+      ${c.html}
+    </section>` : ''}
+
+    <section class="item-sec" aria-labelledby="h-more">
+      <h2 id="h-more">이어서 보기</h2>
+      <div class="ctas" id="item-ctas">${marketCta(it, null)}</div>
+    </section>
+
+    <section class="item-sec" aria-labelledby="h-same">
+      <div class="sec-head row"><h2 id="h-same">${state.month}월 다른 제철</h2><a class="textlink small" href="#/">전체 보기</a></div>
+      <div class="grid">${sameMonthCards(it)}</div>
+      <p class="note muted small">제철은 노지·주출하 시기 기준이에요. 지역·날씨·재배 방식에 따라 달라질 수 있어요.</p>
+    </section>
+
+    ${adBox('multiplex')}
+  </article>`;
+  setMeta(it);
+  if (c) bindChart(VIEW_ITEM, c);
+  // 형제 사이트 데이터가 오면 동네 링크·바깥 연결 채움(그사이 다른 화면으로 갔으면 무시)
+  Promise.all([regionsP, surplusP, foodsP, dishesP]).then(([R, D, F, DS]) => {
+    if (current !== `item:${it.id}`) return;
+    const tw = $('#towns', VIEW_ITEM); if (tw) tw.innerHTML = townsHTML(it, R, D);
+    const box = $('#item-ctas', VIEW_ITEM); if (box) box.innerHTML = sikdangCta(it, F, DS) + marketCta(it, D);
   });
 }
 
-function renderAlerts() {
-  const ids = Object.keys(watch);
-  const rows = ids.map((id) => BY_ID[id]).sort((a, b) => (isNewAlert(b.id) - isNewAlert(a.id)) || ((monthsUntil(a)?.i ?? 0) - (monthsUntil(b)?.i ?? 0)));
-  $('#alerts-body').innerHTML = `
-    <div class="sheet-head"><div><h2 id="alerts-title">제철 알림</h2><p class="muted small">품목이 제철에 들어서면 상단 종에 배지로 알려드려요.</p></div>${X_BTN}</div>
-    ${rows.length ? `<ul class="list">${rows.map((it) => {
-      const st = isNewAlert(it.id) ? '<span class="status new">새로 제철 도착</span>'
-        : inSeason(it, NOW.m) ? '<span class="status in">지금 제철</span>'
-        : `<span class="status muted">${monthsUntil(it).mm}월부터 (${monthsUntil(it).i}개월 뒤)</span>`;
-      return `<li><span class="li-art">${lineIc(it, 28)}</span><div class="li-main"><b>${esc(it.n)}</b>${st}</div>
-        <button type="button" class="rm" data-watch="${it.id}" aria-label="${esc(it.n)} 알림 끄기">${IC.x}</button></li>`;
-    }).join('')}</ul>` : '<p class="empty">아직 알림 받을 품목이 없어요. 카드의 알림 버튼을 눌러 보세요.</p>'}
-    <p class="muted small">알림 목록은 이 기기 브라우저에만 저장돼요.</p>`;
-}
-function ackAlerts() {
-  let changed = false;
-  for (const id of Object.keys(watch)) if (isNewAlert(id)) { watch[id] = seasonKey(BY_ID[id]); changed = true; }
-  if (changed) { ls.set('season.watch', watch); renderBadges(); renderGrid(); }
+// ── 제목·설명(라우트마다) ──
+const BASE_TITLE = document.title;
+const metaEl = (sel) => document.head.querySelector(sel);
+const BASE_META = {
+  desc: metaEl('meta[name="description"]')?.content || '',
+  ogT: metaEl('meta[property="og:title"]')?.content || '',
+  ogD: metaEl('meta[property="og:description"]')?.content || '',
+  ogU: metaEl('meta[property="og:url"]')?.content || '',
+};
+function setMeta(it) {
+  const put = (sel, v) => { const n = metaEl(sel); if (n) n.setAttribute('content', v); };
+  if (!it) {
+    document.title = BASE_TITLE;
+    put('meta[name="description"]', BASE_META.desc); put('meta[property="og:title"]', BASE_META.ogT);
+    put('meta[property="og:description"]', BASE_META.ogD); put('meta[property="og:url"]', BASE_META.ogU);
+    return;
+  }
+  const n = baseName(it);
+  const d = `${n} 제철은 ${seasonText(it)}. 고르는 법·보관법·손질 팁, 원산지 동네${it.r ? `(${parseTowns(it.r).filter((t) => t.sido).slice(0, 2).map((t) => t.label).join(', ')})` : ''}, 어디서 사면 좋은지까지 한 페이지에.`;
+  document.title = `${n} 제철·고르는 법·어디서 살까 — 제철장보기`;
+  put('meta[name="description"]', d); put('meta[property="og:title"]', `${n} 제철 장보기 — 고르는 법·원산지 동네`);
+  put('meta[property="og:description"]', d); put('meta[property="og:url"]', `${BASE_META.ogU}#/item/${it.id}`);
 }
 
-function listText() {
-  return `[${NOW.m}월 장보기 · 제철장보기]\n` + list.map((x) => `${x.done ? '☑' : '☐'} ${BY_ID[x.id].n}`).join('\n');
+// ── 라우터: 홈(이달 제철) ↔ 품목 페이지. 화면이 바뀔 때마다 새 광고 칸 ──
+let current = '';
+let homeY = 0;
+let inAppNav = 0; // 앱 안에서 품목으로 들어온 횟수(뒤로 가기 링크용)
+function freshHomeAds() { $$('[data-ad]', VIEW_HOME).forEach((b) => { b.innerHTML = adBox(b.dataset.ad); }); }
+function clearHomeAds() { $$('[data-ad]', VIEW_HOME).forEach((b) => { b.innerHTML = ''; }); }
+function showHome(anchor) {
+  const was = current;
+  if (was !== 'home') {
+    VIEW_ITEM.hidden = true; VIEW_ITEM.innerHTML = ''; VIEW_HOME.hidden = false;
+    $('#tip').hidden = true;
+    current = 'home';
+    setMeta(null);
+    freshHomeAds(); mountAds(VIEW_HOME);
+    const el = anchor && document.getElementById(anchor);
+    if (el) el.scrollIntoView({ behavior: 'instant' });
+    else if (was) window.scrollTo({ top: homeY, behavior: 'instant' });
+  }
 }
-function renderList() {
-  $('#list-body').innerHTML = `
-    <div class="sheet-head"><div><h2 id="list-title">장보기 리스트</h2><p class="muted small">제철 품목을 담아 두고 장 볼 때 체크하세요.</p></div>${X_BTN}</div>
-    ${list.length ? `<ul class="list">${list.map((x) => { const it = BY_ID[x.id]; return `<li class="${x.done ? 'done' : ''}">
-      <input type="checkbox" data-done="${it.id}" ${x.done ? 'checked' : ''} aria-label="${esc(it.n)} 샀어요">
-      <span class="li-art">${lineIc(it, 28)}</span>
-      <div class="li-main"><b>${esc(it.n)}</b><small>${inSeason(it, NOW.m) ? '지금 제철' : `제철 ${seasonText(it)}`}</small></div>
-      <button type="button" class="rm" data-list="${it.id}" aria-label="${esc(it.n)} 빼기">${IC.x}</button></li>`; }).join('')}</ul>
-      <div class="sheet-actions"><button type="button" class="btn ghost" data-list-copy>목록 복사·공유</button><button type="button" class="btn ghost" data-list-clear>산 것 지우기</button></div>`
-      : '<p class="empty">비어 있어요. 카드의 장보기 버튼을 눌러 담아 보세요.</p>'}`;
+function showItem(id) {
+  if (current === 'home') { homeY = window.scrollY; clearHomeAds(); }
+  current = `item:${id}`;
+  VIEW_HOME.hidden = true; VIEW_ITEM.hidden = false;
+  $('#tip').hidden = true;
+  renderItem(id);
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  $('#item-title', VIEW_ITEM)?.focus({ preventScroll: true });
+  mountAds(VIEW_ITEM);
+}
+function route() {
+  const h = decodeURIComponent(location.hash || '');
+  let m = h.match(/^#item=([\w-]+)$/); // 예전 주소
+  if (m) { history.replaceState(null, '', itemHref(m[1])); m = [0, m[1]]; showItem(m[1]); return; }
+  m = h.match(/^#\/item\/([\w-]+)\/?$/);
+  if (m) { showItem(m[1]); return; }
+  m = h.match(/^#\/month\/(\d{1,2})$/);
+  if (m && +m[1] >= 1 && +m[1] <= 12 && +m[1] !== state.month) { state.month = +m[1]; renderMonths(); renderHero(); renderPicks(); renderGrid(); }
+  showHome(/^#[a-z][\w-]*$/i.test(h) ? h.slice(1) : '');
 }
 
 // ── 공유 카드 (1080×1350) ──
@@ -594,7 +801,14 @@ async function openShare() {
     $('#share-img').src = url; $('#share-dl').href = url;
   } catch { toast('카드를 만들지 못했어요. 링크 복사를 이용해 주세요.'); }
 }
-const pageURL = () => location.href.split('#')[0];
+const pageURL = (month) => location.href.split('#')[0] + (month && month !== NOW.m ? `#/month/${month}` : '');
+async function shareItem(it) {
+  if (!it) return;
+  const url = `${location.href.split('#')[0]}${itemHref(it.id)}`;
+  const text = `${baseName(it)} 제철은 ${seasonText(it)}. 고르는 법·원산지 동네·어디서 사면 좋은지 — 제철장보기`;
+  try { if (navigator.share) { await navigator.share({ title: document.title, text, url }); return; } } catch (e) { if (e?.name === 'AbortError') return; }
+  copyText(`${text} ${url}`, '링크를 복사했어요');
+}
 async function copyText(t, ok) {
   try { await navigator.clipboard.writeText(t); toast(ok); }
   catch { prompt('아래 내용을 복사하세요', t); }
@@ -603,80 +817,28 @@ async function doShare() {
   const text = `${state.month}월 제철 ${ITEMS.filter((i) => inSeason(i, state.month)).length}종, 지금 싼 건 뭘까? 제철장보기에서 확인해요`;
   try {
     const file = shareBlob && new File([shareBlob], `jecheol-${state.month}.png`, { type: 'image/png' });
-    if (file && navigator.canShare?.({ files: [file] })) { await navigator.share({ files: [file], title: '제철장보기', text, url: pageURL() }); return; }
-    if (navigator.share) { await navigator.share({ title: '제철장보기', text, url: pageURL() }); return; }
+    if (file && navigator.canShare?.({ files: [file] })) { await navigator.share({ files: [file], title: '제철장보기', text, url: pageURL(state.month) }); return; }
+    if (navigator.share) { await navigator.share({ title: '제철장보기', text, url: pageURL(state.month) }); return; }
   } catch (e) { if (e?.name === 'AbortError') return; }
-  copyText(`${text} ${pageURL()}`, '링크를 복사했어요. 이미지는 저장 버튼으로 받으세요.');
-}
-
-// ── 광고: 슬롯마다 한 번만 push, 채워지지 않으면 영역을 접음 ──
-function pushAds() {
-  $$('[data-ad]').forEach((box) => {
-    const ins = $('ins.adsbygoogle', box);
-    if (!ins || ins.dataset.pushed) return;
-    ins.dataset.pushed = '1';
-    const sync = () => {
-      const st = ins.getAttribute('data-ad-status');
-      if (st === 'filled') { box.hidden = false; box.classList.add('is-filled'); }
-      else if (st === 'unfilled') box.hidden = true;
-    };
-    new MutationObserver(sync).observe(ins, { attributes: true, attributeFilter: ['data-ad-status'] });
-    try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch { /* 광고 차단 등 */ }
-    // 스크립트가 막혔거나 응답이 없으면 접음(나중에 채워지면 다시 보임)
-    setTimeout(() => { if (ins.getAttribute('data-ad-status') !== 'filled') box.hidden = true; }, 4000);
-  });
-}
-
-// ── 전체 갱신 ──
-function refresh() {
-  renderHero(); renderPicks(); renderBadges(); renderGrid();
-  const openItemId = $('#dlg-item').open && location.hash.startsWith('#item=') ? location.hash.slice(6) : null;
-  if (openItemId) {
-    // 상세 시트의 버튼 상태만 갱신
-    $$('#item-body [data-watch]').forEach((b) => { b.setAttribute('aria-pressed', isWatched(openItemId)); b.innerHTML = watchLbl(openItemId); });
-    $$('#item-body [data-list]').forEach((b) => { b.setAttribute('aria-pressed', inList(openItemId)); b.innerHTML = listLbl(openItemId); });
-  }
-  if ($('#dlg-alerts').open) renderAlerts();
-  if ($('#dlg-list').open) renderList();
+  copyText(`${text} ${pageURL(state.month)}`, '링크를 복사했어요. 이미지는 저장 버튼으로 받으세요.');
 }
 
 // ── 이벤트 ──
 document.addEventListener('click', (e) => {
   const t = e.target;
-  const w = t.closest('[data-watch]'); if (w) { toggleWatch(w.dataset.watch); return; }
-  const l = t.closest('[data-list]'); if (l) { toggleList(l.dataset.list); return; }
-  const it = t.closest('[data-item]'); if (it) { openItem(it.dataset.item, it.dataset.tab === 'price'); return; }
   const mo = t.closest('[data-month]'); if (mo) { setMonth(Number(mo.dataset.month)); return; }
   const c = t.closest('[data-cat]'); if (c) { state.cat = c.dataset.cat; renderCats(); renderGrid(); renderCal(); return; }
   const so = t.closest('[data-sort]'); if (so) { state.sort = so.dataset.sort; renderPrices(); return; }
-  const op = t.closest('[data-open]');
-  if (op) {
-    const k = op.dataset.open;
-    if (k === 'alerts') { renderAlerts(); openDlg('dlg-alerts'); ackAlerts(); }
-    if (k === 'list') { renderList(); openDlg('dlg-list'); }
-    if (k === 'share') openShare();
-    return;
-  }
+  const bk = t.closest('[data-back]');
+  if (bk && inAppNav > 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey) { e.preventDefault(); history.back(); return; }
+  const si = t.closest('[data-share-item]'); if (si) { shareItem(BY_ID[si.dataset.shareItem]); return; }
+  const op = t.closest('[data-open]'); if (op) { if (op.dataset.open === 'share') openShare(); return; }
   if (t.closest('[data-close]')) { t.closest('dialog').close(); return; }
   if (t.matches('dialog')) { t.close(); return; } // 바깥(백드롭) 클릭
   if (t.closest('[data-share-go]')) { doShare(); return; }
-  if (t.closest('[data-copy-link]')) { copyText(pageURL(), '링크를 복사했어요'); return; }
-  if (t.closest('[data-list-copy]')) {
-    const text = listText();
-    if (navigator.share) navigator.share({ title: '장보기 리스트', text }).catch((er) => { if (er?.name !== 'AbortError') copyText(text, '목록을 복사했어요'); });
-    else copyText(text, '목록을 복사했어요');
-    return;
-  }
-  if (t.closest('[data-list-clear]')) { list = list.filter((x) => !x.done); ls.set('season.list', list); refresh(); }
-});
-document.addEventListener('change', (e) => {
-  const d = e.target.closest('[data-done]'); if (!d) return;
-  const x = list.find((y) => y.id === d.dataset.done); if (x) x.done = d.checked;
-  ls.set('season.list', list); refresh();
-});
-$('#dlg-item').addEventListener('close', () => {
-  $('#tip').hidden = true;
-  if (location.hash.startsWith('#item=')) history.replaceState(null, '', location.pathname + location.search);
+  if (t.closest('[data-copy-link]')) { copyText(pageURL(state.month), '링크를 복사했어요'); return; }
+  // 앱 안 품목 링크로 들어가면 뒤로 가기 링크가 history.back()을 씀(목록 위치 유지)
+  const a = t.closest('a[href^="#/item/"]'); if (a) inAppNav++;
 });
 $('#months').addEventListener('keydown', (e) => {
   const k = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
@@ -687,13 +849,15 @@ $('#months').addEventListener('keydown', (e) => {
 });
 let qT;
 $('#q').addEventListener('input', (e) => { clearTimeout(qT); qT = setTimeout(() => { state.q = e.target.value; renderGrid(); }, 160); });
-window.addEventListener('hashchange', () => { if (location.hash.startsWith('#item=')) openItem(location.hash.slice(6)); });
+window.addEventListener('hashchange', route);
+window.addEventListener('popstate', () => { if (inAppNav > 0 && !location.hash.startsWith('#/item/')) inAppNav = 0; });
 
-// 달을 바꾸면 메모·목록이 교차 전환(서비스의 움직임 1개, 400ms 이하)
+// 달을 바꾸면 메모·목록이 교차 전환(서비스의 움직임 1개, 400ms 이하). 주소만 바꾸고(#/month/N) 광고 칸은 그대로
 let xfT;
 function setMonth(m) {
   if (m === state.month) return;
   state.month = m;
+  try { history.replaceState(null, '', m === NOW.m ? location.pathname + location.search : `#/month/${m}`); } catch { /* 무시 */ }
   renderMonths(); renderHero();
   const boxes = [$('#picks'), $('#grid')];
   if (REDUCED || !boxes[0].animate) { renderPicks(); renderGrid(); return; }
@@ -706,7 +870,6 @@ function setMonth(m) {
 }
 
 // ── 시작 ──
-renderMonths(); renderCats(); renderHero(); renderPicks(); renderBadges(); renderGrid(); renderPrices(); renderNews(null); renderCal();
+renderMonths(); renderCats(); renderHero(); renderPicks(); renderGrid(); renderPrices(); renderNews(null); renderCal();
 surplusP.then((D) => { if (D) renderNews(D); });
-pushAds();
-if (location.hash.startsWith('#item=')) openItem(location.hash.slice(6));
+route();
