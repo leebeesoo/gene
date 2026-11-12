@@ -1,6 +1,6 @@
 // 지역: 이달 제철 메뉴(식당 있는 것만) → 곧 제철 → 사철 → 다른 달. 그리고 전체 지역 목록
 import { regions, region, groupDishes } from '../data.js';
-import { dishList, adSlot, draftNote } from '../components.js';
+import { dishList, adSlot, draftNote, PHOTO_NOTE } from '../components.js';
 import { icon } from '../icons.js';
 import { esc, nowMonth, store, checkedText, josa } from '../util.js';
 
@@ -18,7 +18,7 @@ export async function regionView(ctx) {
   ctx.description = `${reg.sido} ${reg.sigungu}에서 ${m}월에 먹을 제철 메뉴와 그 메뉴를 잘하는 식당. ${lead.slice(0, 4).map((d) => `${d.n} ${d.rest.length}곳`).join(' · ')}`;
 
   const nowBlock = g.now.length
-    ? `<div class="sec-head"><h2 class="sec">${m}월 제철</h2><span class="more num">${g.now.length}가지</span></div>${dishList(g.now, `${reg.name} 이달 제철 메뉴`, { showRegion: false })}`
+    ? `<div class="sec-head"><h2 class="sec">${m}월 제철</h2><span class="more num">${g.now.length}가지</span></div>${dishList(g.now, `${reg.name} 이달 제철 메뉴`, { showRegion: false, adEvery: 12 })}`
     : `<p class="soon-note">${esc(josa(reg.name, '은/는'))} ${m}월 제철 메뉴를 내는 식당을 아직 못 찾았어요.${g.soon.length ? ' 곧 제철인 메뉴부터 보여 드려요.' : ''}</p>`;
   const soonBlock = g.soon.length && (!g.now.length || g.soonMonth === (m % 12) + 1)
     ? `<div class="sec-head"><h2 class="sec">곧 제철 <span class="muted num">${g.soonMonth}월부터</span></h2></div>${dishList(g.soon, `${reg.name} 곧 제철 메뉴`, { showRegion: false, label: `곧 제철 · ${g.soonMonth}월부터` })}`
@@ -33,6 +33,7 @@ export async function regionView(ctx) {
       <p class="muted small num">${esc(reg.sigungu)} · 메뉴 ${reg.dishes.length}가지 · 식당 ${restN}곳${reg.checked ? ` · ${esc(checkedText(reg.checked))} 조사` : ''}</p>
     </header>
     ${draftNote()}
+    <p class="phnote">${PHOTO_NOTE}. 식당의 실제 음식 사진이 아니에요.</p>
     ${nowBlock}
     ${soonBlock}
     ${g.always.length ? `<div class="sec-head"><h2 class="sec">사철 먹는 메뉴</h2><span class="more num">${g.always.length}가지</span></div>${dishList(g.always, `${reg.name} 사철 메뉴`, { showRegion: false, label: '사철' })}` : ''}

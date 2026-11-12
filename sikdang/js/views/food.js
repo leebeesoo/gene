@@ -1,7 +1,7 @@
 // 메뉴 화면(지역 하나의 요리 하나): 식당 목록이 먼저, 소개는 아래 접어 둠
 // 이름 화면(#/food/<이름>): 그 요리·재료를 내는 지역별 메뉴 목록 (시즌 링크·검색에서 들어옴)
 import { regions, region, dishIndex, resolveFood, dishesFor, isNow } from '../data.js';
-import { monthBar, adSlot, restaurantCard, dishList, dishHref, regionHref, foodHref, draftNote } from '../components.js';
+import { monthBar, adSlot, restaurantCard, dishList, dishHref, regionHref, foodHref, draftNote, photo, imgFor, ingKey, PHOTO_NOTE } from '../components.js';
 import { icon } from '../icons.js';
 import { esc, $, $$, rangeText, hookText, nowMonth, enc, josa, distKm, store } from '../util.js';
 
@@ -35,6 +35,7 @@ export async function foodView(ctx) {
     <h1 class="display">${esc(label)}</h1>
     ${list.length ? `<p class="lede num">${new Set(list.map((d) => d.reg.id)).size}개 지역 · 메뉴 ${list.length}가지${now.length ? ` · 지금 제철 ${now.length}가지` : ''}</p>
       ${draftNote()}
+      <p class="phnote">${PHOTO_NOTE}. 식당의 실제 음식 사진이 아니에요.</p>
       ${now.length ? `<div class="sec-head"><h2 class="sec">${m}월 제철인 곳</h2></div>${dishList(now, `${name} 이달 제철`)}` : ''}
       ${rest.length ? `<div class="sec-head"><h2 class="sec">${now.length ? '다른 달에 제철인 곳' : '지역별 메뉴'}</h2></div>${dishList(rest, `${name} 다른 달`)}` : ''}`
     : `<div class="empty" style="margin-top:20px"><h3>아직 식당 정보가 없어요</h3><p class="small">${esc(josa(name, '을/를'))} 내는 집을 공공 자료로 찾고 있어요. <a class="link" href="#/search?q=${enc(name)}">비슷한 이름 찾기</a></p></div>
@@ -91,6 +92,7 @@ export async function dishView(ctx) {
 
   ctx.el.innerHTML = `<section class="wrap page">
     <nav class="crumb" aria-label="위치"><a href="${regionHref(reg.id)}">${esc(reg.name)}</a>${icon('next', 'ic')}<span>${range && range !== '사철' ? `${esc(range)} 제철` : '메뉴'}</span></nav>
+    ${imgFor(d) ? `<figure class="dphoto">${photo(d, { eager: true, alt: `${ingKey(d)} 예시 이미지` })}<figcaption>사진은 재료(${esc(ingKey(d))}) 예시 이미지예요. 식당의 실제 음식 사진이 아니에요.</figcaption></figure>` : ''}
     <header class="dish-head">
       <h1 class="display">${esc(d.n)}</h1>
       <p class="lede"><b>${esc(reg.name)}</b>${range ? `<span class="num">${esc(range === '사철' ? '사철' : `${range} 제철`)}</span>` : ''}<span class="num">식당 ${rest.length}곳</span></p>

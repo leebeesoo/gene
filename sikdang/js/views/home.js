@@ -1,6 +1,6 @@
 // 홈: 이달의 메뉴 하나(큰 세리프) + 그 메뉴를 잘하는 식당 3곳 → 내 근처(또는 전국 인기) 이달 메뉴 목록
 import { regions, region, popularNow, nearNow, regionsNow, key } from '../data.js';
-import { dishList, adSlot, dishHref, regionHref, pushAds } from '../components.js';
+import { dishList, adSlot, dishHref, regionHref, pushAds, photo, PHOTO_NOTE } from '../components.js';
 import { icon } from '../icons.js';
 import { esc, $, nowMonth, distKm, store, rangeText, endingNow, naverMap } from '../util.js';
 
@@ -22,6 +22,7 @@ export async function homeView(ctx) {
   el.innerHTML = `<section class="hero wrap" aria-labelledby="feat-name">
       <p class="eyebrow"><span class="num">${m}월</span>의 제철 메뉴 · <span data-where>전국</span></p>
       <div class="feature" data-feature></div>
+      <p class="phnote">${PHOTO_NOTE}. 식당의 실제 음식 사진이 아니에요.</p>
     </section>
     <section class="wrap locbar" data-loc aria-live="polite"></section>
     <section class="wrap" data-near hidden></section>
@@ -35,12 +36,15 @@ export async function homeView(ctx) {
       <ul class="rgrid">${topRegs.map((a) => `<li><a href="${regionHref(a.reg.id)}"><b>${esc(a.reg.name)}</b><span class="num">메뉴 ${a.nd} · 식당 ${a.nr}</span><span class="top">${esc(a.top.n)}</span></a></li>`).join('')}</ul>
     </section>
     <section class="wrap how">
-      <div class="sec-head"><h2 class="sec">이렇게 골라요</h2><a class="more" href="about.html#how">자세히</a></div>
+      <details class="more-sec">
+      <summary><span>이렇게 골라요</span>${icon('down')}</summary>
       <ol>
         <li><b>그 지역의 제철로</b> 같은 전어라도 여수와 보령은 철이 달라요. 시·군 자료로 지역마다 제철 달을 따로 적어요.</li>
         <li><b>공공 자료에 나온 집만</b> 관광 누리집·공공 자료·언론에 그 메뉴로 소개된 집을 모으고, 정부 일반음식점 명단과 상호·주소를 맞춰 봐요.</li>
         <li><b>근거와 출처를 함께</b> 왜 이 집인지 한 줄과 원문 링크를 붙여요. 협찬은 받지 않아요.</li>
       </ol>
+      <p class="small" style="margin-top:12px"><a class="link" href="about.html#how">식당을 고르는 기준 자세히</a></p>
+      </details>
     </section>`;
 
   const feature = $('[data-feature]', el);
@@ -60,7 +64,9 @@ export async function homeView(ctx) {
     if (!alive || my !== featToken) return;
     const href = dishHref(d.reg.id, d.n);
     const ms = d.ms;
-    feature.innerHTML = `<h1 class="giant" id="feat-name"><span class="sr">${m}월 제철 메뉴: </span><a href="${href}" data-slide>${esc(d.n)}</a></h1>
+    feature.innerHTML = `<a class="fphoto" href="${href}" tabindex="-1" aria-hidden="true" data-slide>${photo(d, { eager: true })}</a>
+      <div class="ftext">
+      <h1 class="giant" id="feat-name"><span class="sr">${m}월 제철 메뉴: </span><a href="${href}" data-slide>${esc(d.n)}</a></h1>
       <p class="fmeta"><b>${esc(d.reg.name)}</b><span class="num">${esc(rangeText(ms))} 제철${endingNow(ms) ? ' · 이달까지' : ''}</span><span class="num">식당 ${d.nr}곳</span></p>
       <ol class="menu3">${rest.slice(0, 3).map((r, i) => `<li>
         <span class="no num">${i + 1}</span>
@@ -74,10 +80,10 @@ export async function homeView(ctx) {
           <button class="icon-btn" type="button" data-feat="-1" aria-label="이전 메뉴">${icon('prev')}</button>
           <span class="num" aria-live="polite">${fi + 1} / ${feats.length}</span>
           <button class="icon-btn" type="button" data-feat="1" aria-label="다음 메뉴">${icon('next')}</button></div>` : ''}
+      </div>
       </div>`;
     if (dir && !reduceMotion()) {
-      const t = $('[data-slide]', feature);
-      t.animate([{ transform: `translateX(${dir * 48}px)`, opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 320, easing: 'cubic-bezier(.2,.7,.2,1)' });
+      for (const t of feature.querySelectorAll('[data-slide]')) t.animate([{ transform: `translateX(${dir * 48}px)`, opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 320, easing: 'cubic-bezier(.2,.7,.2,1)' });
     }
   }
 

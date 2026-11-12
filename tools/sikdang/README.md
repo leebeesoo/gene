@@ -79,3 +79,32 @@ Node 22 이상, 의존성 없음. 덤프 원본(`raw/`)은 저장소에 넣지 �
 홈의 「내 위치로 찾기」는 지역 중심 좌표가 필요합니다. `lottomap/data/stores.js`(동행복권 판매점 좌표)를
 시·군별로 평균 내어 씁니다. 판매점이 없는 6개 군(단양·영동·청양·곡성·청송·봉화)은 군청 소재지 근삿값을
 `FALLBACK_LATLNG`에 적어 두었습니다. 새 지역이 「좌표 없음」 경고에 뜨면 같은 표에 더하세요.
+
+## 재료 사진 (`sikdang/img/ing/`)
+
+메뉴 카드·첫 화면·메뉴 화면 위의 사진은 **그 메뉴의 재료를 보여 주는 AI 생성 예시 이미지**예요
+(전어구이 → 전어, 굴국밥 → 굴, 추어탕 → 미꾸라지). 식당이 실제로 내는 음식 사진이 아니어서
+화면마다 「사진은 재료 예시 이미지예요. 식당의 실제 음식 사진이 아니에요.」를 한 번 적어 둡니다.
+
+- **연결:** `dishes.json`의 재료 키(3번째 칸) → `sikdang/data/ing-img.json` `{ "재료": "img/ing/<slug>.webp" }`.
+  화면은 요리의 `k`(없으면 `ing[0]`)로 찾고, 없으면 같은 크기의 글자 카드(재료 이름)로 보여 줘요.
+- **목록:** `tools/sikdang/ing-img-prompts.tsv` — 재료 · 파일 · 영어 이름 · 놓인 모습. 가공품은 원재료 사진을
+  같이 써요(평양냉면·메밀묵 → `memil`, 도토리묵 → `dotori`, 밀가루 면 → `milgaru`, 우리밀 면 → `mil`).
+- **크기:** WebP, 최대 720×540, 품질 72(약 30KB), 전체 약 9MB. 원본 PNG는 저장소에 넣지 않아요.
+
+### 새 재료를 넣거나 사진을 다시 만들 때
+
+1. Higgsfield `generate_image` (모델 `gpt_image_2_6`, 비율 `4:3`). 세트가 한 벌로 보이도록 프롬프트 틀은 그대로 둡니다:
+   ```
+   Editorial food still life photograph of fresh raw {한글 이름} ({English name}), {놓인 모습}, on/in an off-white
+   stoneware plate or bowl, seen from a 45-degree angle, soft natural window light from the left, warm off-white
+   linen tablecloth background, muted natural colors, calm minimal composition with empty space, Korean seasonal
+   market ingredient, no text, no people, no hands
+   ```
+   요리·가공품이면 가장 알아보기 쉬운 원재료로 적어요. 장당 0.25크레딧.
+2. 결과 PNG를 받아(저장소 밖 폴더) WebP로 줄여 `sikdang/img/ing/<slug>.webp`에 둡니다(slug는 로마자, ASCII):
+   ```
+   python3 -c "import sys;from PIL import Image;im=Image.open(sys.argv[1]).convert('RGB');im.thumbnail((720,540),Image.LANCZOS);im.save(sys.argv[2],'WEBP',quality=72,method=6)" in.png sikdang/img/ing/<slug>.webp
+   ```
+3. `ing-img.json`에 `"재료": "img/ing/<slug>.webp"`를 더하고 `ing-img-prompts.tsv`에 한 줄 적어요.
+4. 접촉 인화(썸네일 모음)로 훑어 재료가 틀리거나 글자·사람·손이 나온 사진은 다시 만듭니다.

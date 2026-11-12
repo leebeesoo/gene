@@ -1,7 +1,7 @@
 // 화면 조각
 import { CONFIG } from './config.js';
 import { icon } from './icons.js';
-import { esc, enc, $$, months, rangeText, nowMonth, endingNow, checkedText, naverMap, hostOf, inSeason } from './util.js';
+import { esc, enc, months, rangeText, nowMonth, endingNow, checkedText, naverMap, hostOf, inSeason } from './util.js';
 
 export const dishHref = (regionId, n, extra = '') => `#/dish/${enc(regionId)}/${enc(n)}${extra}`;
 export const foodHref = (name) => `#/food/${enc(name)}`;
@@ -13,23 +13,47 @@ const seasonLabel = (ms, m = nowMonth()) => {
   return `${rangeText(ms)}${endingNow(ms, m) ? ' · 이달까지' : ''}`;
 };
 
-/** 요리 한 줄 (메뉴판처럼): 요리 이름 · 지역 · 제철 · 식당 수 · 대표 식당 */
-export function dishRow(d, { showRegion = true, label = '' } = {}) {
+// 재료 사진 (AI로 만든 재료 예시 이미지, data/ing-img.json: 재료 키 → 경로)
+let IMG = {};
+let imgP = null;
+export function loadImgs() {
+  if (!imgP) imgP = fetch('data/ing-img.json').then((r) => (r.ok ? r.json() : {})).catch(() => ({})).then((m) => { IMG = m || {}; return IMG; });
+  return imgP;
+}
+/** 요리의 재료 키 → 사진 경로(없으면 '') */
+export const ingKey = (d) => d.k || d.ing?.[0] || '';
+export const imgFor = (d) => IMG[ingKey(d)] || '';
+export const PHOTO_NOTE = '사진은 재료 예시 이미지예요';
+
+/** 사진 칸: 사진이 있으면 4:3 이미지, 없으면 같은 크기의 글자 칸 */
+export function photo(d, { eager = false, alt = '' } = {}) {
+  const src = imgFor(d);
+  if (!src) return `<span class="ph noimg" aria-hidden="true"><span>${esc(ingKey(d) || d.n)}</span></span>`;
+  return `<span class="ph"><img src="${esc(src)}" alt="${esc(alt)}" width="720" height="540" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async"></span>`;
+}
+
+const seasonText = (d, label) => (label || (d.ms ? seasonLabel(d.ms) : ''));
+
+/** 요리 카드 (사진 격자): 재료 사진 · 요리 이름 · 지역(또는 제철) · 식당 수 */
+export function dishCard(d, { showRegion = true, label = '' } = {}) {
   const reg = d.reg || d.region;
   const nr = d.nr ?? d.rest?.length ?? 0;
-  const sample = d.sample || d.rest?.[0]?.n || '';
-  const m = nowMonth();
-  const now = d.ms && inSeason(d.ms, m) && d.ms.length < 12;
-  return `<li><a class="drow" href="${dishHref(reg.id, d.n)}">
+  const now = d.ms && inSeason(d.ms, nowMonth()) && d.ms.length < 12;
+  const season = showRegion ? '' : seasonText(d, label);
+  return `<li class="dcard"><a href="${dishHref(reg.id, d.n)}">
+    ${photo(d)}
     <span class="dn">${esc(d.n)}</span>
-    <span class="dmeta">${showRegion ? `<b>${esc(reg.name)}</b>` : ''}${d.ms ? `<span class="num${now ? ' on' : ''}">${esc(label || seasonLabel(d.ms, m))}</span>` : (label ? `<span>${esc(label)}</span>` : '')}</span>
-    <span class="dcount num">식당 <b>${nr}</b>곳</span>
-    <span class="dsample">${esc(sample)}${nr > 1 ? ` 외 ${nr - 1}곳` : ''}</span>
+    <span class="dmeta">${showRegion ? `<b>${esc(reg.name)}</b>` : ''}${season ? `<span class="num${now ? ' on' : ''}">${esc(season)}</span>` : ''}<span class="num">식당 ${nr}곳</span></span>
   </a></li>`;
 }
-export const dishList = (items, label, opts) => (items.length
-  ? `<ul class="dlist" aria-label="${esc(label)}">${items.map((d) => dishRow(d, opts)).join('')}</ul>`
-  : '');
+/** 사진 격자. 12개(2·3·4열 모두 꽉 찬 줄)마다 광고 한 줄을 끼울 수 있음 (카드 안에는 넣지 않음) */
+export function dishList(items, label, opts = {}) {
+  if (!items.length) return '';
+  const every = opts.adEvery || 0;
+  const cells = items.map((d, i) => dishCard(d, opts)
+    + (every && (i + 1) % every === 0 && i < items.length - 1 ? `<li class="grid-ad">${adSlot('display')}</li>` : '')).join('');
+  return `<ul class="dgrid" aria-label="${esc(label)}">${cells}</ul>`;
+}
 
 export function monthBar(ms) {
   ms = months(ms);
@@ -40,19 +64,14 @@ export function monthBar(ms) {
   return `<div class="mbar" role="img" aria-label="제철 ${esc(rangeText(ms))}, 지금 ${now}월"><ol>${cells}</ol></div>`;
 }
 
-/** 광고 칸: 자리를 미리 잡고(min-height) 「광고」 라벨. kind: 'display' | 'infeed' | 'multiplex' */
+/** 광고 칸 (재미랩 공용 마크업 ../common/ads.js). kind: 'display' | 'infeed' | 'multiplex' */
 export function adSlot(kind = 'display') {
   const multiplex = kind === 'multiplex';
-  return `<div class="ad ad-${kind}" data-ad><span class="ad-label">광고</span><ins class="adsbygoogle" style="display:block" data-ad-client="${CONFIG.ADSENSE_CLIENT}" data-ad-slot="${multiplex ? CONFIG.ADSENSE_SLOT_MULTIPLEX : CONFIG.ADSENSE_SLOT}" data-ad-format="${multiplex ? 'autorelaxed' : 'auto'}"${multiplex ? '' : ' data-full-width-responsive="true"'}></ins></div>`;
+  return `<aside class="jl-ad${multiplex ? ' jl-ad--multiplex' : ''}" aria-label="광고"><small>광고</small><ins class="adsbygoogle" style="display:block" data-ad-client="${CONFIG.ADSENSE_CLIENT}" data-ad-slot="${multiplex ? CONFIG.ADSENSE_SLOT_MULTIPLEX : CONFIG.ADSENSE_SLOT}" data-ad-format="${multiplex ? 'autorelaxed' : 'auto'}"${multiplex ? '' : ' data-full-width-responsive="true"'}></ins></aside>`;
 }
-/** 새로 그린 광고 칸마다 한 번만 push (숨겨진 칸은 건너뜀) */
+/** 새로 그린 광고 칸만 한 번씩 요청 (공용 도우미에 맡김) */
 export function pushAds(root = document) {
-  if (document.documentElement.classList.contains('no-ads')) return;
-  $$('ins.adsbygoogle', root).forEach((ins) => {
-    if (ins.dataset.pushed || ins.dataset.adsbygoogleStatus || !ins.offsetParent) return;
-    ins.dataset.pushed = '1';
-    try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch { /* 광고 차단 등 */ }
-  });
+  if (window.JLAds) window.JLAds.mount(root);
 }
 
 /** 제보 링크: 폼이 있으면 미리 채운 폼, 없으면 이메일 */

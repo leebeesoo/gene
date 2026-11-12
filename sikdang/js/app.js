@@ -1,6 +1,6 @@
 // 앱 셸: 해시 라우터, 메타 갱신, 광고 push, 메뉴
 import { $, $$ } from './util.js';
-import { pushAds } from './components.js';
+import { pushAds, loadImgs } from './components.js';
 import { homeView } from './views/home.js';
 import { regionView, regionsView } from './views/region.js';
 import { foodView, dishView } from './views/food.js';
@@ -46,6 +46,7 @@ async function route() {
   const ctx = { el, params: match.params, query, title: '', description: '', jsonld: null, cleanup: null, afterMount: null, redirect: null };
   if (first) app.innerHTML = '<p class="loading-view wrap">불러오는 중…</p>';
   try {
+    await loadImgs();
     await match.view(ctx);
   } catch (err) {
     console.warn(err);

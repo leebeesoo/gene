@@ -1,7 +1,7 @@
 // 찾기: 메뉴 · 재료 · 지역 · 식당 이름. 식당이 없는 메뉴는 여기서만 「아직 식당 정보가 없어요」로 보여 줌
 import { CONFIG } from '../config.js';
 import { regions, foods, searchIndex, dishIndex, popularNow } from '../data.js';
-import { dishList, dishHref, regionHref, foodHref } from '../components.js';
+import { dishList, dishHref, regionHref, foodHref, PHOTO_NOTE } from '../components.js';
 import { icon } from '../icons.js';
 import { esc, $, norm, nowMonth } from '../util.js';
 
@@ -44,6 +44,7 @@ export async function searchView(ctx) {
     </form>
     ${q && fromFood ? `<div class="empty" style="margin-top:20px"><h3>「${esc(q)}」, 아직 식당 정보가 없어요</h3><p class="small">이 재료로 하는 메뉴를 내는 집을 공공 자료로 찾고 있어요.</p></div>` : ''}
     ${q && !total && !fromFood ? `<div class="empty" style="margin-top:20px"><h3>「${esc(q)}」 결과가 없어요</h3><p class="small">다른 이름(예: 넙치 → 광어)이나 지역 이름으로 찾아보세요.</p></div>` : ''}
+    ${dishHits.length || !q || !total ? `<p class="phnote">${PHOTO_NOTE}. 식당의 실제 음식 사진이 아니에요.</p>` : ''}
     ${dishHits.length ? `<div class="sec-head"><h2 class="sec">메뉴</h2><span class="more num">${dishHits.length}</span></div>${dishList(dishHits.slice(0, 30), '메뉴 결과')}` : ''}
     ${ingHits.length ? `<div class="sec-head"><h2 class="sec">재료로 찾기</h2></div>
       <ul class="list">${ingHits.map(({ k, nd }) => (nd
