@@ -77,10 +77,12 @@ a{color:inherit}
     "life life"
     "ad2 ad2"
     "family season"
-    "sikdang map"}
+    "sikdang map";
+  /* 광고 줄은 내용 높이(auto) — 광고가 접히면 줄이 0이 되어 빈 칸이 안 남는다 */
+  grid-template-rows:minmax(200px,auto) minmax(200px,auto) auto minmax(200px,auto) minmax(200px,auto) auto minmax(200px,auto) minmax(200px,auto)}
 .t-lotto{grid-area:lotto}.t-roots{grid-area:roots}.t-market{grid-area:market}.t-year{grid-area:year}.t-names{grid-area:names}
 .t-life{grid-area:life}.adtile{grid-area:ad}.adtile.a2{grid-area:ad2}.t-family{grid-area:family}.t-season{grid-area:season}.t-sikdang{grid-area:sikdang}.t-map{grid-area:map}
-.board.filtered{grid-template-areas:none;grid-auto-flow:row dense}
+.board.filtered{grid-template-areas:none;grid-template-rows:none;grid-auto-flow:row dense}
 .board.filtered>*{grid-area:auto}
 .board.filtered>.w{grid-column:span 2}
 .board.filtered>.adtile{grid-column:1/-1;order:99}
@@ -196,13 +198,8 @@ a{color:inherit}
 .adtile.inrow{margin-left:10px}
 .adtile .jl-ad{margin:0;padding:28px 12px 12px;min-height:280px}
 .adtile .jl-ad>small{position:absolute;top:8px;left:14px;margin:0}
-.adtile .note{display:none;padding:18px 20px 20px;height:100%;flex-direction:column;justify-content:center;gap:10px}
-.adtile.empty .note,.adtile:has(.jl-ad--empty) .note{display:flex}
-.note .lab{font-size:12px;color:var(--muted);font-weight:600}
-.note h2{font-size:18px;font-weight:750;letter-spacing:-.025em;line-height:1.3}
-.note ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
-.note li{font-size:13px;line-height:1.3;background:var(--bg);border-radius:999px;padding:5px 11px;color:var(--ink)}
-.note p{font-size:13px;color:var(--muted);line-height:1.5}
+/* 광고가 안 채워지면(심사 전·광고 차단) 타일째 접는다 */
+.adtile.empty,.adtile:has(.jl-ad--empty){display:none}
 
 /* 그리드 아래·푸터 앞 광고(공용 .jl-ad). 푸터 첫 링크와 150px 넘게 띄운다.
    모바일은 광고가 화면 높이의 30%를 넘지 않게 그리드 아래 칸을 빼고(소개 바로 뒤 칸과 거의 붙어 있어서) 데스크톱에서만 보인다 */
@@ -227,12 +224,12 @@ main>.jl-ad.end{margin:48px auto 128px}
       "ad ad ad ad"
       "life life names family"
       "ad2 ad2 ad2 ad2"
-      "season season sikdang map"}
+      "season season sikdang map";
+    grid-template-rows:minmax(216px,auto) minmax(216px,auto) auto minmax(216px,auto) auto minmax(216px,auto)}
   .board.filtered>.w{grid-column:span 2}
   .tile{padding:20px 20px 22px}
   .adtile{margin:8px 0}.adtile.inrow{margin-left:8px}
   .adtile .jl-ad{min-height:250px}
-  .adtile .note{padding:24px 28px}
   .tile .nm{font-size:20px}
   .t-lotto .nm{font-size:34px}
   .code{font-size:24px}
@@ -348,24 +345,12 @@ main>.jl-ad.end{margin:48px auto 128px}
       <aside class="jl-ad" aria-label="광고"><small>광고</small>
         <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
       </aside>
-      <div class="note">
-        <p class="lab">재미랩 소개</p>
-        <h2 id="noteH">오늘 바뀐 것</h2>
-        <ul id="noteList"><li>오늘로또 공 6개</li><li>근본 코드</li><li>나때연감 그해</li><li>이름레이더 성씨</li></ul>
-        <p>타일의 숫자와 그림은 오늘 날짜로 계산해서 매일 바뀌어요. 내일 또 들러 보세요.</p>
-      </div>
     </div>
 
     <div class="adtile a2" id="adTile2">
       <aside class="jl-ad" aria-label="광고"><small>광고</small>
         <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
       </aside>
-      <div class="note">
-        <p class="lab">이번 주 · 이달</p>
-        <h2 id="note2H">이번 주에 챙길 것</h2>
-        <ul id="note2List"><li>로또 추첨 토요일 20:35</li><li>올해 남은 주말</li><li>이달 제철</li></ul>
-        <p>로또 추첨일, 남은 주말, 이달 제철 품목은 날짜가 바뀌면 같이 바뀌어요.</p>
-      </div>
     </div>
 
     <a class="tile t-family" data-cat="fun" href="family/" aria-label="식구궁합 — 우리 가족 오행 궁합판">
@@ -584,13 +569,6 @@ main>.jl-ad.end{margin:48px auto 128px}
   if (!window.fetch) loadFonts();
   setTimeout(loadFonts, 1500);
 
-  /* 광고 타일이 비었을 때 보이는 메모: 오늘 날짜로 바뀐 것 */
-  $('noteH').textContent = T.m + '월 ' + T.d + '일, 오늘 바뀐 것';
-  $('noteList').innerHTML = ['로또 공 ' + picks.join(' '), '근본 코드 ' + $('rCode').textContent, '연감 ' + Y[0] + '년', S[0] + '씨 ' + fmt(S[1]) + '명', T.m + '월 제철 ' + SM[3]]
-    .map(function (x) { return '<li>' + x + '</li>'; }).join('');
-  $('note2H').textContent = T.m + '월, 이번 주에 챙길 것';
-  $('note2List').innerHTML = ['제' + round + '회 추첨 ' + ndp.m + '/' + ndp.d + ' 20:35', '올해 남은 주말 ' + sats + '번', T.m + '월 제철 ' + SM.slice(0, 3).join('·'), '나때연감 ' + Y[0] + '년판']
-    .map(function (x) { return '<li>' + x + '</li>'; }).join('');
 
   /* 분류 거르기 (#fun · #life · #food 바로가기도 받는다)
      거른 뒤 마지막 줄이 비면 광고 타일이 남은 칸만큼 넓어져 구멍을 메운다 */
@@ -638,7 +616,7 @@ main>.jl-ad.end{margin:48px auto 128px}
     board.querySelectorAll('.tile').forEach(function (t) { io.observe(t); });
   }
 
-  /* 광고는 공용 common/ads.js가 요청·접기를 맡는다. 광고 타일이 접히면 메모가 자리를 채운다
+  /* 광고는 공용 common/ads.js가 요청·접기를 맡는다. 광고가 접히면 타일도 숨긴다
      (:has를 못 쓰는 브라우저용으로 .empty도 붙여 둔다) */
   document.querySelectorAll('.adtile').forEach(function (t) {
     var ad = t.querySelector('.jl-ad'); if (!ad || !('MutationObserver' in window)) return;
