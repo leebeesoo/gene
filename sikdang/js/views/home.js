@@ -7,7 +7,7 @@ import { esc, $, $$, nowMonth, distKm, store } from '../util.js';
 export async function homeView(ctx) {
   const m = nowMonth();
   const [{ list, byId }, national] = await Promise.all([regions(), seasonalNational(12)]);
-  ctx.title = `${m}월 제철 음식과 잘하는 집 | 제철한끼`;
+  ctx.title = `${m}월 제철 음식과 잘하는 집 | 제철식당`;
   ctx.description = `${m}월, 지금 사는 지역에서 꼭 먹을 제철 음식과 그 음식을 잘하는 집. 협찬 없이 정부 영업 명단으로 확인한 식당만 모았어요.`;
 
   const el = ctx.el;

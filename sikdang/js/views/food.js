@@ -39,7 +39,7 @@ function overview(ctx, key, entry, byId, missing) {
   for (const x of rows) if (!seen.has(x.reg.id)) { seen.add(x.reg.id); uniq.push(x); }
   uniq.sort((a, b) => inSeason(b.ms, m) - inSeason(a.ms, m) || b.nr - a.nr);
   const nowN = uniq.filter((x) => inSeason(x.ms, m)).length;
-  ctx.title = `${key} 제철과 잘하는 집, 지역별로 | 제철한끼`;
+  ctx.title = `${key} 제철과 잘하는 집, 지역별로 | 제철식당`;
   ctx.description = `${key}는 지역마다 제철이 달라요. ${uniq.length}개 지역의 ${key} 제철 달과 ${key}를 내는 식당을 모았어요.`;
   ctx.el.innerHTML = `<section class="wrap page">
     <span class="trust">${icon('shield')}협찬 없음 · 정부 영업 명단으로 확인</span>
@@ -89,7 +89,7 @@ function detail(ctx, key, entry, byId, reg) {
   const range = rangeText(ms);
   const introText = f0.intro || `${reg.name}에서 ${range ? `${range}에 ` : ''}즐겨 먹는 ${key}예요.`;
 
-  ctx.title = `${reg.name} ${key}${range && range !== '사철' ? ` 제철(${range})` : ''} 잘하는 집 ${rest.length}곳 | 제철한끼`;
+  ctx.title = `${reg.name} ${key}${range && range !== '사철' ? ` 제철(${range})` : ''} 잘하는 집 ${rest.length}곳 | 제철식당`;
   ctx.description = `${reg.name} ${key} ${range ? `제철 ${range}. ` : ''}${introText} ${rest.slice(0, 3).map((r) => r.n).join('·')} 등 ${rest.length}곳, 협찬 없이 정부 영업 명단으로 확인.`;
   ctx.jsonld = rest.length ? {
     '@context': 'https://schema.org', '@type': 'ItemList', name: `${reg.name} ${key} 식당`,

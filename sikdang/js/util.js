@@ -79,8 +79,8 @@ export function distKm(a, b) {
 }
 
 export const store = {
-  get(k) { try { return localStorage.getItem('hanki:' + k); } catch { return null; } },
-  set(k, v) { try { if (v == null) localStorage.removeItem('hanki:' + k); else localStorage.setItem('hanki:' + k, v); } catch { /* 저장 불가 */ } },
+  get(k) { try { return localStorage.getItem('sikdang:' + k); } catch { return null; } },
+  set(k, v) { try { if (v == null) localStorage.removeItem('sikdang:' + k); else localStorage.setItem('sikdang:' + k, v); } catch { /* 저장 불가 */ } },
 };
 
 export const naverMap = (name, addr) => `https://map.naver.com/p/search/${enc(`${name} ${addr}`)}`;

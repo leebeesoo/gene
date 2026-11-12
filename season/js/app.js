@@ -15,9 +15,9 @@ const BY_K = Object.fromEntries(ITEMS.filter((i) => i.k).map((i) => [i.k, i]));
 const catLabel = (id) => CATS.find((c) => c.id === id)?.label || '';
 const MARKET = '../market/';
 const marketSearch = (it) => `${MARKET}#/search?q=${encodeURIComponent(it.q || it.n)}`;
-const HANKI = '../hanki/';
+const HANKI = '../sikdang/';
 const baseName = (it) => it.n.replace(/\(.*\)/, '').trim();
-const hankiFood = (it) => `${HANKI}#/food/${encodeURIComponent(baseName(it))}`;
+const sikdangFood = (it) => `${HANKI}#/food/${encodeURIComponent(baseName(it))}`;
 
 // 1.5px 선 아이콘(인라인)
 const I = (d, cls = 'ic') => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
@@ -374,7 +374,7 @@ function openItem(id, focusPrice = false) {
       <button type="button" class="btn ghost" data-watch="${it.id}" aria-pressed="${isWatched(it.id)}">${watchLbl(it.id)}</button>
       <button type="button" class="btn ghost" data-list="${it.id}" aria-pressed="${inList(it.id)}">${listLbl(it.id)}</button>
     </div>
-    <a class="cta-row" href="${hankiFood(it)}"><span><b>이 재료로 하는 식당 → 제철한끼</b><small>${esc(baseName(it))} 요리를 잘하는 집 찾기</small></span>${IC.arrow}</a>
+    <a class="cta-row" href="${sikdangFood(it)}"><span><b>이 재료로 하는 식당 → 제철식당</b><small>${esc(baseName(it))} 요리를 잘하는 집 찾기</small></span>${IC.arrow}</a>
     <a class="cta-row" href="${marketSearch(it)}"><span><b>남는 곳 보기 → 맛남의 광장</b><small>${esc(baseName(it))} 남는 산지·리퍼브 찾기</small></span>${IC.arrow}</a>`;
   const d = openDlg('dlg-item');
   if (c) bindChart(d, c);

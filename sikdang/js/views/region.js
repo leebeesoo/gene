@@ -16,7 +16,7 @@ export async function regionView(ctx) {
   const m = nowMonth();
   const s = seasonalIn(reg);
   store.set('region', reg.id);
-  ctx.title = `${reg.name} ${m}월 제철 음식과 잘하는 집 | 제철한끼`;
+  ctx.title = `${reg.name} ${m}월 제철 음식과 잘하는 집 | 제철식당`;
   ctx.description = `${reg.sido} ${reg.sigungu}에서 ${m}월에 먹을 제철 음식 ${s.now.length}가지와 그 음식을 내는 식당. ${s.now.slice(0, 5).map((f) => f.k).join('·')}`;
   const moreNow = s.now.length;
   const dishes = reg.dishes || [];
@@ -40,8 +40,8 @@ export async function regionView(ctx) {
 
 export async function regionsView(ctx) {
   const { list } = await regions();
-  ctx.title = '지역 전체 | 제철한끼';
-  ctx.description = `제철한끼가 조사한 ${list.length}개 시·군의 제철 음식과 식당.`;
+  ctx.title = '지역 전체 | 제철식당';
+  ctx.description = `제철식당가 조사한 ${list.length}개 시·군의 제철 음식과 식당.`;
   const groups = new Map();
   for (const r of list) { const k = r.sido; if (!groups.has(k)) groups.set(k, []); groups.get(k).push(r); }
   ctx.el.innerHTML = `<section class="wrap page">

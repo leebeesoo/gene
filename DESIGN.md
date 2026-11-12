@@ -15,7 +15,7 @@
 - 반경: 카드 12px, 버튼·입력 10px, 칩 999px.
 - 그림자 없음 → 1px `--line` 테두리. 시트·모달만 `0 8px 24px -12px rgba(0,0,0,.12)`.
 - 상단바: 불투명 바탕 + 아래 1px 선.
-- 글자 크기 단계 28 / 20 / 16 / 14 / 12, 굵기 700 / 500. 숫자는 `font-variant-numeric: tabular-nums`. 명조(Noto Serif KR)는 roots·family·birthyear·hanki 제목에만.
+- 글자 크기 단계 28 / 20 / 16 / 14 / 12, 굵기 700 / 500. 숫자는 `font-variant-numeric: tabular-nums`. 명조(Noto Serif KR)는 roots·family·birthyear·sikdang 제목에만.
 - 아이콘: 1.5px 선 SVG 한 세트(인라인). 크기 20/24.
 - 다크 모드: 같은 토큰 이름을 다크 값으로 재정의.
 - 허브에서 각 사이트는 포인트 색 점 하나로만 구분.
@@ -28,7 +28,7 @@
 | lottomap 명당로드 | lotto와 같음, accent #C8361F | accent #F06A50 |
 | market 맛남의 광장 | #F5F5F0 / #FFFFFF / #1D211D / #687066 / #E2E3DC / #3E6B3A (보조 #A8642C) | #121412 / #1A1D1A / #E9ECE6 / #8F978C / #2B2F2A / #7FAF6F |
 | season 제철장보기 | #F7F6F1 / #FFFFFF / #1F221E / #6B6F66 / #E5E3DA / #2F6B4F | #111311 / #1A1C19 / #ECECE6 / #90958B / #2C2E29 / #6DB08C |
-| hanki 제철한끼 | #F6F4F0 / #FFFFFF / #1E1C1A / #6F6A64 / #E4E0D8 / #B4532A (구이 불 색) | #121110 / #1C1A18 / #EEEAE4 / #97918A / #2E2B28 / #E07F52 |
+| sikdang 제철식당 | #F6F4F0 / #FFFFFF / #1E1C1A / #6F6A64 / #E4E0D8 / #B4532A (구이 불 색) | #121110 / #1C1A18 / #EEEAE4 / #97918A / #2E2B28 / #E07F52 |
 | roots 근본 테스트 | #F3F1EC / #FBFAF7 / #1C1C1E / #6F6B64 / #DDD8CE / #8E2B22 (인주) | #141413 / #1D1C1A / #ECE8E0 / #96918A / #2E2C29 / #C9584A |
 | family 식구궁합 | roots 바탕 공유, accent #1F5F57 | accent #5FA79B |
 | names 이름레이더 | #F6F7F9 / #FFFFFF / #15171C / #6A6F7A / #E3E5EA / #2B50D8 | #0F1013 / #181A1F / #ECEEF2 / #8C919C / #292C33 / #7A93F0 |
@@ -45,7 +45,7 @@
 | /lottomap/ | 명당로드 | 로또 1등 명당 지도와 번호 통계 |
 | /market/ | 맛남의 광장 | 버려질 농수산물이 어디서 남는지, 버려지기 전에 |
 | /season/ | 제철장보기 | 이달 제철 식재료와 지금 싼 품목 (사러 가기) |
-| /hanki/ | 제철한끼 | 이달 이 지역 제철 음식을 잘하는 집 (먹으러 가기) |
+| /sikdang/ | 제철식당 | 이달 이 지역 제철 음식을 잘하는 집 (먹으러 가기) |
 | /roots/ | 근본 테스트 | 사주와 퀴즈로 찾는 나의 근본 코드 |
 | /family/ | 식구궁합 | 우리 가족 오행 궁합판 |
 | /names/ | 이름레이더 | 내 이름, 전국에 몇 명? |

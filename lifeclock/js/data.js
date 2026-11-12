@@ -174,7 +174,7 @@
     { href: '../lottomap/', name: '명당로드', desc: '로또 1등 명당 지도와 번호 통계', icon: 'lottomap' },
     { href: '../market/', name: '맛남의 광장', desc: '버려질 뻔한 못난이 농수산물 장터', icon: 'market' },
     { href: '../season/', name: '제철장보기', desc: '이달의 제철 식재료와 지금 싼 품목', icon: 'season' },
-    { href: '../hanki/', name: '제철한끼', desc: '이달 이 지역 제철 음식 잘하는 집', icon: 'hanki' },
+    { href: '../sikdang/', name: '제철식당', desc: '이달 이 지역 제철 음식 잘하는 집', icon: 'sikdang' },
     { href: '../roots/', name: '근본 테스트', desc: '사주와 퀴즈로 찾는 나의 근본 코드', icon: 'roots' },
     { href: '../family/', name: '식구궁합', desc: '우리 가족 오행 궁합판', icon: 'family' },
     { href: '../names/', name: '이름레이더', desc: '내 이름, 전국에 몇 명?', icon: 'names' },

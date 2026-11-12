@@ -1,9 +1,10 @@
 name: Surplus data
 # 남는 지도(market) 데이터: 매일 06:17 KST(21:17 UTC) 수집 → market/data/surplus*.json 을 실행한 브랜치(예약 실행은 기본 브랜치)에 커밋
 # 배포는 Cloudflare Pages(Git 연동)가 main 푸시를 보고 자동으로 합니다(DEPLOY.md). 커밋 메시지에 skip-ci 류 표시(대괄호 skip ci·ci skip 등)를 넣지 마세요 — Cloudflare가 배포를 건너뜁니다.
+# 출시 전까지 매일 자동 실행은 꺼 둠. 출시할 때 아래 두 줄 주석을 풀면 매일 06:17 KST에 돕니다.
 on:
-  schedule:
-    - cron: '17 21 * * *'
+  # schedule:
+  #   - cron: '17 21 * * *'
   workflow_dispatch:
 permissions:
   contents: write

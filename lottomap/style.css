@@ -16,7 +16,7 @@
   --map-stroke: #FFFFFF;
   --b-y: #FBC400; --b-b: #69C8F2; --b-r: #FF7272; --b-k: #AAAAAA; --b-g: #B0D840;
   --d-lotto: #D9381E; --d-lottomap: #C8361F; --d-roots: #8E2B22; --d-family: #1F5F57; --d-names: #2B50D8;
-  --d-lifeclock: #C2456A; --d-birthyear: #B23A26; --d-hanki: #B4532A; --d-season: #2F6B4F; --d-market: #3E6B3A;
+  --d-lifeclock: #C2456A; --d-birthyear: #B23A26; --d-sikdang: #B4532A; --d-season: #2F6B4F; --d-market: #3E6B3A;
   --r-card: 12px; --r-ctl: 10px;
   --ease: cubic-bezier(.2, .8, .2, 1);
   --gutter: 16px;
@@ -30,7 +30,7 @@
     --c0: #222326; --c1: #392A26; --c2: #52352C; --c3: #744236; --c4: #9B5443; --c5: #C56B55; --c6: #E8917A;
     --map-stroke: #191A1D;
     --d-lotto: #FF5C41; --d-lottomap: #F06A50; --d-roots: #C9584A; --d-family: #5FA79B; --d-names: #7A93F0;
-    --d-lifeclock: #E07A97; --d-birthyear: #E0664E; --d-hanki: #E07F52; --d-season: #6DB08C; --d-market: #7FAF6F;
+    --d-lifeclock: #E07A97; --d-birthyear: #E0664E; --d-sikdang: #E07F52; --d-season: #6DB08C; --d-market: #7FAF6F;
     color-scheme: dark;
   }
 }
@@ -282,7 +282,7 @@ select:focus, input:focus { border-color: var(--ink); outline: none; }
 .more-item span:last-child { font-size: 12px; color: var(--ink-3); line-height: 1.45; }
 .mi-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--dot); margin-bottom: 10px; }
 .d-lotto { --dot: var(--d-lotto); } .d-lottomap { --dot: var(--d-lottomap); } .d-roots { --dot: var(--d-roots); } .d-family { --dot: var(--d-family); } .d-names { --dot: var(--d-names); }
-.d-lifeclock { --dot: var(--d-lifeclock); } .d-birthyear { --dot: var(--d-birthyear); } .d-hanki { --dot: var(--d-hanki); } .d-season { --dot: var(--d-season); } .d-market { --dot: var(--d-market); }
+.d-lifeclock { --dot: var(--d-lifeclock); } .d-birthyear { --dot: var(--d-birthyear); } .d-sikdang { --dot: var(--d-sikdang); } .d-season { --dot: var(--d-season); } .d-market { --dot: var(--d-market); }
 
 /* ---------- ads ---------- */
 .ad { position: relative; min-height: 120px; padding: 20px 0 4px; border-radius: var(--r-card); border: 1px solid var(--line); overflow: hidden; text-align: center; }

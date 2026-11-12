@@ -41,7 +41,7 @@
 
 루트의 `_headers`(Cloudflare Pages 형식)가 응답 헤더를 정합니다.
 
-- `/market/data/*`, `/hanki/data/*` — `Cache-Control: public, max-age=600` (매일 갱신되는 데이터, 10분)
+- `/market/data/*`, `/sikdang/data/*` — `Cache-Control: public, max-age=600` (매일 갱신되는 데이터, 10분)
 - `*.png` — 1년 + `immutable` (이미지를 바꿀 때는 파일 이름을 바꿉니다)
 - 그 밖의 HTML·JS·CSS는 Cloudflare Pages 기본값(배포 때마다 새로 반영)
 

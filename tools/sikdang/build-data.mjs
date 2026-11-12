@@ -1,18 +1,18 @@
 #!/usr/bin/env node
-// 제철한끼 데이터 빌드: 구글 시트 「제철한끼 검수표」 → hanki/data/*.json
+// 제철식당 데이터 빌드: 구글 시트 「제철식당 검수표」 → sikdang/data/*.json
 //
 // 읽는 곳 (둘 중 하나, 탭마다 따로 정해도 됨)
-//  (a) 웹에 게시한 CSV 주소: 환경 변수 HANKI_CSV_REGIONS · HANKI_CSV_INGREDIENTS · HANKI_CSV_STYLES
-//      · HANKI_CSV_DISHES · HANKI_CSV_RESTAURANTS (GitHub Actions용)
-//  (b) 로컬 덤프 폴더: --raw <dir> 또는 HANKI_RAW_DIR. 탭 이름(공백 없이)으로 된 .csv 또는 .json
+//  (a) 웹에 게시한 CSV 주소: 환경 변수 SIKDANG_CSV_REGIONS · SIKDANG_CSV_INGREDIENTS · SIKDANG_CSV_STYLES
+//      · SIKDANG_CSV_DISHES · SIKDANG_CSV_RESTAURANTS (GitHub Actions용)
+//  (b) 로컬 덤프 폴더: --raw <dir> 또는 SIKDANG_RAW_DIR. 탭 이름(공백 없이)으로 된 .csv 또는 .json
 //      (.json은 Sheets API values 형식 {"values":[[...]]})
 //      예) 지역.csv, 재료사전.csv, 요리방식.csv, 대표음식.csv, 식당후보.csv
 //
-// 쓰는 곳: hanki/data/regions.json, foods.json, r/<regionId>.json, meta.json
+// 쓰는 곳: sikdang/data/regions.json, foods.json, r/<regionId>.json, meta.json
 // 의존성 없음 (Node 22+). 시트에는 절대 쓰지 않음 (읽기 전용).
 //
-//   node tools/hanki/build-data.mjs --raw /path/to/hanki-raw
-//   HANKI_CSV_REGIONS=https://docs.google.com/...output=csv ... node tools/hanki/build-data.mjs
+//   node tools/sikdang/build-data.mjs --raw /path/to/sikdang-raw
+//   SIKDANG_CSV_REGIONS=https://docs.google.com/...output=csv ... node tools/sikdang/build-data.mjs
 
 import { readFile, writeFile, mkdir, rm, readdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
@@ -21,15 +21,15 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, '..', '..');
-const OUT = join(ROOT, 'hanki', 'data');
+const OUT = join(ROOT, 'sikdang', 'data');
 
 // ── 설정 ─────────────────────────────────────────────
 const TABS = {
-  regions: { env: 'HANKI_CSV_REGIONS', files: ['지역'] },
-  ingredients: { env: 'HANKI_CSV_INGREDIENTS', files: ['재료사전', '재료 사전'] },
-  styles: { env: 'HANKI_CSV_STYLES', files: ['요리방식', '요리 방식'] },
-  dishes: { env: 'HANKI_CSV_DISHES', files: ['대표음식', '지역 대표 음식', '지역대표음식'] },
-  restaurants: { env: 'HANKI_CSV_RESTAURANTS', files: ['식당후보', '식당 후보'] },
+  regions: { env: 'SIKDANG_CSV_REGIONS', files: ['지역'] },
+  ingredients: { env: 'SIKDANG_CSV_INGREDIENTS', files: ['재료사전', '재료 사전'] },
+  styles: { env: 'SIKDANG_CSV_STYLES', files: ['요리방식', '요리 방식'] },
+  dishes: { env: 'SIKDANG_CSV_DISHES', files: ['대표음식', '지역 대표 음식', '지역대표음식'] },
+  restaurants: { env: 'SIKDANG_CSV_RESTAURANTS', files: ['식당후보', '식당 후보'] },
 };
 // 공개하지 않을 식당 상태 (이 말이 들어가면 뺌)
 const REJECT_STATUS = ['보류', '탈락', '제외', '폐업', '삭제', '거절', '반려', '중복', '휴업'];
@@ -41,8 +41,8 @@ const FAMILY_AREA_M2 = 100; // 시설 총규모 100㎡ 이상 → 가족
 
 const args = process.argv.slice(2);
 const argVal = (k) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : undefined; };
-const RAW_DIR = argVal('--raw') || process.env.HANKI_RAW_DIR || join(HERE, 'raw');
-const TODAY = new Date(process.env.HANKI_TODAY || Date.now());
+const RAW_DIR = argVal('--raw') || process.env.SIKDANG_RAW_DIR || join(HERE, 'raw');
+const TODAY = new Date(process.env.SIKDANG_TODAY || Date.now());
 
 // ── 입력 ─────────────────────────────────────────────
 function parseCSV(text) {
@@ -345,7 +345,7 @@ async function main() {
   }));
   const meta = {
     generated: TODAY.toISOString().slice(0, 10),
-    sheet: '제철한끼 검수표',
+    sheet: '제철식당 검수표',
     counts: { regions: regions.length, foods: Object.keys(foods).length, regionFoods: regions.reduce((s, r) => s + r.foods.length, 0), restaurants: restTotal, drafts, moodTagged: tagged, skipped },
     skippedWhy,
     mood: { nopoYears: NOPO_YEARS, familyAreaM2: FAMILY_AREA_M2, columns: { opened: F.idx.opened >= 0, area: F.idx.area >= 0, mood: F.idx.mood >= 0 } },

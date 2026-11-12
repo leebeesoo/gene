@@ -8,7 +8,7 @@ import { esc, $, norm, months, inSeason } from '../util.js';
 export async function searchView(ctx) {
   const q = (ctx.query.get('q') || '').trim();
   const fromFood = ctx.query.get('from') === 'food';
-  ctx.title = q ? `「${q}」 찾기 | 제철한끼` : '찾기 | 제철한끼';
+  ctx.title = q ? `「${q}」 찾기 | 제철식당` : '찾기 | 제철식당';
   ctx.description = '제철 음식, 지역, 식당 이름으로 찾아보세요.';
   const [F, { list, byId }, idx, national] = await Promise.all([foods(), regions(), searchIndex().catch(() => ({ d: [], r: [] })), seasonalNational(10)]);
 

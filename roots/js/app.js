@@ -102,7 +102,7 @@ function nextTests(exclude = '') {
     { k: 'lottomap', href: '../lottomap/', icon: '地', t: '명당로드', d: '로또 명당 지도' },
     { k: 'market', href: '../market/', icon: '市', t: '맛남의 광장', d: '리퍼브 농수산물 직거래' },
     { k: 'season', href: '../season/', icon: '節', t: '제철장보기', d: '이달 제철 식재료와 지금 싼 품목' },
-    { k: 'hanki', href: '../hanki/', icon: '味', t: '제철한끼', d: '이달 이 지역 제철 음식 잘하는 집' },
+    { k: 'sikdang', href: '../sikdang/', icon: '味', t: '제철식당', d: '이달 이 지역 제철 음식 잘하는 집' },
     { k: 'family', href: '../family/', icon: '家', t: '식구궁합', d: '가족끼리 보는 궁합' },
     { k: 'names', href: '../names/', icon: '名', t: '이름레이더', d: '내 이름은 얼마나 흔할까' },
     { k: 'lifeclock', href: '../lifeclock/', icon: '春', t: '남은봄', d: '남은 시간 계산기' },

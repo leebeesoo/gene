@@ -3,7 +3,7 @@
 /market/data/*
   Cache-Control: public, max-age=600
 
-/hanki/data/*
+/sikdang/data/*
   Cache-Control: public, max-age=600
 
 # 이미지는 길게 (파일을 바꿀 때는 이름을 바꿉니다)

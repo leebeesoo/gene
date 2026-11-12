@@ -1,12 +1,12 @@
-# 제철한끼 데이터 도구
+# 제철식당 데이터 도구
 
-구글 시트 「제철한끼 검수표」(`1dXtW_7iT7rJBMPiWv6TQWcCq6b6Cf-ZIfwC8m97eyd8`)를 읽어
-`hanki/data/` 아래 JSON을 만듭니다. 시트에는 쓰지 않습니다(읽기 전용).
+구글 시트 「제철식당 검수표」(`1dXtW_7iT7rJBMPiWv6TQWcCq6b6Cf-ZIfwC8m97eyd8`)를 읽어
+`sikdang/data/` 아래 JSON을 만듭니다. 시트에는 쓰지 않습니다(읽기 전용).
 
 ```
-node tools/hanki/build-data.mjs --raw <덤프 폴더>     # 로컬 CSV/JSON 덤프
-HANKI_CSV_REGIONS=… HANKI_CSV_INGREDIENTS=… HANKI_CSV_STYLES=… \
-HANKI_CSV_DISHES=… HANKI_CSV_RESTAURANTS=… node tools/hanki/build-data.mjs   # 웹에 게시한 CSV
+node tools/sikdang/build-data.mjs --raw <덤프 폴더>     # 로컬 CSV/JSON 덤프
+SIKDANG_CSV_REGIONS=… SIKDANG_CSV_INGREDIENTS=… SIKDANG_CSV_STYLES=… \
+SIKDANG_CSV_DISHES=… SIKDANG_CSV_RESTAURANTS=… node tools/sikdang/build-data.mjs   # 웹에 게시한 CSV
 ```
 
 Node 22 이상, 의존성 없음. 덤프 원본(`raw/`)은 저장소에 넣지 않습니다.
@@ -35,7 +35,7 @@ Node 22 이상, 의존성 없음. 덤프 원본(`raw/`)은 저장소에 넣지 �
 - **지역 대표 음식**: 음식, 재료, 계절 이유(달 형식이면 제철 달로), 한 줄 소개(E열), 출처.
 - **식당 후보**: 지역, 재료, 식당 이름, 도로명주소, 내는 요리 방식, 근거 한 줄, 출처 주소, 공식 명단 일치, 상태. **메모 열은 공개하지 않음.**
   - 공개 조건: 상태에 보류·탈락·제외·폐업·삭제·거절·반려·중복·휴업이 없고, 공식 명단 일치가 「일치」로 시작.
-  - 상태가 초안·검수 중·확인 필요·빈칸이면 `d:1`(초안). `hanki/js/config.js`의 `PUBLISH_DRAFTS`가 `true`면
+  - 상태가 초안·검수 중·확인 필요·빈칸이면 `d:1`(초안). `sikdang/js/config.js`의 `PUBLISH_DRAFTS`가 `true`면
     「검수 중」 표시와 함께 보이고, `false`로 바꾸면 검수 끝난 줄만 보입니다.
   - 선택 열 `마지막 확인`(YYYY-MM-DD)이 있으면 그 날짜를, 없으면 지역 탭의 조사 날짜를 씁니다.
 
@@ -44,8 +44,8 @@ Node 22 이상, 의존성 없음. 덤프 원본(`raw/`)은 저장소에 넣지 �
 1. 시트에서 **파일 → 공유 → 웹에 게시**.
 2. 「링크」 탭에서 게시할 탭(예: 식당 후보)을 고르고 형식을 **쉼표로 구분된 값(.csv)** 으로 → 게시.
 3. 나온 주소(`…/pub?gid=…&single=true&output=csv`)를 저장소 Secrets/Variables에 넣습니다.
-   탭마다 반복: `HANKI_CSV_REGIONS`(지역), `HANKI_CSV_INGREDIENTS`(재료 사전), `HANKI_CSV_STYLES`(요리 방식),
-   `HANKI_CSV_DISHES`(지역 대표 음식), `HANKI_CSV_RESTAURANTS`(식당 후보).
+   탭마다 반복: `SIKDANG_CSV_REGIONS`(지역), `SIKDANG_CSV_INGREDIENTS`(재료 사전), `SIKDANG_CSV_STYLES`(요리 방식),
+   `SIKDANG_CSV_DISHES`(지역 대표 음식), `SIKDANG_CSV_RESTAURANTS`(식당 후보).
 4. 「변경사항이 있을 때 자동으로 다시 게시」를 켜 둡니다. 「조사할 목록」 탭은 게시하지 않아도 됩니다.
 
 게시 CSV는 누구나 볼 수 있으니 개인정보(담당자 이름, 연락처)는 게시하는 탭에 넣지 마세요.
