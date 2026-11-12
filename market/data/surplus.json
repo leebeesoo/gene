@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_at": "2026-11-11T21:48:29+09:00",
+  "generated_at": "2026-11-12T11:17:39+09:00",
   "sources": [
     {
       "id": "kamis",
@@ -21,7 +21,7 @@
       "name": "농림축산식품부 보도자료",
       "url": "https://www.mafra.go.kr/bbs/home/792/rssList.do?row=50",
       "license": "공공누리",
-      "as_of": "2026-11-04"
+      "as_of": "2026-11-11"
     },
     {
       "id": "krei",
@@ -113,6 +113,7 @@
         "note": "채소가격안정제 대상 품목 (계약 물량만) · 정부 수급대책 진행 중"
       },
       "event_ids": [
+        "2026-11-11-mafra-582233-baechu",
         "2026-11-05-kr-baechu-herald",
         "2026-11-04-mafra-582139-baechu",
         "2026-11-03-mafra-582129-baechu",
@@ -236,6 +237,34 @@
       ],
       "source_ids": [
         "news"
+      ]
+    },
+    {
+      "id": "kr-jogi",
+      "sido": null,
+      "sigungu": null,
+      "item": "조기",
+      "category": "sea",
+      "level": "surplus",
+      "metrics": {
+        "price": null,
+        "unit": null,
+        "price_basis": null,
+        "price_vs_normal_pct": null,
+        "price_vs_last_year_pct": null,
+        "volume_vs_normal_ratio": null,
+        "market": null,
+        "as_of": null
+      },
+      "support": {
+        "program": "수급대책",
+        "note": "정부·지자체 수급대책(시장격리·출하조절) 진행 중 — 보상은 해당 물량만"
+      },
+      "event_ids": [
+        "2026-11-11-mafra-582233-jogi"
+      ],
+      "source_ids": [
+        "mafra"
       ]
     },
     {
@@ -542,6 +571,32 @@
     }
   ],
   "events": [
+    {
+      "id": "2026-11-11-mafra-582233-baechu",
+      "date": "2026-11-11",
+      "type": "isolation",
+      "sido": null,
+      "sigungu": null,
+      "item": "배추",
+      "title": "농식품부, 배추 수급안정을 위해 공급과잉량 시장격리 등 대책 조기 추진!",
+      "url": "https://www.mafra.go.kr/bbs/home/792/582233/artclView.do",
+      "publisher": "농림축산식품부",
+      "verified": false,
+      "source_id": "mafra"
+    },
+    {
+      "id": "2026-11-11-mafra-582233-jogi",
+      "date": "2026-11-11",
+      "type": "isolation",
+      "sido": null,
+      "sigungu": null,
+      "item": "조기",
+      "title": "농식품부, 배추 수급안정을 위해 공급과잉량 시장격리 등 대책 조기 추진!",
+      "url": "https://www.mafra.go.kr/bbs/home/792/582233/artclView.do",
+      "publisher": "농림축산식품부",
+      "verified": false,
+      "source_id": "mafra"
+    },
     {
       "id": "2026-11-11-yeongyang-baechu",
       "date": "2026-11-11",
