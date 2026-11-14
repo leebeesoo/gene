@@ -10,7 +10,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(here, '..', '..');
 const ing = n => pathToFileURL(join(ROOT, 'sikdang', 'img', 'ing', n + '.webp')).href;
 const JOBS = [
-  { tpl: 'hub.html', out: 'og/hub.v1.jpg' },
+  { tpl: 'hub.html', out: 'og/hub.v2.jpg' },
   { tpl: 'family.html', out: 'family/og.v1.jpg' },
   { tpl: 'sikdang.html', out: 'sikdang/og.v1.jpg', q: '?imgs=' + ['gul', 'daege', 'jeoneo', 'sagwa'].map(ing).join(',') },
 ];

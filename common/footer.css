@@ -22,5 +22,8 @@
 .jl-footer .jf-body ul{margin:0;padding-left:18px}
 .jl-footer .jf-notes{font-size:15px}
 .jl-footer .jf-notes p{margin:0 0 4px}
+.jl-footer .jf-site{display:flex;flex-wrap:wrap;gap:0 18px;font-size:14px;border-top:1px solid var(--jf-line);padding-top:4px}
+.jl-footer .jf-site a{text-decoration:none;display:inline-flex;align-items:center;min-height:44px}
+.jl-footer .jf-site a:hover{text-decoration:underline}
 .jl-footer .jf-copy{font-size:14px}
 @media (prefers-reduced-motion:reduce){.jl-footer summary::after{transition:none}}

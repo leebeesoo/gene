@@ -8,13 +8,13 @@ function roleCard(r, p, on, ready) {
   const url = formUrl({ ...p, role: r.id });
   const btn = url
     ? `<a class="btn ${on ? 'primary' : ''}" href="${esc(url)}" target="_blank" rel="noopener noreferrer" data-role-link="${r.id}">${esc(r.short)} 연결 신청${icon('external', 14)}<span class="sr-only"> (새 창, 구글 폼)</span></a>`
-    : `<button type="button" class="btn" disabled aria-describedby="form-soon">신청 폼 준비 중</button>`;
+    : ''; // 폼 주소(FORM_URL)가 없으면 버튼을 그리지 않고, 위의 안내 한 줄(#form-soon)로 대신해요
   return `<article class="role ${on ? 'on' : ''}" id="role-${r.id}">
     <p class="role-k">${esc(r.short)}</p>
     <h3>${esc(r.who)}</h3>
     <p>${esc(r.what)}</p>
     <p class="role-after">${esc(r.after)}</p>
-    <div class="btns">${btn}</div>
+    ${btn ? `<div class="btns">${btn}</div>` : ''}
   </article>`;
 }
 
@@ -41,15 +41,13 @@ export async function joinView(ctx) {
       <li><b>4. 직접 결정</b><span>값·양·운송은 두 분이 정해요. 저희는 대금·수수료를 받지 않아요.</span></li>
     </ol>
 
-    ${adSlot('display')}
+    ${ready ? adSlot('display') : ''}
 
-    ${ready ? '' : `<p class="notice" id="form-soon"><span><b>신청 폼을 준비하고 있어요.</b> 지금은 아래에서 신청마다 무엇을 하는지만 볼 수 있어요. 폼이 열리면 이 페이지의 버튼이 바로 폼으로 이어져요. 급한 갈아엎기 소식은 지역농협·시군청 농정과에, 기부는 아래 푸드뱅크로 바로 연락해 주세요.</span></p>`}
-
-    <form class="join-pre" id="join-pre" aria-label="신청 폼에 미리 채울 정보">
+    ${ready ? `<form class="join-pre" id="join-pre" aria-label="신청 폼에 미리 채울 정보">
       <div class="field"><label for="jn-sido">지역</label><select id="jn-sido" name="sido"><option value="">선택 안 함</option>${REGION_NAMES.map((r) => `<option ${r === p.sido ? 'selected' : ''}>${r}</option>`).join('')}</select></div>
       <div class="field"><label for="jn-item">품목 <span class="muted">선택</span></label><input id="jn-item" name="item" value="${esc(p.item)}" maxlength="20" placeholder="예) 쪽파" autocomplete="off"></div>
       <p class="hint">고른 지역·품목은 신청 폼에 미리 채워져요.</p>
-    </form>
+    </form>` : `<p class="lead" id="form-soon">연결 신청은 곧 열려요. 지금은 이메일 <a class="link" href="mailto:gdf0620@gmail.com?subject=${encodeURIComponent('[맛남의 광장] 연결 신청')}">gdf0620@gmail.com</a>으로 품목·물량·지역과 연락처를 알려 주세요.</p>`}
 
     <div class="roles">${ROLES.map((r) => roleCard(r, p, r.id === focus, ready)).join('')}</div>
     <p class="note">신청 내용은 구글 폼(운영자 구글 시트)에 저장되고, 연결 안내와 제보 확인에만 써요. 상대에게 연락처를 전하기 전에는 꼭 따로 동의를 받아요. 지역별 신청 수는 5 미만이면 숫자를 밝히지 않아요. <a class="link" href="./privacy.html">개인정보처리방침</a> · <a class="link" href="./terms.html">이용약관</a></p>
@@ -62,7 +60,8 @@ export async function joinView(ctx) {
     ${foodbankHTML({ id: 'foodbank' })}
   </section>`;
 
-  const form = ctx.el.querySelector('#join-pre');
+  const form = ctx.el.querySelector('#join-pre'); // 폼 주소가 없으면 미리 채우기 칸도 없어요
+  if (form) {
   const sync = () => {
     const cur = { ...p, sido: form.elements.sido.value, item: form.elements.namedItem('item').value.trim() };
     if (cur.sido !== p.sido) cur.sigungu = '';
@@ -71,6 +70,7 @@ export async function joinView(ctx) {
   form.addEventListener('input', sync);
   form.addEventListener('change', sync);
   form.addEventListener('submit', (e) => e.preventDefault());
+  }
 
   const counts = await loadCounts();
   if (counts) {

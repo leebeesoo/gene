@@ -6,7 +6,7 @@
 /**
  * 연결 신청 구글 폼 주소 (응답 받는 폼의 viewform 주소).
  * 예: 'https://docs.google.com/forms/d/e/1FAIpQL.../viewform'
- * 비워두면 신청 버튼이 「신청 폼 준비 중」으로 잠기고, 설명만 보여요.
+ * 비워두면 연결 신청 화면에서 신청 버튼·미리 채우기 칸·광고를 숨기고, 이메일로 알려 달라는 안내 한 줄만 보여요.
  */
 const FORM_URL_DEFAULT = '';
 

@@ -48,6 +48,23 @@ fs.rmSync(DIST, { recursive: true, force: true });
 fs.mkdirSync(DIST, { recursive: true });
 copyDir(ROOT);
 
+// 실서버(Workers 정적 파일)는 /a/b.html 을 307로 /a/b 로 넘긴다. 검색엔진이 리디렉션 주소를
+// 대표 주소로 받지 않게, dist 안의 절대 주소(canonical·og:url·JSON-LD·사이트맵)만 확장자 없는 주소로 바꾼다.
+// 원본 파일은 그대로 둔다. index.html 은 폴더 주소(/a/)로, 검색엔진 확인 파일(google*.html)은 그대로.
+const ABS_HTML = /https:\/\/jaemilab\.net\/([^"'<>\s]*?)([^/"'<>\s]+)\.html(?=["'<\s#?])/g;
+const cleanUrl = (m, dir, name) => (/^google[0-9a-f]+$/.test(name) ? m : name === 'index' ? `${SITE}${dir}` : `${SITE}${dir}${name}`);
+const rewriteAbs = dir => {
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    const p = path.join(dir, e.name);
+    if (e.isDirectory()) { rewriteAbs(p); continue; }
+    if (!/\.(html|xml)$/.test(e.name)) continue;
+    const s = fs.readFileSync(p, 'utf8');
+    const t = s.replace(ABS_HTML, cleanUrl);
+    if (t !== s) fs.writeFileSync(p, t);
+  }
+};
+rewriteAbs(DIST);
+
 // 확인: 꼭 있어야 할 파일, 있으면 안 되는 것, 사이트맵 주소가 실제 파일과 맞는지
 const errors = [];
 for (const f of ['index.html', 'robots.txt', 'sitemap.xml', '_headers', 'ads.txt']) if (!fs.existsSync(path.join(DIST, f))) errors.push(`없음: ${f}`);
@@ -62,6 +79,8 @@ for (const m of maps) {
     urls++;
     let rel = decodeURI(loc).replace(SITE, '');
     if (rel === '' || rel.endsWith('/')) rel += 'index.html';
+    else if (!path.extname(rel)) rel += '.html';
+    if (loc.endsWith('.html')) errors.push(`${m}: 리디렉션되는 .html 주소 ${loc}`);
     if (!fs.existsSync(path.join(DIST, rel))) errors.push(`${m}: 파일 없는 주소 ${loc}`);
   }
 }

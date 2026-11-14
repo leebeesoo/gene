@@ -63,8 +63,8 @@ export async function processView(ctx) {
 
     ${adSlot('display')}
 
-    <section class="sec" aria-labelledby="h-near"><header class="sec-head"><h2 id="h-near">근처 가공할 수 있는 곳</h2><p>지역별 목록은 준비 중이에요</p></header>
-      <p class="muted small">지역별 가공센터·위탁 가공업체 목록은 준비 중이에요. 그 전에는 아래 공식 안내에서 찾아보세요.</p>
+    <section class="sec" aria-labelledby="h-near"><header class="sec-head"><h2 id="h-near">근처 가공할 수 있는 곳</h2><p>공식 안내에서 지역별로 찾는 법</p></header>
+      <p class="muted small">가까운 공동 가공 시설은 시·군 농업기술센터에 먼저 물어보는 게 가장 빨라요. 위탁 가공을 맡길 업체는 식품안전나라에서 영업 신고·등록이 되어 있는지 확인한 뒤 연락하세요.</p>
       <div class="place-grid">${PROC_PLACES.map((x) => `<article class="place">
         <h3>${esc(x.title)}</h3><p>${esc(x.body)}</p><p class="muted small">${esc(x.hint)}</p>
         <a class="btn" href="${esc(x.link.href)}" target="_blank" rel="noopener noreferrer">${esc(x.link.label)}${icon('external', 14)}<span class="sr-only"> (새 창)</span></a></article>`).join('')}</div>

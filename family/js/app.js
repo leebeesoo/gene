@@ -558,7 +558,7 @@ function renderHow() {
     <h3>5. 가족 역할</h3>
     <ul>${ROLE_RULES.map(r => `<li><b>${r.name}</b>: ${r.rule}</li>`).join('')}</ul>
     <p>점수가 같으면 역할을 덜 맡은 사람, 그다음 목록 순서로 정해요. 조건을 만족하는 사람이 없으면 "해당 없음".</p>
-    <p class="sub">자세한 출처는 <a href="SOURCES.md">SOURCES.md</a>.</p>`;
+    <p class="sub">자세한 출처는 <a href="sources.html">출처 전체 보기</a>.</p>`;
 }
 
 /* ── 공유받은 링크 ────────────────────────────────── */

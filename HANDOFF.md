@@ -35,6 +35,13 @@
 - ~~GA4 넣기~~ — GTM(GTM-MLZPXGS7)으로 전 페이지 설치 완료(2026-11-14). GA4는 GTM 안에서 설정
 - 남은 확인: 제철식당 어색한 메뉴 이름(굴요리 등), 명당로드 목록 광고 여백
 
+## 2026-11-14 애드센스 심사 대비: 속마음 칠판 공개 목록에서 빼기 (사장님 결정)
+심사 동안 `/donkey/`(속마음 칠판)를 허브·푸터·소개·사이트맵에서 뺐다. 파일은 그대로 배포되어 직접 주소로는 열린다.
+- 뺀 곳: 허브 타일(`index.html`, 14→13가지·운세·재미 6→5, 격자 재배치), `common/footer.js` SERVICES(4번째 값 `true` = 숨김), 루트 `about.html`·`404.html` 목록, `privacy.html`·`terms.html`의 칠판 링크(문장은 남김), `tools/seo/sitemap.mjs`의 `HOLD`, donkey 4쪽에 noindex.
+- **승인 뒤 되돌리기:** ① `common/footer.js` donkey 줄의 `, true` 삭제 ② `tools/seo/sitemap.mjs`의 `HOLD`를 `new Set([])`로 ③ `donkey/index.html`의 noindex 두 줄 삭제, `donkey/about·privacy·rules.html`은 `noindex,follow`→`index,follow` ④ `index.html`에 donkey 타일·JSON-LD 항목을 다시 넣고 13→14, 운세·재미 5→6, 격자는 git 기록(이 변경 직전)의 grid-template-areas로 ⑤ `about.html`·`404.html` 목록 줄, `privacy.html`·`terms.html` 링크 복구, 루트 페이지 「13가지」→「14가지」 ⑥ `node tools/seo/sitemap.mjs` → `node tools/seo/build.mjs`. 칠판 화면에는 승인 뒤에도 광고를 넣지 않는다.
+- 사이트 이름 통일(구글 사이트 이름 기능): 공개 HTML 전부 `og:site_name`=「재미랩」(서비스 이름은 `<title>`에), 생성기 `tools/silver/build.mjs`·`tools/quotes/build.mjs`도 고침(`tools/seo/sources.mjs`는 privacy.html 머리를 따라감). 허브 WebSite JSON-LD에 `alternateName` ["재미랩 생활 도구","jaemilab.net"]. 새 페이지를 만들 때도 og:site_name은 「재미랩」. 공유 이미지 `og/hub.v2.jpg`(13가지, 칠판 뺌; 되돌릴 때 `tools/seo/og/hub.html`에 칠판 줄 넣고 v3로).
+- 같은 날 함께 한 것: 나이별 혜택 달력 나이 페이지 색인을 60·65·70세 3쪽으로 줄임(66·75·80은 70세와 본문 89~93% 같음, `tools/silver/build.mjs` INDEXED_AGES). 오늘로또·식구궁합 첫 화면에 정적 설명(번호 만드는 법·등수별 확률 / 상생·상극·육합·충 표), 허브 소개 문단, 사기 유형 목록 페이지 출처 추가.
+
 ## 사장님 할 일 — 진행 현황 (2026-11-14 기준)
 
 ### 끝난 것 ✅
@@ -43,10 +50,15 @@
 - [x] 커스텀 도메인 `jaemilab.net` 연결
 - [x] GA4: GTM(GTM-MLZPXGS7) 안에 GA4(G-HG739JDTS6) 연결돼 있음. 실제 사이트에서 수집 요청 나가는 것 확인
 - [x] 문의 이메일: gdf0620@gmail.com (전 서비스 반영)
-- [x] 구글 서치콘솔 확인 파일 받음 → 사이트에 올림(`google0257301bb46d3493.html`, Worker가 리다이렉트 없이 응답). **배포 뒤 서치콘솔에서 「확인」 누르기 → Sitemaps에 `sitemap.xml` 제출**
-- [x] 네이버 서치어드바이저 태그 받음 → 허브 `<head>`에 넣음. **배포 뒤 「소유확인」 누르기 → 요청 → 사이트맵 제출 `https://jaemilab.net/sitemap.xml`**
+- [x] 구글 서치콘솔 확인 파일 받음 → 사이트에 올림(`google0257301bb46d3493.html`, Worker가 리다이렉트 없이 응답). **확인 완료 (2026-11-14), 사이트맵 제출**
+- [x] 네이버 서치어드바이저 태그 받음 → 허브 `<head>`에 넣음. **확인 완료 (2026-11-14), 사이트맵 제출**
 
 ### 남은 것 ⏳
+- [ ] **애드센스 가입** (adsense.google.com, 사이트 `jaemilab.net`, 결제 프로필 이름 = 신분증 이름) → 게시자 ID(pub-…) Claude에게. **검토 요청은 Claude가 「지금」이라고 할 때** (서치콘솔 색인 뒤, 보통 1~3주). 공략: `docs/adsense-strategy.md`
+- [ ] **소원명당(가칭, `/wish/`) 이름 정하기** — 추천: 소원명당 / 소원지도 / 빌러가는길 중 고르기
+- [ ] **소원명당 TourAPI 키** (선택, 사진·주소 보강용): data.go.kr에서 「한국관광공사_국문 관광정보 서비스」(15101578) 활용신청 → 같은 일반 인증키라 `DATA_GO_KR_KEY` 하나로 됨
+- [ ] **소원명당 문구·사진 검토** — 1차가 만들어지면 미리보기로 보고 고칠 곳 알려 주기
+- [ ] **(선택) 「맛남의 광장」 이름 바꿀지** — SBS 예능과 같은 이름이라 혼동·상표 위험 (`docs/brand-name.md`)
 - [ ] 애드센스: adsense.google.com 가입(jaemilab.net) → 게시자 ID(pub-…) Claude에게 전달 → Claude가 넣고 배포 → 검토 요청 (`docs/adsense-setup.md`)
 - [ ] 공공데이터포털 인증키: GitHub Settings → Secrets → Actions → `DATA_GO_KR_KEY` (활용신청 3개: 15141809, 15141808, 15141818)
 - [ ] KAMIS 키: `KAMIS_CERT_KEY`, `KAMIS_CERT_ID` (같은 곳)

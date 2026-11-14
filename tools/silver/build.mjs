@@ -21,6 +21,10 @@ const BASE = 'https://jaemilab.net/silver/'; // 사이트 주소(2026-11-14 도�
 const Y = data.meta.baseYear;
 const CHECKED = data.meta.checked;
 const AGES = []; for (let a = 60; a <= 85; a++) AGES.push(a);
+// 나이 페이지는 26개가 거의 같아서, 새 항목이 시작되는 대표 나이만 검색에 싣는다.
+// 2026-11-14: 75·80·66세는 70세와 본문이 89~93% 같아 noindex로 돌림(애드센스 「중복·얇은 페이지」 대비). 대표 나이 60·65·70만 색인.
+// 나머지는 noindex,follow(사람은 그대로 보고 링크도 따라감) + 사이트맵 제외(tools/seo/sitemap.mjs가 noindex를 뺌) + 광고 없음.
+const INDEXED_AGES = new Set([60, 65, 70]);
 const items = data.items;
 const byId = Object.fromEntries(items.map(i => [i.id, i]));
 
@@ -29,7 +33,7 @@ const LOGO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-
 const ICON_MOON = '<svg class="ico ico-s" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>';
 const AD = '<aside class="jl-ad" aria-label="광고"><small>광고</small><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></aside>';
 
-function head({ title, desc, path, up, ogTitle, ogDesc, jsonld, extra = '' }) {
+function head({ title, desc, path, up, ogTitle, ogDesc, jsonld, extra = '', noindex = false }) {
   const url = BASE + path;
   return `<!doctype html>
 <html lang="ko">
@@ -39,11 +43,11 @@ ${GTM_HEAD}
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
-<meta name="theme-color" content="#F7F6F2" media="(prefers-color-scheme: light)">
+${noindex ? '<meta name="robots" content="noindex,follow">\n' : ''}<meta name="theme-color" content="#F7F6F2" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#121211" media="(prefers-color-scheme: dark)">
 <link rel="canonical" href="${url}">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="${NAME}">
+<meta property="og:site_name" content="재미랩">
 <meta property="og:title" content="${esc(ogTitle || title)}">
 <meta property="og:description" content="${esc(ogDesc || desc)}">
 <meta property="og:url" content="${url}">
@@ -256,7 +260,7 @@ function buildAge(a) {
     title: `${a}세(${by}년생) 받을 수 있는 혜택·검진 — ${Y}년 기준 | ${NAME}`,
     desc, path: `age/${a}/`, up,
     ogTitle: `${a}세(${by}년생)가 올해 받을 수 있는 혜택·검진`,
-    jsonld
+    jsonld, noindex: !INDEXED_AGES.has(a)
   }) + `
 <main id="main" tabindex="-1">
   <div class="wrap">
@@ -301,7 +305,7 @@ function buildAge(a) {
     </section>
 
     ${methodBox(up)}
-    ${AD}
+    ${INDEXED_AGES.has(a) ? AD : ''}
   </div>
 </main>
 ` + foot(up, FOOT_NOTE);

@@ -2,7 +2,7 @@
 // robots.txt · sitemap.xml(색인) · sitemap-<서비스>.xml 만들기. 의존성 없음.
 //   node tools/seo/sitemap.mjs [YYYY-MM-DD]   (날짜를 빼면 오늘, lastmod로 쓴다)
 // 공개 HTML(tools/seo/gtm.mjs의 publicHtml과 같은 제외 규칙) 중 noindex가 아닌 페이지만 싣는다.
-// index.html은 폴더 주소(끝 슬래시)로 쓴다. 결과는 저장소 루트에 쓰고, 빌드(tools/seo/build.mjs)가 dist/로 복사한다.
+// index.html은 폴더 주소(끝 슬래시)로 쓴다. 루트 안내 페이지(about·contact·privacy·terms.html)는 sitemap-hub.xml에 들어간다. 결과는 저장소 루트에 쓰고, 빌드(tools/seo/build.mjs)가 dist/로 복사한다.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -13,14 +13,19 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const day = process.argv[2] || new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10); // 한국 날짜
 if (!/^\d{4}-\d{2}-\d{2}$/.test(day)) throw new Error('날짜 형식: YYYY-MM-DD');
 
+// 애드센스 심사 동안 사이트맵에서 빼는 서비스(페이지는 그대로 배포, 직접 주소로는 열림). 승인 뒤 비우면 다시 실린다. HANDOFF.md 참고
+const HOLD = new Set(['donkey']);
 // 서비스 순서 = 허브 순서와 비슷하게. 루트 index.html은 'hub'.
 const groups = new Map();
 for (const f of publicHtml(ROOT).sort()) {
   const rel = path.relative(ROOT, f).split(path.sep).join('/');
+  if (/^google[0-9a-f]+\.html$/.test(rel) || rel === '404.html') continue; // 검색엔진 확인 파일·없는 주소용 페이지
   const html = fs.readFileSync(f, 'utf8');
   if (/<meta name="robots" content="[^"]*noindex/i.test(html)) continue;
   if (/http-equiv="refresh"/i.test(html)) continue;
+  if (/^google[0-9a-f]+\.html$/.test(rel)) continue; // Search Console 소유 확인 파일
   const svc = rel.includes('/') ? rel.split('/')[0] : 'hub';
+  if (HOLD.has(svc)) continue;
   const loc = SITE + rel.replace(/(^|\/)index\.html$/, '$1');
   if (!groups.has(svc)) groups.set(svc, []);
   groups.get(svc).push(loc);

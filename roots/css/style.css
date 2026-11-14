@@ -504,3 +504,23 @@ body.has-sticky .jl-footer { padding-bottom: 120px; }
 .skip-notice p { margin: 0; font-size: 15px; color: var(--ink-2); }
 .skip-notice .btn { justify-self: start; }
 .formula .f-skip { background: var(--surface); padding: 8px 10px; border-radius: 8px; }
+
+/* 서비스 안내 글 (정적 HTML, 앱 아래) */
+.svc-guide { margin-top: 56px; padding-top: 32px; padding-bottom: 8px; border-top: 1px solid var(--line); font-size: 16px; line-height: 1.75; color: var(--ink); }
+.svc-guide > * { max-width: 680px; }
+.svc-guide h2 { font-family: var(--serif); font-size: 20px; font-weight: 700; line-height: 1.4; letter-spacing: -.02em; margin: 0 0 8px; }
+.svc-guide h3 { font-size: 16px; font-weight: 700; line-height: 1.5; margin: 32px 0 8px; }
+.svc-guide p, .svc-guide ul, .svc-guide ol { margin: 0 0 12px; }
+.svc-guide ul, .svc-guide ol { padding-left: 20px; }
+.svc-guide li { margin: 4px 0; }
+.svc-guide .lead, .svc-guide .note { color: var(--muted); }
+.svc-guide .note { font-size: 14px; }
+.svc-guide a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.svc-faq details { border-bottom: 1px solid var(--line); }
+.svc-faq details:first-child { border-top: 1px solid var(--line); }
+.svc-faq summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 52px; padding: 12px 0; font-weight: 500; }
+.svc-faq summary::-webkit-details-marker { display: none; }
+.svc-faq summary::after { content: ""; flex: none; width: 8px; height: 8px; margin-right: 4px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: translateY(-3px) rotate(45deg); transition: transform .15s; }
+.svc-faq details[open] summary::after { transform: translateY(2px) rotate(-135deg); }
+.svc-faq details p { margin: 0 0 16px; }
+body.in-flow .svc-guide { display: none; }

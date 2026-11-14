@@ -121,7 +121,7 @@ ${noindex ? '<meta name="robots" content="noindex,follow">\n' : ''}<meta name="t
 <meta name="theme-color" content="#121113" media="(prefers-color-scheme: dark)">
 <link rel="canonical" href="${canonical}">
 <meta property="og:type" content="${ogType}">
-<meta property="og:site_name" content="${BRAND}">
+<meta property="og:site_name" content="재미랩">
 <meta property="og:title" content="${esc(ogTitle || title)}">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:url" content="${canonical}">
@@ -265,6 +265,9 @@ function toc(list) {
   return `<details class="toc" open><summary>이 페이지의 명언 <span class="num">${list.length}</span>개</summary><ol>${list.map(q => `<li><a href="#${q.id}">${esc(shortText(q, 34))}</a> <span class="toc-a">${esc(persons[q.author].name)}</span></li>`).join('')}</ol></details>`;
 }
 
+// 태그를 뺀 본문 한글 글자 수(광고를 둘 만큼 글이 있는지 가늠)
+function koChars(html) { return (html.replace(/<[^>]+>/g, '').match(/[가-힣]/g) || []).length; }
+
 function listWithAds(list, up, fullFn) {
   return list.map((q, i) => quoteBlock(q, up, { full: fullFn(q) }) + (i === 5 && list.length > 9 ? '\n' + AD : '')).join('\n');
 }
@@ -365,7 +368,7 @@ for (const p of personPages) {
   const title = `${p.name} 명언 ${list.length}개 — 원문과 출처까지`;
   const desc = `${p.name}(${p.name_orig})의 명언을 ${p.works ? p.works.split(',')[0] + ' 등 ' : ''}원문과 함께 모았어요. 우리말 번역은 원문에서 직접 옮겼고, ${ok}개는 원전에서 문장을 확인했어요.`;
   const life = p.born || p.died ? `<span class="num">${esc(p.born)}${p.born && p.died ? ' ~ ' : ''}${esc(p.died)}</span>` : '';
-  const body = `<div class="wrap">
+  const bodyRaw = `<div class="wrap">
 ${crumbs([['인물별', null], [p.name, null]], up)}
 <header class="g-head tpl-book">
   <p class="eyebrow">인물별 명언</p>
@@ -381,11 +384,13 @@ ${hero(f, 'book')}
 </section>
 ${toc(ordered)}
 <section class="qlist" aria-label="${esc(p.name)} 명언 목록">
-${listWithAds(ordered, up, q => homeOf(q) === rel)}
+${ordered.map(q => quoteBlock(q, up, { full: homeOf(q) === rel })).join('\n')}
 </section>
-${AD}
+<!--AD-->
 <section class="more"><h2>다른 인물</h2>${chips(personPages.filter(x => x !== p).map(x => [x.name, `p/${x.id}/`, quotes.filter(q => q.author === x.id).length]), up)}</section>
 </div>`;
+  // 인물 페이지는 글이 짧은 편이라 광고는 목록 아래 1칸만, 그것도 본문 한글이 1,500자를 넘을 때만 둔다(얇은 페이지에 광고 금지)
+  const body = bodyRaw.replace('<!--AD-->', koChars(bodyRaw) > 1500 ? AD : '');
   write(rel, page({ rel, depth: 2, title, desc, ogImage: cardRel(f.id), bodyClass: 'tpl-book',
     jsonld: { '@context': 'https://schema.org', '@graph': [
       { '@type': 'CollectionPage', name: title, description: desc, url: absUrl(rel), inLanguage: 'ko', dateModified: TODAY,
