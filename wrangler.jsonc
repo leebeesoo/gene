@@ -1,0 +1,16 @@
+// 혹시나랩 사이트 전체를 Cloudflare Workers(정적 파일)로 배포하는 설정.
+// Cloudflare 빌드 설정: Build command = node tools/seo/build.mjs, Deploy command = npx wrangler deploy
+// name은 Cloudflare에 만든 Worker 이름과 같아야 한다.
+// 검색엔진 확인 파일(google*.html)은 workers/site/index.js가 먼저 받아 리다이렉트 없이 답한다.
+{
+  "name": "gene",
+  "main": "workers/site/index.js",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/google*"]
+  }
+}

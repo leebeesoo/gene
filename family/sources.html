@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MLZPXGS7');</script>
+<!-- End Google Tag Manager -->
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>식구궁합 — 출처와 계산 근거</title>
+<meta property="og:site_name" content="혹시나랩">
+<meta name="description" content="식구궁합의 사주 기둥, 오행 생극, 천간합·지지 합충형파해 표의 출처와 점수 계산 근거.">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://jaemilab.net/family/sources.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='4' y='4' width='56' height='56' rx='10' fill='%231F5F57'/%3E%3Cpath d='M32 18L46 42H18Z' fill='none' stroke='%23FBFAF7' stroke-width='3' stroke-linejoin='round'/%3E%3Ccircle cx='32' cy='18' r='6' fill='%23FBFAF7'/%3E%3Ccircle cx='46' cy='42' r='6' fill='%23FBFAF7'/%3E%3Ccircle cx='18' cy='42' r='6' fill='%23FBFAF7'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&display=swap">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="../common/footer.css">
+<link rel="stylesheet" href="../common/ads.css">
+<style>.doc{max-width:720px;margin:0 auto;padding:24px 16px 40px}.doc h1{font-family:var(--serif);font-weight:700;font-size:28px;margin:8px 0 6px}.doc h2{font-size:20px;margin:26px 0 6px}.doc p,.doc li{color:var(--ink-2);font-size:16px}.doc a{color:var(--accent)}</style>
+<style>
+.sources h1{margin-bottom:6px}
+.sources .src-meta{font-size:14px;color:var(--muted,#6b6b70);margin:0 0 20px}
+.sources h2{margin-top:32px}
+.sources h3{font-size:16px;font-weight:700;margin:20px 0 6px}
+.sources ul,.sources ol{padding-left:20px;margin:0 0 12px}
+.sources li{margin:0 0 6px;line-height:1.7}
+.sources li ul,.sources li ol{margin:6px 0 0}
+.sources p{line-height:1.7}
+.sources code{font-size:.9em;padding:1px 5px;border-radius:6px;border:1px solid var(--line,#e2e0db);word-break:break-all}
+.sources a{overflow-wrap:anywhere}
+.sources blockquote{margin:0 0 12px;padding:0 0 0 12px;border-left:2px solid var(--line,#e2e0db);color:var(--muted,#6b6b70)}
+.sources .md-table{overflow-x:auto;margin:0 0 16px;-webkit-overflow-scrolling:touch}
+.sources table{border-collapse:collapse;width:100%;min-width:480px;font-size:14px;font-variant-numeric:tabular-nums}
+.sources th,.sources td{text-align:left;vertical-align:top;padding:8px;border-bottom:1px solid var(--line,#e2e0db);line-height:1.55}
+.sources th{font-weight:700;white-space:nowrap}
+.sources .src-back{margin-top:32px;font-size:15px}
+</style>
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MLZPXGS7"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<header class="top"><div class="top-in"><a class="brand" href="./">식구궁합</a></div></header>
+<main class="doc sources">
+  <h1>식구궁합 — 출처와 계산 근거</h1>
+  <p class="src-meta">식구궁합에서 쓰는 자료의 출처, 확인한 날짜, 계산에 넣은 가정을 정리했어요. 틀린 곳은 <a href="../contact.html">문의</a>로 알려 주세요.</p>
+<p>식구궁합은 전통 명리(命理) 이론의 표준 표를 그대로 옮겨 재미로 보여 주는 도구입니다. 과학적 예측이 아닙니다.</p>
+<h2>1. 사주 기둥 (년·월·일·시주)</h2>
+<ul><li>계산은 <code>../roots/js/saju.js</code>(근본 테스트 엔진)에 위임합니다. <code>js/saju-adapter.js</code>가 그 API를 이 앱의 인터페이스 <code>computeSaju(y, m, d, hour, minute, { lunar, leap }) → { year, month, day, hour }</code>로 맞춥니다.</li><li>roots 엔진(v2)의 기준: 입춘·12절의 정확한 절입 시각(태양 겉보기 황경, VSOP87 절삭식), 역사적 한국 표준시·서머타임(IANA tz <code>Asia/Seoul</code>), 동경 127.5° 지방시 보정, 오호둔(월간)·오서둔(시간), 율리우스 적일 기반 일진(2000-01-01 = 戊午). 음력은 한국천문연구원 음력(1900–2050).</li><li>roots 엔진을 불러오지 못하면 평균 절입일 근사로 대체하며, 바닥글에 그 사실을 표시합니다.</li></ul>
+<h2>2. 오행 상생·상극</h2>
+<ul><li>상생(相生): 木生火, 火生土, 土生金, 金生水, 水生木</li><li>상극(相剋): 木剋土, 土剋水, 水剋火, 火剋金, 金剋木</li><li>천간 오행: 甲乙 木, 丙丁 火, 戊己 土, 庚辛 金, 壬癸 水 / 지지 오행: 寅卯 木, 巳午 火, 辰戌丑未 土, 申酉 金, 亥子 水</li><li>출처: 오행 생극은 『연해자평』·『삼명통회』 등 명리 고전과 일반 명리 입문서에 공통된 표준 내용입니다.</li></ul>
+<h2>3. 천간합 (天干五合)</h2>
+<p>甲己合土 · 乙庚合金 · 丙辛合水 · 丁壬合木 · 戊癸合火 — 명리 고전의 천간합(化氣) 표준 표.</p>
+<h2>4. 지지 관계 표 (地支 合·沖·刑·破·害)</h2>
+<div class="md-table"><table><thead><tr><th>관계</th><th>짝</th><th>비고</th></tr></thead><tbody><tr><td>육합(六合)</td><td>子丑(土) · 寅亥(木) · 卯戌(火) · 辰酉(金) · 巳申(水) · 午未(火/土)</td><td>午未합의 화(化)오행은 문헌마다 火 또는 土</td></tr><tr><td>삼합(三合)</td><td>申子辰 水局 · 亥卯未 木局 · 寅午戌 火局 · 巳酉丑 金局</td><td>두 글자만 있으면 반합(半合)으로 계산</td></tr><tr><td>육충(六沖)</td><td>子午 · 丑未 · 寅申 · 卯酉 · 辰戌 · 巳亥</td><td>서로 정반대(6칸)</td></tr><tr><td>형(刑)</td><td>寅巳申 무은지형(無恩之刑) · 丑戌未 지세지형(持勢之刑) · 子卯 무례지형(無禮之刑) · 辰辰 午午 酉酉 亥亥 자형(自刑)</td><td>삼형은 짝 단위(寅巳, 巳申, 申寅 / 丑戌, 戌未, 未丑)로 셈</td></tr><tr><td>육파(六破)</td><td>子酉 · 丑辰 · 寅亥 · 卯午 · 巳申 · 未戌</td><td></td></tr><tr><td>육해(六害·穿)</td><td>子未 · 丑午 · 寅巳 · 卯辰 · 申亥 · 酉戌</td><td></td></tr></tbody></table></div>
+<ul><li>출처: 『삼명통회(三命通會)』·『연해자평(淵海子平)』의 지지 합·충·형·파·해 논의에서 전해지는 표준 표로, 현대 명리 입문서와 위키백과(한국어·중국어) 「지지(地支)」 항목에 실린 표와 같은 내용입니다. 표 자체는 문헌 간 이견이 거의 없고, 이견이 있는 부분(午未합의 오행)은 위에 적었습니다.</li><li>겹침: 한 쌍이 여러 관계에 동시에 해당할 수 있습니다(巳申 = 합·형·파, 寅亥 = 합·파, 寅巳 = 형·해, 寅申·丑未 = 충·형). 식구궁합은 해당되는 항목을 모두 더합니다.</li><li>단위 테스트: <code>tests/relations.test.mjs</code> (<code>node --test family/tests/relations.test.mjs</code>).</li></ul>
+<h2>5. 띠</h2>
+<p>띠 = 년주 지지(子 쥐 … 亥 돼지). 명리 관례대로 <strong>입춘</strong> 기준이며, 설날 기준으로 띠를 세는 민간 관습과 1~2월생은 다를 수 있습니다. 띠 궁합은 위 지지 관계 표를 년지끼리 적용한 것입니다(전통 띠 궁합의 &quot;삼합띠·육합띠·원진/충띠&quot; 중 원진은 넣지 않았습니다).</p>
+<h2>6. 이 앱이 정한 것 (전통 표가 아닌 부분)</h2>
+<p>다음은 전통 문헌의 정해진 값이 아니라 식구궁합이 투명하게 정한 규칙이며, 화면의 &quot;어떻게 계산했나요?&quot;에 그대로 표시됩니다.</p>
+<ul><li>점수 가중치 (<code>js/relations.js</code>의 <code>W</code>): 기본 50점, 일간 상생 +14 / 같은 오행 +6 / 상극 −12, 천간합 +8, 일지 육합 +10 · 삼합 +7 · 같은 글자 +2 · 충 −10 · 형 −7 · 자형 −4 · 파 −4 · 해 −5, 띠 육합 +6 · 삼합 +4 · 같은 띠 +2 · 충 −6 · 형 −4 · 자형 −2 · 파 −2 · 해 −3, 5~98점으로 제한.</li><li>오행 밸런스: 천간·지지 표면 글자만 셈(지장간 제외). 10% 미만이면 &quot;부족&quot;.</li><li>가족 역할: 통관(通關) 개념(상극 사이를 생으로 잇는 오행)으로 중재자, 극하는 수로 추진자, 생하는 수로 분위기메이커, 생 받는 수로 &quot;사랑받는 사람&quot;.</li><li>부족한 기운의 연상(계절·색·방위)은 오행 배속표(오행과 계절·방위·오방색을 잇는 전통 배속)에서 가져왔고, &quot;채워 보기&quot; 팁은 재미용 제안입니다.</li></ul>
+<h2>7. 명절 날짜</h2>
+<p>설날(음력 1월 1일)·추석(음력 8월 15일)의 양력 날짜, 한국천문연구원 월력요항 기준:</p>
+<div class="md-table"><table><thead><tr><th>연도</th><th>설날</th><th>추석</th></tr></thead><tbody><tr><td>2025</td><td>1월 29일</td><td>10월 6일</td></tr><tr><td>2026</td><td>2월 17일</td><td>9월 25일</td></tr><tr><td>2027</td><td>2월 7일</td><td>9월 15일</td></tr><tr><td>2028</td><td>1월 27일</td><td>10월 3일</td></tr><tr><td>2029</td><td>2월 13일</td><td>9월 22일</td></tr><tr><td>2030</td><td>2월 3일</td><td>9월 12일</td></tr></tbody></table></div>
+<p>명절 14일 전부터 다음 날까지 &quot;명절 모드&quot; 배너를 보여 줍니다. (roots 엔진의 <code>lunarToSolar</code>로 교차 검증)</p>
+  <p class="src-back"><a href="./">← 식구궁합 첫 화면</a> · <a href="privacy.html">개인정보처리방침</a> · <a href="../">혹시나랩 홈</a></p>
+</main>
+<footer class="jl-footer" data-site="family" data-home="../">
+  <div data-notes><p>전통 명리 이론을 재미로 옮긴 엔터테인먼트예요. 과학적 근거는 없어요.</p></div>
+  <div data-sources>
+    <ul>
+      <li>사주 기둥: <a href="../roots/">근본 테스트</a> 만세력 엔진 (한국천문연구원 음력, IANA tz <code>Asia/Seoul</code>)</li>
+      <li>오행 생극·천간합·지지 합충형파해: 『연해자평』·『삼명통회』 등 명리 고전의 표준 표</li>
+      <li>전체 목록: <a href="sources.html">출처 전체 보기</a></li>
+    </ul>
+  </div>
+  <div data-links><a href="./">식구궁합</a><a href="../roots/">근본 테스트</a><a href="privacy.html">개인정보처리방침</a></div>
+</footer>
+<script src="../common/footer.js" defer></script>
+<script src="../common/ads.js" defer></script>
+</body>
+</html>

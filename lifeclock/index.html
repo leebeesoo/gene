@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MLZPXGS7');</script>
+<!-- End Google Tag Manager -->
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>인생 시계 · 남은 시간 계산기 | 남은봄</title>
+<meta name="description" content="생년월일과 성별만 넣으면 2024년 생명표로 남은 주말·명절·벚꽃 횟수와 기대수명을 세어 드려요. 인생을 주 단위 달력으로 보고, 만 나이와 살아온 날도 한 번에 확인하세요.">
+<meta name="keywords" content="인생시계, 남은 시간 계산기, 기대수명 계산, 기대여명, 생명표, 만 나이 계산기, 정신 나이 테스트, 인생 달력, 살아온 날 계산, 10000일 계산">
+<meta name="theme-color" content="#F7F5F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121113" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://jaemilab.net/lifeclock/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="혹시나랩">
+<meta property="og:title" content="벚꽃, 앞으로 몇 번 더 볼까? — 남은봄">
+<meta property="og:description" content="통계청 생명표로 세어 본 나의 남은 주말·명절·벚꽃. 오늘은 내 인생의 몇 번째 날일까?">
+<meta property="og:url" content="https://jaemilab.net/lifeclock/">
+<meta property="og:image" content="https://jaemilab.net/lifeclock/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="남은봄 — 주 단위 인생 달력과 남은 벚꽃 횟수">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="벚꽃, 앞으로 몇 번 더 볼까? — 남은봄">
+<meta name="twitter:description" content="통계청 생명표로 세어 본 나의 남은 주말·명절·벚꽃. 오늘은 내 인생의 몇 번째 날일까?">
+<meta name="twitter:image" content="https://jaemilab.net/lifeclock/og.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg fill='%231E1B1F'%3E%3Crect x='8' y='8' width='12' height='12' rx='2'/%3E%3Crect x='26' y='8' width='12' height='12' rx='2'/%3E%3Crect x='44' y='8' width='12' height='12' rx='2'/%3E%3Crect x='8' y='26' width='12' height='12' rx='2'/%3E%3C/g%3E%3Cg fill='%23C2456A'%3E%3Crect x='26' y='26' width='12' height='12' rx='2'/%3E%3Crect x='44' y='26' width='12' height='12' rx='2'/%3E%3Crect x='8' y='44' width='12' height='12' rx='2'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="../common/footer.css">
+<link rel="stylesheet" href="../common/ads.css">
+<script>try{var t=localStorage.getItem('lifeclock.theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "남은봄 — 인생 시계",
+      "url": "https://jaemilab.net/lifeclock/",
+      "description": "통계청(국가데이터처) 2024년 생명표 기대여명으로 남은 주말·명절·벚꽃·월드컵·대선 횟수를 계산하고, 만 나이·연 나이·한국 나이와 정신 나이 테스트를 제공합니다.",
+      "applicationCategory": "LifestyleApplication",
+      "operatingSystem": "Any",
+      "inLanguage": "ko",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "KRW" }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "남은 시간은 어떻게 계산하나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "국가데이터처(구 통계청) 2024년 완전생명표의 성별·연령별 기대여명을 현재 나이(소수점까지)에 맞게 보간해 더합니다. 같은 나이·성별 한국인의 평균값이며 개인의 수명을 예측하지 않습니다." }
+        },
+        {"@type":"Question","name":"기대수명과 기대여명은 뭐가 달라요?","acceptedAnswer":{"@type":"Answer","text":"기대여명은 지금 나이에서 앞으로 더 살 것으로 기대되는 평균 햇수이고, 흔히 말하는 기대수명은 0세의 기대여명이에요. 남은봄의 기대수명은 현재 나이에 기대여명을 더한 값이라, 40세 여성이면 40 + 47.4 = 약 87.4세로 여자 0세 기대수명(86.6세)보다 조금 길게 나와요."}},
+        {
+          "@type": "Question",
+          "name": "만 나이, 연 나이, 한국 나이는 어떻게 다른가요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "만 나이는 생일이 지날 때마다 한 살씩, 연 나이는 올해 연도에서 출생 연도를 뺀 값, 한국(세는) 나이는 연 나이에 1을 더한 값입니다. 2023년 6월 28일부터 법령·계약 등에서는 원칙적으로 만 나이를 씁니다." }
+        },
+        {"@type":"Question","name":"생활습관을 넣으면 남은 시간이 바뀌나요?","acceptedAnswer":{"@type":"Answer","text":"기본 숫자는 바뀌지 않아요. 흡연·운동 연구에서 나온 차이를 「참고 시나리오」로 따로 보여 드리고, 수면은 몇 년이라는 효과 크기가 없어 남은 시간에 반영하지 않아요."}},
+        {"@type":"Question","name":"입력한 생일은 저장되나요?","acceptedAnswer":{"@type":"Answer","text":"서버로 보내지 않고 이 기기의 브라우저에만 저장돼요. 다음에 열면 바로 내 격자를 보여 드리려는 용도예요."}}
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MLZPXGS7"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<a class="sr-only" href="#main">본문 바로가기</a>
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="./" aria-label="남은봄 처음으로">남은봄</a>
+    <span class="top-sp"></span>
+    <button class="icon-btn" type="button" id="btnTheme" aria-label="화면 테마 바꾸기">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+  <div id="viewHome">
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="wrap hero-head">
+        <p class="hero-k"><span class="ex-tag" id="heroTag">예시</span><span id="heroWho">34세 여성의 인생 · 2024년 생명표 기준</span></p>
+        <h1 class="hero-t" id="heroTitle"><span class="sr-only">남은 시간 계산기 — </span>벚꽃, 앞으로 <span class="num" id="heroN">50</span>번</h1>
+        <p class="hero-sub" id="heroSub">한 칸이 1주, 한 줄이 1년이에요. 지나온 주는 잉크, 앞으로 남은 봄은 분홍으로 칠했어요.</p>
+        <button class="btn btn-primary hero-btn" type="button" id="btnFill">내 격자 채우기</button>
+      </div>
+      <div class="grid-band">
+        <div class="grid-box" id="gridBox">
+          <canvas id="lifeGrid" role="img" aria-label="인생 주 단위 격자"></canvas>
+        </div>
+      </div>
+      <div class="wrap hero-foot">
+        <div class="legend" aria-hidden="true"><span><i class="lg-lived"></i>지나온 주</span><span><i class="lg-spring"></i>남은 봄</span><span><i class="lg-left"></i>남은 주(평균)</span><span><i class="lg-bonus"></i>평균 이후</span></div>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <section class="intro" id="intro" aria-labelledby="introTitle" hidden>
+        <h2 class="sec-h" id="introTitle">생일과 성별만 넣어 주세요</h2>
+        <p class="sec-sub">남은 주말·명절·벚꽃을 세어 드려요. 입력값은 서버로 보내지 않고 이 기기에만 저장돼요.</p>
+        <form class="card form" id="form" novalidate>
+          <div class="field">
+            <label class="lbl" for="birth">생년월일</label>
+            <input class="input num" type="date" id="birth" name="birth" required min="1900-01-01" autocomplete="bday">
+          </div>
+          <fieldset class="field" style="border:0;padding:0;margin:0 0 16px">
+            <legend class="lbl">성별 <small>생명표가 성별로 달라요</small></legend>
+            <div class="seg">
+              <input type="radio" name="sex" id="sexF" value="f"><label for="sexF">여성</label>
+              <input type="radio" name="sex" id="sexM" value="m"><label for="sexM">남성</label>
+            </div>
+          </fieldset>
+          <details class="more" id="moreLs">
+            <summary>생활습관도 넣어 볼래요 <small style="color:var(--muted);font-weight:500">(선택)</small></summary>
+            <fieldset class="field" style="border:0;padding:0">
+              <legend class="lbl">흡연</legend>
+              <div class="seg">
+                <input type="radio" name="smoke" id="smN" value="never"><label for="smN">안 피움</label>
+                <input type="radio" name="smoke" id="smQ" value="quit"><label for="smQ">끊었음</label>
+                <input type="radio" name="smoke" id="smY" value="yes"><label for="smY">피움</label>
+              </div>
+            </fieldset>
+            <fieldset class="field" style="border:0;padding:0">
+              <legend class="lbl">운동 <small>중강도 기준</small></legend>
+              <div class="seg">
+                <input type="radio" name="exercise" id="exN" value="none"><label for="exN">거의 안 함</label>
+                <input type="radio" name="exercise" id="exL" value="some"><label for="exL">하루 15분+</label>
+              </div>
+            </fieldset>
+            <fieldset class="field" style="border:0;padding:0">
+              <legend class="lbl">수면</legend>
+              <div class="seg">
+                <input type="radio" name="sleep" id="slS" value="short"><label for="slS">6시간 미만</label>
+                <input type="radio" name="sleep" id="slM" value="mid"><label for="slM">6~8시간</label>
+                <input type="radio" name="sleep" id="slL" value="long"><label for="slL">9시간+</label>
+              </div>
+            </fieldset>
+          </details>
+          <p class="form-err" id="formErr" role="alert"></p>
+          <button class="btn btn-primary" type="submit" style="margin-top:12px">내 인생 시계 보기</button>
+        </form>
+      </section>
+
+      <div id="result" hidden aria-live="polite"></div>
+
+
+      <details class="src card" id="sources">
+        <summary>데이터 출처와 계산 방법</summary>
+        <ul>
+          <li><b>기대여명</b>: 국가데이터처(구 통계청) 「2024년 생명표」(2025.12.3. 공표) 완전생명표의 성별·단일연령 기대여명. 현재 나이(소수점)로 두 연령 사이를 선형 보간했어요.</li>
+          <li><b>기대수명</b> = 현재 나이 + 기대여명. 같은 나이·성별 한국인 <b>평균</b>이며 개인의 수명을 예측하지 않아요.</li>
+          <li><b>설·추석·벚꽃</b>은 해마다 1번으로 세고 날짜는 근사(설 2/1, 벚꽃 4/5, 추석 9/25 기준)했어요. 실제 음력 날짜와 며칠 다를 수 있어요.</li>
+          <li><b>격자의 봄</b>은 3~5월에 걸친 주를 칠한 거예요. 90년을 다 그리고, 평균 기대수명 이후는 흐리게 그렸어요.</li>
+          <li><b>월드컵</b>: 2030년부터 4년 주기. <b>대선</b>: 현행 5년 단임제가 유지된다고 가정, 2030년부터 5년 주기.</li>
+          <li><b>심장박동</b>은 분당 80회로 가정한 어림값이에요.</li>
+          <li><b>생활습관</b>: Jha 외 NEJM 2013(흡연), Wen 외 Lancet 2011(운동), Cappuccio 외 Sleep 2010(수면). 다른 나라 집단 연구라 참고용이에요.</li>
+          <li><b>만 나이 통일</b>: 「민법」·「행정기본법」 개정으로 2023년 6월 28일부터 법령·계약·공문서 나이는 원칙적으로 만 나이.</li>
+        </ul>
+      </details>
+
+      <section class="svc-guide" id="guide" aria-labelledby="guide-h">
+        <h2 id="guide-h">남은봄은 이렇게 쓰고, 이렇게 계산해요</h2>
+        <p class="lead">생년월일과 성별을 넣으면 통계청 생명표의 평균 기대여명으로 앞으로 남은 주말·명절·벚꽃 횟수를 세어 주는 인생 시계예요. 겁을 주려는 숫자가 아니라, 남은 시간을 눈에 보이게 해서 오늘을 조금 더 아껴 쓰자는 뜻으로 만들었어요.</p>
+
+        <h3>무엇을 볼 수 있나요</h3>
+        <p>인생 90년을 한 칸 1주, 한 줄 1년의 격자로 그려 지나온 주와 남은 봄을 칠해 드려요. 결과 화면에서는 만 나이·연 나이·세는 나이, 오늘이 인생의 몇 번째 날인지, 인생을 하루로 치면 지금이 몇 시인지, 앞으로 남은 주말·벚꽃·추석·설날·월드컵·대선·생일 횟수, 지금까지 살아온 날과 시간을 볼 수 있어요. 부모님과 함께할 수 있는 날을 어림해 보고, 재미로 하는 정신 나이 테스트도 있어요.</p>
+
+        <h3>쓰는 법</h3>
+        <ol>
+          <li>맨 위 「내 격자 채우기」를 눌러요.</li>
+          <li>생년월일과 성별을 넣어요. 생명표는 남녀 기대여명이 달라서 성별이 필요해요. 흡연·운동·수면 습관은 넣고 싶을 때만 넣으면 돼요.</li>
+          <li>「내 인생 시계 보기」를 누르면 격자가 내 나이에 맞게 다시 칠해지고 남은 횟수가 나와요.</li>
+          <li>결과 아래에 부모님 만 나이와 1년에 만나는 날 수를 넣으면 함께할 수 있는 날을 어림해 드려요. 다가오는 기념일은 캘린더에 추가할 수 있어요.</li>
+        </ol>
+
+        <h3>계산 근거와 출처</h3>
+        <ul>
+          <li><b>기대여명</b>: 국가데이터처(구 통계청) 「2024년 생명표」(2025년 12월 3일 공표) 완전생명표의 성별·나이별 기대여명이에요. 2024년 생명표에서 0세 기대여명은 남자 80.8년·여자 86.6년, 40세는 남자 41.9년·여자 47.4년, 60세는 남자 23.7년·여자 28.4년이에요. 현재 나이를 소수점까지 계산해 두 나이 사이 값을 선형 보간해요.</li>
+          <li><b>남은 횟수</b>: 설·추석·벚꽃은 해마다 한 번으로 세고 날짜는 설 2월 1일, 벚꽃 4월 5일, 추석 9월 25일로 근사해요. 월드컵은 2030년 대회부터 4년마다, 대선은 현행 5년 단임제가 이어진다고 보고 2030년부터 5년마다로 계산해요.</li>
+          <li><b>살아온 시간</b>: 자정에 태어났다고 보고 날·주·시간을 세요. 심장박동은 분당 80회로 가정한 어림값이에요.</li>
+          <li><b>생활습관 참고</b>: 흡연은 Jha 외(NEJM 2013), 운동은 Wen 외(Lancet 2011), 수면은 Cappuccio 외(Sleep 2010) 연구를 참고 정보로만 보여 드리고, 기본 계산에는 넣지 않아요.</li>
+        </ul>
+
+        <h3>결과를 읽을 때 알아 두세요</h3>
+        <p>모든 숫자는 같은 나이·같은 성별 한국인의 평균이에요. 한 사람의 수명을 예측하지 않고, 의학적 진단이나 조언도 아니에요. 생활습관 시나리오는 다른 나라 연구의 연수 차이(흡연 약 10년, 운동 약 3년)를 단순히 더한 값이라 실제보다 크게 나올 수 있어요. 입력한 생일과 성별은 서버로 보내지 않고 이 기기에만 저장돼요.</p>
+
+        <h3>자주 묻는 질문</h3>
+        <div class="svc-faq">
+          <details>
+            <summary>남은 시간은 어떻게 계산하나요?</summary>
+            <p>국가데이터처(구 통계청) 2024년 완전생명표의 성별·연령별 기대여명을 현재 나이(소수점까지)에 맞게 보간해 더합니다. 같은 나이·성별 한국인의 평균값이며 개인의 수명을 예측하지 않습니다.</p>
+          </details>
+          <details>
+            <summary>기대수명과 기대여명은 뭐가 달라요?</summary>
+            <p>기대여명은 지금 나이에서 앞으로 더 살 것으로 기대되는 평균 햇수이고, 흔히 말하는 기대수명은 0세의 기대여명이에요. 남은봄의 기대수명은 현재 나이에 기대여명을 더한 값이라, 40세 여성이면 40 + 47.4 = 약 87.4세로 여자 0세 기대수명(86.6세)보다 조금 길게 나와요.</p>
+          </details>
+          <details>
+            <summary>만 나이, 연 나이, 한국 나이는 어떻게 다른가요?</summary>
+            <p>만 나이는 생일이 지날 때마다 한 살씩, 연 나이는 올해 연도에서 출생 연도를 뺀 값, 한국(세는) 나이는 연 나이에 1을 더한 값입니다. 2023년 6월 28일부터 법령·계약 등에서는 원칙적으로 만 나이를 씁니다.</p>
+          </details>
+          <details>
+            <summary>생활습관을 넣으면 남은 시간이 바뀌나요?</summary>
+            <p>기본 숫자는 바뀌지 않아요. 흡연·운동 연구에서 나온 차이를 「참고 시나리오」로 따로 보여 드리고, 수면은 몇 년이라는 효과 크기가 없어 남은 시간에 반영하지 않아요.</p>
+          </details>
+          <details>
+            <summary>입력한 생일은 저장되나요?</summary>
+            <p>서버로 보내지 않고 이 기기의 브라우저에만 저장돼요. 다음에 열면 바로 내 격자를 보여 드리려는 용도예요.</p>
+          </details>
+        </div>
+      </section>
+
+      <div id="adBottom"></div>
+    </div>
+  </div>
+
+  <div id="viewQuiz" hidden>
+    <div class="wrap quiz" id="quiz" aria-live="polite"></div>
+  </div>
+</main>
+
+<footer class="jl-footer" data-site="lifeclock" data-home="../">
+  <div data-notes><p>재미와 동기 부여를 위한 통계 계산기예요. 의학적 진단·조언이 아니며, 건강 관련 결정은 전문가와 상의하세요. 통계는 평균일 뿐, 오늘은 당신 거예요.</p></div>
+  <div data-links><a href="privacy.html">개인정보처리방침</a><a href="#sources" data-open-sources>데이터 출처</a></div>
+</footer>
+<script src="../common/footer.js" defer></script>
+<script src="../common/ads.js" defer></script>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="js/data.js"></script>
+<script src="js/calc.js"></script>
+<script src="js/share.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

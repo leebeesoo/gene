@@ -2,65 +2,797 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>재미랩 — 오늘 해볼 만한 것들</title>
-<meta name="description" content="오늘의 로또 번호, 리퍼브 식품 장터 맛남의 광장, 나의 뿌리 찾기까지. 매일 들르고 싶은 작은 웹 서비스 모음.">
-<meta property="og:title" content="재미랩 — 오늘 해볼 만한 것들">
-<meta property="og:description" content="오늘의 로또 번호 · 리퍼브 식품 장터 · 나의 뿌리 찾기">
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MLZPXGS7');</script>
+<!-- End Google Tag Manager -->
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>혹시나랩 — 로또·운세·제철·생활 계산기 무료 모음</title>
+<meta name="description" content="혹시나 하고 열어 보는 무료 생활 도구 13가지. 오늘의 로또 번호와 1등 명당, 사주 궁합, 이달 제철 식재료와 맛집, 내 이름 통계, 나이별 혜택·검진, 상황별 명언까지 공공 데이터로 만들었어요.">
+<meta name="theme-color" content="#FAF7F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1B1917" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://jaemilab.net/">
+<meta name="naver-site-verification" content="75fd43f7bacbe1423aa88882c733339d84f09920">
 <meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23111'/%3E%3Ccircle cx='32' cy='32' r='14' fill='%23ffcc33'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="혹시나랩">
+<meta property="og:url" content="https://jaemilab.net/">
+<meta property="og:image" content="https://jaemilab.net/og/hub.v3.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="혹시나랩 — 혹시나 하고 열어 보는 생활 도구 13가지 목록">
+<meta property="og:title" content="혹시나랩 — 혹시나 하고 열어 보는 생활 도구 13가지">
+<meta property="og:description" content="오늘의 로또 번호, 내 이름이 전국에 몇 명인지, 이달 제철 식재료, 나이별 혜택·검진까지. 하나만 눌러 봐도 1분이면 끝나요.">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="혹시나랩 — 혹시나 하고 열어 보는 생활 도구 13가지">
+<meta name="twitter:description" content="오늘의 로또 번호, 내 이름이 전국에 몇 명인지, 이달 제철 식재료, 나이별 혜택·검진까지. 하나만 눌러 봐도 1분이면 끝나요.">
+<meta name="twitter:image" content="https://jaemilab.net/og/hub.v3.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='26' fill='%23191A1C'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="common/footer.css">
+<link rel="stylesheet" href="common/ads.css">
+<!-- 타일 제목용 글꼴은 각 서비스의 제목 글꼴. 화면에 쓴 글자만 &text=로 받는다(스크립트 끝에서 연결) -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "@id": "https://jaemilab.net/#website", "name": "혹시나랩", "alternateName": ["혹시나 랩", "jaemilab.net"], "url": "https://jaemilab.net/", "inLanguage": "ko"}, {"@type": "ItemList", "name": "혹시나랩 서비스 13가지", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "오늘로또", "url": "https://jaemilab.net/lotto/"}, {"@type": "ListItem", "position": 2, "name": "명당로드", "url": "https://jaemilab.net/lottomap/"}, {"@type": "ListItem", "position": 3, "name": "근본 테스트", "url": "https://jaemilab.net/roots/"}, {"@type": "ListItem", "position": 4, "name": "식구궁합", "url": "https://jaemilab.net/family/"}, {"@type": "ListItem", "position": 5, "name": "이름레이더", "url": "https://jaemilab.net/names/"}, {"@type": "ListItem", "position": 6, "name": "남은봄", "url": "https://jaemilab.net/lifeclock/"}, {"@type": "ListItem", "position": 7, "name": "나때연감", "url": "https://jaemilab.net/birthyear/"}, {"@type": "ListItem", "position": 8, "name": "제철장보기", "url": "https://jaemilab.net/season/"}, {"@type": "ListItem", "position": 9, "name": "제철식당", "url": "https://jaemilab.net/sikdang/"}, {"@type": "ListItem", "position": 10, "name": "맛남의 광장", "url": "https://jaemilab.net/market/"}, {"@type": "ListItem", "position": 11, "name": "내 상황 명언", "url": "https://jaemilab.net/quotes/"}, {"@type": "ListItem", "position": 12, "name": "나이별 혜택·검진 달력", "url": "https://jaemilab.net/silver/"}, {"@type": "ListItem", "position": 13, "name": "내 미래 머니", "url": "https://jaemilab.net/money/"}]}]}
+</script>
 <style>
-:root{--bg:#f6f5f2;--fg:#15151a;--muted:#6b6b74;--card:#fff;--line:#e7e5df}
-@media (prefers-color-scheme:dark){:root{--bg:#0f0f12;--fg:#f2f2f4;--muted:#9a9aa6;--card:#18181d;--line:#26262d}}
+:root{
+  --bg:#FAF7F2;--ink:#1F1D1A;--muted:#736D64;--line:#E9E3D8;--chip:#F0EAE0;--soft:#F3EEE5;
+  --sans:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  --serif:"Noto Serif KR","Nanum Myeongjo","AppleMyungjo","Batang",serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#1B1917;--ink:#EEEAE3;--muted:#A39C92;--line:#2E2B27;--chip:#26231F;--soft:#221F1C;
+  color-scheme:dark;
+}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:"Pretendard Variable",Pretendard,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-main{max-width:960px;margin:0 auto;padding:56px 16px 40px}
-h1{font-size:clamp(30px,6vw,48px);letter-spacing:-.03em;margin:0 0 8px;font-weight:800}
-.sub{color:var(--muted);margin:0 0 36px;font-size:17px}
-.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
-a.card{display:flex;flex-direction:column;gap:14px;padding:24px;border-radius:24px;background:var(--card);border:1px solid var(--line);color:inherit;text-decoration:none;transition:transform .2s,box-shadow .2s;min-height:220px}
-a.card:hover,a.card:focus-visible{transform:translateY(-3px);box-shadow:0 16px 40px -20px rgba(0,0,0,.35);outline:none}
-.ico{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;font-size:28px}
-.card h2{margin:0;font-size:22px;letter-spacing:-.02em}
-.card p{margin:0;color:var(--muted);line-height:1.5}
-.go{margin-top:auto;font-weight:700}
-.ad{margin:40px 0 0;min-height:120px}
-.ad small{display:block;color:var(--muted);font-size:11px;margin-bottom:4px}
-footer{max-width:960px;margin:0 auto;padding:24px 16px 48px;color:var(--muted);font-size:13px}
-footer a{color:inherit}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;font-weight:500;letter-spacing:-.01em;word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased}
+h1,h2,h3,p{margin:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:12px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+.num{font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* 머리: 동그라미 로고 + 한 줄 소개 + 날짜 */
+.top{background:var(--bg)}
+.top .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding-top:22px;padding-bottom:6px}
+.brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+.brand .dots{display:grid;grid-template-columns:repeat(2,9px);gap:3px;flex:none}
+.brand .dots i{width:9px;height:9px;border-radius:50%}
+.brand .dots i:nth-child(1){background:#D23A1F}.brand .dots i:nth-child(2){background:#FBC400}
+.brand .dots i:nth-child(3){background:#2F6B4F}.brand .dots i:nth-child(4){background:#2B50D8}
+.brand b{display:block;font-size:21px;font-weight:800;letter-spacing:-.04em;line-height:1.15;color:var(--ink)}
+.brand span{display:block;font-size:13px;color:var(--muted);font-weight:500;line-height:1.3}
+.today{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;background:var(--chip);border-radius:999px;padding:5px 12px}
+.today b{color:var(--ink);font-weight:700}
+
+/* 분류 거르기 */
+.filters{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.filters .wrap{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-top:10px;padding-bottom:10px}
+.filters .wrap::-webkit-scrollbar{display:none}
+.filters button{flex:none;font:inherit;font-size:14px;font-weight:600;color:var(--muted);background:var(--chip);border:0;border-radius:999px;padding:0 15px;height:36px;cursor:pointer;transition:color .15s,background .15s}
+.filters button span{font-weight:500;margin-left:4px;font-variant-numeric:tabular-nums;opacity:.75}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.filters button:not([aria-pressed="true"]):hover{color:var(--ink)}
+
+/* 벤토 그리드 */
+.board{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(200px,auto);gap:14px;padding-top:14px;
+  grid-template-areas:
+    "lotto lotto"
+    "roots market"
+    "ad ad"
+    "year names"
+    "life life"
+    "quotes quotes"
+    "silver silver"
+    "ad2 ad2"
+    "money money"
+    "family season"
+    "sikdang map";
+  /* 광고 줄은 내용 높이(auto) — 광고가 접히면 줄이 0이 되어 빈 칸이 안 남는다 */
+  grid-template-rows:minmax(200px,auto) minmax(200px,auto) auto minmax(200px,auto) minmax(200px,auto) minmax(200px,auto) minmax(232px,auto) auto minmax(200px,auto) minmax(200px,auto) minmax(200px,auto)}
+.t-lotto{grid-area:lotto}.t-roots{grid-area:roots}.t-market{grid-area:market}.t-year{grid-area:year}.t-names{grid-area:names}
+.t-life{grid-area:life}.adtile{grid-area:ad}.adtile.a2{grid-area:ad2}.t-family{grid-area:family}.t-season{grid-area:season}.t-sikdang{grid-area:sikdang}.t-map{grid-area:map}
+.t-donkey{grid-area:donkey}.t-silver{grid-area:silver}.t-money{grid-area:money}.t-quotes{grid-area:quotes}
+.board.filtered{grid-template-areas:none;grid-template-rows:none;grid-auto-flow:row dense}
+.board.filtered>*{grid-area:auto}
+.board.filtered>.w{grid-column:span 2}
+.board.filtered>.adtile{grid-column:1/-1;order:99}
+.board.filtered>.adtile.a2{display:none}
+.board [hidden]{display:none}
+
+.tile{--tb:#F5F5F2;--ti:#17181B;--ta:#B8452A;--df:var(--sans);
+  position:relative;display:flex;flex-direction:column;min-width:0;padding:16px 16px 18px;border-radius:18px;background:var(--tb);color:var(--ti);text-decoration:none;overflow:hidden;
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ti) 5%,transparent);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s}
+.tile:hover{transform:translateY(-2px);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ti) 14%,transparent)}
+.tile:active{transform:translateY(0)}
+.tile:focus-visible{outline-offset:3px;border-radius:18px}
+.t-roots{box-shadow:none}.t-roots:hover{box-shadow:none}
+.tile .hd{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;line-height:1.3;color:color-mix(in srgb,var(--ti) 64%,var(--tb))}
+.tile .hd svg{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s}
+.tile:hover .hd svg{transform:translateX(2px)}
+.tile .pv{flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0;padding:10px 0}
+.tile .ft{margin-top:auto}
+.tile .nm{font-family:var(--df);font-size:18px;line-height:1.2;letter-spacing:-.02em;font-weight:700}
+.tile .ol{margin-top:3px;font-size:12px;line-height:1.4;color:color-mix(in srgb,var(--ti) 64%,var(--tb));display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.small{font-size:12px;line-height:1.4;color:color-mix(in srgb,var(--ti) 64%,var(--tb))}
+.disp{font-family:var(--df)}
+
+/* 서비스별 바탕·잉크·포인트·제목 글꼴 (docs/design-direction.md) */
+.t-lotto{--tb:#F4F2EC;--ti:#16171A;--ta:#D23A1F;--df:"Black Han Sans",var(--sans)}
+.t-map{--tb:#F5F5F2;--ti:#17181B;--ta:#B8452A;--df:"IBM Plex Sans KR",var(--sans)}
+.t-market{--tb:#F3F3EC;--ti:#1D211D;--ta:#3E6B3A;--df:"Gothic A1",var(--sans)}
+.t-season{--tb:#F7F6F1;--ti:#1F221E;--ta:#2F6B4F;--df:"Hahmlet",var(--serif)}
+.t-sikdang{--tb:#F6F3EE;--ti:#1E1C1A;--ta:#B4532A;--df:"Gowun Batang",var(--serif)}
+.t-roots{--tb:#8E2B22;--ti:#F6EFE4;--ta:#F6EFE4;--df:"Nanum Myeongjo",var(--serif)}
+.t-family{--tb:#F5F1EA;--ti:#1F1D1A;--ta:#1F5F57;--df:"Gowun Batang",var(--serif)}
+.t-names{--tb:#F6F7F9;--ti:#15171C;--ta:#2B50D8;--df:"IBM Plex Sans KR",var(--sans)}
+.t-life{--tb:#F7F5F2;--ti:#1E1B1F;--ta:#C2456A;--df:"Gowun Batang",var(--serif)}
+.t-year{--tb:#F2EFE8;--ti:#222020;--ta:#B23A26;--df:"Noto Serif KR",var(--serif)}
+.t-donkey{--tb:#F6F5F1;--ti:#1C1B19;--ta:#8F6200;--nb:#FCF8EE;--nl:#E7DEC6}
+.t-silver{--tb:#F7F6F2;--ti:#141413;--ta:#2C6A8E}
+.t-money{--tb:#F6F6F3;--ti:#191A1C;--ta:#5A4AA8}
+.t-quotes{--tb:#F7F6F3;--ti:#1D1B1E;--ta:#7A3B69;--df:"Gowun Batang",var(--serif)}
+@media (prefers-color-scheme:dark){
+  .tile{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ti) 7%,transparent)}
+  .tile:hover{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ti) 16%,transparent)}
+  .t-lotto{--tb:#121212;--ti:#ECEAE4;--ta:#D9705C}
+  .t-map{--tb:#121314;--ti:#E9E9E6;--ta:#CF7A63}
+  .t-market{--tb:#121412;--ti:#E6EAE3;--ta:#8FB282}
+  .t-season{--tb:#111311;--ti:#E8E8E2;--ta:#7FAF95}
+  .t-sikdang{--tb:#131110;--ti:#ECE7E0;--ta:#CF8A66}
+  .t-roots{--tb:#3A1A17;--ti:#ECE8E0;--ta:#D9A49E}
+  .t-family{--tb:#151412;--ti:#ECE7DF;--ta:#6FA59B}
+  .t-names{--tb:#101114;--ti:#E9EBEF;--ta:#8A9BD8}
+  .t-life{--tb:#121113;--ti:#EEEAEC;--ta:#CC8296}
+  .t-year{--tb:#141312;--ti:#EEE9E0;--ta:#CF7B66}
+  .t-donkey{--tb:#121211;--ti:#EDEBE6;--ta:#D8AE52;--nb:#221F1A;--nl:#39342A}
+  .t-silver{--tb:#121211;--ti:#F3F1EC;--ta:#7DB6DA}
+  .t-money{--tb:#111213;--ti:#ECECEA;--ta:#A99CF0}
+  .t-quotes{--tb:#121113;--ti:#EEEBEE;--ta:#CF8DBF}
+}
+
+/* 오늘로또 */
+.t-lotto .nm{font-size:26px;font-weight:400;letter-spacing:0}
+.t-lotto .round{color:var(--ta);font-weight:700}
+.balls{display:flex;gap:6px;margin:8px 0 12px}
+.ball{flex:0 1 44px;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:var(--c);color:#fff;font-weight:800;font-size:17px;font-variant-numeric:tabular-nums;text-shadow:0 1px 0 rgba(0,0,0,.18)}
+.ball.y{--c:#FBC400}.ball.b{--c:#69C8F2}.ball.r{--c:#FF7272}.ball.k{--c:#AAAAAA}.ball.g{--c:#B0D840}
+@media (prefers-color-scheme:dark){.balls{filter:saturate(.85)}}
+.cd{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.cd b{font-size:clamp(28px,8vw,44px);line-height:1;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.cd span{font-size:12px;color:color-mix(in srgb,var(--ti) 64%,var(--tb))}
+
+/* 근본 테스트: 인주 면 + 도장 */
+.stamp{display:flex;align-items:center;gap:12px}
+.seal{width:64px;height:64px;flex:none;display:grid;place-items:center;border:2px solid var(--ta);border-radius:10px;font-family:var(--df);font-weight:800;font-size:40px;line-height:1;transform:rotate(-4deg)}
+.code{font-family:var(--df);font-weight:800;font-size:19px;letter-spacing:.04em;line-height:1.2;white-space:nowrap}
+.code+.small{margin-top:4px}
+
+/* 맛남의 광장 */
+.t-market .big{font-family:var(--df);font-weight:800;font-size:44px;line-height:1;color:var(--ta);letter-spacing:-.02em}
+.t-market .big small{font-size:16px;color:var(--ti);margin-left:4px;letter-spacing:-.01em}
+.heads{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:2px}
+.heads li{display:flex;justify-content:space-between;align-items:baseline;gap:6px;font-family:var(--df);font-weight:800;font-size:15px;line-height:1.35}
+.heads li i{font-style:normal;font-family:var(--sans);font-weight:600;font-size:11px;color:color-mix(in srgb,var(--ti) 64%,var(--tb))}
+
+/* 나때연감 */
+.t-year .mast{font-size:11px;letter-spacing:.12em;border-bottom:1px solid currentColor;padding-bottom:6px;color:color-mix(in srgb,var(--ti) 64%,var(--tb));display:flex;justify-content:space-between}
+.t-year .yr{font-family:var(--df);font-weight:900;font-size:clamp(52px,15vw,96px);line-height:.95;letter-spacing:-.04em;margin:10px 0 8px}
+.t-year .hl{font-family:var(--df);font-weight:900;font-size:16px;line-height:1.35;border-top:1px solid color-mix(in srgb,var(--ti) 30%,transparent);padding-top:8px}
+.t-year .cols{display:none}
+
+/* 이름레이더 */
+.t-names .who{font-family:var(--df);font-weight:700;font-size:20px}
+.t-names .cnt{white-space:nowrap;font-family:var(--df);font-weight:700;font-size:clamp(20px,6vw,26px);line-height:1.1;color:var(--ta);letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-top:2px}
+.t-names .cnt small{font-size:14px;color:var(--ti);margin-left:2px}
+
+/* 남은봄 */
+.t-life .say{font-family:var(--df);font-weight:700;font-size:26px;line-height:1.2;letter-spacing:-.02em}
+.weeks{display:grid;grid-template-columns:repeat(26,minmax(0,1fr));gap:3px;margin-top:12px;max-width:520px}
+.weeks i{aspect-ratio:1;border-radius:2px;background:color-mix(in srgb,var(--ti) 82%,var(--tb))}
+.weeks i.left{background:var(--ta)}
+.weeks i.now{background:var(--ta);box-shadow:0 0 0 1.5px var(--tb),0 0 0 3px var(--ti)}
+
+/* 식구궁합 */
+.penta{width:100%;max-width:120px;height:auto;display:block;margin:0 auto}
+.penta .edge{fill:none;stroke:color-mix(in srgb,var(--ti) 22%,var(--tb));stroke-width:1.2}
+.penta .rel{fill:none;stroke:var(--ta);stroke-width:1.4}
+.penta text{font-family:var(--df);font-weight:700;font-size:10px;fill:var(--tb)}
+
+/* 제철장보기·제철식당 */
+.t-season .mon{font-family:var(--df);font-weight:700;font-size:clamp(48px,13vw,72px);line-height:1;letter-spacing:-.03em}
+.t-season .items{margin-top:8px;font-family:var(--df);font-weight:700;font-size:16px;color:var(--ta)}
+.t-sikdang .dish{font-family:var(--df);font-weight:700;font-size:30px;line-height:1.15;letter-spacing:-.02em;color:var(--ta)}
+
+/* 명당로드 */
+.t-map .stat{font-family:var(--df);font-weight:600;font-size:30px;line-height:1.05;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.t-map .stat small{font-size:14px;margin-left:2px}
+.t-map .best{margin-top:8px;font-size:13px;line-height:1.35}
+.t-map .best b{color:var(--ta);font-weight:700}
+
+/* 속마음 칠판: 예시 쪽지 몇 장이 겹쳐 붙은 모습 (실제 글 아님) */
+.notes{position:relative;flex:1;min-height:160px;margin-top:8px}
+.note{position:absolute;width:min(78%,210px);padding:8px 10px 10px;border-radius:6px;background:var(--nb);box-shadow:inset 0 0 0 1px var(--nl);font-size:13px;line-height:1.4;font-weight:600;transform:rotate(var(--r,0deg))}
+.note.mine{box-shadow:inset 0 0 0 1.5px var(--ta)}
+.note:nth-child(1){left:0;top:0;--r:-4deg}
+.note:nth-child(2){right:0;top:30%;--r:3deg}
+.note:nth-child(3){left:6%;top:58%;--r:-1.5deg}
+.note:nth-child(4){display:none}
+
+/* 나이별 혜택·검진 달력 */
+.t-silver .age{font-size:15px;font-weight:700;line-height:1.3;margin-top:4px}
+.t-silver .age b{font-size:30px;letter-spacing:-.03em;color:var(--ta);font-variant-numeric:tabular-nums;margin-right:2px}
+.perks{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:7px}
+.perks li{font-size:14px;font-weight:700;line-height:1.3;padding-left:12px;position:relative}
+.perks li::before{content:"";position:absolute;left:0;top:.5em;width:5px;height:5px;border-radius:50%;background:var(--ta)}
+.perks li i{display:block;font-style:normal;font-weight:500;font-size:12px;color:color-mix(in srgb,var(--ti) 64%,var(--tb))}
+.perks li:nth-child(n+4){display:none}
+
+/* 내 미래 머니: 그해 1만 원을 지금 물가로 */
+.t-money .pv{gap:12px}
+.t-money .then{font-size:14px;font-weight:600}
+.t-money .now{font-size:clamp(30px,8vw,40px);line-height:1.05;font-weight:700;letter-spacing:-.03em;color:var(--ta);font-variant-numeric:tabular-nums}
+.t-money .now small{font-size:16px;color:var(--ti);margin-left:2px}
+.bars{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;align-items:end;height:84px;max-width:360px}
+.bars span{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;font-size:11px;line-height:1.2;color:color-mix(in srgb,var(--ti) 64%,var(--tb));font-variant-numeric:tabular-nums}
+.bars i{display:block;width:100%;height:calc(var(--h,0) * 62px);border-radius:3px 3px 0 0;background:color-mix(in srgb,var(--ti) 16%,var(--tb));margin-bottom:4px;min-height:3px}
+.bars .on i{background:var(--ta)}
+.bars .on{color:var(--ti);font-weight:700}
+
+/* 내 상황 명언: 날짜로 고른 한 줄(명조) */
+.t-quotes .qt{font-family:var(--df);font-weight:700;font-size:21px;line-height:1.5;letter-spacing:-.02em;margin-top:6px}
+.t-quotes .qs{margin-top:8px;font-size:12px;line-height:1.4;color:color-mix(in srgb,var(--ti) 64%,var(--tb))}
+.t-quotes .qs b{color:var(--ta);font-weight:700}
+
+/* 광고 타일: 그리드 사이 한 줄(모바일은 늘 꽉 찬 한 줄 — 타일 옆에 붙지 않음), 링크 타일과 24px 넘게 띄움(격자 간격 14 + 여백 10).
+   광고 칸은 공용 .jl-ad(common/ads.css). 채워지지 않으면(unfilled·차단·로드 실패) 공용 도우미가 칸을 접고
+   그 자리를 「오늘 바뀐 것」 같은 메모가 채운다 → 격자에 구멍이 안 생김 */
+.adtile{position:relative;min-width:0;margin:10px 0;border-radius:18px;background:var(--soft);box-shadow:inset 0 0 0 1px var(--line);overflow:hidden}
+.adtile.inrow{margin-left:10px}
+.adtile .jl-ad{margin:0;padding:28px 12px 12px;min-height:280px}
+.adtile .jl-ad>small{position:absolute;top:8px;left:14px;margin:0}
+/* 광고가 안 채워지면(심사 전·광고 차단) 타일째 접는다 */
+.adtile.empty,.adtile:has(.jl-ad--empty){display:none}
+
+/* 그리드 아래·푸터 앞 광고(공용 .jl-ad). 푸터 첫 링크와 150px 넘게 띄운다.
+   모바일은 광고가 화면 높이의 30%를 넘지 않게 그리드 아래 칸을 빼고(소개 바로 뒤 칸과 거의 붙어 있어서) 데스크톱에서만 보인다 */
+main>.jl-ad{margin:48px auto 0}
+main>.jl-ad.mid{display:none}
+main>.jl-ad.end{margin:48px auto 128px}
+@media (min-width:880px){main>.jl-ad.mid{display:block}}
+
+/* 소개 */
+.about{margin-top:48px;padding:22px 20px;border-radius:18px;background:var(--soft);display:grid;gap:12px}
+.about h2{font-size:19px;font-weight:700;letter-spacing:-.025em}
+.about p{font-size:14px;color:var(--muted);line-height:1.65;max-width:680px}
+.about a{color:var(--ink);font-weight:600;text-underline-offset:2px}
+.jl-footer .jf-notes p{margin:0 0 4px}
+
+/* 데스크톱: 4열 벤토 (큰 칸 1, 와이드 2, 세로형 1) */
+@media (min-width:880px){
+  .top .wrap{padding-top:28px}
+  .board{grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:minmax(216px,auto);gap:16px;padding-top:16px;
+    grid-template-areas:
+      "lotto lotto roots year"
+      "lotto lotto market year"
+      "ad ad ad ad"
+      "life life names names"
+      "family quotes quotes silver"
+      "family money money silver"
+      "ad2 ad2 ad2 ad2"
+      "season season sikdang map";
+    grid-template-rows:minmax(216px,auto) minmax(216px,auto) auto minmax(216px,auto) minmax(216px,auto) minmax(216px,auto) auto minmax(216px,auto)}
+  .board.filtered>.w{grid-column:span 2}
+  .tile{padding:20px 20px 22px}
+  .adtile{margin:8px 0}.adtile.inrow{margin-left:8px}
+  .adtile .jl-ad{min-height:250px}
+  .tile .nm{font-size:20px}
+  .t-lotto .nm{font-size:34px}
+  .code{font-size:24px}
+  .t-lotto .balls{gap:10px;margin:8px 0 20px}
+  .t-lotto .ball{flex-basis:64px;font-size:24px}
+  .t-lotto .cd b{font-size:56px}
+  .t-year .cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;font-size:12px;line-height:1.45;color:color-mix(in srgb,var(--ti) 72%,var(--tb))}
+  .t-year .cols b{display:block;color:var(--ti);font-weight:700}
+  .t-season .pv{flex-direction:row;align-items:flex-end;justify-content:flex-start;gap:20px}
+  .t-season .items{margin:0 0 8px}
+  .weeks{gap:4px}
+  .penta{max-width:140px}
+  .notes{min-height:200px}
+  .note{font-size:14px}
+  .note:nth-child(1){top:2%}
+  .note:nth-child(2){top:24%}
+  .note:nth-child(3){top:50%}
+  .note:nth-child(4){display:block;right:2%;top:74%;--r:2deg}
+  .perks li:nth-child(n+4){display:block}
+  .t-money .pv{flex-direction:row;align-items:flex-end;justify-content:space-between;gap:24px}
+  .bars{flex:1;height:110px}
+  .bars i{height:calc(var(--h,0) * 86px)}
+  .t-quotes .qt{font-size:26px}
+}
+
+/* 움직임은 하나: 타일이 화면에 들어올 때 미리보기가 한 번 자리 잡는다 */
+.motion .tile:not(.in) .m{opacity:0;transform:translateY(6px)}
+.motion .tile.in .m{animation:settle .24s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i,0) * 28ms)}
+@keyframes settle{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.tile:hover{transform:none}}
 </style>
 </head>
 <body>
-<main>
-  <h1>오늘 뭐 해볼까?</h1>
-  <p class="sub">매일 들러도 새로운 작은 서비스들</p>
-  <div class="grid">
-    <a class="card" href="lotto/">
-      <div class="ico" style="background:#fff3c4">🎱</div>
-      <h2>오늘의 행운 로또</h2>
-      <p>내 생일과 사는 곳으로 뽑는 오늘의 번호, 살 곳과 살 시간까지.</p>
-      <span class="go">번호 뽑기 →</span>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MLZPXGS7"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="go" viewBox="0 0 16 16"><path d="M6 3.5 10.5 8 6 12.5"/></symbol>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="./"><span class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span><b>혹시나랩</b><span>혹시나 하고 열어 보는 작은 도구 13가지</span></span></a>
+    <p class="today" id="today">오늘의 숫자</p>
+  </div>
+</header>
+
+<div class="filters">
+  <div class="wrap" role="group" aria-label="분류로 거르기">
+    <button type="button" data-f="all" aria-pressed="true">전체<span>13</span></button>
+    <button type="button" data-f="fun" aria-pressed="false">운세·재미<span>5</span></button>
+    <button type="button" data-f="life" aria-pressed="false">생활·데이터<span>5</span></button>
+    <button type="button" data-f="food" aria-pressed="false">먹거리<span>3</span></button>
+  </div>
+</div>
+
+<main class="wrap">
+  <h1 class="sr">혹시나랩, 혹시나 하고 열어 보는 무료 생활 도구 13가지</h1>
+  <div class="board" id="board">
+
+    <a class="tile t-lotto w" data-cat="fun" href="lotto/" aria-label="오늘로또 — 사주로 뽑는 오늘의 로또 번호와 살 시간·방향">
+      <div class="hd"><span>운세·재미 · <span class="round num" id="lRound">이번 주 추첨</span></span><svg aria-hidden="true"><use href="#go"/></svg></div>
+      <div class="pv">
+        <p class="small">오늘의 공 · 날짜로 뽑은 미리보기</p>
+        <div class="balls" id="lBalls" aria-hidden="true"></div>
+        <div class="cd m" style="--i:6"><b id="lCd">토요일 20:35</b><span id="lCdLab">추첨까지</span></div>
+      </div>
+      <div class="ft">
+        <p class="nm disp">오늘로또</p>
+        <p class="ol">미리보기: 오늘 날짜로 뽑은 공 6개예요. 내 사주로 뽑은 번호와 살 시간·방향은 안에서.</p>
+      </div>
     </a>
-    <a class="card" href="market/">
-      <div class="ico" style="background:#dff3e2">🥬</div>
-      <h2>맛남의 광장</h2>
-      <p>버려질 뻔한 못난이 농수산물을 산지 가격 그대로. 식당 대량구매도.</p>
-      <span class="go">장터 가기 →</span>
+
+    <a class="tile t-roots" data-cat="fun" href="roots/" aria-label="근본 테스트 — 사주와 퀴즈로 찾는 나의 근본 코드">
+      <div class="hd"><span>운세·재미</span><svg aria-hidden="true"><use href="#go"/></svg></div>
+      <div class="pv">
+        <div class="stamp">
+          <span class="seal m" aria-hidden="true">根</span>
+          <div class="m" style="--i:2"><p class="code" id="rCode">思守理獨</p><p class="small" id="rType">오늘의 코드</p></div>
+        </div>
+      </div>
+      <div class="ft"><p class="nm disp">근본 테스트</p><p class="ol">16가지 근본 코드 중 나는?</p></div>
     </a>
-    <a class="card" href="roots/">
-      <div class="ico" style="background:#e3e6f7">🌳</div>
-      <h2>나의 뿌리</h2>
-      <p>내 안에 흐르는 조상의 피. 유형, 가계도, 시대별 인생, 궁합까지.</p>
-      <span class="go">뿌리 찾기 →</span>
+
+    <a class="tile t-market" data-cat="food" href="market/" aria-label="맛남의 광장 — 버려질 농수산물이 어디서 남는지, 버려지기 전에">
+      <div class="hd"><span>먹거리</span><svg aria-hidden="true"><use href="#go"/></svg></div>
+      <div class="pv">
+        <p class="small">지금 남는 품목</p>
+        <p class="big m num" id="mN">—<small>개</small></p>
+        <ul class="heads m" style="--i:2" id="mList"><li>버려지기 전에 확인</li></ul>
+      </div>
+      <div class="ft"><p class="nm disp">맛남의 광장</p><p class="ol">버려질 농수산물이 어디서 남는지, 버려지기 전에</p></div>
+    </a>
+
+    <a class="tile t-year" data-cat="life" href="birthyear/" aria-label="나때연감 — 내가 태어난 해 타임캡슐">
+      <div class="hd"><span>생활·데이터</span><svg aria-hidden="true"><use href="#go"/></svg></div>
+      <div class="pv">
+        <p class="mast"><span>그해 1면</span><span id="yMast">연감</span></p>
+        <p class="yr m num" id="yYear">1994</p>
+        <p class="hl m" style="--i:2" id="yHead">기록적 폭염</p>
+        <div class="cols m" style="--i:3"><p><b>그해 노래</b><span id="ySong">「칵테일 사랑」 마로니에</span></p><p><b>태어난 아기</b><span id="yBirth" class="num">721,185명</span></p></div>
+      </div>
+      <div class="ft"><p class="nm disp">나때연감</p><p class="ol">내가 태어난 해 타임캡슐</p></div>
+    </a>
+
+    <a class="tile t-names" data-cat="life" href="names/" aria-label="이름레이더 — 내 이름, 전국에 몇 명?">
+      <div class="hd"><span>생활·데이터</span><svg aria-hidden="true"><use href="#go"/></svg></div>
+      <div class="pv">
+        <p class="who disp m" id="nWho">김씨</p>
+        <p class="cnt m" style="--i:1"><span id="nCnt">10,689,967</span><small>명</small></p>
+        <p class="small">전국 · 2015 인구주택총조사</p>
+      </div>
+      <div class="ft"><p class="nm disp">이름레이더</p><p class="ol">내 이름, 전국에 몇 명?</p></div>
+    </a>
+
+    <a class="tile t-life w" data-cat="life" href="lifeclock/" aria-label="남은봄 — 남은 주말·명절·벚꽃 세는 인생 시계">
+      <div class="hd"><span>생활·데이터</span><svg aria-hidden="true"><use href="#go"/></svg></div>
+      <div class="pv">
+        <p class="say disp m" id="wSay">올해 남은 주말</p>
+        <p class="small m" style="--i:1" id="wSub">올해 52주</p>
+        <div class="weeks" id="wGrid" aria-hidden="true"></div>
+      </div>
+      <div class="ft"><p class="nm disp">남은봄</p><p class="ol">남은 주말·명절·벚꽃 세는 인생 시계</p></div>
+    </a>
+
+    <a class="tile t-quotes w" data-cat="fun" href="quotes/" aria-label="내 상황 명언 — 지금 필요한 한 줄, 원문과 출처까지">
+      <div class="hd"><span>운세·재미 · 오늘의 한 줄</span><svg aria-hidden="true"><use href="#go"/></svg></div>
+      <div class="pv">
+        <!-- quotes/data/quotes.json에서 「확인됨」 짧은 명언 15개를 골라 날짜로 돌린다. 원본이 바뀌면 같이 고친다 -->
+        <p class="qt m" id="qText">천 리 길도 발밑에서 시작된다.</p>
+        <p class="qs m" style="--i:1" id="qSrc"><b>노자</b> · 『도덕경』 64장</p>
+      </div>
+      <div class="ft"><p class="nm disp">내 상황 명언</p><p class="ol">지금 필요한 한 줄, 원문과 출처까지</p></div>
+    </a>
+
+    <a class="tile t-silver w" data-cat="life" href="silver/" aria-label="나이별 혜택·검진 달력 — 태어난 해로 보는 올해 받을 혜택·검진">
+      <div class="hd"><span>생활·데이터</span><svg aria-hidden="true"><use href="#go"/></svg></div>
+      <div class="pv">
+        <!-- silver/data/benefits.json(2026-11-13 확인) 중 65세부터 받는 항목. 원본이 바뀌면 같이 고친다 -->
+        <p class="small" id="sbYear">예: 1961년생 · 올해 65세</p>
+        <p class="age m"><b>65세</b>부터 받는 것</p>
+        <ul class="perks m" style="--i:1">
+          <li>기초연금<i>만 65세 · 소득인정액 기준 이하</i></li>
+          <li>폐렴구균 예방접종<i>평생 1회 무료</i></li>
+          <li>독감 예방접종<i>매년 1회 무료</i></li>
+          <li>틀니·임플란트 건강보험<i>비용의 30%만 본인 부담</i></li>
+          <li>교통·문화 경로우대<i>지하철 무료 · 기차 30% 감면</i></li>
+        </ul>
+      </div>
+      <div class="ft"><p class="nm disp">나이별 혜택·검진 달력</p><p class="ol">태어난 해로 보는 올해 받을 혜택·검진</p></div>
+    </a>
+
+    <a class="tile t-money w" data-cat="life" href="money/" aria-label="내 미래 머니 — 청약 가점·이자·물가, 공식 기준으로 계산">
+      <div class="hd"><span>생활·데이터 · 계산기</span><svg aria-hidden="true"><use href="#go"/></svg></div>
+      <div class="pv">
+        <!-- money/js/data.js 소비자물가지수(2020=100, 한국은행 ECOS) 연간치로 계산. 2026년 연간치가 나오면 같이 고친다 -->
+        <div class="m">
+          <p class="then" id="mnThen">1995년 1만 원은 2025년 물가로</p>
+          <p class="now" id="mnNow">22,427<small>원</small></p>
+        </div>
+        <div class="bars m" style="--i:1" id="mnBars" aria-hidden="true"></div>
+      </div>
+      <div class="ft"><p class="nm disp">내 미래 머니</p><p class="ol">청약 가점·이자·물가, 공식 기준으로 계산</p></div>
+    </a>
+
+    <div class="adtile" id="adTile">
+      <aside class="jl-ad" aria-label="광고"><small>광고</small>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </aside>
+    </div>
+
+    <div class="adtile a2" id="adTile2">
+      <aside class="jl-ad" aria-label="광고"><small>광고</small>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </aside>
+    </div>
+
+    <a class="tile t-family" data-cat="fun" href="family/" aria-label="식구궁합 — 우리 가족 오행 궁합판">
+      <div class="hd"><span>운세·재미</span><svg aria-hidden="true"><use href="#go"/></svg></div>
+      <div class="pv">
+        <svg class="penta m" viewBox="0 0 120 112" aria-hidden="true">
+          <polygon class="edge" points="60,12 105,45 88,98 32,98 15,45"/>
+          <path class="rel" d="M60 12 L88 98 M15 45 L105 45 M32 98 L60 12"/>
+          <circle cx="60" cy="12" r="10" fill="#5E8A6E"/><text x="60" y="15.5" text-anchor="middle">木</text>
+          <circle cx="105" cy="45" r="10" fill="#B5624F"/><text x="105" y="48.5" text-anchor="middle">火</text>
+          <circle cx="88" cy="98" r="10" fill="#A8854D"/><text x="88" y="101.5" text-anchor="middle">土</text>
+          <circle cx="32" cy="98" r="10" fill="#85868A"/><text x="32" y="101.5" text-anchor="middle">金</text>
+          <circle cx="15" cy="45" r="10" fill="#466A86"/><text x="15" y="48.5" text-anchor="middle">水</text>
+        </svg>
+      </div>
+      <div class="ft"><p class="nm disp">식구궁합</p><p class="ol">우리 가족 오행 궁합판</p></div>
+    </a>
+
+    <a class="tile t-season w" data-cat="food" href="season/" aria-label="제철장보기 — 이달 제철 식재료와 지금 싼 품목">
+      <div class="hd"><span>먹거리 · 사러 가기</span><svg aria-hidden="true"><use href="#go"/></svg></div>
+      <div class="pv">
+        <p class="mon m num" id="sMon">이달</p>
+        <p class="items m" style="--i:1" id="sItems">제철 품목</p>
+      </div>
+      <div class="ft"><p class="nm disp">제철장보기</p><p class="ol">이달 제철 식재료와 지금 싼 품목</p></div>
+    </a>
+
+    <a class="tile t-sikdang" data-cat="food" href="sikdang/" aria-label="제철식당 — 이달 이 지역 제철 음식을 잘하는 집">
+      <div class="hd"><span>먹거리 · 먹으러 가기</span><svg aria-hidden="true"><use href="#go"/></svg></div>
+      <div class="pv">
+        <p class="small" id="dLab">이달의 음식</p>
+        <p class="dish m" id="dDish">제철 음식</p>
+      </div>
+      <div class="ft"><p class="nm disp">제철식당</p><p class="ol">이달 이 지역 제철 음식을 잘하는 집</p></div>
+    </a>
+
+    <a class="tile t-map" data-cat="fun" href="lottomap/" aria-label="명당로드 — 로또 1등 명당 지도와 번호 통계">
+      <div class="hd"><span>운세·재미</span><svg aria-hidden="true"><use href="#go"/></svg></div>
+      <div class="pv">
+        <!-- lottomap/data/stores.js(스냅샷 2026-11-05, 262~1248회) 판매점 1등 합계·최다 판매점. 데이터 갱신 때 같이 고친다 -->
+        <p class="stat m"><span class="small">1등</span> 9,231<small>건</small></p>
+        <p class="best m" style="--i:1">최다 명당 <b>노원 스파</b> 53회</p>
+      </div>
+      <div class="ft"><p class="nm disp">명당로드</p><p class="ol">로또 1등 명당 지도와 번호 통계</p></div>
     </a>
   </div>
-  <div class="ad"><small>광고</small>
+
+  <aside class="jl-ad mid" aria-label="광고"><small>광고</small>
     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
-  </div>
+  </aside>
+
+  <section class="about" aria-labelledby="about-h">
+    <h2 id="about-h">혹시나랩은</h2>
+    <p>「혹시나」 하는 마음으로 열어 보는 작은 생활 도구 13가지예요. 운세·재미, 생활 데이터, 먹거리를 다뤄요. 타일의 숫자와 그림은 오늘 날짜로 바로 계산해서 매일 바뀝니다. 오늘로또 타일의 공은 날짜로 뽑은 미리보기이고, 내 번호는 들어가서 사주로 뽑아요.</p>
+    <p>숫자는 되도록 공공 자료에서 가져와요. 이름 통계와 출생아 수는 통계청 KOSIS, 물가는 한국은행, 제철 식재료 가격은 KAMIS, 로또 당첨 판매점은 동행복권, 혜택·검진 나이는 보건복지부와 국민건강보험공단 안내를 기준으로 했고, 서비스마다 아래쪽 「정보 출처」에 자료 이름과 확인한 날짜를 적어 두었어요.</p>
+    <p>돈·건강과 관련된 계산은 참고용이에요. 실제 신청이나 가입 전에는 해당 기관에서 한 번 더 확인해 주세요. 사주·궁합·로또 번호는 전통 풀이를 옮긴 재미 콘텐츠라 과학적 근거나 당첨 보장이 없어요. 운영자와 데이터 원칙은 <a href="./about.html">혹시나랩 소개</a>에, 틀린 내용 제보는 <a href="./contact.html">문의</a>에서 받아요.</p>
+  </section>
+
+  <aside class="jl-ad jl-ad--multiplex end" aria-label="광고"><small>광고</small>
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="autorelaxed"></ins>
+  </aside>
 </main>
-<footer>© 재미랩 · 모든 입력 정보는 내 기기에만 저장됩니다.</footer>
-<script>try{(adsbygoogle=window.adsbygoogle||[]).push({})}catch(e){}</script>
+
+<footer class="jl-footer" data-site="" data-home="./" data-copy="입력한 정보는 내 기기에만 저장돼요(맛남의 광장 신청 폼 제외)">
+  <div data-notes><p>운세·궁합 결과는 재미로 보는 콘텐츠예요. 복권은 만 19세 미만은 살 수 없고, 도박 문제 상담은 국번 없이 1336이에요.</p></div>
+  <div data-sources><ul>
+    <li>명당로드: <a href="https://dhlottery.co.kr/" rel="noopener">동행복권</a> 262~1248회 당첨 판매점</li>
+    <li>맛남의 광장: <a href="https://www.kamis.or.kr/" rel="noopener">KAMIS</a>·농림축산식품부·농업관측센터·언론 보도</li>
+    <li>이름레이더: <a href="https://kosis.kr/" rel="noopener">통계청 KOSIS</a> 2015 인구주택총조사</li>
+    <li>나때연감: <a href="https://kosis.kr/" rel="noopener">통계청 KOSIS</a> 출생통계</li>
+    <li>나이별 혜택·검진 달력: 보건복지부·국민건강보험공단·질병관리청 공식 안내 (2026-11-13 확인)</li>
+    <li>내 미래 머니: <a href="https://ecos.bok.or.kr/" rel="noopener">한국은행 ECOS</a> 소비자물가지수(2020=100) 연간</li>
+    <li>내 상황 명언: 명언마다 원문·출처 확인 (내 상황 명언 안에서)</li>
+  </ul></div>
+  <div data-links><a href="./about.html">혹시나랩 소개</a><a href="./contact.html">문의</a><a href="./privacy.html">개인정보처리방침</a><a href="./terms.html">이용약관</a><a href="lotto/about.html">오늘로또 소개</a><a href="sikdang/about.html">제철식당 소개</a></div>
+</footer>
+<script src="common/footer.js" defer></script>
+<script src="common/ads.js" defer></script>
+
+<script src="lotto/data.js"></script>
+<script src="lotto/engine.js"></script>
+<script>
+(function () {
+  'use strict';
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var KST = 9 * 36e5, WEEK = 7 * 864e5, MIN = 6e4;
+  function kst(ts) { var d = new Date(ts + KST); return { y: d.getUTCFullYear(), m: d.getUTCMonth() + 1, d: d.getUTCDate(), dow: d.getUTCDay(), h: d.getUTCHours(), mi: d.getUTCMinutes() }; }
+  function $(id) { return document.getElementById(id); }
+  function fmt(n) { return n.toLocaleString('ko-KR'); }
+  var now = Date.now(), T = kst(now);
+  var DOW = ['일', '월', '화', '수', '목', '금', '토'];
+  var dayKey = T.y * 10000 + T.m * 100 + T.d;
+  var dayNo = Math.floor((now + KST) / 864e5); // KST 기준 일련 번호
+
+  /* 날짜 한 줄 */
+  $('today').innerHTML = '<b>' + T.m + '월 ' + T.d + '일 ' + DOW[T.dow] + '요일</b>의 숫자';
+
+  /* 날짜 시드 난수 */
+  function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  var R = rng(dayKey * 2654435761);
+
+  /* 오늘로또: 추첨 회차·남은 시간(lotto/engine.js와 같은 계산) + 오늘의 공 6개 */
+  var FIRST = Date.UTC(2002, 11, 7, 20, 35) - KST;
+  function nextDraw(ts) {
+    var p = kst(ts), t = Date.UTC(p.y, p.m - 1, p.d + ((6 - p.dow) % 7 + 7) % 7, 20, 35) - KST;
+    if (t <= ts) t += WEEK; return t;
+  }
+  var nd = nextDraw(now), round = Math.round((nd - FIRST) / WEEK) + 1, ndp = kst(nd);
+  $('lRound').textContent = '제' + round + '회 · ' + ndp.m + '월 ' + ndp.d + '일(토) 20:35';
+  // 오늘로또 첫 화면과 같은 「오늘의 공」 (lotto/engine.js의 commonDraw)
+  var picks;
+  try { picks = window.LottoEngine.commonDraw(window.LottoEngine.dateKey()).nums.slice().sort(function (a, b) { return a - b; }); }
+  catch (e) {
+    var pool = [];
+    picks = [];
+    for (var i = 1; i <= 45; i++) pool.push(i);
+    for (i = 0; i < 6; i++) picks.push(pool.splice(Math.floor(R() * pool.length), 1)[0]);
+    picks.sort(function (a, b) { return a - b; });
+  }
+  $('lBalls').innerHTML = picks.map(function (n, k) {
+    var c = n <= 10 ? 'y' : n <= 20 ? 'b' : n <= 30 ? 'r' : n <= 40 ? 'k' : 'g';
+    return '<span class="ball m ' + c + '" style="--i:' + k + '">' + n + '</span>';
+  }).join('');
+  $('lBalls').setAttribute('aria-hidden', 'false');
+  $('lBalls').setAttribute('role', 'img');
+  $('lBalls').setAttribute('aria-label', '오늘의 공 미리보기 ' + picks.join(', '));
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function tick() {
+    var t = Date.now(), target = nextDraw(t), close = target - 35 * MIN, left, lab;
+    if (t < close) { left = close - t; lab = '판매 마감까지'; } else { left = target - t; lab = '추첨까지'; }
+    var s = Math.floor(left / 1000), d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60), ss = s % 60;
+    $('lCd').textContent = (d ? d + '일 ' : '') + pad(h) + ':' + pad(m) + ':' + pad(ss);
+    $('lCdLab').textContent = lab;
+  }
+  tick(); setInterval(tick, 1000);
+
+  /* 근본 테스트: 오늘의 코드 (roots/js/data.js 축·유형 순서) */
+  var AX = [['思', '行'], ['守', '遊'], ['理', '情'], ['獨', '群']];
+  var TYPES = ['학자', '선비', '화원', '의원', '책사', '역관', '방랑시인', '풍류객', '장인', '왕족', '대지', '의병', '뱃사람', '장군', '예언자', '보부상'];
+  var ti = ((dayNo % 16) + 16) % 16;
+  $('rCode').textContent = AX.map(function (a, k) { return a[(ti >> (3 - k)) & 1]; }).join('');
+  $('rType').textContent = '오늘의 코드 · ' + TYPES[ti];
+
+  /* 나때연감: birthyear/data/years.js에서 고른 해 */
+  var YEARS = [
+    [1986, '서울 아시안게임 개막', '「비처럼 음악처럼」 김현식', 636019],
+    [1988, '서울 올림픽 개막', '「그대에게」 무한궤도', 633092],
+    [1991, '남북한 유엔 동시 가입', '「보이지 않는 사랑」 신승훈', 709275],
+    [1994, '기록적 폭염', '「칵테일 사랑」 마로니에', 721185],
+    [1997, '홍콩, 중국에 반환', '「행복」 H.O.T.', 675394],
+    [1999, '유로화 출범', '「어머님께」 god', 620668],
+    [2002, '한일 월드컵, 4강 신화', '「No.1」 보아', 496911],
+    [2005, '청계천 복원 개통', '「Rising Sun」 동방신기', 438707]
+  ];
+  var Y = YEARS[((dayNo % YEARS.length) + YEARS.length) % YEARS.length];
+  $('yYear').textContent = Y[0]; $('yHead').textContent = Y[1]; $('ySong').textContent = Y[2];
+  $('yBirth').textContent = fmt(Y[3]) + '명'; $('yMast').textContent = Y[0] + '년판';
+
+  /* 이름레이더: 성씨 인구(names/js/data.js, 2015 인구주택총조사) */
+  var SUR = [['김', 10689967], ['이', 7307237], ['박', 4192080], ['정', 2407601], ['최', 2340582], ['조', 1453971], ['강', 1269290]];
+  var S = SUR[((dayNo % SUR.length) + SUR.length) % SUR.length];
+  $('nWho').textContent = S[0] + '씨, 전국에';
+  $('nCnt').textContent = fmt(S[1]);
+
+  /* 남은봄: 올해 52주 격자와 남은 주말 */
+  var jan1 = Date.UTC(T.y, 0, 1), today0 = Date.UTC(T.y, T.m - 1, T.d), dec31 = Date.UTC(T.y, 11, 31);
+  var doy = Math.round((today0 - jan1) / 864e5); // 0부터
+  var passed = Math.min(52, Math.floor(doy / 7));
+  var sats = 0; for (var t0 = today0; t0 <= dec31; t0 += 864e5) if (new Date(t0).getUTCDay() === 6) sats++;
+  $('wSay').textContent = '올해 남은 주말, ' + sats + '번';
+  $('wSub').textContent = '52주 중 ' + passed + '주가 지났어요';
+  var cells = '';
+  for (i = 0; i < 52; i++) cells += '<i class="m' + (i < passed ? '' : i === passed ? ' now' : ' left') + '" style="--i:' + Math.min(10, Math.floor((i % 26) / 3)) + '"></i>';
+  $('wGrid').innerHTML = cells;
+
+  /* 제철장보기·제철식당: 달마다 품목 3개와 음식 하나 (season/js/items.js 제철 월 기준) */
+  var SEASON = [
+    ['굴', '꼬막', '딸기', '매생이국'], ['냉이', '미나리', '꼬막', '꼬막비빔밥'], ['냉이', '주꾸미', '딸기', '주꾸미볶음'],
+    ['두릅', '주꾸미', '참외', '도다리쑥국'], ['마늘', '참외', '꽃게', '꽃게찜'], ['매실', '감자', '수박', '콩국수'],
+    ['복숭아', '옥수수', '가지', '삼계탕'], ['포도', '복숭아', '깻잎', '민어탕'], ['전어', '대하', '밤', '전어구이'],
+    ['대하', '단감', '고구마', '대하구이'], ['배추', '무', '굴', '굴국밥'], ['방어', '과메기', '유자', '방어회']
+  ];
+  var SM = SEASON[T.m - 1];
+  $('sMon').textContent = T.m + '월';
+  $('sItems').textContent = SM.slice(0, 3).join(' · ');
+  $('dLab').textContent = T.m + '월의 음식';
+  $('dDish').textContent = SM[3];
+
+  /* 내 상황 명언: quotes/data/quotes.json 「확인됨」 중 짧은 15개, 날짜로 하나 */
+  var QUOTES = [
+    ['천 리 길도 발밑에서 시작된다.', '노자', '『도덕경』 64장'],
+    ['사람은 가르치면서 배운다.', '세네카', '『도덕 서한』 7번째 편지 8절'],
+    ['큰 그릇은 늦게 이루어진다.', '노자', '『도덕경』 41장'],
+    ['무엇보다 너 자신에게 진실하라.', '셰익스피어', '희곡 『햄릿』 1막 3장'],
+    ['미루는 사이에 인생은 지나가 버린다.', '세네카', '『도덕 서한』 1번째 편지 3절'],
+    ['잃는다는 것은 변한다는 것일 뿐이다.', '마르쿠스 아우렐리우스', '『명상록』 9권 35절'],
+    ['사람은 애쓰는 동안에는 헤매기 마련이다.', '괴테', '『파우스트』 1부 「천상의 서곡」'],
+    ['내가 바라지 않는 일을 남에게 하지 말라.', '공자', '『논어』 「위령공」 24장'],
+    ['행복하게 사는 데 필요한 것은 아주 적다.', '마르쿠스 아우렐리우스', '『명상록』 7권 67절'],
+    ['음악이 없다면 삶은 하나의 실수일 것이다.', '니체', '『우상의 황혼』 「잠언과 화살」 33번'],
+    ['옛것을 익혀 새것을 알면 스승이 될 만하다.', '공자', '『논어』 「위정」 11장'],
+    ['열정 없이 이루어진 위대한 일은 하나도 없다.', '에머슨', '에세이 「원」'],
+    ['덕이 있는 사람은 외롭지 않다. 반드시 이웃이 있다.', '공자', '『논어』 「이인」 25장'],
+    ['쉬는 사람은 움직여야 하고, 움직이는 사람은 쉬어야 한다.', '세네카', '『도덕 서한』 3번째 편지 6절'],
+    ['날마다가 한 해 중 가장 좋은 날이라고 마음에 새겨 두라.', '에머슨', '에세이 「일과 날」']
+  ];
+  var QQ = QUOTES[((dayNo % QUOTES.length) + QUOTES.length) % QUOTES.length];
+  $('qText').textContent = QQ[0];
+  $('qSrc').innerHTML = '<b>' + QQ[1] + '</b> · ' + QQ[2];
+
+  /* 나이별 혜택·검진 달력: 올해 65세가 되는 출생연도 (나이는 「올해 − 출생연도」) */
+  $('sbYear').textContent = '예: ' + (T.y - 65) + '년생 · 올해 65세';
+
+  /* 내 미래 머니: 그해 1만 원을 최근 연간 물가(2025)로 — money/js/data.js 소비자물가지수(2020=100) */
+  var CPI = { 1985: 29.555, 1995: 51.995, 2005: 74.413, 2015: 94.861, 2025: 116.61 }, CPI_NOW = 2025;
+  var CY = [1985, 1995, 2005, 2015], cy = CY[((dayNo % CY.length) + CY.length) % CY.length];
+  function won(y) { return Math.round(10000 * CPI[CPI_NOW] / CPI[y]); }
+  $('mnThen').textContent = cy + '년 1만 원은 ' + CPI_NOW + '년 물가로';
+  $('mnNow').innerHTML = fmt(won(cy)) + '<small>원</small>';
+  var maxW = won(1985);
+  $('mnBars').innerHTML = CY.concat(CPI_NOW).map(function (y) {
+    return '<span' + (y === cy ? ' class="on"' : '') + '><i style="--h:' + (won(y) / maxW).toFixed(3) + '"></i>' + (y === CPI_NOW ? '지금' : y) + '</span>';
+  }).join('');
+
+  /* 맛남의 광장: 지금 남는 품목 (market/data/surplus.json, 실패하면 예비 문구) */
+  var LV = { disposal: [4, '폐기'], crash: [3, '폭락'], surplus: [2, '과잉'], watch: [1, '주의'] };
+  function marketFallback() {
+    $('mN').innerHTML = '지도<small></small>';
+    $('mList').innerHTML = '<li>어디서 남는지 보기</li>';
+  }
+  if (window.fetch) {
+    fetch('market/data/surplus.json').then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (d) {
+      var best = {};
+      (d.signals || []).forEach(function (s) {
+        var lv = LV[s.level] || LV.watch; if (!s.item || lv[0] < 2) return;
+        if (!best[s.item] || best[s.item][0] < lv[0]) best[s.item] = lv;
+      });
+      var items = Object.keys(best).sort(function (a, b) { return best[b][0] - best[a][0]; });
+      if (!items.length) throw 0;
+      $('mN').innerHTML = items.length + '<small>개</small>';
+      $('mList').innerHTML = items.slice(0, 3).map(function (k) { return '<li>' + k + '<i>' + best[k][1] + '</i></li>'; }).join('');
+    }).catch(marketFallback).then(function () { loadFonts(); });
+  } else marketFallback();
+
+  /* 제목용 글꼴: 화면에 쓴 글자만 받는다 */
+  function loadFonts() {
+    if (document.getElementById('dispFont')) return;
+    var txt = '';
+    document.querySelectorAll('.disp, .tile .nm, .qt, .code, .seal, .yr, .hl, .mon, .items, .dish, .stat, .best b, .who, .cnt, .say, .heads, .big, .penta text').forEach(function (el) { txt += el.textContent; });
+    txt += '0123456789,·월';
+    var seen = {}, uniq = '';
+    Array.from(txt.replace(/\s+/g, '')).forEach(function (c) { if (!seen[c]) { seen[c] = 1; uniq += c; } });
+    var href = 'https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@600;700&family=Gothic+A1:wght@800&family=Hahmlet:wght@700&family=Gowun+Batang:wght@700&family=Nanum+Myeongjo:wght@800&family=Noto+Serif+KR:wght@900&display=swap&text=' + encodeURIComponent(uniq);
+    var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = href; l.id = 'dispFont';
+    document.head.appendChild(l);
+  }
+  if (!window.fetch) loadFonts();
+  setTimeout(loadFonts, 1500);
+
+
+  /* 분류 거르기 (#fun · #life · #food 바로가기도 받는다)
+     거른 뒤 마지막 줄이 비면 광고 타일이 남은 칸만큼 넓어져 구멍을 메운다 */
+  var board = $('board'), btns = document.querySelectorAll('.filters button'), adTile = $('adTile');
+  function fitAd() {
+    adTile.style.gridColumn = ''; adTile.classList.remove('inrow');
+    board.querySelectorAll('.tile').forEach(function (t) { t.style.gridColumn = ''; });
+    if (!board.classList.contains('filtered')) return;
+    var cols = getComputedStyle(board).gridTemplateColumns.split(' ').length, used = 0, vis = board.querySelectorAll('.tile:not([hidden])');
+    vis.forEach(function (t) { used += t.classList.contains('w') ? 2 : 1; });
+    var rest = used % cols;
+    if (!rest) return;
+    // 모바일(2열): 광고 타일은 늘 꽉 찬 한 줄 → 마지막 타일을 넓혀 빈칸을 메운다. 데스크톱: 광고 타일이 남은 칸을 메운다(간격 24px)
+    // 광고가 접혀 있으면(심사 전·차단) 데스크톱도 마지막 타일을 넓혀 빈칸을 메운다
+    var last = vis[vis.length - 1];
+    if (cols <= 2) last.style.gridColumn = '1 / -1';
+    else if (getComputedStyle(adTile).display === 'none') last.style.gridColumn = 'span ' + ((last.classList.contains('w') ? 2 : 1) + cols - rest);
+    else { adTile.style.gridColumn = 'span ' + (cols - rest); adTile.classList.add('inrow'); }
+  }
+  function setFilter(f) {
+    btns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.f === f)); });
+    board.classList.toggle('filtered', f !== 'all');
+    board.querySelectorAll('.tile').forEach(function (t) { t.hidden = f !== 'all' && t.dataset.cat !== f; });
+    fitAd();
+  }
+  window.addEventListener('resize', fitAd);
+  // 광고 칸이 나중에 접히거나 채워지면(공용 ads.js가 class를 바꿈) 다시 맞춘다
+  if (window.MutationObserver) new MutationObserver(fitAd).observe(adTile.querySelector('.jl-ad'), { subtree: true, attributes: true, attributeFilter: ['class'] });
+  btns.forEach(function (b) { b.addEventListener('click', function () {
+    setFilter(b.dataset.f);
+    try { history.replaceState(null, '', b.dataset.f === 'all' ? location.pathname : '#' + b.dataset.f); } catch (e) {}
+  }); });
+  var h = location.hash.slice(1); if (/^(fun|life|food)$/.test(h)) setFilter(h);
+
+  /* 하나뿐인 움직임: 화면에 들어올 때 미리보기 한 번 + 이름 숫자 굴리기 */
+  function countUp(el, to) {
+    var t0 = performance.now();
+    function f(t) { var p = Math.min(1, (t - t0) / 400); el.textContent = fmt(Math.round(to * (1 - Math.pow(1 - p, 3)))); if (p < 1) requestAnimationFrame(f); }
+    requestAnimationFrame(f);
+  }
+  if (!reduce && 'IntersectionObserver' in window) {
+    document.documentElement.classList.add('motion');
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('in'); io.unobserve(e.target);
+        if (e.target.classList.contains('t-names')) countUp($('nCnt'), S[1]);
+      });
+    }, { threshold: .25 });
+    board.querySelectorAll('.tile').forEach(function (t) { io.observe(t); });
+  }
+
+  /* 광고는 공용 common/ads.js가 요청·접기를 맡는다. 광고가 접히면 타일도 숨긴다
+     (:has를 못 쓰는 브라우저용으로 .empty도 붙여 둔다) */
+  document.querySelectorAll('.adtile').forEach(function (t) {
+    var ad = t.querySelector('.jl-ad'); if (!ad || !('MutationObserver' in window)) return;
+    function sync() { t.classList.toggle('empty', ad.classList.contains('jl-ad--empty')); }
+    new MutationObserver(sync).observe(ad, { attributes: true, attributeFilter: ['class'] }); sync();
+  });
+})();
+</script>
 </body>
 </html>
