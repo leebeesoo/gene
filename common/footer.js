@@ -1,5 +1,5 @@
 /*
- * 재미랩 공용 푸터. 사용법:
+ * 혹시나랩 공용 푸터. 사용법:
  *   <link rel="stylesheet" href="../common/footer.css">
  *   <footer class="jl-footer" data-site="lotto" data-home="../">
  *     <div data-notes> 이 서비스만의 짧은 안내(면책·19세·1336 등) </div>
@@ -9,7 +9,7 @@
  *   <script src="../common/footer.js" defer></script>
  * data-copy="…" 로 맨 아래 한 줄을 바꿀 수 있습니다(예: 구글 폼을 쓰는 맛남의 광장).
  * data-notes / data-sources / data-links 는 모두 선택. 모든 서비스가 같은 순서·모양으로 그려집니다.
- * 맨 아래에는 사이트 전체 안내(재미랩 소개·문의·개인정보처리방침·이용약관, 루트 페이지)가 항상 붙습니다.
+ * 맨 아래에는 사이트 전체 안내(혹시나랩 소개·문의·개인정보처리방침·이용약관, 루트 페이지)가 항상 붙습니다.
  */
 (function () {
   var SERVICES = [
@@ -31,7 +31,7 @@
   ];
   // 사이트 전체 안내 페이지(루트). 모든 푸터 맨 아래에 같은 순서로 붙는다.
   var SITE_LINKS = [
-    ['about.html', '재미랩 소개'],
+    ['about.html', '혹시나랩 소개'],
     ['contact.html', '문의'],
     ['privacy.html', '개인정보처리방침'],
     ['terms.html', '이용약관']
@@ -49,16 +49,16 @@
     // data-links에 같은 주소(home 기준)가 이미 있으면(허브) 다시 그리지 않는다
     var siteLinks = SITE_LINKS.filter(function (l) { return links.indexOf('"' + base + l[0] + '"') < 0; });
     var html = '<div class="jf-in">' +
-      '<div class="jf-top"><a class="jf-home" href="' + esc(home) + '">← 재미랩 홈</a>' +
+      '<div class="jf-top"><a class="jf-home" href="' + esc(home) + '">← 혹시나랩 홈</a>' +
       (links ? '<nav class="jf-links" aria-label="' + esc(me ? me[1] : '') + ' 안내">' + links + '</nav>' : '') + '</div>' +
       (notes ? '<div class="jf-notes">' + notes + '</div>' : '') +
       (sources ? '<details class="jf-sources"><summary>정보 출처</summary><div class="jf-body">' + sources + '</div></details>' : '') +
       '<details class="jf-others"><summary>다른 서비스</summary><ul class="jf-svc">' +
       others.map(function (s) { return '<li><a href="' + esc(base + s[0] + '/') + '"><b>' + esc(s[1]) + '</b>' + esc(s[2]) + '</a></li>'; }).join('') +
       '</ul></details>' +
-      (siteLinks.length ? '<nav class="jf-site" aria-label="재미랩 안내">' +
+      (siteLinks.length ? '<nav class="jf-site" aria-label="혹시나랩 안내">' +
         siteLinks.map(function (l) { return '<a href="' + esc(base + l[0]) + '">' + esc(l[1]) + '</a>'; }).join('') + '</nav>' : '') +
-      '<p class="jf-copy">© 재미랩' + (me ? ' · ' + esc(me[1]) : '') + ' · ' + esc(f.getAttribute('data-copy') || '입력한 정보는 이 기기에만 저장돼요') + '</p>' +
+      '<p class="jf-copy">© 혹시나랩' + (me ? ' · ' + esc(me[1]) : '') + ' · ' + esc(f.getAttribute('data-copy') || '입력한 정보는 이 기기에만 저장돼요') + '</p>' +
       '</div>';
     f.innerHTML = html;
     f.setAttribute('data-rendered', '1');

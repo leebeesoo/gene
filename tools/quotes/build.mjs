@@ -121,7 +121,7 @@ ${noindex ? '<meta name="robots" content="noindex,follow">\n' : ''}<meta name="t
 <meta name="theme-color" content="#121113" media="(prefers-color-scheme: dark)">
 <link rel="canonical" href="${canonical}">
 <meta property="og:type" content="${ogType}">
-<meta property="og:site_name" content="재미랩">
+<meta property="og:site_name" content="혹시나랩">
 <meta property="og:title" content="${esc(ogTitle || title)}">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:url" content="${canonical}">
@@ -159,8 +159,8 @@ ${GTM_BODY}
 <main id="main">
 ${body}
 </main>
-<footer class="jl-footer" data-site="quotes" data-home="${up}../" data-copy="번역·해설은 재미랩이 직접 썼어요. 원문은 저작권이 끝난 글만 실어요">
-  <div data-notes><p>명언은 저작권 보호기간이 끝난 글(1962년 이전에 세상을 떠난 사람의 글, 고전)만 싣고, 우리말 번역은 재미랩이 원문에서 직접 옮겼어요. 출처가 원문에서 확인된 것은 「확인됨」, 아직 확인하지 못한 것은 「추정」으로 표시해요.</p></div>
+<footer class="jl-footer" data-site="quotes" data-home="${up}../" data-copy="번역·해설은 혹시나랩이 직접 썼어요. 원문은 저작권이 끝난 글만 실어요">
+  <div data-notes><p>명언은 저작권 보호기간이 끝난 글(1962년 이전에 세상을 떠난 사람의 글, 고전)만 싣고, 우리말 번역은 혹시나랩이 원문에서 직접 옮겼어요. 출처가 원문에서 확인된 것은 「확인됨」, 아직 확인하지 못한 것은 「추정」으로 표시해요.</p></div>
   <div data-links><a href="${up}about/">출처 확인 기준</a><a href="${up}check/">진위 확인</a><a href="${up}privacy.html">개인정보처리방침</a></div>
 </footer>
 <div class="sheet-back" id="shareSheet" hidden>
@@ -209,7 +209,7 @@ function quoteBlock(q, up, { full = true, hTag = 'h3' } = {}) {
   ${showOrig ? `<p class="q-orig" lang="${lc}"${q.lang === '히브리어' ? ' dir="rtl"' : ''}>${br(q.original)}</p>` : ''}
   <p class="q-meta">${sourceLine(q, up)} ${statusBadge(q.status)}</p>
   ${full ? `<p class="q-note">${esc(q.note)}</p>
-  <p class="q-ev">${q.lang !== '한국어' ? `원어: ${esc(q.lang)} · 우리말 번역: 재미랩` : '원문 우리말'}${ev ? ` · 근거: ${ev}` : ' · 근거 링크: 아직 없음(확인 중)'} · 확인일 <span class="num">${esc(q.checked)}</span></p>`
+  <p class="q-ev">${q.lang !== '한국어' ? `원어: ${esc(q.lang)} · 우리말 번역: 혹시나랩` : '원문 우리말'}${ev ? ` · 근거: ${ev}` : ' · 근거 링크: 아직 없음(확인 중)'} · 확인일 <span class="num">${esc(q.checked)}</span></p>`
     : `<p class="q-ev"><a href="${up}${anchorUrl(q)}">원문·출처·해설 보기</a></p>`}
   ${q.page && full ? `<p class="q-ev"><a href="${up}q/${q.id}/">이 명언 자세히 보기(배경·비슷한 말·쓰는 법)</a></p>` : ''}
   <div class="q-acts">
@@ -433,7 +433,7 @@ ${AD}
   write(rel, page({ rel, depth: 2, title, desc, ogType: 'article', ogImage: cardRel(q.id), bodyClass: 'tpl-' + tpl,
     jsonld: { '@context': 'https://schema.org', '@graph': [
       { ...quotationLd(q), url: absUrl(rel), description: d.background.slice(0, 160) },
-      { '@type': 'Article', headline: title, description: desc, inLanguage: 'ko', dateModified: TODAY, url: absUrl(rel), image: absUrl(cardRel(q.id)), publisher: { '@type': 'Organization', name: '재미랩' } },
+      { '@type': 'Article', headline: title, description: desc, inLanguage: 'ko', dateModified: TODAY, url: absUrl(rel), image: absUrl(cardRel(q.id)), publisher: { '@type': 'Organization', name: '혹시나랩' } },
       crumbLd([[p.name + ' 명언', hasPersonPage(p.id) ? `p/${p.id}/` : rel], [titleCore, rel]]) ] }, body }));
 }
 
@@ -490,7 +490,7 @@ ${AD}
 </div>`;
     write(r, page({ rel: r, depth: 2, title: c.title, desc: d2, ogType: 'article', ogImage: cardRel(c.id), bodyClass: 'tpl-verdict',
       jsonld: { '@context': 'https://schema.org', '@graph': [
-        { '@type': 'ClaimReview', url: absUrl(r), datePublished: TODAY, author: { '@type': 'Organization', name: '재미랩' },
+        { '@type': 'ClaimReview', url: absUrl(r), datePublished: TODAY, author: { '@type': 'Organization', name: '혹시나랩' },
           claimReviewed: `${who}가 「${c.text_ko}」라고 말했다`, reviewRating: { '@type': 'Rating', alternateName: c.verdict } },
         crumbLd([['진위 확인', 'check/'], [who, r]]) ] }, body: b }));
   }
@@ -509,7 +509,7 @@ ${crumbs([['출처 확인 기준', null]], up)}
 <h2>1. 어떤 글을 싣나요</h2>
 <p>저작권 보호기간이 끝난 글만 실어요. 우리나라 저작권법상 1962년 이전에 세상을 떠난 사람의 글은 보호기간이 끝났고, 『논어』·『도덕경』·미쉬나처럼 아주 오래된 고전도 마찬가지예요. 노래 가사, 영화·드라마 대사, 지금 살아 있는 사람의 글은 싣지 않아요.</p>
 <h2>2. 번역은 누가 하나요</h2>
-<p>우리말 번역은 모두 재미랩이 원문을 보고 직접 옮겼어요. 이미 나와 있는 한국어 번역서나 다른 사이트의 번역 문장은 가져오지 않아요(번역도 저작물이라서요). 『명상록』은 그리스어 원문 대신 퍼블릭 도메인인 조지 롱의 1862년 영어 번역을 원문 칸에 싣고, 그 영어에서 옮겼다고 밝혀 두었어요. 우리말 시는 오늘날 맞춤법으로 띄어 쓰고, 원문 칸에 초판 표기를 함께 실어요.</p>
+<p>우리말 번역은 모두 혹시나랩이 원문을 보고 직접 옮겼어요. 이미 나와 있는 한국어 번역서나 다른 사이트의 번역 문장은 가져오지 않아요(번역도 저작물이라서요). 『명상록』은 그리스어 원문 대신 퍼블릭 도메인인 조지 롱의 1862년 영어 번역을 원문 칸에 싣고, 그 영어에서 옮겼다고 밝혀 두었어요. 우리말 시는 오늘날 맞춤법으로 띄어 쓰고, 원문 칸에 초판 표기를 함께 실어요.</p>
 <h2>3. 「확인됨」과 「추정」은 무엇이 다른가요</h2>
 <ul>
   <li><b>확인됨</b>: 원전 전자 텍스트(프로젝트 구텐베르크, 위키문헌, Sefaria, The Latin Library 등)에서 그 문장을 직접 찾았거나, 원문 자료를 인용한 믿을 만한 기관·연구 자료로 날짜와 문헌을 확인한 것. 명언마다 근거 링크와 확인일을 달아요.</li>
@@ -537,7 +537,7 @@ ${crumbs([['출처 확인 기준', null]], up)}
   const desc = `졸업·수능·위로·새해·결혼 등 상황별로 고른 명언 ${quotes.length}개. 원문과 출처, 우리말 번역, 진짜 그 사람이 한 말인지까지 확인했어요. 카톡으로 명언 카드를 보낼 수 있어요.`;
   const body = `<div class="wrap">
 <section class="home-head">
-  <p class="eyebrow">재미랩 · ${BRAND}</p>
+  <p class="eyebrow">혹시나랩 · ${BRAND}</p>
   <h1>지금 필요한 한 줄,<br>원문과 출처까지.</h1>
   <p class="lead">상황별로 고른 명언 <span class="num">${quotes.length}</span>개. 원전에서 문장을 확인한 것 <span class="num">${ok}</span>개, 우리말 번역은 원문에서 직접 옮겼어요.</p>
 </section>
@@ -584,7 +584,7 @@ ${AD}
 </div>`;
   write(rel, page({ rel, depth: 0, title, desc, ogTitle: `${BRAND_LINE} — ${BRAND}`, ogImage: 'cards/og-home.png', bodyClass: 'home',
     jsonld: { '@context': 'https://schema.org', '@graph': [
-      { '@type': 'WebSite', name: BRAND, alternateName: '재미랩 ' + BRAND, url: SITE, inLanguage: 'ko', description: desc },
+      { '@type': 'WebSite', name: BRAND, alternateName: '혹시나랩 ' + BRAND, url: SITE, inLanguage: 'ko', description: desc },
       { '@type': 'CollectionPage', name: title, url: SITE, inLanguage: 'ko', dateModified: TODAY,
         hasPart: SITUATIONS.map(s => ({ '@type': 'CollectionPage', name: s.title, url: absUrl(`s/${s.slug}/`) })) } ] }, body }));
 }

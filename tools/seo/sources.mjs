@@ -148,7 +148,7 @@ for (const [svc, [name, desc]] of Object.entries(PAGES)) {
   <h1>${inline(title)}</h1>
   <p class="src-meta">${esc(name)}에서 쓰는 자료의 출처, 확인한 날짜, 계산에 넣은 가정을 정리했어요. 틀린 곳은 <a href="../contact.html">문의</a>로 알려 주세요.</p>
 ${body}
-  <p class="src-back"><a href="./">← ${esc(name)} 첫 화면</a> · <a href="privacy.html">개인정보처리방침</a> · <a href="../">재미랩 홈</a></p>
+  <p class="src-back"><a href="./">← ${esc(name)} 첫 화면</a> · <a href="privacy.html">개인정보처리방침</a> · <a href="../">혹시나랩 홈</a></p>
 `;
   const main = wrapArticle ? `\n<article class="doc sources">${content}</article>\n` : content;
   let html = head + main + tail;

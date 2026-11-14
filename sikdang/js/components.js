@@ -64,7 +64,7 @@ export function monthBar(ms) {
   return `<div class="mbar" role="img" aria-label="제철 ${esc(rangeText(ms))}, 지금 ${now}월"><ol>${cells}</ol></div>`;
 }
 
-/** 광고 칸 (재미랩 공용 마크업 ../common/ads.js). kind: 'display' | 'infeed' | 'multiplex' */
+/** 광고 칸 (혹시나랩 공용 마크업 ../common/ads.js). kind: 'display' | 'infeed' | 'multiplex' */
 export function adSlot(kind = 'display') {
   const multiplex = kind === 'multiplex';
   return `<aside class="jl-ad${multiplex ? ' jl-ad--multiplex' : ''}" aria-label="광고"><small>광고</small><ins class="adsbygoogle" style="display:block" data-ad-client="${CONFIG.ADSENSE_CLIENT}" data-ad-slot="${multiplex ? CONFIG.ADSENSE_SLOT_MULTIPLEX : CONFIG.ADSENSE_SLOT}" data-ad-format="${multiplex ? 'autorelaxed' : 'auto'}"${multiplex ? '' : ' data-full-width-responsive="true"'}></ins></aside>`;

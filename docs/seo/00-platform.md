@@ -116,7 +116,7 @@ Sitemap: https://{DOMAIN}/sitemap.xml
 - `og:image`는 1200×630에 글자를 가운데 1100×560 안에 두고, 200KB 이하로 만들며, `og:image:alt`를 넣고 `?v={해시}`를 붙입니다. 1차는 템플릿별 이미지 1장, 2차는 페이지별 이미지(빌드에서 SVG→PNG 변환, 무료 `@resvg/resvg-js`)입니다.
 - `twitter:card`는 summary_large_image입니다.
 - canonical은 `https://{DOMAIN}{경로}/`입니다.
-- 빵부스러기는 `재미랩 › {서비스명} › {목록} › {항목}`으로 화면에 보이게 표시하고, 같은 내용을 BreadcrumbList로도 넣습니다.
+- 빵부스러기는 `혹시나랩 › {서비스명} › {목록} › {항목}`으로 화면에 보이게 표시하고, 같은 내용을 BreadcrumbList로도 넣습니다.
 - alt 규칙: 정보 이미지는 「{대상} {무엇} — {핵심 숫자}」(예: 「전어 월별 소매가 그래프 — 11월 100g 2,180원」)로 쓰고, 장식 이미지는 `alt=""`로 둡니다. 식재료 사진은 「{재료} 사진」으로 쓰고 출처는 캡션에 둡니다.
 
 **서비스 첫 화면(현재 길이 → 제안)**
@@ -164,7 +164,7 @@ JSON-LD 예시(sikdang menu):
 ```json
 {"@context":"https://schema.org","@graph":[
  {"@type":"BreadcrumbList","itemListElement":[
-  {"@type":"ListItem","position":1,"name":"재미랩","item":"https://{DOMAIN}/"},
+  {"@type":"ListItem","position":1,"name":"혹시나랩","item":"https://{DOMAIN}/"},
   {"@type":"ListItem","position":2,"name":"제철식당","item":"https://{DOMAIN}/sikdang/"},
   {"@type":"ListItem","position":3,"name":"여수","item":"https://{DOMAIN}/sikdang/region/yeosu/"},
   {"@type":"ListItem","position":4,"name":"서대회"}]},
@@ -172,7 +172,7 @@ JSON-LD 예시(sikdang menu):
   {"@type":"ListItem","position":1,"item":{"@type":"Restaurant","name":"삼학집","address":"{주소}","servesCuisine":"서대회"}}]},
  {"@type":"WebPage","dateModified":"2026-11-11","isPartOf":{"@id":"https://{DOMAIN}/#website"}}]}
 ```
-허브에만 `{"@type":"WebSite","@id":"https://{DOMAIN}/#website","name":"재미랩"}`과 Organization(logo 112px 이상, sameAs)을 넣습니다.
+허브에만 `{"@type":"WebSite","@id":"https://{DOMAIN}/#website","name":"혹시나랩"}`과 Organization(logo 112px 이상, sameAs)을 넣습니다.
 
 **본문 구성(모든 상세 공통)**
 - 맨 앞에 한 문장 답을 둡니다(H1 바로 아래, 숫자와 기준일 포함).

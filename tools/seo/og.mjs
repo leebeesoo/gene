@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 // 공유 이미지(1200×630 JPG) 만들기: node tools/seo/og.mjs  (playwright 필요, 사이트 빌드와 별개)
+// 하나만: node tools/seo/og.mjs hub  (틀 이름 앞부분으로 거름)
 // 이미지를 바꾸면 파일 이름의 버전(v1 → v2)을 올리고 HTML의 og:image도 함께 바꾼다(카카오 이미지 캐시).
 import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
@@ -10,13 +11,14 @@ const here = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(here, '..', '..');
 const ing = n => pathToFileURL(join(ROOT, 'sikdang', 'img', 'ing', n + '.webp')).href;
 const JOBS = [
-  { tpl: 'hub.html', out: 'og/hub.v2.jpg' },
+  { tpl: 'hub.html', out: 'og/hub.v3.jpg' },
   { tpl: 'family.html', out: 'family/og.v1.jpg' },
   { tpl: 'sikdang.html', out: 'sikdang/og.v1.jpg', q: '?imgs=' + ['gul', 'daege', 'jeoneo', 'sagwa'].map(ing).join(',') },
 ];
 const b = await chromium.launch();
 const p = await b.newPage({ viewport: { width: 1200, height: 630 } });
-for (const j of JOBS) {
+const only = process.argv[2];
+for (const j of JOBS.filter(j => !only || j.tpl.startsWith(only))) {
   await p.goto(pathToFileURL(join(here, 'og', j.tpl)).href + (j.q || ''));
   await p.waitForLoadState('networkidle').catch(() => {});
   await p.evaluate(() => document.fonts.ready);

@@ -1,6 +1,6 @@
 # 배포 — Cloudflare Pages
 
-사이트 주소는 **https://jaemilab.net/** (2026-11-14 구매, Cloudflare). 저장소에는 내부 문서(`docs/`, `tools/`, `workers/`, 테스트, `*.md`)가 함께 있으므로, Cloudflare가 매번 `node tools/seo/build.mjs`로 **공개할 파일만 `dist/`에 복사**해서 그 폴더만 배포합니다(의존성 없음, 몇 초). Cloudflare Pages를 GitHub 저장소에 연결해 두면 `main`에 푸시될 때마다(사람의 커밋이든, 매일 06:17 데이터 수집 커밋이든) 자동으로 빌드·배포됩니다. GitHub Actions 배포 워크플로는 쓰지 않습니다. `dist/`는 커밋하지 않습니다(`.gitignore`).
+혹시나랩 사이트 주소는 **https://jaemilab.net/** (2026-11-14 구매, Cloudflare). 저장소에는 내부 문서(`docs/`, `tools/`, `workers/`, 테스트, `*.md`)가 함께 있으므로, Cloudflare가 매번 `node tools/seo/build.mjs`로 **공개할 파일만 `dist/`에 복사**해서 그 폴더만 배포합니다(의존성 없음, 몇 초). Cloudflare Pages를 GitHub 저장소에 연결해 두면 `main`에 푸시될 때마다(사람의 커밋이든, 매일 06:17 데이터 수집 커밋이든) 자동으로 빌드·배포됩니다. GitHub Actions 배포 워크플로는 쓰지 않습니다. `dist/`는 커밋하지 않습니다(`.gitignore`).
 
 ## 1. Cloudflare Pages 프로젝트 만들기 (처음 한 번)
 

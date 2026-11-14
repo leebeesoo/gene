@@ -1,4 +1,4 @@
-# 재미랩 https://jaemilab.net/
+# 혹시나랩 https://jaemilab.net/
 User-agent: *
 Allow: /
 Disallow: /docs/

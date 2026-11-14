@@ -47,7 +47,7 @@ ${noindex ? '<meta name="robots" content="noindex,follow">\n' : ''}<meta name="t
 <meta name="theme-color" content="#121211" media="(prefers-color-scheme: dark)">
 <link rel="canonical" href="${url}">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="재미랩">
+<meta property="og:site_name" content="혹시나랩">
 <meta property="og:title" content="${esc(ogTitle || title)}">
 <meta property="og:description" content="${esc(ogDesc || desc)}">
 <meta property="og:url" content="${url}">
@@ -399,16 +399,16 @@ function buildAbout() {
     title: `만든 사람·만든 방법 — ${NAME}`,
     desc: `${NAME}을 누가, 어떤 자료로, 어떻게 만들었는지. 출처 목록, 확인일, 바뀐 내용 기록, 정정 요청 방법.`,
     path: 'about.html', up,
-    jsonld: { '@context': 'https://schema.org', '@type': 'AboutPage', name: `만든 사람·만든 방법 — ${NAME}`, url: BASE + 'about.html', inLanguage: 'ko', dateModified: CHECKED, publisher: { '@type': 'Organization', name: '재미랩' } }
+    jsonld: { '@context': 'https://schema.org', '@type': 'AboutPage', name: `만든 사람·만든 방법 — ${NAME}`, url: BASE + 'about.html', inLanguage: 'ko', dateModified: CHECKED, publisher: { '@type': 'Organization', name: '혹시나랩' } }
   }) + `
 <main id="main" class="wrap doc" tabindex="-1">
   <h1>만든 사람·만든 방법</h1>
   <p class="meta">마지막 확인 ${R.fmtDate(CHECKED)} · 다음 확인 예정 ${R.fmtDate(data.meta.nextCheck)}</p>
 
   <h2>누가 만드나요</h2>
-  <p>${NAME}은 작은 무료 웹 서비스 모음 「재미랩」에서 만들었어요. 재미랩 운영자 한 사람이 운영하며, 의료인·사회복지 전문가가 아니에요. 그래서 직접 판단하거나 조언하지 않고, 공식 기관이 발표한 기준만 옮겨 정리해요.</p>
+  <p>${NAME}은 작은 무료 웹 서비스 모음 「혹시나랩」에서 만들었어요. 혹시나랩 운영자 한 사람이 운영하며, 의료인·사회복지 전문가가 아니에요. 그래서 직접 판단하거나 조언하지 않고, 공식 기관이 발표한 기준만 옮겨 정리해요.</p>
   <ul>
-    <li>운영: 재미랩 운영자 (개인)</li>
+    <li>운영: 혹시나랩 운영자 (개인)</li>
     <li>문의·정정 요청: 이메일 <a href="mailto:gdf0620@gmail.com">gdf0620@gmail.com</a> 로 보내 주세요. 공식 자료와 다른 부분을 알려 주시면 확인 후 고치고 아래 기록에 남겨요.</li>
     <li>광고: Google AdSense 광고가 붙을 수 있어요. 제휴 링크, 병원·상품 홍보, 유료 게재는 없어요.</li>
   </ul>

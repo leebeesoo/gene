@@ -1,4 +1,4 @@
-# 재미랩 인계서 (2026-11-12)
+# 혹시나랩 인계서 (2026-11-12)
 
 새 세션은 이 파일부터 읽는다. 브랜치 `claude/epic-ramanujan-ddvniq`, PR leebeesoo/gene#1 (draft).
 
@@ -12,7 +12,7 @@
 ## 서비스 (전부 정적 사이트, 빌드 없음)
 | 경로 | 이름 | 상태 |
 |---|---|---|
-| / | 재미랩 허브 | 벤토 그리드 + 서비스별 미리보기, 빈칸은 광고 칸(안 채워지면 접힘) |
+| / | 혹시나랩 허브 | 벤토 그리드 + 서비스별 미리보기, 빈칸은 광고 칸(안 채워지면 접힘) |
 | /lotto/ | 오늘로또 | 만 19세 정확 확인, 1336 안내 |
 | /lottomap/ | 명당로드 | 동행복권 실데이터 1~1249회 |
 | /roots/ | 근본 테스트 | 사주 테스트 58개 통과, 질문 건너뛰기·이전·다음 |
@@ -39,8 +39,15 @@
 심사 동안 `/donkey/`(속마음 칠판)를 허브·푸터·소개·사이트맵에서 뺐다. 파일은 그대로 배포되어 직접 주소로는 열린다.
 - 뺀 곳: 허브 타일(`index.html`, 14→13가지·운세·재미 6→5, 격자 재배치), `common/footer.js` SERVICES(4번째 값 `true` = 숨김), 루트 `about.html`·`404.html` 목록, `privacy.html`·`terms.html`의 칠판 링크(문장은 남김), `tools/seo/sitemap.mjs`의 `HOLD`, donkey 4쪽에 noindex.
 - **승인 뒤 되돌리기:** ① `common/footer.js` donkey 줄의 `, true` 삭제 ② `tools/seo/sitemap.mjs`의 `HOLD`를 `new Set([])`로 ③ `donkey/index.html`의 noindex 두 줄 삭제, `donkey/about·privacy·rules.html`은 `noindex,follow`→`index,follow` ④ `index.html`에 donkey 타일·JSON-LD 항목을 다시 넣고 13→14, 운세·재미 5→6, 격자는 git 기록(이 변경 직전)의 grid-template-areas로 ⑤ `about.html`·`404.html` 목록 줄, `privacy.html`·`terms.html` 링크 복구, 루트 페이지 「13가지」→「14가지」 ⑥ `node tools/seo/sitemap.mjs` → `node tools/seo/build.mjs`. 칠판 화면에는 승인 뒤에도 광고를 넣지 않는다.
-- 사이트 이름 통일(구글 사이트 이름 기능): 공개 HTML 전부 `og:site_name`=「재미랩」(서비스 이름은 `<title>`에), 생성기 `tools/silver/build.mjs`·`tools/quotes/build.mjs`도 고침(`tools/seo/sources.mjs`는 privacy.html 머리를 따라감). 허브 WebSite JSON-LD에 `alternateName` ["재미랩 생활 도구","jaemilab.net"]. 새 페이지를 만들 때도 og:site_name은 「재미랩」. 공유 이미지 `og/hub.v2.jpg`(13가지, 칠판 뺌; 되돌릴 때 `tools/seo/og/hub.html`에 칠판 줄 넣고 v3로).
+- 사이트 이름 통일(구글 사이트 이름 기능): 공개 HTML 전부 `og:site_name`=「혹시나랩」(서비스 이름은 `<title>`에), 생성기 `tools/silver/build.mjs`·`tools/quotes/build.mjs`도 고침(`tools/seo/sources.mjs`는 privacy.html 머리를 따라감). 허브 WebSite JSON-LD에 `alternateName` ["혹시나 랩","jaemilab.net"]. 새 페이지를 만들 때도 og:site_name은 「혹시나랩」. 공유 이미지 `og/hub.v3.jpg`(13가지, 칠판 뺌; 되돌릴 때 `tools/seo/og/hub.html`에 칠판 줄 넣고 v4로, `node tools/seo/og.mjs hub`).
 - 같은 날 함께 한 것: 나이별 혜택 달력 나이 페이지 색인을 60·65·70세 3쪽으로 줄임(66·75·80은 70세와 본문 89~93% 같음, `tools/silver/build.mjs` INDEXED_AGES). 오늘로또·식구궁합 첫 화면에 정적 설명(번호 만드는 법·등수별 확률 / 상생·상극·육합·충 표), 허브 소개 문단, 사기 유형 목록 페이지 출처 추가.
+
+## 2026-11-14 사이트 이름 변경: 재미랩 → 혹시나랩 (사장님 결정)
+도메인 jaemilab.net은 그대로, 이름만 바꿈. 공개 파일 163개의 「재미랩」을 모두 「혹시나랩」으로(제목·설명·og:site_name·JSON-LD publisher·푸터 「© 혹시나랩」·번역 표기 「우리말 번역: 혹시나랩」·robots.txt·Worker 주석), 생성기(`tools/silver`, `tools/quotes`, `tools/seo/og/hub.html`)도 고침.
+- 허브: title 「혹시나랩 — 로또·운세·제철·생활 계산기 무료 모음」, 머리 한 줄 「혹시나 하고 열어 보는 작은 도구 13가지」, 「오늘의 재미판」→「오늘의 숫자」, WebSite `alternateName` ["혹시나 랩","jaemilab.net"], twitter:title/description 추가.
+- `about.html`에 「이름의 뜻」 단락(옛 이름 언급 없음 — 사장님 결정). 공유 이미지 `og/hub.v3.jpg` 새로 만듦(`node tools/seo/og.mjs hub`로 하나만 다시 만들 수 있게 함).
+- 남은 「재미랩」은 의도한 것뿐: 허브 alternateName, about 한 줄. docs의 옛 기록은 그대로 둠.
+- 사장님 할 일: 서치콘솔 홈 URL 재수집 요청, 서치어드바이저 사이트맵 재제출(구글 사이트 이름 반영엔 며칠~몇 주).
 
 ## 사장님 할 일 — 진행 현황 (2026-11-14 기준)
 

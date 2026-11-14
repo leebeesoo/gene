@@ -1,4 +1,4 @@
-/* 재미랩 공용 푸터 — 모든 서비스가 같은 모양을 씁니다. 색은 각 사이트 토큰을 따라가고, 없으면 기본값. */
+/* 혹시나랩 공용 푸터 — 모든 서비스가 같은 모양을 씁니다. 색은 각 사이트 토큰을 따라가고, 없으면 기본값. */
 .jl-footer{--jf-ink:var(--ink,var(--fg,#1c1c1e));--jf-muted:var(--muted,#6b6b70);--jf-line:var(--line,#e2e0db);--jf-bg:var(--surface,transparent);
   border-top:1px solid var(--jf-line);margin-top:56px;padding:28px max(16px,env(safe-area-inset-right,0px)) calc(32px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
   font:15px/1.6 "Pretendard Variable",Pretendard,system-ui,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;color:var(--jf-muted)}
