@@ -1,0 +1,16 @@
+{
+  "note": "카드 PNG용 글꼴. 모두 SIL Open Font License 1.1 — 이미지에 넣어 배포 가능, 글꼴 파일 자체 판매만 금지. 파일은 저장소에 넣지 않고(약 50MB) 빌드 때 .font-cache/로 받는다.",
+  "license": "https://openfontlicense.org/open-font-license-official-text/",
+  "files": [
+    { "family": "Gowun Batang", "weight": 400, "file": "GowunBatang-Regular.ttf", "url": "https://fonts.gstatic.com/s/gowunbatang/v12/ijwSs5nhRMIjYsdSgcMa3wRhXA.ttf", "source": "https://fonts.google.com/specimen/Gowun+Batang" },
+    { "family": "Gowun Batang", "weight": 700, "file": "GowunBatang-Bold.ttf", "url": "https://fonts.gstatic.com/s/gowunbatang/v12/ijwNs5nhRMIjYsdSgcMa3wRZ4J7awg.ttf", "source": "https://fonts.google.com/specimen/Gowun+Batang" },
+    { "family": "Black Han Sans", "weight": 400, "file": "BlackHanSans-Regular.ttf", "url": "https://fonts.gstatic.com/s/blackhansans/v24/ea8Aad44WunzF9a-dL6toA8r8nqV.ttf", "source": "https://fonts.google.com/specimen/Black+Han+Sans" },
+    { "family": "Do Hyeon", "weight": 400, "file": "DoHyeon-Regular.ttf", "url": "https://fonts.gstatic.com/s/dohyeon/v21/TwMN-I8CRRU2zM86HFE3.ttf", "source": "https://fonts.google.com/specimen/Do+Hyeon" },
+    { "family": "Noto Serif KR", "weight": 400, "file": "NotoSerifKR-Regular.ttf", "url": "https://fonts.gstatic.com/s/notoserifkr/v32/3JnoSDn90Gmq2mr3blnHaTZXbOtLJDvui3JOncjmeM52.ttf", "source": "https://fonts.google.com/noto/specimen/Noto+Serif+KR" },
+    { "family": "Noto Serif KR", "weight": 700, "file": "NotoSerifKR-Bold.ttf", "url": "https://fonts.gstatic.com/s/notoserifkr/v32/3JnoSDn90Gmq2mr3blnHaTZXbOtLJDvui3JOncgBf852.ttf", "source": "https://fonts.google.com/noto/specimen/Noto+Serif+KR" },
+    { "family": "Pretendard", "weight": 400, "file": "Pretendard-Regular.otf", "url": "https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/public/static/Pretendard-Regular.otf", "source": "https://github.com/orioncactus/pretendard" },
+    { "family": "Pretendard", "weight": 500, "file": "Pretendard-Regular.otf", "url": "https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/public/static/Pretendard-Regular.otf", "source": "https://github.com/orioncactus/pretendard" },
+    { "family": "Pretendard", "weight": 700, "file": "Pretendard-Bold.otf", "url": "https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/public/static/Pretendard-Bold.otf", "source": "https://github.com/orioncactus/pretendard" },
+    { "family": "Pretendard", "weight": 800, "file": "Pretendard-ExtraBold.otf", "url": "https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/public/static/Pretendard-ExtraBold.otf", "source": "https://github.com/orioncactus/pretendard" }
+  ]
+}

@@ -1,0 +1,2993 @@
+{
+ "version": 1,
+ "updated": "2026-11-13",
+ "persons": [
+  {
+   "id": "confucius",
+   "name": "공자",
+   "name_orig": "孔子",
+   "born": "기원전 551",
+   "died": "기원전 479",
+   "classical": true,
+   "bio": "중국 춘추시대 노나라의 사상가예요. 제자들이 스승의 말과 행동을 모아 엮은 책이 『논어』예요. 배움과 사람됨, 관계의 예절을 짧은 문답으로 남겨 2,500년 동안 동아시아 교육의 바탕이 됐어요.",
+   "works": "『논어』(제자들이 엮음)"
+  },
+  {
+   "id": "laozi",
+   "name": "노자",
+   "name_orig": "老子",
+   "born": "미상",
+   "died": "미상",
+   "classical": true,
+   "bio": "도가 사상의 시조로 전해지는 인물이에요. 『도덕경』 81장을 썼다고 전하지만, 실제로 있었던 사람인지와 언제 쓰였는지는 학자마다 의견이 달라요. 물, 비움, 멈춤 같은 비유로 억지로 하지 않는 삶을 말해요.",
+   "works": "『도덕경』"
+  },
+  {
+   "id": "avot",
+   "name": "탈무드 「아보트」",
+   "name_orig": "פרקי אבות",
+   "born": "",
+   "died": "3세기 초 편찬",
+   "classical": true,
+   "bio": "「피르케이 아보트(선조들의 어록)」는 유대 율법서 미쉬나의 한 편으로, 탈무드에 함께 실려 전해요. 힐렐 같은 랍비들의 짧은 가르침을 모았어요. 흔히 「탈무드 명언」으로 도는 말 가운데 원전이 확인되는 것은 대부분 이 책에서 나와요.",
+   "works": "미쉬나 「아보트」"
+  },
+  {
+   "id": "seneca",
+   "name": "세네카",
+   "name_orig": "Lucius Annaeus Seneca",
+   "born": "기원전 4년경",
+   "died": "65",
+   "bio": "로마의 스토아 철학자이자 정치가예요. 친구 루킬리우스에게 보낸 편지 124통(『도덕 서한』)에서 시간, 두려움, 우정, 가난을 다정하고 날카롭게 이야기해요. 네로 황제의 스승이었다가 끝내 그의 명령으로 목숨을 끊었어요.",
+   "works": "『루킬리우스에게 보낸 도덕 서한』, 『인생의 짧음에 관하여』"
+  },
+  {
+   "id": "marcus-aurelius",
+   "name": "마르쿠스 아우렐리우스",
+   "name_orig": "Marcus Aurelius",
+   "born": "121",
+   "died": "180",
+   "bio": "로마 황제이자 스토아 철학자예요. 전쟁터 막사에서 자신에게 쓴 메모가 『명상록』으로 남았어요. 원문은 그리스어이고, 여기 원문 칸에는 퍼블릭 도메인인 조지 롱(George Long)의 1862년 영어 번역을 함께 실어요.",
+   "works": "『명상록』"
+  },
+  {
+   "id": "shakespeare",
+   "name": "셰익스피어",
+   "name_orig": "William Shakespeare",
+   "born": "1564",
+   "died": "1616",
+   "bio": "영국의 극작가·시인이에요. 희곡 37편과 소네트 154편을 남겼어요. 대사 한 줄이 그대로 영어 관용구가 된 경우가 많아요. 여기 실린 말은 모두 극 중 인물의 대사라서, 누가 어떤 상황에서 한 말인지 함께 적었어요.",
+   "works": "『햄릿』, 『템페스트』, 『로미오와 줄리엣』, 『한여름 밤의 꿈』"
+  },
+  {
+   "id": "franklin",
+   "name": "벤저민 프랭클린",
+   "name_orig": "Benjamin Franklin",
+   "born": "1706",
+   "died": "1790",
+   "bio": "미국의 정치가·과학자·출판인이에요. 25년 동안 펴낸 『가난한 리처드의 달력』에 짧은 격언을 실었고, 그 격언을 모은 1758년 서문이 「부자가 되는 길」이에요. 격언 상당수는 옛 속담을 다듬은 것이라고 본인도 밝혔어요.",
+   "works": "『가난한 리처드의 달력』, 「부자가 되는 길」, 『자서전』"
+  },
+  {
+   "id": "goethe",
+   "name": "괴테",
+   "name_orig": "Johann Wolfgang von Goethe",
+   "born": "1749",
+   "died": "1832",
+   "bio": "독일의 시인·소설가·극작가예요. 60년 가까이 고쳐 쓴 『파우스트』와 성장소설의 원형인 『빌헬름 마이스터의 수업 시대』를 남겼어요. 괴테 이름으로 도는 말 중에는 출처가 없는 것이 많아서, 여기서는 원문을 찾은 것만 실어요.",
+   "works": "『파우스트』, 『빌헬름 마이스터의 수업 시대』, 『젊은 베르테르의 슬픔』"
+  },
+  {
+   "id": "emerson",
+   "name": "에머슨",
+   "name_orig": "Ralph Waldo Emerson",
+   "born": "1803",
+   "died": "1882",
+   "bio": "미국의 사상가·시인이에요. 「자기 신뢰」, 「우정」 같은 에세이로 개인의 직관과 자립을 강조했어요. 소로의 스승이자 친구였어요. 인터넷에 에머슨 이름으로 도는 「성공이란 무엇인가」 같은 글은 그가 쓴 게 아니에요.",
+   "works": "『에세이 1집·2집』, 『사회와 고독』"
+  },
+  {
+   "id": "thoreau",
+   "name": "소로",
+   "name_orig": "Henry David Thoreau",
+   "born": "1817",
+   "died": "1862",
+   "bio": "미국의 작가·사상가예요. 월든 호숫가 오두막에서 2년 2개월을 지낸 기록 『월든』(1854)과 「시민 불복종」을 남겼어요. 단순하게, 자기 박자대로 사는 법을 이야기해요.",
+   "works": "『월든』, 「시민 불복종」"
+  },
+  {
+   "id": "lincoln",
+   "name": "링컨",
+   "name_orig": "Abraham Lincoln",
+   "born": "1809",
+   "died": "1865",
+   "bio": "미국 16대 대통령이에요. 혼자 공부해 변호사가 됐고, 남북전쟁을 이끌며 노예제를 끝냈어요. 연설문과 편지가 거의 다 남아 있어서 진짜 링컨의 말인지 확인하기 쉬운 편이에요. 그만큼 그의 이름을 빌린 가짜 명언도 많아요.",
+   "works": "게티즈버그 연설, 두 번째 취임 연설, 편지"
+  },
+  {
+   "id": "twain",
+   "name": "마크 트웨인",
+   "name_orig": "Mark Twain",
+   "born": "1835",
+   "died": "1910",
+   "bio": "미국의 소설가·유머 작가예요. 『톰 소여의 모험』, 『허클베리 핀의 모험』을 썼어요. 소설 『바보 윌슨』의 각 장 머리에 「바보 윌슨의 달력」이라는 짧은 경구를 붙였는데, 트웨인 명언의 상당수가 여기서 나와요.",
+   "works": "『허클베리 핀의 모험』, 『바보 윌슨』, 『적도를 따라서』"
+  },
+  {
+   "id": "nietzsche",
+   "name": "니체",
+   "name_orig": "Friedrich Nietzsche",
+   "born": "1844",
+   "died": "1900",
+   "bio": "독일의 철학자예요. 짧고 강한 경구로 기존 도덕과 가치를 뒤흔들었어요. 『차라투스트라는 이렇게 말했다』, 『우상의 황혼』 등을 남겼어요. 문장이 짧아 앞뒤를 잘라 인용하기 쉬워서, 여기서는 원문의 앞뒤 문맥을 함께 적어요.",
+   "works": "『차라투스트라는 이렇게 말했다』, 『우상의 황혼』, 『즐거운 학문』"
+  },
+  {
+   "id": "einstein",
+   "name": "아인슈타인",
+   "name_orig": "Albert Einstein",
+   "born": "1879",
+   "died": "1955",
+   "bio": "상대성 이론을 세운 물리학자예요. 세상에서 가짜 명언이 가장 많이 붙는 사람 가운데 하나예요. 여기에는 편지·인터뷰 등 출처가 추적되는 말만 싣고, 잘못 알려진 말은 「진위 확인」에서 따로 다뤄요.",
+   "works": "편지, 인터뷰, 『나의 세계관』"
+  },
+  {
+   "id": "curie",
+   "name": "마리 퀴리",
+   "name_orig": "Marie Skłodowska Curie",
+   "born": "1867",
+   "died": "1934",
+   "bio": "폴란드 출신 물리학자·화학자예요. 방사능 연구로 노벨 물리학상과 화학상을 받았어요.",
+   "works": ""
+  },
+  {
+   "id": "yun-dongju",
+   "name": "윤동주",
+   "name_orig": "尹東柱",
+   "born": "1917",
+   "died": "1945",
+   "bio": "일제강점기의 시인이에요. 일본 유학 중 독립운동 혐의로 붙잡혀 후쿠오카 형무소에서 스물일곱에 세상을 떠났어요. 유고 시집 『하늘과 바람과 별과 시』(1948)가 남았어요. 우리말 시라서 번역 없이 원문을 실어요.",
+   "works": "『하늘과 바람과 별과 시』(1948)"
+  },
+  {
+   "id": "han-yongun",
+   "name": "한용운",
+   "name_orig": "韓龍雲",
+   "born": "1879",
+   "died": "1944",
+   "bio": "승려·시인·독립운동가예요. 3·1 운동 민족대표 33인 가운데 한 사람이에요. 시집 『님의 침묵』(1926)에서 떠난 「님」을 끝내 보내지 않는 마음을 노래했어요.",
+   "works": "『님의 침묵』(1926)"
+  },
+  {
+   "id": "kim-gu",
+   "name": "김구",
+   "name_orig": "金九",
+   "born": "1876",
+   "died": "1949",
+   "bio": "독립운동가예요. 대한민국 임시정부 주석을 지냈어요. 자서전 『백범일지』(1947년 국사원 간행) 끝에 실린 「나의 소원」에 그가 바란 나라의 모습을 담았어요.",
+   "works": "『백범일지』"
+  },
+  {
+   "id": "ahn-junggeun",
+   "name": "안중근",
+   "name_orig": "安重根",
+   "born": "1879",
+   "died": "1910",
+   "bio": "독립운동가예요. 1909년 하얼빈에서 이토 히로부미를 처단하고 이듬해 뤼순 감옥에서 순국했어요. 감옥에서 쓴 붓글씨(유묵) 여러 점이 보물로 지정돼 있어요.",
+   "works": "『동양평화론』(미완), 옥중 유묵"
+  },
+  {
+   "id": "yi-sunsin",
+   "name": "이순신",
+   "name_orig": "李舜臣",
+   "born": "1545",
+   "died": "1598",
+   "bio": "조선의 무신이에요. 임진왜란과 정유재란에서 수군을 이끌었어요. 전쟁 중에 쓴 일기 『난중일기』는 국보이자 유네스코 세계기록유산이에요.",
+   "works": "『난중일기』, 장계"
+  },
+  {
+   "id": "gandhi",
+   "name": "간디",
+   "name_orig": "Mohandas K. Gandhi",
+   "born": "1869",
+   "died": "1948",
+   "bio": "인도 독립운동 지도자예요. 비폭력 저항을 이끌었어요.",
+   "works": ""
+  }
+ ],
+ "quotes": [
+  {
+   "id": "q001",
+   "text_ko": "배우고 때때로 익히면 기쁘지 않은가. 벗이 먼 곳에서 찾아오면 즐겁지 않은가. 남이 알아주지 않아도 서운해하지 않으면 군자답지 않은가.",
+   "original": "學而時習之，不亦說乎？有朋自遠方來，不亦樂乎？人不知而不慍，不亦君子乎？",
+   "lang": "한문",
+   "author": "confucius",
+   "source": "『논어』 「학이」 1장",
+   "year": "기원전 5세기(공자 사후 편찬)",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌 원문",
+     "url": "https://zh.wikisource.org/wiki/%E8%AB%96%E8%AA%9E/%E5%AD%B8%E8%80%8C%E7%AC%AC%E4%B8%80"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "graduation",
+    "thanks"
+   ],
+   "topics": [
+    "learning",
+    "friendship"
+   ],
+   "note": "『논어』의 첫 문장이에요. 배움의 기쁨, 벗의 즐거움, 남의 평가에 흔들리지 않는 태도를 차례로 말해요. 졸업식에서 「배움」과 「친구」를 함께 이야기할 때 잘 맞아요."
+  },
+  {
+   "id": "q002",
+   "text_ko": "세 사람이 길을 가면 그 가운데 반드시 내 스승이 있다. 좋은 점은 골라서 따르고, 좋지 않은 점은 보고 나를 고친다.",
+   "original": "三人行，必有我師焉。擇其善者而從之，其不善者而改之。",
+   "lang": "한문",
+   "author": "confucius",
+   "source": "『논어』 「술이」 21장",
+   "year": "기원전 5세기(공자 사후 편찬)",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌 원문",
+     "url": "https://zh.wikisource.org/wiki/%E8%AB%96%E8%AA%9E/%E8%BF%B0%E8%80%8C%E7%AC%AC%E4%B8%83"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "graduation",
+    "retirement"
+   ],
+   "topics": [
+    "learning"
+   ],
+   "note": "「누구에게서나 배울 수 있다」는 뜻이에요. 좋지 않은 모습도 나를 돌아보는 거울로 삼으라는 뒷부분까지 함께 쓰면 뜻이 온전해져요."
+  },
+  {
+   "id": "q003",
+   "text_ko": "아는 사람은 좋아하는 사람만 못하고, 좋아하는 사람은 즐기는 사람만 못하다.",
+   "original": "知之者不如好之者，好之者不如樂之者。",
+   "lang": "한문",
+   "author": "confucius",
+   "source": "『논어』 「옹야」 18장",
+   "year": "기원전 5세기(공자 사후 편찬)",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌 원문",
+     "url": "https://zh.wikisource.org/wiki/%E8%AB%96%E8%AA%9E/%E9%9B%8D%E4%B9%9F%E7%AC%AC%E5%85%AD"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "exam",
+    "cheer"
+   ],
+   "topics": [
+    "learning",
+    "happiness"
+   ],
+   "note": "공부든 일이든 오래 가는 힘은 즐거움에서 나온다는 말이에요. 시험을 앞둔 사람에게는 「끝까지 즐겨 보라」는 응원으로 쓸 수 있어요."
+  },
+  {
+   "id": "q004",
+   "text_ko": "잘못하고도 고치지 않는 것, 이것을 잘못이라고 한다.",
+   "original": "過而不改，是謂過矣。",
+   "lang": "한문",
+   "author": "confucius",
+   "source": "『논어』 「위령공」 30장",
+   "year": "기원전 5세기(공자 사후 편찬)",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌 원문",
+     "url": "https://zh.wikisource.org/wiki/%E8%AB%96%E8%AA%9E/%E8%A1%9B%E9%9D%88%E5%85%AC%E7%AC%AC%E5%8D%81%E4%BA%94"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "newyear",
+    "comfort"
+   ],
+   "topics": [
+    "failure"
+   ],
+   "note": "잘못 자체보다 고치지 않는 것을 문제로 봐요. 뒤집으면 「고치면 된다」는 위로가 돼요. 새해 다짐에 어울려요."
+  },
+  {
+   "id": "q005",
+   "text_ko": "날이 추워진 뒤에야 소나무와 잣나무가 늦게 시든다는 것을 안다.",
+   "original": "歲寒，然後知松柏之後凋也。",
+   "lang": "한문",
+   "author": "confucius",
+   "source": "『논어』 「자한」 28장",
+   "year": "기원전 5세기(공자 사후 편찬)",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌 원문",
+     "url": "https://zh.wikisource.org/wiki/%E8%AB%96%E8%AA%9E/%E5%AD%90%E7%BD%95%E7%AC%AC%E4%B9%9D"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "comfort",
+    "cheer"
+   ],
+   "topics": [
+    "patience",
+    "friendship"
+   ],
+   "note": "어려운 때가 와야 누가 변하지 않는지 알 수 있다는 말이에요. 추사 김정희가 제주 유배 중 변함없이 책을 보내 준 제자 이상적에게 그려 준 「세한도」의 제목이 여기서 나왔어요."
+  },
+  {
+   "id": "q006",
+   "text_ko": "덕이 있는 사람은 외롭지 않다. 반드시 이웃이 있다.",
+   "original": "德不孤，必有鄰。",
+   "lang": "한문",
+   "author": "confucius",
+   "source": "『논어』 「이인」 25장",
+   "year": "기원전 5세기(공자 사후 편찬)",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌 원문",
+     "url": "https://zh.wikisource.org/wiki/%E8%AB%96%E8%AA%9E/%E9%87%8C%E4%BB%81%E7%AC%AC%E5%9B%9B"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "retirement",
+    "farewell"
+   ],
+   "topics": [
+    "friendship"
+   ],
+   "note": "바르게 사는 사람 곁에는 결국 뜻을 같이하는 사람이 모인다는 뜻이에요. 떠나는 동료에게 「어디서든 좋은 사람들이 함께할 것」이라는 인사로 쓸 수 있어요."
+  },
+  {
+   "id": "q007",
+   "text_ko": "나는 열다섯에 배움에 뜻을 두었고, 서른에 섰으며, 마흔에 흔들리지 않았고, 쉰에 하늘의 뜻을 알았으며, 예순에 귀가 순해졌고, 일흔에는 마음 가는 대로 해도 법도를 넘지 않았다.",
+   "original": "吾十有五而志于學，三十而立，四十而不惑，五十而知天命，六十而耳順，七十而從心所欲，不踰矩。",
+   "lang": "한문",
+   "author": "confucius",
+   "source": "『논어』 「위정」 4장",
+   "year": "기원전 5세기(공자 사후 편찬)",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌 원문",
+     "url": "https://zh.wikisource.org/wiki/%E8%AB%96%E8%AA%9E/%E7%82%BA%E6%94%BF%E7%AC%AC%E4%BA%8C"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "birthday"
+   ],
+   "topics": [
+    "time",
+    "learning"
+   ],
+   "note": "나이를 부르는 말 「지학(15)·이립(30)·불혹(40)·지천명(50)·이순(60)·종심(70)」이 모두 이 한 문장에서 나왔어요. 30·40·50·60·70세 생일 카드에 그 나이에 해당하는 구절을 골라 쓰기 좋아요."
+  },
+  {
+   "id": "q008",
+   "text_ko": "아는 것을 안다고 하고, 모르는 것을 모른다고 하는 것, 이것이 아는 것이다.",
+   "original": "知之爲知之，不知爲不知，是知也。",
+   "lang": "한문",
+   "author": "confucius",
+   "source": "『논어』 「위정」 17장",
+   "year": "기원전 5세기(공자 사후 편찬)",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌 원문",
+     "url": "https://zh.wikisource.org/wiki/%E8%AB%96%E8%AA%9E/%E7%82%BA%E6%94%BF%E7%AC%AC%E4%BA%8C"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "exam"
+   ],
+   "topics": [
+    "learning"
+   ],
+   "note": "제자 자로에게 한 말이에요. 모르는 곳을 정확히 아는 것이 공부의 시작이라는 뜻이라, 시험 직전 오답 정리를 하는 사람에게 잘 맞아요."
+  },
+  {
+   "id": "q009",
+   "text_ko": "산을 쌓는 일에 비유하면, 흙 한 삼태기가 모자라 이루지 못하고 멈췄더라도 멈춘 것은 나다.",
+   "original": "譬如爲山，未成一簣，止，吾止也。",
+   "lang": "한문",
+   "author": "confucius",
+   "source": "『논어』 「자한」 18장",
+   "year": "기원전 5세기(공자 사후 편찬)",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌 원문",
+     "url": "https://zh.wikisource.org/wiki/%E8%AB%96%E8%AA%9E/%E5%AD%90%E7%BD%95%E7%AC%AC%E4%B9%9D"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "exam",
+    "challenge"
+   ],
+   "topics": [
+    "patience"
+   ],
+   "note": "마지막 한 걸음을 남기고 멈추는 것도 결국 내 선택이라는 말이에요. 이어지는 구절은 「땅을 고르는 일에 비유하면, 흙 한 삼태기를 부었더라도 나아간 것은 나다」예요. 조금이라도 나아가면 그것도 내 몫이라는 응원이에요."
+  },
+  {
+   "id": "q010",
+   "text_ko": "부모님의 나이는 꼭 알고 있어야 한다. 한편으로는 오래 사셔서 기쁘고, 한편으로는 연세가 드셔서 걱정되기 때문이다.",
+   "original": "父母之年，不可不知也。一則以喜，一則以懼。",
+   "lang": "한문",
+   "author": "confucius",
+   "source": "『논어』 「이인」 21장",
+   "year": "기원전 5세기(공자 사후 편찬)",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌 원문",
+     "url": "https://zh.wikisource.org/wiki/%E8%AB%96%E8%AA%9E/%E9%87%8C%E4%BB%81%E7%AC%AC%E5%9B%9B"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "birthday",
+    "thanks"
+   ],
+   "topics": [
+    "love",
+    "time"
+   ],
+   "note": "부모님 생신 카드에 잘 어울리는 구절이에요. 「기쁨」과 「걱정」이 한 문장에 같이 있어서 마음을 솔직하게 전할 수 있어요."
+  },
+  {
+   "id": "q011",
+   "text_ko": "옛것을 익혀 새것을 알면 스승이 될 만하다.",
+   "original": "溫故而知新，可以爲師矣。",
+   "lang": "한문",
+   "author": "confucius",
+   "source": "『논어』 「위정」 11장",
+   "year": "기원전 5세기(공자 사후 편찬)",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌 원문",
+     "url": "https://zh.wikisource.org/wiki/%E8%AB%96%E8%AA%9E/%E7%82%BA%E6%94%BF%E7%AC%AC%E4%BA%8C"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "graduation",
+    "retirement"
+   ],
+   "topics": [
+    "learning"
+   ],
+   "note": "사자성어 「온고지신」의 출처예요. 쌓아 온 경험 위에 새것을 더하는 사람이 남을 가르칠 수 있다는 뜻이라, 은사님 퇴임 인사에 잘 맞아요."
+  },
+  {
+   "id": "q012",
+   "text_ko": "배우기만 하고 생각하지 않으면 얻는 것이 없고, 생각만 하고 배우지 않으면 위태롭다.",
+   "original": "學而不思則罔，思而不學則殆。",
+   "lang": "한문",
+   "author": "confucius",
+   "source": "『논어』 「위정」 15장",
+   "year": "기원전 5세기(공자 사후 편찬)",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌 원문",
+     "url": "https://zh.wikisource.org/wiki/%E8%AB%96%E8%AA%9E/%E7%82%BA%E6%94%BF%E7%AC%AC%E4%BA%8C"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "exam"
+   ],
+   "topics": [
+    "learning"
+   ],
+   "note": "외우기와 이해하기, 둘 중 하나만으로는 부족하다는 말이에요. 공부 방법을 돌아볼 때 쓰기 좋아요."
+  },
+  {
+   "id": "q013",
+   "text_ko": "뒤에 오는 사람들이 두렵다. 그들이 지금의 우리만 못하리라고 어찌 장담하겠는가.",
+   "original": "後生可畏，焉知來者之不如今也？",
+   "lang": "한문",
+   "author": "confucius",
+   "source": "『논어』 「자한」 22장",
+   "year": "기원전 5세기(공자 사후 편찬)",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌 원문",
+     "url": "https://zh.wikisource.org/wiki/%E8%AB%96%E8%AA%9E/%E5%AD%90%E7%BD%95%E7%AC%AC%E4%B9%9D"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "graduation",
+    "retirement"
+   ],
+   "topics": [
+    "learning"
+   ],
+   "note": "「후생가외」의 출처예요. 젊은 사람의 가능성을 존중하는 말이라, 졸업생에게 주는 선배·선생님의 축사나 후배에게 자리를 넘겨주는 퇴임 인사에 어울려요."
+  },
+  {
+   "id": "q014",
+   "text_ko": "내가 바라지 않는 일을 남에게 하지 말라.",
+   "original": "己所不欲，勿施於人。",
+   "lang": "한문",
+   "author": "confucius",
+   "source": "『논어』 「위령공」 24장",
+   "year": "기원전 5세기(공자 사후 편찬)",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌 원문",
+     "url": "https://zh.wikisource.org/wiki/%E8%AB%96%E8%AA%9E/%E8%A1%9B%E9%9D%88%E5%85%AC%E7%AC%AC%E5%8D%81%E4%BA%94"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "wedding"
+   ],
+   "topics": [
+    "friendship",
+    "love"
+   ],
+   "note": "평생 지킬 한마디를 묻는 제자에게 공자가 「서(恕)」, 곧 헤아림이라고 답하며 덧붙인 말이에요. 「안연」 편에도 같은 문장이 나와요. 함께 살아갈 두 사람에게 주는 짧은 당부로 쓸 수 있어요."
+  },
+  {
+   "id": "q015",
+   "text_ko": "천 리 길도 발밑에서 시작된다.",
+   "original": "千里之行，始於足下。",
+   "lang": "한문",
+   "author": "laozi",
+   "source": "『도덕경』 64장",
+   "year": "기원전 4세기경(추정)",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌 『도덕경』(왕필본) 원문",
+     "url": "https://zh.wikisource.org/wiki/%E9%81%93%E5%BE%B7%E7%B6%93%20(%E7%8E%8B%E5%BC%BC%E6%9C%AC)"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "newyear",
+    "challenge"
+   ],
+   "topics": [
+    "patience",
+    "courage"
+   ],
+   "note": "우리 속담 「천 리 길도 한 걸음부터」의 뿌리로 자주 소개되는 문장이에요. 원문은 「발 아래」에서 시작한다고 해서, 거창한 첫걸음보다 지금 서 있는 자리를 강조해요.",
+   "page": true,
+   "detail": {
+    "background": "『도덕경』 64장은 「일이 커지기 전에 다스리라」는 이야기예요. 아름드리나무는 털끝만 한 싹에서, 9층 누대는 흙 한 줌에서, 천 리 길은 발밑에서 시작된다는 세 가지 비유를 차례로 든 뒤, 끝에서는 「일을 망치는 것은 거의 다 이루었을 때」라며 처음처럼 끝을 조심하라고 말해요. 그래서 이 문장은 「시작이 반」이라는 격려이면서 「끝까지 처음 마음으로」라는 당부이기도 해요. 우리말 속담 「천 리 길도 한 걸음부터」와 뜻이 같아 자주 함께 소개되지만, 속담이 이 문장에서 나왔다는 기록이 따로 있는 건 아니에요.",
+    "similar": [
+     "q016",
+     "q027",
+     "q096"
+    ],
+    "usage": [
+     "새해 계획 카드: 「천 리 길도 발밑에서 시작된대. 올해 첫걸음을 응원해!」",
+     "첫 출근하는 동생에게: 「거창한 다짐보다 오늘 하루. 천 리 길도 발밑에서부터.」",
+     "마라톤·자격증처럼 긴 목표를 시작하는 친구에게 짧은 응원 메시지로."
+    ]
+   }
+  },
+  {
+   "id": "q016",
+   "text_ko": "아름드리나무도 털끝만 한 싹에서 자라고, 9층 누대도 흙을 한 줌씩 쌓아 올린 데서 시작된다.",
+   "original": "合抱之木，生於毫末；九層之臺，起於累土。",
+   "lang": "한문",
+   "author": "laozi",
+   "source": "『도덕경』 64장",
+   "year": "기원전 4세기경(추정)",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌 『도덕경』(왕필본) 원문",
+     "url": "https://zh.wikisource.org/wiki/%E9%81%93%E5%BE%B7%E7%B6%93%20(%E7%8E%8B%E5%BC%BC%E6%9C%AC)"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "exam",
+    "newyear"
+   ],
+   "topics": [
+    "patience"
+   ],
+   "note": "바로 뒤에 「천 리 길도 발밑에서 시작된다」가 이어져요. 매일의 작은 공부가 쌓인다는 응원으로 쓰기 좋아요."
+  },
+  {
+   "id": "q017",
+   "text_ko": "남을 아는 사람은 지혜롭고, 자신을 아는 사람은 밝다. 남을 이기는 사람은 힘이 있고, 자신을 이기는 사람은 강하다. 만족할 줄 아는 사람은 넉넉하다.",
+   "original": "知人者智，自知者明。勝人者有力，自勝者強。知足者富。",
+   "lang": "한문",
+   "author": "laozi",
+   "source": "『도덕경』 33장",
+   "year": "기원전 4세기경(추정)",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌 『도덕경』(왕필본) 원문",
+     "url": "https://zh.wikisource.org/wiki/%E9%81%93%E5%BE%B7%E7%B6%93%20(%E7%8E%8B%E5%BC%BC%E6%9C%AC)"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "exam",
+    "challenge"
+   ],
+   "topics": [
+    "courage",
+    "happiness"
+   ],
+   "note": "경쟁 상대보다 어제의 나를 이기라는 말로 자주 쓰여요. 시험을 앞둔 사람에게 「남과 비교하지 말고 나를 이기면 된다」는 응원이 돼요."
+  },
+  {
+   "id": "q018",
+   "text_ko": "가장 좋은 것은 물과 같다. 물은 모든 것을 이롭게 하면서도 다투지 않는다.",
+   "original": "上善若水。水善利萬物而不爭。",
+   "lang": "한문",
+   "author": "laozi",
+   "source": "『도덕경』 8장",
+   "year": "기원전 4세기경(추정)",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌 『도덕경』(왕필본) 원문",
+     "url": "https://zh.wikisource.org/wiki/%E9%81%93%E5%BE%B7%E7%B6%93%20(%E7%8E%8B%E5%BC%BC%E6%9C%AC)"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "retirement",
+    "wedding"
+   ],
+   "topics": [
+    "love"
+   ],
+   "note": "「상선약수」예요. 낮은 곳으로 흐르며 남을 살리는 물의 성질을 사람의 덕에 빗댔어요. 오랫동안 묵묵히 일해 온 분의 퇴임을 기릴 때 어울려요."
+  },
+  {
+   "id": "q019",
+   "text_ko": "큰 그릇은 늦게 이루어진다.",
+   "original": "大器晚成",
+   "lang": "한문",
+   "author": "laozi",
+   "source": "『도덕경』 41장",
+   "year": "기원전 4세기경(추정)",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌 『도덕경』(왕필본) 원문",
+     "url": "https://zh.wikisource.org/wiki/%E9%81%93%E5%BE%B7%E7%B6%93%20(%E7%8E%8B%E5%BC%BC%E6%9C%AC)"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "comfort",
+    "exam"
+   ],
+   "topics": [
+    "patience",
+    "failure"
+   ],
+   "note": "「대기만성」이에요. 원래 문맥은 「큰 네모는 모서리가 없고, 큰 그릇은 늦게 이루어지며, 큰 소리는 들리지 않는다」로, 진짜 큰 것은 보통의 눈으로 잘 보이지 않는다는 뜻이에요. 결과가 늦게 나오는 사람에게 주는 위로로 오래 쓰여 왔어요."
+  },
+  {
+   "id": "q020",
+   "text_ko": "회오리바람도 아침 내내 불지 않고, 소나기도 하루 종일 내리지 않는다.",
+   "original": "飄風不終朝，驟雨不終日。",
+   "lang": "한문",
+   "author": "laozi",
+   "source": "『도덕경』 23장",
+   "year": "기원전 4세기경(추정)",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌 『도덕경』(왕필본) 원문",
+     "url": "https://zh.wikisource.org/wiki/%E9%81%93%E5%BE%B7%E7%B6%93%20(%E7%8E%8B%E5%BC%BC%E6%9C%AC)"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "comfort"
+   ],
+   "topics": [
+    "patience",
+    "time"
+   ],
+   "note": "거센 것은 오래가지 않는다는 말이에요. 힘든 시기를 지나는 사람에게 「이것도 지나간다」는 위로를 옛말로 전할 수 있어요."
+  },
+  {
+   "id": "q021",
+   "text_ko": "만족할 줄 알면 욕되지 않고, 멈출 줄 알면 위태롭지 않아 오래갈 수 있다.",
+   "original": "知足不辱，知止不殆，可以長久。",
+   "lang": "한문",
+   "author": "laozi",
+   "source": "『도덕경』 44장",
+   "year": "기원전 4세기경(추정)",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌 『도덕경』(왕필본) 원문",
+     "url": "https://zh.wikisource.org/wiki/%E9%81%93%E5%BE%B7%E7%B6%93%20(%E7%8E%8B%E5%BC%BC%E6%9C%AC)"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "retirement",
+    "rest"
+   ],
+   "topics": [
+    "happiness"
+   ],
+   "note": "「지족」과 「지지(멈출 줄 앎)」를 말해요. 박수 받을 때 내려오는 결정을 존중하는 말이라 퇴임·은퇴 인사에 잘 맞아요."
+  },
+  {
+   "id": "q022",
+   "text_ko": "내가 나를 위하지 않으면 누가 나를 위하겠는가. 그러나 나만을 위한다면 나는 무엇인가. 지금이 아니면 언제인가.",
+   "original": "אִם אֵין אֲנִי לִי, מִי לִי. וּכְשֶׁאֲנִי לְעַצְמִי, מָה אֲנִי. וְאִם לֹא עַכְשָׁיו, אֵימָתָי",
+   "lang": "히브리어",
+   "author": "avot",
+   "speaker": "힐렐",
+   "source": "미쉬나 「아보트」 1장 14절(힐렐)",
+   "year": "기원전 1세기 말(힐렐 활동기), 3세기 초 편찬",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "Sefaria 히브리어 원문",
+     "url": "https://www.sefaria.org/Pirkei_Avot.1.14"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "challenge",
+    "newyear"
+   ],
+   "topics": [
+    "courage",
+    "time"
+   ],
+   "note": "랍비 힐렐의 말이에요. 「지금이 아니면 언제?」라는 마지막 구절만 따로 많이 쓰이지만, 나를 챙기는 것과 남을 생각하는 것의 균형을 말한 앞부분까지 읽어야 뜻이 온전해요."
+  },
+  {
+   "id": "q023",
+   "text_ko": "누가 지혜로운가? 모든 사람에게서 배우는 사람이다. 누가 강한가? 자기 마음을 다스리는 사람이다. 누가 넉넉한가? 자기 몫에 기뻐하는 사람이다. 누가 존경받는가? 남을 존중하는 사람이다.",
+   "original": "אֵיזֶהוּ חָכָם, הַלּוֹמֵד מִכָּל אָדָם … אֵיזֶהוּ גִבּוֹר, הַכּוֹבֵשׁ אֶת יִצְרוֹ … אֵיזֶהוּ עָשִׁיר, הַשָּׂמֵחַ בְּחֶלְקוֹ … אֵיזֶהוּ מְכֻבָּד, הַמְכַבֵּד אֶת הַבְּרִיּוֹת",
+   "lang": "히브리어",
+   "author": "avot",
+   "speaker": "벤 조마",
+   "source": "미쉬나 「아보트」 4장 1절(벤 조마)",
+   "year": "2세기 초(벤 조마 활동기), 3세기 초 편찬",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "Sefaria 히브리어 원문",
+     "url": "https://www.sefaria.org/Pirkei_Avot.4.1"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "graduation"
+   ],
+   "topics": [
+    "learning",
+    "happiness"
+   ],
+   "note": "네 가지 질문과 답으로 된 짧은 가르침이에요. 원문에는 답마다 구약 성경 구절이 근거로 붙어 있어서 여기서는 「…」로 줄였어요. 졸업생에게 「앞으로 어떤 사람이 될까」를 묻는 축사에 쓰기 좋아요."
+  },
+  {
+   "id": "q024",
+   "text_ko": "일을 다 끝내는 것이 네 몫은 아니다. 그렇다고 손을 놓아도 되는 것도 아니다.",
+   "original": "לֹא עָלֶיךָ הַמְּלָאכָה לִגְמֹר, וְלֹא אַתָּה בֶן חוֹרִין לִבָּטֵל מִמֶּנָּה",
+   "lang": "히브리어",
+   "author": "avot",
+   "speaker": "랍비 타르폰",
+   "source": "미쉬나 「아보트」 2장 16절(랍비 타르폰)",
+   "year": "1~2세기(타르폰 활동기), 3세기 초 편찬",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "Sefaria 히브리어 원문",
+     "url": "https://www.sefaria.org/Pirkei_Avot.2.16"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "retirement",
+    "cheer"
+   ],
+   "topics": [
+    "patience"
+   ],
+   "note": "큰일 앞에서 지치지 않게 해 주는 말이에요. 혼자 다 해내지 않아도 되지만, 내 몫만큼은 한다는 태도예요. 일을 다음 사람에게 넘기며 떠나는 퇴임 인사에도 어울려요."
+  },
+  {
+   "id": "q025",
+   "text_ko": "그 사람의 자리에 서 보기 전에는 그를 판단하지 말라.",
+   "original": "וְאַל תָּדִין אֶת חֲבֵרְךָ עַד שֶׁתַּגִּיעַ לִמְקוֹמוֹ",
+   "lang": "히브리어",
+   "author": "avot",
+   "speaker": "힐렐",
+   "source": "미쉬나 「아보트」 2장 4절(힐렐)",
+   "year": "기원전 1세기 말(힐렐 활동기), 3세기 초 편찬",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "Sefaria 히브리어 원문",
+     "url": "https://www.sefaria.org/Pirkei_Avot.2.4"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "wedding",
+    "comfort"
+   ],
+   "topics": [
+    "friendship",
+    "love"
+   ],
+   "note": "원문은 「네 동료(חבר)」를 그의 자리에 이르기 전까지 판단하지 말라는 말이에요. 부부·친구 사이에서 상대 입장에 서 보라는 당부로 쓸 수 있어요."
+  },
+  {
+   "id": "q026",
+   "text_ko": "루킬리우스여, 모든 것은 남의 것이고 오직 시간만이 우리의 것이다.",
+   "original": "Omnia, Lucili, aliena sunt, tempus tantum nostrum est.",
+   "lang": "라틴어",
+   "author": "seneca",
+   "source": "『도덕 서한』 1번째 편지 3절",
+   "year": "62~65년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "The Latin Library 라틴어 원문",
+     "url": "https://www.thelatinlibrary.com/sen/seneca.ep1.shtml"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "newyear",
+    "rest"
+   ],
+   "topics": [
+    "time"
+   ],
+   "note": "『도덕 서한』의 첫 편지예요. 돈이나 물건은 빌려도 갚을 수 있지만, 시간을 받은 것은 아무도 빚으로 여기지 않는다고 꼬집어요."
+  },
+  {
+   "id": "q027",
+   "text_ko": "미루는 사이에 인생은 지나가 버린다.",
+   "original": "Dum differtur vita transcurrit.",
+   "lang": "라틴어",
+   "author": "seneca",
+   "source": "『도덕 서한』 1번째 편지 3절",
+   "year": "62~65년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "The Latin Library 라틴어 원문",
+     "url": "https://www.thelatinlibrary.com/sen/seneca.ep1.shtml"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "newyear",
+    "challenge"
+   ],
+   "topics": [
+    "time"
+   ],
+   "note": "바로 앞 문장은 「오늘을 붙잡으면 내일에 덜 매달리게 된다」예요. 새해 계획을 「언젠가」에서 「오늘」로 옮기자는 말로 쓸 수 있어요."
+  },
+  {
+   "id": "q028",
+   "text_ko": "우리에게 주어진 시간이 짧은 것이 아니라, 우리가 많이 허비하는 것이다.",
+   "original": "Non exiguum temporis habemus, sed multum perdidimus.",
+   "lang": "라틴어",
+   "author": "seneca",
+   "source": "『인생의 짧음에 관하여』 1장 3절",
+   "year": "49년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "The Latin Library 라틴어 원문",
+     "url": "https://www.thelatinlibrary.com/sen/sen.brevita.shtml"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "birthday",
+    "newyear"
+   ],
+   "topics": [
+    "time"
+   ],
+   "note": "「인생은 짧다」는 한탄에 대한 세네카의 답이에요. 이어서 「잘 쓰기만 하면 인생은 충분히 길다」고 말해요."
+  },
+  {
+   "id": "q029",
+   "text_ko": "우리를 실제로 짓누르는 것보다 겁주는 것이 더 많다. 우리는 실제 일보다 생각 때문에 더 자주 괴로워한다.",
+   "original": "Plura sunt, Lucili, quae nos terrent quam quae premunt, et saepius opinione quam re laboramus.",
+   "lang": "라틴어",
+   "author": "seneca",
+   "source": "『도덕 서한』 13번째 편지 4절",
+   "year": "62~65년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "The Latin Library 라틴어 원문",
+     "url": "https://www.thelatinlibrary.com/sen/seneca.ep2.shtml"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "comfort",
+    "exam"
+   ],
+   "topics": [
+    "courage"
+   ],
+   "note": "걱정의 대부분은 아직 일어나지 않은 일이라는 말이에요. 시험 전날 불안한 사람에게 건네기 좋아요."
+  },
+  {
+   "id": "q030",
+   "text_ko": "사람은 가르치면서 배운다.",
+   "original": "Homines dum docent discunt.",
+   "lang": "라틴어",
+   "author": "seneca",
+   "source": "『도덕 서한』 7번째 편지 8절",
+   "year": "62~65년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "The Latin Library 라틴어 원문",
+     "url": "https://www.thelatinlibrary.com/sen/seneca.ep1.shtml"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "retirement",
+    "thanks"
+   ],
+   "topics": [
+    "learning"
+   ],
+   "note": "선생님의 퇴임이나 스승의 날에 「가르쳐 주셔서 감사합니다」와 함께 쓰기 좋은 말이에요. 가르치는 사람도 함께 자란다는 뜻이에요."
+  },
+  {
+   "id": "q031",
+   "text_ko": "어려워서 감히 못 하는 것이 아니다. 감히 하지 않기 때문에 어려운 것이다.",
+   "original": "Non quia difficilia sunt non audemus, sed quia non audemus difficilia sunt.",
+   "lang": "라틴어",
+   "author": "seneca",
+   "source": "『도덕 서한』 104번째 편지 26절",
+   "year": "62~65년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "The Latin Library 라틴어 원문",
+     "url": "https://www.thelatinlibrary.com/sen/seneca.ep17-18.shtml"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "challenge",
+    "exam"
+   ],
+   "topics": [
+    "courage"
+   ],
+   "note": "두려움이 어려움을 만든다는 말이에요. 같은 낱말을 앞뒤로 뒤집은 라틴어 문장이라 원문 그대로도 리듬이 좋아요.",
+   "page": true,
+   "detail": {
+    "background": "세네카가 말년에 친구 루킬리우스에게 보낸 104번째 편지에 나와요. 이 편지에서 세네카는 병을 핑계로 여행을 떠난 이야기로 시작해, 장소를 바꾼다고 마음의 짐이 사라지지 않는다는 데까지 이야기를 끌고 가요. 사람들은 일이 어렵다고 생각해서 시도하지 않지만, 실제로는 시도하지 않기 때문에 일이 어렵게 느껴진다는 게 이 문장의 뜻이에요. 라틴어 원문은 difficilia(어렵다)와 audemus(감히 하다)를 앞뒤로 뒤집어 놓은 대구라서 한 번 들으면 잊히지 않아요. 같은 생각은 『도덕 서한』 곳곳에 나오는데, 13번째 편지의 「우리는 실제보다 상상 때문에 더 괴로워한다」와 짝을 이뤄요.",
+    "similar": [
+     "q029",
+     "q047",
+     "q082"
+    ],
+    "usage": [
+     "처음 해 보는 일을 앞둔 동료에게: 「어려워서 못 하는 게 아니라, 안 해 봐서 어려운 거래요.」",
+     "수능·면접 응원 카드 한 줄로.",
+     "도전을 망설이는 나에게 쓰는 다짐 메모."
+    ]
+   }
+  },
+  {
+   "id": "q032",
+   "text_ko": "어느 항구로 갈지 모르는 사람에게는 어떤 바람도 순풍이 아니다.",
+   "original": "Ignoranti quem portum petat nullus suus ventus est.",
+   "lang": "라틴어",
+   "author": "seneca",
+   "source": "『도덕 서한』 71번째 편지 3절",
+   "year": "62~65년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "The Latin Library 라틴어 원문",
+     "url": "https://www.thelatinlibrary.com/sen/seneca.ep8.shtml"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "graduation",
+    "newyear"
+   ],
+   "topics": [
+    "courage"
+   ],
+   "note": "목표가 있어야 기회도 기회로 보인다는 말이에요. 졸업생이나 새해 계획을 세우는 사람에게 어울려요."
+  },
+  {
+   "id": "q033",
+   "text_ko": "가진 것이 적은 사람이 가난한 것이 아니라, 더 많이 바라는 사람이 가난하다.",
+   "original": "Non qui parum habet, sed qui plus cupit, pauper est.",
+   "lang": "라틴어",
+   "author": "seneca",
+   "source": "『도덕 서한』 2번째 편지 6절",
+   "year": "62~65년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "The Latin Library 라틴어 원문",
+     "url": "https://www.thelatinlibrary.com/sen/seneca.ep1.shtml"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "rest",
+    "retirement"
+   ],
+   "topics": [
+    "happiness"
+   ],
+   "note": "에피쿠로스의 말 「기쁜 가난은 명예로운 것」을 소개한 뒤 세네카가 덧붙인 말이에요."
+  },
+  {
+   "id": "q034",
+   "text_ko": "쉬는 사람은 움직여야 하고, 움직이는 사람은 쉬어야 한다.",
+   "original": "Et quiescenti agendum et agenti quiescendum est.",
+   "lang": "라틴어",
+   "author": "seneca",
+   "source": "『도덕 서한』 3번째 편지 6절",
+   "year": "62~65년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "The Latin Library 라틴어 원문",
+     "url": "https://www.thelatinlibrary.com/sen/seneca.ep1.shtml"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "rest"
+   ],
+   "topics": [
+    "happiness",
+    "time"
+   ],
+   "note": "늘 바쁜 것도, 늘 쉬기만 하는 것도 병이라는 말 끝에 나와요. 바로 뒤에 「자연에게 물어보라. 낮도 만들고 밤도 만들었다고 답할 것이다」가 이어져요."
+  },
+  {
+   "id": "q035",
+   "text_ko": "(큰 시합에 자신 있게 나서는 선수는) 넘어질 때마다 더 꿋꿋하게 다시 일어난 사람이다.",
+   "original": "… qui quotiens cecidit contumacior resurrexit, cum magna spe descendit ad pugnam.",
+   "lang": "라틴어",
+   "author": "seneca",
+   "source": "『도덕 서한』 13번째 편지 2절",
+   "year": "62~65년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "The Latin Library 라틴어 원문",
+     "url": "https://www.thelatinlibrary.com/sen/seneca.ep2.shtml"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "cheer",
+    "comfort"
+   ],
+   "topics": [
+    "failure",
+    "courage"
+   ],
+   "note": "한 번도 맞아 본 적 없는 선수는 큰 시합에서 기세를 낼 수 없다는 비유에 이어 나오는 말이에요. 실패를 겪은 사람이 오히려 큰 희망을 안고 나선다는 뜻이에요."
+  },
+  {
+   "id": "q036",
+   "text_ko": "「나는 나 자신의 친구가 되기 시작했다.」 큰 발전이다. 그런 사람은 결코 혼자가 아니다.",
+   "original": "'Quaeris' inquit 'quid profecerim? amicus esse mihi coepi.' Multum profecit: numquam erit solus.",
+   "lang": "라틴어",
+   "author": "seneca",
+   "source": "『도덕 서한』 6번째 편지 7절",
+   "year": "62~65년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "The Latin Library 라틴어 원문",
+     "url": "https://www.thelatinlibrary.com/sen/seneca.ep1.shtml"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "rest",
+    "comfort"
+   ],
+   "topics": [
+    "friendship"
+   ],
+   "note": "세네카가 스토아 철학자 헤카톤의 말을 인용하고 자기 생각을 덧붙인 부분이에요. 앞 따옴표 안은 헤카톤, 뒤는 세네카의 말이에요."
+  },
+  {
+   "id": "q037",
+   "text_ko": "행복하게 사는 데 필요한 것은 아주 적다.",
+   "original": "very little indeed is necessary for living a happy life.",
+   "lang": "그리스어(영역 인용)",
+   "author": "marcus-aurelius",
+   "source": "『명상록』 7권 67절",
+   "year": "170~180년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/15877"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "birthday",
+    "rest"
+   ],
+   "topics": [
+    "happiness"
+   ],
+   "note": "그리스어 원문 대신 조지 롱의 영어 번역(1862, 퍼블릭 도메인)을 원문 칸에 실었어요. 앞 문장은 「신과 같은 사람이면서도 아무에게도 알려지지 않을 수 있다」예요. 남이 알아주지 않아도 충분히 행복할 수 있다는 맥락이에요."
+  },
+  {
+   "id": "q038",
+   "text_ko": "만 년이라도 살 것처럼 굴지 말라. 살아 있는 동안, 할 수 있을 때 선하게 살라.",
+   "original": "Do not act as if thou wert going to live ten thousand years. Death hangs over thee. While thou livest, while it is in thy power, be good.",
+   "lang": "그리스어(영역 인용)",
+   "author": "marcus-aurelius",
+   "source": "『명상록』 4권 17절",
+   "year": "170~180년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/15877"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "newyear"
+   ],
+   "topics": [
+    "time"
+   ],
+   "note": "그리스어 원문 대신 조지 롱의 영어 번역(1862, 퍼블릭 도메인)을 원문 칸에 실었어요. 원문 가운데 「죽음이 네 위에 걸려 있다」는 문장은 우리말 본문에서 줄였어요."
+  },
+  {
+   "id": "q039",
+   "text_ko": "가장 좋은 복수는 나에게 잘못한 사람과 닮지 않는 것이다.",
+   "original": "The best way of avenging thyself is not to become like the wrong doer.",
+   "lang": "그리스어(영역 인용)",
+   "author": "marcus-aurelius",
+   "source": "『명상록』 6권 6절",
+   "year": "170~180년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/15877"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "comfort",
+    "farewell"
+   ],
+   "topics": [
+    "courage"
+   ],
+   "note": "그리스어 원문 대신 조지 롱의 영어 번역(1862, 퍼블릭 도메인)을 원문 칸에 실었어요. 상처를 준 사람 때문에 내가 변하지 않는 것이 이기는 길이라는 뜻이에요."
+  },
+  {
+   "id": "q040",
+   "text_ko": "좋은 사람이 어떤 사람인지 더는 따지지 말고, 그런 사람이 되어라.",
+   "original": "No longer talk at all about the kind of man that a good man ought to be, but be such.",
+   "lang": "그리스어(영역 인용)",
+   "author": "marcus-aurelius",
+   "source": "『명상록』 10권 16절",
+   "year": "170~180년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/15877"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "graduation",
+    "challenge"
+   ],
+   "topics": [
+    "courage"
+   ],
+   "note": "그리스어 원문 대신 조지 롱의 영어 번역(1862, 퍼블릭 도메인)을 원문 칸에 실었어요. 말보다 실천을 강조하는 『명상록』의 대표 문장이에요."
+  },
+  {
+   "id": "q041",
+   "text_ko": "잃는다는 것은 변한다는 것일 뿐이다.",
+   "original": "Loss is nothing else than change.",
+   "lang": "그리스어(영역 인용)",
+   "author": "marcus-aurelius",
+   "source": "『명상록』 9권 35절",
+   "year": "170~180년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/15877"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "comfort",
+    "farewell"
+   ],
+   "topics": [
+    "time"
+   ],
+   "note": "그리스어 원문 대신 조지 롱의 영어 번역(1862, 퍼블릭 도메인)을 원문 칸에 실었어요. 뒤에는 「자연은 변화를 기뻐한다」가 이어져요. 잃은 것을 끝이 아닌 변화로 보자는 위로예요."
+  },
+  {
+   "id": "q042",
+   "text_ko": "안을 들여다보라. 선의 샘은 안에 있어서, 계속 파 내려가면 언제까지나 솟아오른다.",
+   "original": "Look within. Within is the fountain of good, and it will ever bubble up, if thou wilt ever dig.",
+   "lang": "그리스어(영역 인용)",
+   "author": "marcus-aurelius",
+   "source": "『명상록』 7권 59절",
+   "year": "170~180년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/15877"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "comfort",
+    "rest"
+   ],
+   "topics": [
+    "happiness"
+   ],
+   "note": "그리스어 원문 대신 조지 롱의 영어 번역(1862, 퍼블릭 도메인)을 원문 칸에 실었어요. 기운이 빠졌을 때 밖에서 답을 찾기보다 내 안을 돌아보라는 말이에요."
+  },
+  {
+   "id": "q043",
+   "text_ko": "사람들은 시골집, 바닷가, 산속에서 쉴 곳을 찾는다. 그러나 마음만 먹으면 언제든 자기 안으로 물러나 쉴 수 있다.",
+   "original": "Men seek retreats for themselves, houses in the country, sea-shores, and mountains; … for it is in thy power whenever thou shalt choose to retire into thyself.",
+   "lang": "그리스어(영역 인용)",
+   "author": "marcus-aurelius",
+   "source": "『명상록』 4권 3절",
+   "year": "170~180년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/15877"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "rest"
+   ],
+   "topics": [
+    "happiness"
+   ],
+   "note": "그리스어 원문 대신 조지 롱의 영어 번역(1862, 퍼블릭 도메인)을 원문 칸에 실었어요. 휴가를 떠나지 못하는 날에도 쉴 수 있다는 말이에요. 뒤에는 「자기 영혼보다 더 조용하고 걱정 없는 곳은 없다」가 이어져요."
+  },
+  {
+   "id": "q044",
+   "text_ko": "끊임없이 파도가 부딪쳐도 굳게 서서 주위의 성난 물결을 잠재우는 바위 곶처럼 되어라.",
+   "original": "Be like the promontory against which the waves continually break, but it stands firm and tames the fury of the water around it.",
+   "lang": "그리스어(영역 인용)",
+   "author": "marcus-aurelius",
+   "source": "『명상록』 4권 49절",
+   "year": "170~180년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/15877"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "cheer",
+    "comfort"
+   ],
+   "topics": [
+    "patience",
+    "courage"
+   ],
+   "note": "그리스어 원문 대신 조지 롱의 영어 번역(1862, 퍼블릭 도메인)을 원문 칸에 실었어요. 이어서 「이런 일이 일어나서 불행하다가 아니라, 이런 일이 일어났는데도 흔들리지 않으니 다행이다」라고 생각을 바꾸라고 말해요."
+  },
+  {
+   "id": "q045",
+   "text_ko": "아침에 일어나기 싫을 때는 이렇게 생각하라. 나는 사람으로서 할 일을 하러 일어난다.",
+   "original": "In the morning when thou risest unwillingly, let this thought be present,—I am rising to the work of a human being.",
+   "lang": "그리스어(영역 인용)",
+   "author": "marcus-aurelius",
+   "source": "『명상록』 5권 1절",
+   "year": "170~180년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/15877"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "cheer",
+    "exam"
+   ],
+   "topics": [
+    "patience"
+   ],
+   "note": "그리스어 원문 대신 조지 롱의 영어 번역(1862, 퍼블릭 도메인)을 원문 칸에 실었어요. 황제도 이불 밖으로 나오기 싫었다는 걸 보여 주는 유명한 대목이에요. 뒤에는 「이불 속에서 몸을 따뜻하게 하려고 태어났는가」라는 물음이 이어져요."
+  },
+  {
+   "id": "q046",
+   "text_ko": "할아버지 베루스에게서 나는 바른 품성과 성미를 다스리는 법을 배웠다.",
+   "original": "From my grandfather Verus I learned good morals and the government of my temper.",
+   "lang": "그리스어(영역 인용)",
+   "author": "marcus-aurelius",
+   "source": "『명상록』 1권 1절",
+   "year": "170~180년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/15877"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "thanks"
+   ],
+   "topics": [
+    "love",
+    "learning"
+   ],
+   "note": "그리스어 원문 대신 조지 롱의 영어 번역(1862, 퍼블릭 도메인)을 원문 칸에 실었어요. 『명상록』 1권은 통째로 「누구에게서 무엇을 배웠는지」를 적은 감사 목록이에요. 가족, 스승, 친구의 이름을 하나씩 부르며 배운 것을 적어요. 감사 편지의 첫 줄로 이 형식을 빌려 쓰기 좋아요."
+  },
+  {
+   "id": "q047",
+   "text_ko": "의심은 배신자다. 해 보기를 두려워하게 만들어, 얻을 수 있었던 좋은 것마저 잃게 한다.",
+   "original": "Our doubts are traitors, And make us lose the good we oft might win, By fearing to attempt.",
+   "lang": "영어",
+   "author": "shakespeare",
+   "source": "희곡 『자에는 자로』 1막 4장(루치오의 대사)",
+   "year": "1604년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/100"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "challenge",
+    "exam"
+   ],
+   "topics": [
+    "courage"
+   ],
+   "note": "오빠를 살리려면 직접 나서야 한다며 이사벨라를 설득하는 루치오의 대사예요."
+  },
+  {
+   "id": "q048",
+   "text_ko": "진실한 사랑의 길은 순탄하게 흐른 적이 없다.",
+   "original": "The course of true love never did run smooth.",
+   "lang": "영어",
+   "author": "shakespeare",
+   "source": "희곡 『한여름 밤의 꿈』 1막 1장(라이샌더의 대사)",
+   "year": "1595년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/100"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "wedding"
+   ],
+   "topics": [
+    "love"
+   ],
+   "note": "결혼을 반대에 부딪힌 연인이 서로를 다독이며 하는 말이에요. 우여곡절 끝에 결혼하는 두 사람에게 웃으며 건넬 수 있어요."
+  },
+  {
+   "id": "q049",
+   "text_ko": "헤어짐은 이토록 달콤한 슬픔이라, 날이 밝을 때까지 잘 자라는 인사만 되풀이하게 되네요.",
+   "original": "Parting is such sweet sorrow, That I shall say good night till it be morrow.",
+   "lang": "영어",
+   "author": "shakespeare",
+   "source": "희곡 『로미오와 줄리엣』 2막 2장(줄리엣의 대사)",
+   "year": "1595년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/100"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "farewell"
+   ],
+   "topics": [
+    "love"
+   ],
+   "note": "발코니 장면 끝에서 줄리엣이 하는 말이에요. 아쉬움이 큰 작별을 가볍고 따뜻하게 말할 때 써요."
+  },
+  {
+   "id": "q050",
+   "text_ko": "지나간 일은 서막일 뿐이다.",
+   "original": "What's past is prologue.",
+   "lang": "영어",
+   "author": "shakespeare",
+   "source": "희곡 『템페스트』 2막 1장(안토니오의 대사)",
+   "year": "1611년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/100"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "graduation",
+    "retirement",
+    "newyear"
+   ],
+   "topics": [
+    "time"
+   ],
+   "note": "극 중에서는 악역 안토니오가 음모를 꾸미며 하는 말이지만, 지금은 「지금까지는 시작에 불과하다」는 뜻으로 졸업·새 출발 인사에 널리 쓰여요. 미국 국립문서보관소 건물에도 새겨져 있어요."
+  },
+  {
+   "id": "q051",
+   "text_ko": "무엇보다 너 자신에게 진실하라.",
+   "original": "This above all: to thine own self be true.",
+   "lang": "영어",
+   "author": "shakespeare",
+   "source": "희곡 『햄릿』 1막 3장(폴로니어스의 대사)",
+   "year": "1600년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/100"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "graduation"
+   ],
+   "topics": [
+    "courage"
+   ],
+   "note": "먼 길을 떠나는 아들 레어티즈에게 아버지 폴로니어스가 당부하는 여러 충고의 마지막 말이에요. 졸업하고 떠나는 자녀에게 그대로 쓸 수 있어요."
+  },
+  {
+   "id": "q052",
+   "text_ko": "모두를 사랑하되 몇 사람만 믿고, 누구에게도 잘못하지 말라.",
+   "original": "Love all, trust a few, Do wrong to none.",
+   "lang": "영어",
+   "author": "shakespeare",
+   "source": "희곡 『끝이 좋으면 다 좋아』 1막 1장(백작 부인의 대사)",
+   "year": "1605년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/100"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "graduation"
+   ],
+   "topics": [
+    "friendship"
+   ],
+   "note": "궁정으로 떠나는 아들 버트람에게 어머니가 건네는 당부예요."
+  },
+  {
+   "id": "q053",
+   "text_ko": "저 작은 촛불이 얼마나 멀리까지 빛을 던지는지. 험한 세상에서 착한 일 하나도 저렇게 빛난다.",
+   "original": "How far that little candle throws his beams! So shines a good deed in a naughty world.",
+   "lang": "영어",
+   "author": "shakespeare",
+   "source": "희곡 『베니스의 상인』 5막 1장(포샤의 대사)",
+   "year": "1597년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/100"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "thanks"
+   ],
+   "topics": [
+    "love"
+   ],
+   "note": "작은 친절에 고마움을 전할 때 쓰기 좋은 대사예요. 여기서 naughty는 「버릇없는」이 아니라 옛 뜻인 「악한, 험한」이에요."
+  },
+  {
+   "id": "q054",
+   "text_ko": "드릴 말씀은 고맙다는 말뿐입니다. 고맙고, 또 고맙고, 언제나 고맙습니다.",
+   "original": "I can no other answer make but thanks, And thanks, and ever thanks.",
+   "lang": "영어",
+   "author": "shakespeare",
+   "source": "희곡 『십이야』 3막 3장(세바스찬의 대사)",
+   "year": "1601년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/100"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "thanks"
+   ],
+   "topics": [
+    "friendship"
+   ],
+   "note": "자신을 따라와 준 친구 안토니오에게 세바스찬이 하는 말이에요. 감사 카드 한 줄로 그대로 쓰기 좋아요."
+  },
+  {
+   "id": "q055",
+   "text_ko": "얻고 나면 끝이다. 기쁨의 핵심은 해 나가는 데 있다.",
+   "original": "Things won are done; joy's soul lies in the doing.",
+   "lang": "영어",
+   "author": "shakespeare",
+   "source": "희곡 『트로일러스와 크레시다』 1막 2장(크레시다의 대사)",
+   "year": "1602년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/100"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "challenge",
+    "retirement"
+   ],
+   "topics": [
+    "happiness"
+   ],
+   "note": "극 중에서는 사랑의 밀고 당기기를 두고 하는 말이지만, 결과보다 과정의 기쁨을 말하는 문장으로 널리 인용돼요."
+  },
+  {
+   "id": "q056",
+   "text_ko": "우리는 지금의 우리가 누구인지는 알지만, 앞으로 무엇이 될 수 있는지는 모른다.",
+   "original": "We know what we are, but know not what we may be.",
+   "lang": "영어",
+   "author": "shakespeare",
+   "source": "희곡 『햄릿』 4막 5장(오필리아의 대사)",
+   "year": "1600년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/100"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "graduation",
+    "birthday"
+   ],
+   "topics": [
+    "courage"
+   ],
+   "note": "극 중에서는 슬픔에 정신을 놓은 오필리아의 말이라 원래 분위기는 어두워요. 지금은 아직 정해지지 않은 가능성을 응원하는 뜻으로 많이 쓰여요."
+  },
+  {
+   "id": "q057",
+   "text_ko": "도둑맞고도 웃는 사람은 도둑에게서 무언가를 되찾아 온다.",
+   "original": "The robb'd that smiles steals something from the thief.",
+   "lang": "영어",
+   "author": "shakespeare",
+   "source": "희곡 『오셀로』 1막 3장(공작의 대사)",
+   "year": "1603년경",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/100"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "comfort"
+   ],
+   "topics": [
+    "happiness"
+   ],
+   "note": "되돌릴 수 없는 일에 매달려 슬퍼하면 또 한 번 잃는다는, 공작의 위로 가운데 한 줄이에요."
+  },
+  {
+   "id": "q058",
+   "text_ko": "잃어버린 시간은 다시 찾을 수 없다.",
+   "original": "Lost time is never found again.",
+   "lang": "영어",
+   "author": "franklin",
+   "source": "「부자가 되는 길」(『가난한 리처드의 달력』 1758년판 서문)",
+   "year": "1758",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/43855"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "exam",
+    "newyear"
+   ],
+   "topics": [
+    "time"
+   ],
+   "note": "프랭클린이 그때까지 25년 치 달력의 격언을 엮어 만든 글에 나와요."
+  },
+  {
+   "id": "q059",
+   "text_ko": "인생을 사랑하는가? 그렇다면 시간을 낭비하지 말라. 인생은 시간으로 만들어져 있으니.",
+   "original": "Dost thou love life? then do not squander time, for that is the stuff life is made of.",
+   "lang": "영어",
+   "author": "franklin",
+   "source": "「부자가 되는 길」(『가난한 리처드의 달력』 1758년판 서문)",
+   "year": "1758",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/43855"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "birthday",
+    "newyear"
+   ],
+   "topics": [
+    "time"
+   ],
+   "note": "1746년판 달력에 처음 실렸고, 「부자가 되는 길」에 다시 모였어요."
+  },
+  {
+   "id": "q060",
+   "text_ko": "나쁜 버릇과는 싸우고, 이웃과는 평화롭게 지내라. 그리고 새해마다 조금 더 나은 사람이 되어라.",
+   "original": "Be at war with your vices, at peace with your neighbours, and let each new year find you a better man.",
+   "lang": "영어",
+   "author": "franklin",
+   "source": "『가난한 리처드의 달력』 1755년판",
+   "year": "1755",
+   "status": "추정",
+   "evidence": [],
+   "checked": "2026-11-13",
+   "situations": [
+    "newyear"
+   ],
+   "topics": [
+    "time"
+   ],
+   "note": "1755년판 달력에 실린 격언으로 널리 인용돼요. 이번 조사에서는 1755년판 원본 이미지나 전자 텍스트로 문장을 직접 확인하지 못해 「추정」으로 뒀어요."
+  },
+  {
+   "id": "q061",
+   "text_ko": "잘 말한 것보다 잘 해낸 것이 낫다.",
+   "original": "Well done is better than well said.",
+   "lang": "영어",
+   "author": "franklin",
+   "source": "『가난한 리처드의 달력』 1737년판",
+   "year": "1737",
+   "status": "추정",
+   "evidence": [],
+   "checked": "2026-11-13",
+   "situations": [
+    "challenge"
+   ],
+   "topics": [
+    "courage"
+   ],
+   "note": "1737년판 달력의 격언으로 알려져 있어요. 원본 대조는 아직 하지 못했어요."
+  },
+  {
+   "id": "q062",
+   "text_ko": "사람은 애쓰는 동안에는 헤매기 마련이다.",
+   "original": "Es irrt der Mensch, so lang er strebt.",
+   "lang": "독일어",
+   "author": "goethe",
+   "source": "『파우스트』 1부 「천상의 서곡」 317행(주님의 대사)",
+   "year": "1808",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/2229"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "comfort",
+    "challenge"
+   ],
+   "topics": [
+    "failure"
+   ],
+   "note": "메피스토펠레스와 내기를 하며 주님이 하는 말이에요. 헤매는 것은 애쓰고 있다는 증거라는 위로로 읽혀요."
+  },
+  {
+   "id": "q063",
+   "text_ko": "끊임없이 애쓰며 노력하는 사람은 우리가 구원할 수 있다.",
+   "original": "Wer immer strebend sich bemüht, Den können wir erlösen.",
+   "lang": "독일어",
+   "author": "goethe",
+   "source": "『파우스트』 2부 5막 11936~11937행(천사들의 노래)",
+   "year": "1832",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/2230"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "cheer",
+    "exam"
+   ],
+   "topics": [
+    "patience"
+   ],
+   "note": "괴테가 세상을 떠난 해에 나온 『파우스트』 2부의 마지막 장면이에요. 1부의 「사람은 애쓰는 동안 헤매기 마련이다」와 짝을 이뤄요."
+  },
+  {
+   "id": "q064",
+   "text_ko": "조상에게서 물려받은 것은 스스로 다시 얻어야 비로소 네 것이 된다.",
+   "original": "Was du ererbt von deinen Vätern hast, Erwirb es, um es zu besitzen.",
+   "lang": "독일어",
+   "author": "goethe",
+   "source": "『파우스트』 1부 「밤」 682~683행(파우스트의 대사)",
+   "year": "1808",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/2229"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "graduation",
+    "birthday"
+   ],
+   "topics": [
+    "learning"
+   ],
+   "note": "물려받은 재능·환경·지식도 내가 다시 갈고닦아야 내 것이 된다는 말이에요."
+  },
+  {
+   "id": "q065",
+   "text_ko": "여보게, 모든 이론은 잿빛이고 생명의 황금 나무는 푸르다네.",
+   "original": "Grau, teurer Freund, ist alle Theorie, Und grün des Lebens goldner Baum.",
+   "lang": "독일어",
+   "author": "goethe",
+   "source": "『파우스트』 1부 「서재」 2038~2039행(메피스토펠레스의 대사)",
+   "year": "1808",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/2229"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "graduation"
+   ],
+   "topics": [
+    "learning"
+   ],
+   "note": "파우스트로 변장한 메피스토펠레스가 신입생을 놀리며 하는 말이에요. 악마의 대사라는 걸 알고 쓰면 더 재미있어요. 책을 덮고 세상으로 나가는 졸업생에게 어울려요."
+  },
+  {
+   "id": "q066",
+   "text_ko": "날마다 적어도 짧은 노래 한 곡을 듣고, 좋은 시 한 편을 읽고, 훌륭한 그림 한 점을 보고, 할 수 있다면 사려 깊은 말 몇 마디를 나누어야 한다.",
+   "original": "Man sollte alle Tage wenigstens ein kleines Lied hören, ein gutes Gedicht lesen, ein treffliches Gemälde sehen und, wenn es möglich zu machen wäre, einige vernünftige Worte sprechen.",
+   "lang": "독일어",
+   "author": "goethe",
+   "source": "『빌헬름 마이스터의 수업 시대』 5권 1장(제를로의 말)",
+   "year": "1795~1796",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/2339"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "rest",
+    "birthday"
+   ],
+   "topics": [
+    "happiness"
+   ],
+   "note": "괴테 자신의 말로 자주 소개되지만, 소설 속 극단장 제를로가 하는 말이에요. 바쁜 하루에도 아름다운 것을 조금씩 누리자는 뜻이에요."
+  },
+  {
+   "id": "q067",
+   "text_ko": "열정 없이 이루어진 위대한 일은 하나도 없다.",
+   "original": "Nothing great was ever achieved without enthusiasm.",
+   "lang": "영어",
+   "author": "emerson",
+   "source": "에세이 「원」(『에세이 1집』)",
+   "year": "1841",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/16643"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "challenge",
+    "exam"
+   ],
+   "topics": [
+    "courage"
+   ],
+   "note": "「원(Circles)」의 마지막 부분이에요. 앞 문장은 「새로운 원을 그리는 것」, 곧 익숙한 테두리를 넘어서는 일을 말해요."
+  },
+  {
+   "id": "q068",
+   "text_ko": "너 자신을 믿어라. 모든 마음은 그 쇠줄에 맞춰 울린다.",
+   "original": "Trust thyself: every heart vibrates to that iron string.",
+   "lang": "영어",
+   "author": "emerson",
+   "source": "에세이 「자기 신뢰」(『에세이 1집』)",
+   "year": "1841",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/16643"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "graduation",
+    "exam"
+   ],
+   "topics": [
+    "courage"
+   ],
+   "note": "「자기 신뢰」의 핵심 문장이에요. 「쇠줄」은 흔들리지 않는 악기 줄처럼, 누구나 마음속에 가진 믿음을 가리켜요."
+  },
+  {
+   "id": "q069",
+   "text_ko": "친구를 얻는 단 하나의 방법은 내가 먼저 친구가 되는 것이다.",
+   "original": "The only way to have a friend is to be one.",
+   "lang": "영어",
+   "author": "emerson",
+   "source": "에세이 「우정」(『에세이 1집』)",
+   "year": "1841",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/16643"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "graduation",
+    "thanks"
+   ],
+   "topics": [
+    "friendship"
+   ],
+   "note": "새 학교, 새 직장으로 가는 사람에게 건네기 좋은 짧은 문장이에요."
+  },
+  {
+   "id": "q070",
+   "text_ko": "친구란 내가 진심일 수 있는 사람이다. 그 앞에서는 생각을 소리 내어 말해도 된다.",
+   "original": "A friend is a person with whom I may be sincere. Before him, I may think aloud.",
+   "lang": "영어",
+   "author": "emerson",
+   "source": "에세이 「우정」(『에세이 1집』)",
+   "year": "1841",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/16643"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "thanks",
+    "wedding"
+   ],
+   "topics": [
+    "friendship",
+    "love"
+   ],
+   "note": "에머슨은 우정의 두 요소로 「진실」과 「다정함」을 꼽고, 진실을 설명하며 이 문장을 써요. 평생의 친구가 된 배우자에게 쓰는 결혼 축하 글에도 어울려요."
+  },
+  {
+   "id": "q071",
+   "text_ko": "날마다가 한 해 중 가장 좋은 날이라고 마음에 새겨 두라.",
+   "original": "Write it on your heart that every day is the best day in the year.",
+   "lang": "영어",
+   "author": "emerson",
+   "source": "에세이 「일과 날」(『사회와 고독』)",
+   "year": "1870",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/69258"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "newyear",
+    "birthday"
+   ],
+   "topics": [
+    "time",
+    "happiness"
+   ],
+   "note": "앞 문장은 「지금 이 시간이 결정적인 시간이 아니라고 여기는 것이 우리의 착각 가운데 하나」예요. 새해 첫날뿐 아니라 모든 날이 첫날이라는 뜻이에요."
+  },
+  {
+   "id": "q072",
+   "text_ko": "하루를 마치면 그날은 거기서 끝내라. 너는 할 수 있는 만큼 했다. 실수와 엉뚱한 일도 끼어들었겠지만 되도록 빨리 잊어라. 내일은 새날이다.",
+   "original": "Finish each day and be done with it. You have done what you could. Some blunders and absurdities no doubt crept in; forget them as soon as you can. Tomorrow is a new day.",
+   "lang": "영어",
+   "author": "emerson",
+   "source": "딸 엘런에게 보낸 편지로 전해짐",
+   "year": "미상",
+   "status": "추정",
+   "evidence": [],
+   "checked": "2026-11-13",
+   "situations": [
+    "rest",
+    "comfort"
+   ],
+   "topics": [
+    "failure",
+    "time"
+   ],
+   "note": "에머슨이 딸에게 쓴 편지로 널리 소개되지만, 편지 날짜와 원본이 실린 책을 이번 조사에서 찾지 못했어요. 출처를 확인하기 전까지 「추정」으로 둬요."
+  },
+  {
+   "id": "q073",
+   "text_ko": "내가 숲으로 간 것은 신중하게 살고 싶어서였다. 삶의 본질적인 것만 마주하고, 삶이 가르쳐 주는 것을 배울 수 있는지 알고 싶었다.",
+   "original": "I went to the woods because I wished to live deliberately, to front only the essential facts of life, and see if I could not learn what it had to teach",
+   "lang": "영어",
+   "author": "thoreau",
+   "source": "『월든』 2장 「나는 어디서, 무엇을 위해 살았나」",
+   "year": "1854",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/205"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "rest",
+    "retirement"
+   ],
+   "topics": [
+    "time"
+   ],
+   "note": "뒤에 「그래서 죽을 때 내가 제대로 살지 않았음을 깨닫지 않기 위해」가 이어져요. 은퇴 뒤 새 생활을 시작하는 분께 어울려요."
+  },
+  {
+   "id": "q074",
+   "text_ko": "꿈을 향해 자신 있게 나아가고 상상한 삶을 살려고 애쓰는 사람은, 평범한 때에는 생각지 못한 성공을 만나게 된다.",
+   "original": "If one advances confidently in the direction of his dreams, and endeavors to live the life which he has imagined, he will meet with a success unexpected in common hours.",
+   "lang": "영어",
+   "author": "thoreau",
+   "source": "『월든』 18장 「맺음말」",
+   "year": "1854",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/205"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "graduation",
+    "challenge"
+   ],
+   "topics": [
+    "courage"
+   ],
+   "note": "「꿈을 향해 자신 있게 나아가라」로 줄여 많이 쓰는 문장의 원문이에요. 실제로는 조건문이라 「그렇게 하면 성공을 만난다」는 약속에 가까워요."
+  },
+  {
+   "id": "q075",
+   "text_ko": "공중에 성을 지었다고 헛수고가 되는 것은 아니다. 성은 원래 거기 있어야 한다. 이제 그 밑에 기초를 놓아라.",
+   "original": "If you have built castles in the air, your work need not be lost; that is where they should be. Now put the foundations under them.",
+   "lang": "영어",
+   "author": "thoreau",
+   "source": "『월든』 18장 「맺음말」",
+   "year": "1854",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/205"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "challenge",
+    "graduation"
+   ],
+   "topics": [
+    "courage"
+   ],
+   "note": "「뜬구름 같은 꿈」을 꾸짖는 대신, 꿈은 높이 두고 땅에 기초를 놓으라고 말해요."
+  },
+  {
+   "id": "q076",
+   "text_ko": "누군가 동료들과 발을 맞추지 못한다면, 아마 다른 북소리를 듣고 있기 때문일 것이다. 그가 듣는 음악에 맞춰 걷게 두라. 그 박자가 어떻든, 얼마나 멀리서 들리든.",
+   "original": "If a man does not keep pace with his companions, perhaps it is because he hears a different drummer. Let him step to the music which he hears, however measured or far away.",
+   "lang": "영어",
+   "author": "thoreau",
+   "source": "『월든』 18장 「맺음말」",
+   "year": "1854",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/205"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "comfort",
+    "graduation"
+   ],
+   "topics": [
+    "courage"
+   ],
+   "note": "남들과 속도가 다른 사람을 다그치지 말라는 말이에요. 바로 뒤에 「사과나무나 참나무처럼 빨리 자랄 필요는 없다」가 이어져요.",
+   "page": true,
+   "detail": {
+    "background": "『월든』 마지막 장 「맺음말」에 나오는 문장이에요. 소로는 2년 넘게 월든 호숫가에서 혼자 살며 쓴 이 책의 끝에서, 사람마다 자기 속도와 박자가 있다고 말해요. 바로 이어서 「사과나무나 참나무처럼 빨리 자랄 필요는 없다. 봄을 여름으로 바꿔야 하는가?」라고 물어요. 남들보다 늦거나 다른 길을 가는 사람을 다그치지 말자는 뜻이고, 동시에 다른 북소리를 듣는 사람 스스로에게 「네 음악에 맞춰 걸어도 된다」고 허락하는 말이기도 해요. 영어권에서는 「a different drummer」가 남다른 길을 가는 사람을 가리키는 관용구가 됐어요.",
+    "similar": [
+     "q074",
+     "q075",
+     "q019"
+    ],
+    "usage": [
+     "진로가 남들과 다른 친구에게: 「너는 다른 북소리를 듣고 있는 거야. 네 박자대로 가.」",
+     "재수·휴학을 결정한 사람에게 위로 카드로.",
+     "졸업 축사에서 「모두 같은 속도로 갈 필요는 없다」는 메시지와 함께."
+    ]
+   }
+  },
+  {
+   "id": "q077",
+   "text_ko": "시간은 내가 낚시하러 가는 개울일 뿐이다.",
+   "original": "Time is but the stream I go a-fishing in.",
+   "lang": "영어",
+   "author": "thoreau",
+   "source": "『월든』 2장 「나는 어디서, 무엇을 위해 살았나」",
+   "year": "1854",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/205"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "rest"
+   ],
+   "topics": [
+    "time"
+   ],
+   "note": "시간에 쫓기는 대신 시간 속에서 노는 법을 말하는 문장이에요. 휴가나 주말 인사에 어울려요."
+  },
+  {
+   "id": "q078",
+   "text_ko": "삶이 아무리 초라해도 마주하고 살아 내라. 피하거나 나쁜 이름으로 부르지 말라.",
+   "original": "However mean your life is, meet it and live it; do not shun it and call it hard names.",
+   "lang": "영어",
+   "author": "thoreau",
+   "source": "『월든』 18장 「맺음말」",
+   "year": "1854",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/205"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "comfort",
+    "cheer"
+   ],
+   "topics": [
+    "courage"
+   ],
+   "note": "뒤에 「삶은 너만큼 나쁘지 않다. 가장 부유할 때 가장 초라해 보인다」가 이어져요."
+  },
+  {
+   "id": "q079",
+   "text_ko": "무엇보다, 성공하겠다는 너 자신의 결심이 다른 어떤 것보다 중요하다는 것을 늘 기억하라.",
+   "original": "Always bear in mind that your own resolution to succeed, is more important than any other one thing.",
+   "lang": "영어",
+   "author": "lincoln",
+   "source": "아이섬 리비스에게 보낸 편지",
+   "year": "1855",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "Papers of Abraham Lincoln 편지 전사본",
+     "url": "https://papersofabrahamlincoln.org/documents/D200867"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "exam",
+    "challenge"
+   ],
+   "topics": [
+    "courage"
+   ],
+   "note": "변호사가 되는 법을 묻는 청년에게 보낸 답장이에요. 「누구 밑에서 배우느냐는 중요하지 않다. 책을 구해 읽고 공부하라」는 조언 끝에 이 문장이 나와요. 링컨 문서 편찬 사업(Papers of Abraham Lincoln)의 전사본에서 확인했어요."
+  },
+  {
+   "id": "q080",
+   "text_ko": "여러분, 지금 내가 가진 모든 것, 지금의 나 전부를 여러분에게 빚졌습니다.",
+   "original": "To you, my friends, I owe all that I have, all that I am.",
+   "lang": "영어",
+   "author": "lincoln",
+   "source": "스프링필드 고별 연설",
+   "year": "1861",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/3253"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "retirement",
+    "farewell",
+    "thanks"
+   ],
+   "topics": [
+    "friendship"
+   ],
+   "note": "대통령 취임을 위해 25년 넘게 살던 일리노이주 스프링필드를 떠나며 기차역에서 한 짧은 연설이에요. 연설문은 판본에 따라 문장이 조금씩 달라요(여기는 구텐베르크 전집 판본)."
+  },
+  {
+   "id": "q081",
+   "text_ko": "옳은 것이 힘을 만든다고 믿읍시다. 그 믿음으로 끝까지, 우리가 아는 우리의 의무를 감히 해냅시다.",
+   "original": "Let us have faith that right makes might; and in that faith, let us, to the end, dare to do our duty as we understand it.",
+   "lang": "영어",
+   "author": "lincoln",
+   "source": "쿠퍼 유니언 연설",
+   "year": "1860",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/3253"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "cheer",
+    "challenge"
+   ],
+   "topics": [
+    "courage"
+   ],
+   "note": "대통령 후보로 이름을 알린 뉴욕 연설의 마지막 문장이에요."
+  },
+  {
+   "id": "q082",
+   "text_ko": "용기는 두려움이 없는 것이 아니라, 두려움에 맞서고 두려움을 다스리는 것이다.",
+   "original": "Courage is resistance to fear, mastery of fear—not absence of fear.",
+   "lang": "영어",
+   "author": "twain",
+   "source": "『바보 윌슨』 12장 머리말(「바보 윌슨의 달력」)",
+   "year": "1894",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/102"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "exam",
+    "challenge"
+   ],
+   "topics": [
+    "courage"
+   ],
+   "note": "떨리는 게 정상이라는 말이에요. 시험·면접 전날 건네기 좋아요."
+  },
+  {
+   "id": "q083",
+   "text_ko": "훈련이 전부다. 복숭아도 한때는 쓴 아몬드였고, 콜리플라워는 대학 교육을 받은 양배추일 뿐이다.",
+   "original": "Training is everything. The peach was once a bitter almond; cauliflower is nothing but cabbage with a college education.",
+   "lang": "영어",
+   "author": "twain",
+   "source": "『바보 윌슨』 5장 머리말(「바보 윌슨의 달력」)",
+   "year": "1894",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/102"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "graduation"
+   ],
+   "topics": [
+    "learning"
+   ],
+   "note": "졸업 축하 카드에 웃음을 더하고 싶을 때 쓰기 좋은 트웨인식 농담이에요."
+  },
+  {
+   "id": "q084",
+   "text_ko": "슬픔은 혼자서도 어떻게든 견딘다. 하지만 기쁨을 제대로 누리려면 함께 나눌 사람이 있어야 한다.",
+   "original": "Grief can take care of itself; but to get the full value of a joy you must have somebody to divide it with.",
+   "lang": "영어",
+   "author": "twain",
+   "source": "『적도를 따라서』 머리말(「바보 윌슨의 새 달력」)",
+   "year": "1897",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/2895"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "wedding",
+    "birthday"
+   ],
+   "topics": [
+    "friendship",
+    "love"
+   ],
+   "note": "「기쁨은 나누면 두 배」라는 말을 트웨인식으로 비튼 문장이에요. 결혼 축하에 잘 어울려요."
+  },
+  {
+   "id": "q085",
+   "text_ko": "우리가 죽을 때 장의사마저 아쉬워할 만큼 잘 살도록 애써 보자.",
+   "original": "Let us endeavor so to live that when we come to die even the undertaker will be sorry.",
+   "lang": "영어",
+   "author": "twain",
+   "source": "『바보 윌슨』 6장 머리말(「바보 윌슨의 달력」)",
+   "year": "1894",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/102"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "birthday"
+   ],
+   "topics": [
+    "time",
+    "happiness"
+   ],
+   "note": "농담 속에 「잘 살자」는 다짐이 담겨 있어요. 유머를 아는 어른의 생신 카드에 어울려요."
+  },
+  {
+   "id": "q086",
+   "text_ko": "삶이라는 사관학교에서 배운 것. 나를 죽이지 못하는 것은 나를 더 강하게 만든다.",
+   "original": "Aus der Kriegsschule des Lebens. — Was mich nicht umbringt, macht mich stärker.",
+   "lang": "독일어",
+   "author": "nietzsche",
+   "source": "『우상의 황혼』 「잠언과 화살」 8번",
+   "year": "1889",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/7203"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "comfort",
+    "cheer"
+   ],
+   "topics": [
+    "failure",
+    "courage"
+   ],
+   "note": "앞에 「삶의 사관학교에서」라는 짧은 제목이 붙어 있어요. 고난 자체를 찬양하는 말이라기보다, 견뎌 낸 경험이 나를 단련한다는 뜻이에요.",
+   "page": true,
+   "detail": {
+    "background": "니체가 정신을 놓기 직전인 1888년에 쓰고 1889년에 나온 『우상의 황혼』 첫 장 「잠언과 화살」의 8번째 잠언이에요. 원문 앞에는 「삶의 사관학교에서」라는 짧은 머리말이 붙어 있어서, 군사학교에서 훈련받듯 삶의 고난에서 배운다는 뜻이 분명해져요. 니체는 평생 심한 두통과 눈병에 시달렸고, 이 말에 그 경험이 담겨 있다고 보는 해석이 많아요. 다만 모든 고통이 사람을 강하게 만든다는 일반 법칙처럼 쓰면 원래 뜻을 넘어서요. 「내가 견뎌 낸 것」을 돌아보며 스스로에게 하는 말로 쓸 때 가장 자연스러워요.",
+    "similar": [
+     "q087",
+     "q035",
+     "q044"
+    ],
+    "usage": [
+     "힘든 시기를 지나온 친구에게: 「잘 버텼어. 이 시간이 너를 더 단단하게 만들었을 거야.」",
+     "재기·복귀를 응원하는 메시지로.",
+     "운동·재활처럼 몸으로 버티는 목표를 가진 사람에게."
+    ]
+   }
+  },
+  {
+   "id": "q087",
+   "text_ko": "살아야 할 「왜」를 가진 사람은 거의 어떤 「어떻게」도 견딘다.",
+   "original": "Hat man sein warum? des Lebens, so verträgt man sich fast mit jedem wie?",
+   "lang": "독일어",
+   "author": "nietzsche",
+   "source": "『우상의 황혼』 「잠언과 화살」 12번",
+   "year": "1889",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/7203"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "exam",
+    "comfort"
+   ],
+   "topics": [
+    "patience"
+   ],
+   "note": "정신과 의사 빅터 프랭클이 『죽음의 수용소에서』에 인용해 더 유명해졌어요. 니체 원문은 물음표를 낱말 바로 뒤에 붙인 독특한 표기예요."
+  },
+  {
+   "id": "q088",
+   "text_ko": "음악이 없다면 삶은 하나의 실수일 것이다.",
+   "original": "Ohne Musik wäre das Leben ein Irrthum.",
+   "lang": "독일어",
+   "author": "nietzsche",
+   "source": "『우상의 황혼』 「잠언과 화살」 33번",
+   "year": "1889",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/7203"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "rest",
+    "birthday"
+   ],
+   "topics": [
+    "happiness"
+   ],
+   "note": "원문 표기는 19세기 철자 Irrthum이에요(지금 독일어로는 Irrtum)."
+  },
+  {
+   "id": "q089",
+   "text_ko": "춤추는 별을 낳으려면 자기 안에 아직 혼돈을 품고 있어야 한다.",
+   "original": "man muss noch Chaos in sich haben, um einen tanzenden Stern gebären zu können.",
+   "lang": "독일어",
+   "author": "nietzsche",
+   "source": "『차라투스트라는 이렇게 말했다』 「서설」 5절",
+   "year": "1883",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/7205"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "comfort",
+    "challenge"
+   ],
+   "topics": [
+    "courage"
+   ],
+   "note": "마음이 정리되지 않아 불안한 사람에게, 그 혼돈이 새로운 것을 만드는 힘이라고 말해 줄 수 있어요."
+  },
+  {
+   "id": "q090",
+   "text_ko": "한 번도 춤추지 않은 날은 잃어버린 날로 치자!",
+   "original": "Und verloren sei uns der Tag, wo nicht Ein Mal getanzt wurde!",
+   "lang": "독일어",
+   "author": "nietzsche",
+   "source": "『차라투스트라는 이렇게 말했다』 3부 「낡은 서판과 새로운 서판에 대하여」 23절",
+   "year": "1884",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "프로젝트 구텐베르크 전자 텍스트",
+     "url": "https://www.gutenberg.org/ebooks/7205"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "birthday",
+    "wedding"
+   ],
+   "topics": [
+    "happiness"
+   ],
+   "note": "뒤에 「웃음이 한 번도 없었던 진리는 거짓으로 치자!」가 이어져요. 생일·결혼 축하에 흥을 더하는 문장이에요."
+  },
+  {
+   "id": "q091",
+   "text_ko": "사람은 자전거와 같다. 계속 달려야 균형을 잡을 수 있다.",
+   "original": "Beim Menschen ist es wie beim Velo … (영어로는 흔히 “Life is like riding a bicycle. To keep your balance you must keep moving.”)",
+   "lang": "독일어",
+   "author": "einstein",
+   "source": "아들 에두아르트에게 보낸 편지",
+   "year": "1930",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "Quote Investigator 조사",
+     "url": "https://quoteinvestigator.com/2015/06/28/bicycle/"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "cheer",
+    "comfort"
+   ],
+   "topics": [
+    "patience"
+   ],
+   "note": "1930년 2월 5일에 쓴 편지예요. 우울해하던 아들에게 일을 하며 움직이라고 권하는 내용이에요. 월터 아이작슨의 전기(2007)가 인용했고, 인용 출처를 추적하는 사이트 Quote Investigator가 편지 날짜와 독일어 첫 구절을 확인했어요. 독일어 원문 전체는 아직 대조하지 못해 앞부분만 실어요."
+  },
+  {
+   "id": "q092",
+   "text_ko": "상상력은 지식보다 중요하다.",
+   "original": "Imagination is more important than knowledge.",
+   "lang": "영어",
+   "author": "einstein",
+   "source": "조지 실베스터 비에렉과의 인터뷰 「What Life Means to Einstein」, 새터데이 이브닝 포스트",
+   "year": "1929",
+   "status": "추정",
+   "evidence": [],
+   "checked": "2026-11-13",
+   "situations": [
+    "graduation"
+   ],
+   "topics": [
+    "learning"
+   ],
+   "note": "1929년 10월 26일자 잡지 인터뷰에 실린 말로 알려져 있어요. 이번 조사에서는 잡지 원문을 직접 보지 못해 「추정」으로 둬요."
+  },
+  {
+   "id": "q093",
+   "text_ko": "나에게 특별한 재능은 없다. 다만 열렬하게 궁금해할 뿐이다.",
+   "original": "Ich habe keine besondere Begabung, sondern bin nur leidenschaftlich neugierig.",
+   "lang": "독일어",
+   "author": "einstein",
+   "source": "카를 젤리히에게 보낸 편지",
+   "year": "1952",
+   "status": "추정",
+   "evidence": [],
+   "checked": "2026-11-13",
+   "situations": [
+    "exam"
+   ],
+   "topics": [
+    "learning"
+   ],
+   "note": "1952년 3월 11일 전기 작가 젤리히에게 보낸 편지로 알려져 있어요. 편지 원본은 확인하지 못했어요."
+  },
+  {
+   "id": "q094",
+   "text_ko": "살면서 두려워할 것은 아무것도 없다. 이해해야 할 것이 있을 뿐이다. 이제는 더 많이 이해해서 덜 두려워할 때다.",
+   "original": "Nothing in life is to be feared, it is only to be understood. Now is the time to understand more, so that we may fear less.",
+   "lang": "영어(원어 미상)",
+   "author": "curie",
+   "source": "출처 미확인",
+   "year": "미상",
+   "status": "추정",
+   "evidence": [],
+   "checked": "2026-11-13",
+   "situations": [
+    "exam"
+   ],
+   "topics": [
+    "courage",
+    "learning"
+   ],
+   "note": "퀴리의 말로 널리 쓰이지만, 처음 실린 글을 이번 조사에서 찾지 못했어요. 출처가 확인되지 않으면 「진위 확인」으로 옮길 예정이에요."
+  },
+  {
+   "id": "q095",
+   "text_ko": "죽는 날까지 하늘을 우러러\n한 점 부끄럼이 없기를,\n잎새에 이는 바람에도\n나는 괴로워했다.\n별을 노래하는 마음으로\n모든 죽어 가는 것을 사랑해야지\n그리고 나한테 주어진 길을\n걸어가야겠다.",
+   "original": "죽는 날까지 하늘을 우르러\n한점 부끄럼이 없기를,\n잎새에 이는 바람에도\n나는 괴로워했다.\n별을 노래하는 마음으로\n모든 죽어가는것을 사랑해야지\n그리고 나한테 주어진 길을\n걸어가야겠다.",
+   "lang": "한국어",
+   "author": "yun-dongju",
+   "source": "「서시」, 『하늘과 바람과 별과 시』",
+   "year": "1941년 11월 20일 씀, 1948년 간행",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌(한국어) 원문",
+     "url": "https://ko.wikisource.org/wiki/%ED%95%98%EB%8A%98%EA%B3%BC_%EB%B0%94%EB%9E%8C%EA%B3%BC_%EB%B3%84%EA%B3%BC_%EC%8B%9C_(1948%EB%85%84)/%EC%84%9C%EC%8B%9C"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "graduation",
+    "newyear"
+   ],
+   "topics": [
+    "courage"
+   ],
+   "note": "우리말 칸은 오늘날 맞춤법으로 띄어 쓴 것이고, 원문 칸은 1948년 초판 표기예요(「우르러」, 「한점」). 마지막 줄 「오늘 밤에도 별이 바람에 스치운다.」는 따로 한 연이에요.",
+   "page": true,
+   "detail": {
+    "background": "윤동주가 1941년 11월 20일, 연희전문학교 졸업을 앞두고 직접 엮은 손글씨 시집의 첫머리에 놓은 시예요. 시집은 출판되지 못했고, 시인은 1945년 2월 후쿠오카 형무소에서 세상을 떠났어요. 1948년 유고 시집 『하늘과 바람과 별과 시』가 나오면서 이 시가 맨 앞에 실렸고, 제목 「서시(序詩)」는 「책 머리의 시」라는 뜻이에요. 부끄럼 없이 살고 싶은 마음, 작은 바람에도 흔들리는 괴로움, 그리고 「나한테 주어진 길을 걸어가야겠다」는 다짐이 차례로 이어져서, 졸업과 새 출발을 앞둔 사람들이 오래 읽어 왔어요.",
+    "similar": [
+     "q096",
+     "q097",
+     "q051"
+    ],
+    "usage": [
+     "졸업 앨범·롤링페이퍼: 「나한테 주어진 길을 걸어가야겠다」 한 줄만 써도 충분해요.",
+     "새해 첫날 일기 첫 줄로.",
+     "시 전체를 손글씨로 옮겨 졸업 선물 카드로."
+    ]
+   }
+  },
+  {
+   "id": "q096",
+   "text_ko": "어제도 가고 오늘도 갈\n나의 길 새로운 길",
+   "original": "어제도 가고 오늘도 갈\n나의 길 새로운 길",
+   "lang": "한국어",
+   "author": "yun-dongju",
+   "source": "「새로운 길」, 『하늘과 바람과 별과 시』",
+   "year": "1938년 5월 10일 씀, 1948년 간행",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌(한국어) 원문",
+     "url": "https://ko.wikisource.org/wiki/%ED%95%98%EB%8A%98%EA%B3%BC_%EB%B0%94%EB%9E%8C%EA%B3%BC_%EB%B3%84%EA%B3%BC_%EC%8B%9C_(1948%EB%85%84)/%EC%83%88%EB%A1%9C%EC%9A%B4_%EA%B8%B8"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "graduation",
+    "newyear",
+    "challenge"
+   ],
+   "topics": [
+    "time"
+   ],
+   "note": "연희전문학교에 입학한 해에 쓴 시예요. 「내를 건너서 숲으로 / 고개를 넘어서 마을로」로 시작해 같은 구절로 끝나요. 매일 걷는 길도 늘 새롭다는 마음이 새 학기·새해와 잘 맞아요."
+  },
+  {
+   "id": "q097",
+   "text_ko": "별 하나에 추억과\n별 하나에 사랑과\n별 하나에 쓸쓸함과\n별 하나에 동경과\n별 하나에 시와\n별 하나에 어머니, 어머니,",
+   "original": "별 하나에 追憶과\n별 하나에 사랑과\n별 하나에 쓸쓸함과\n별 하나에 憧憬과\n별 하나에 詩와\n별 하나에 어머니, 어머니,",
+   "lang": "한국어",
+   "author": "yun-dongju",
+   "source": "「별 헤는 밤」, 『하늘과 바람과 별과 시』",
+   "year": "1941년 11월 5일 씀, 1948년 간행",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌(한국어) 원문",
+     "url": "https://ko.wikisource.org/wiki/%ED%95%98%EB%8A%98%EA%B3%BC_%EB%B0%94%EB%9E%8C%EA%B3%BC_%EB%B3%84%EA%B3%BC_%EC%8B%9C_(1948%EB%85%84)/%EB%B3%84_%ED%97%A4%EB%8A%94_%EB%B0%A4"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "farewell",
+    "thanks"
+   ],
+   "topics": [
+    "love"
+   ],
+   "note": "고향과 어머니를 그리는 시의 한가운데 부분이에요. 멀리 있는 가족에게 보내는 글에 어울려요. 원문은 일부 낱말을 한자로 적었어요."
+  },
+  {
+   "id": "q098",
+   "text_ko": "우리는 만날 때에 떠날 것을 염려하는 것과 같이 떠날 때에 다시 만날 것을 믿습니다.",
+   "original": "우리는 맛날때에 ᄯᅥ날것을 염려하는것과 가티 ᄯᅥ날때에 다시맛날것을 밋슴니다",
+   "lang": "한국어",
+   "author": "han-yongun",
+   "source": "「님의 침묵」, 『님의 침묵』",
+   "year": "1926",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌(한국어) 원문",
+     "url": "https://ko.wikisource.org/wiki/%EB%8B%98%EC%9D%98_%EC%B9%A8%EB%AC%B5/%EB%8B%98%EC%9D%98_%EC%B9%A8%EB%AC%B5"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "farewell",
+    "comfort"
+   ],
+   "topics": [
+    "love"
+   ],
+   "note": "이별을 끝이 아닌 다시 만날 약속으로 바꾸는 구절이에요. 우리말 칸은 오늘날 표기, 원문 칸은 1926년 초판 표기(옛 글자 포함)예요."
+  },
+  {
+   "id": "q099",
+   "text_ko": "아아, 님은 갔지마는 나는 님을 보내지 아니하였습니다.",
+   "original": "아々 님은갓지마는 나는 님을보내지 아니하얏슴니다",
+   "lang": "한국어",
+   "author": "han-yongun",
+   "source": "「님의 침묵」, 『님의 침묵』",
+   "year": "1926",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌(한국어) 원문",
+     "url": "https://ko.wikisource.org/wiki/%EB%8B%98%EC%9D%98_%EC%B9%A8%EB%AC%B5/%EB%8B%98%EC%9D%98_%EC%B9%A8%EB%AC%B5"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "farewell"
+   ],
+   "topics": [
+    "love"
+   ],
+   "note": "「님의 침묵」에서 가장 많이 인용되는 구절이에요. 「님」은 연인, 조국, 진리 등 여러 뜻으로 읽혀요."
+  },
+  {
+   "id": "q100",
+   "text_ko": "내가 당신을 사랑하는 것은 까닭이 없는 것이 아닙니다.\n다른 사람들은 나의 홍안만을 사랑하지마는 당신은 나의 백발도 사랑하는 까닭입니다.",
+   "original": "내가 당신을사랑하는것은 ᄭᅡ닭이업는것이 아님니다\n다른사람들은 나의紅顔만을 사랑하지마는 당신은 나의白髮도 사랑하는 ᄭᅡ닭임니다",
+   "lang": "한국어",
+   "author": "han-yongun",
+   "source": "「사랑하는 까닭」, 『님의 침묵』",
+   "year": "1926",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌(한국어) 원문",
+     "url": "https://ko.wikisource.org/wiki/%EB%8B%98%EC%9D%98_%EC%B9%A8%EB%AC%B5/%EC%82%AC%EB%9E%91%ED%95%98%EB%8A%94_%EA%B9%8C%EB%8B%AD"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "wedding"
+   ],
+   "topics": [
+    "love"
+   ],
+   "note": "「홍안」은 젊은 날의 붉은 얼굴이에요. 시는 미소와 눈물, 건강과 죽음까지 사랑하는 까닭을 세 번 되풀이해요. 오래 함께할 두 사람의 결혼 축하 글에 잘 맞아요."
+  },
+  {
+   "id": "q101",
+   "text_ko": "나는 우리나라가 세계에서 가장 아름다운 나라가 되기를 원한다. 가장 부강한 나라가 되기를 원하는 것은 아니다.",
+   "original": "나는 우리나라가 세계에서 가장 아름다운 나라가 되기를 원한다. 가장 부강한 나라가 되기를 원하는 것은 아니다.",
+   "lang": "한국어",
+   "author": "kim-gu",
+   "source": "「나의 소원」 중 「내가 원하는 우리나라」, 『백범일지』",
+   "year": "1947",
+   "status": "추정",
+   "evidence": [],
+   "checked": "2026-11-13",
+   "situations": [],
+   "topics": [
+    "happiness"
+   ],
+   "note": "1947년 국사원판 『백범일지』 끝에 붙은 「나의 소원」의 한 대목이에요. 문장은 판본마다 조금씩 다르고, 「나의 소원」은 이광수가 다듬었다는 논란도 있어요. 판본 원문과 직접 대조하지 못해 「추정」으로 둬요."
+  },
+  {
+   "id": "q102",
+   "text_ko": "오직 한없이 가지고 싶은 것은 높은 문화의 힘이다. 문화의 힘은 우리 자신을 행복되게 하고, 나아가서 남에게 행복을 주겠기 때문이다.",
+   "original": "오직 한없이 가지고 싶은 것은 높은 문화의 힘이다. 문화의 힘은 우리 자신을 행복되게 하고, 나아가서 남에게 행복을 주겠기 때문이다.",
+   "lang": "한국어",
+   "author": "kim-gu",
+   "source": "「나의 소원」 중 「내가 원하는 우리나라」, 『백범일지』",
+   "year": "1947",
+   "status": "추정",
+   "evidence": [],
+   "checked": "2026-11-13",
+   "situations": [
+    "thanks"
+   ],
+   "topics": [
+    "happiness"
+   ],
+   "note": "케이컬처 이야기에 자주 인용되는 문장이에요. 판본에 따라 「행복하게」/「행복되게」처럼 표기가 달라요. 판본 원문과 직접 대조하지 못해 「추정」으로 둬요."
+  },
+  {
+   "id": "q103",
+   "text_ko": "하루라도 책을 읽지 않으면 입안에 가시가 돋는다.",
+   "original": "一日不讀書 口中生荊棘",
+   "lang": "한문",
+   "author": "ahn-junggeun",
+   "source": "뤼순 감옥 유묵",
+   "year": "1910",
+   "status": "추정",
+   "evidence": [],
+   "checked": "2026-11-13",
+   "situations": [
+    "exam"
+   ],
+   "topics": [
+    "learning"
+   ],
+   "note": "1910년 3월 뤼순 감옥에서 쓴 붓글씨로, 보물로 지정된 안중근 유묵 가운데 하나로 알려져 있어요. 국가유산청 기록과 직접 대조하지 못해 「추정」으로 둬요."
+  },
+  {
+   "id": "q104",
+   "text_ko": "이익을 보면 의로운지 먼저 생각하고, 나라가 위태로우면 목숨을 바친다.",
+   "original": "見利思義 見危授命",
+   "lang": "한문",
+   "author": "ahn-junggeun",
+   "source": "뤼순 감옥 유묵(『논어』 「헌문」의 구절)",
+   "year": "1910",
+   "status": "추정",
+   "evidence": [
+    {
+     "label": "위키문헌 『논어』 「헌문」 원문",
+     "url": "https://zh.wikisource.org/wiki/%E8%AB%96%E8%AA%9E/%E6%86%B2%E5%95%8F%E7%AC%AC%E5%8D%81%E5%9B%9B"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [],
+   "topics": [
+    "courage"
+   ],
+   "note": "『논어』 「헌문」 편의 「見利思義，見危授命」을 안중근이 옥중에서 붓으로 쓴 거예요. 『논어』 문장은 원문에서 확인했지만, 유묵 자체는 국가유산청 기록과 대조하지 못했어요."
+  },
+  {
+   "id": "q105",
+   "text_ko": "죽고자 하면 살고, 살고자 하면 죽는다.",
+   "original": "必死則生 必生則死",
+   "lang": "한문",
+   "author": "yi-sunsin",
+   "source": "『난중일기』 정유년 9월 15일",
+   "year": "1597",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "한국경제 생글생글 해설(난중일기 정유년 9월 15일)",
+     "url": "https://sgsg.hankyung.com/article/2025032848761"
+    }
+   ],
+   "checked": "2026-11-13",
+   "situations": [
+    "exam",
+    "challenge"
+   ],
+   "topics": [
+    "courage"
+   ],
+   "note": "명량해전 전날 장수들을 모아 놓고 한 말을 일기에 적은 거예요. 이순신은 「병법에 이르기를」이라며 인용했는데, 중국 병법서 『오자』의 「必死則生 幸生則死」를 조금 바꾼 것으로 봐요.",
+   "page": true,
+   "detail": {
+    "background": "1597년 음력 9월 15일, 명량해전 하루 전에 이순신은 진을 우수영 앞바다로 옮기고 장수들을 불러 모았어요. 『난중일기』의 이날 기록을 보면 그는 「병법에 이르기를」이라며 이 말을 꺼냈고, 「한 사람이 길목을 지키면 천 명도 두렵게 할 수 있다」는 말을 덧붙였어요. 이튿날 조선 수군은 열세 척으로 일본 함대를 막아 냈어요. 이 문장은 중국 병법서 『오자』의 「必死則生 幸生則死(반드시 죽기를 각오하면 살고, 요행으로 살려 하면 죽는다)」를 이순신이 조금 바꾼 것으로 봐요. 목숨을 가볍게 여기라는 뜻이 아니라, 물러설 곳 없는 각오가 길을 연다는 뜻으로 읽혀요.",
+    "similar": [
+     "q106",
+     "q031",
+     "q082"
+    ],
+    "usage": [
+     "수능 전날 응원: 「필사즉생. 마지막까지 너답게.」",
+     "큰 결정을 앞둔 사람에게 각오를 다지는 한마디로.",
+     "운동부·팀 대회 출정식 구호로."
+    ]
+   }
+  },
+  {
+   "id": "q106",
+   "text_ko": "지금 신에게는 아직 전선 열두 척이 있습니다.",
+   "original": "今臣戰船 尙有十二",
+   "lang": "한문",
+   "author": "yi-sunsin",
+   "source": "조정에 올린 장계(이분 『행록』에 전함)",
+   "year": "1597",
+   "status": "추정",
+   "evidence": [],
+   "checked": "2026-11-13",
+   "situations": [
+    "cheer",
+    "comfort"
+   ],
+   "topics": [
+    "courage",
+    "patience"
+   ],
+   "note": "칠천량 패전 뒤 수군을 없애라는 명령에 답한 장계로 전해요. 장계 원본은 남아 있지 않고 조카 이분이 쓴 『행록』 같은 뒷날 기록으로 전해져 「추정」으로 둬요. 남은 것이 적어도 끝나지 않았다는 응원으로 많이 쓰여요."
+  }
+ ],
+ "checks": [
+  {
+   "id": "c01",
+   "slug": "einstein-insanity",
+   "author": "einstein",
+   "status": "출처불명·잘못 알려짐",
+   "verdict": "잘못 알려짐",
+   "text_ko": "같은 일을 반복하면서 다른 결과를 기대하는 것은 미친 짓이다.",
+   "original": "Insanity is doing the same thing over and over again and expecting different results.",
+   "lang": "영어",
+   "title": "「같은 일을 반복하며 다른 결과를 기대하는 건 미친 짓」, 아인슈타인이 한 말일까?",
+   "real_origin": "1980년대 초 미국의 중독 회복 모임(나르코틱스 어노니머스, 알아논) 자료와 모임 기록에서 처음 확인돼요. 아인슈타인의 글·편지·인터뷰에서는 나오지 않았어요.",
+   "body": "이 말은 아인슈타인 명언으로 가장 많이 공유되는 문장 가운데 하나예요. 하지만 인용 출처를 추적하는 Quote Investigator(QI)는 아인슈타인이 이 말을 했다는 믿을 만한 기록을 찾지 못했다고 정리했어요. QI가 찾은 가장 이른 사례는 1981년 알아논 모임의 발언 기록과 1980년대 초 나르코틱스 어노니머스 소책자이고, 아인슈타인 이름이 붙기 시작한 건 그보다 몇 년 뒤예요. 아인슈타인은 편지와 원고가 꼼꼼히 정리돼 있어서, 출처가 없다는 건 꽤 강한 근거가 돼요. 말 자체는 「방법을 바꿔 보자」는 좋은 뜻이니, 쓸 때는 「누가 처음 했는지 모르는 말」로 소개하면 돼요.",
+   "evidence": [
+    {
+     "label": "Quote Investigator 조사(2017)",
+     "url": "https://quoteinvestigator.com/2017/03/23/same/"
+    }
+   ]
+  },
+  {
+   "id": "c02",
+   "slug": "darwin-adapt",
+   "author": null,
+   "attributed": "다윈",
+   "status": "출처불명·잘못 알려짐",
+   "verdict": "잘못 알려짐",
+   "text_ko": "살아남는 것은 가장 강한 종도, 가장 똑똑한 종도 아니다. 변화에 가장 잘 적응하는 종이다.",
+   "original": "It is not the strongest of the species that survives, nor the most intelligent, but the one most responsive to change.",
+   "lang": "영어",
+   "title": "「살아남는 건 가장 강한 종이 아니라 적응하는 종」, 다윈이 한 말일까?",
+   "real_origin": "1963년 미국 루이지애나 주립대 경영학 교수 레온 메긴슨이 다윈의 생각을 자기 말로 풀어 쓴 문장이 시작이에요. 따옴표 없는 요약이었는데 나중에 다윈의 직접 인용처럼 퍼졌어요.",
+   "body": "경영·자기계발 강연에서 다윈의 말로 자주 소개되지만, 『종의 기원』을 비롯한 다윈의 책과 편지에는 이 문장이 없어요. Quote Investigator와, 다윈의 편지를 정리하는 케임브리지대 「다윈 서신 프로젝트」 모두 출처를 메긴슨의 1963년 글로 봐요. 원래는 「다윈의 진화론을 이렇게 이해할 수 있다」는 해설이었고, 그 뒤 여러 사람이 다듬어 지금 모양이 됐어요. 다윈(1882년 사망)의 진짜 문장을 쓰고 싶다면 『종의 기원』 마지막 문단처럼 원문이 확인되는 구절을 고르는 게 안전해요.",
+   "evidence": [
+    {
+     "label": "Quote Investigator 조사(2014)",
+     "url": "https://quoteinvestigator.com/2014/05/04/adapt/"
+    },
+    {
+     "label": "다윈 서신 프로젝트: 잘못 알려진 다윈 인용",
+     "url": "https://www.darwinproject.ac.uk/evolution-misquotation"
+    }
+   ]
+  },
+  {
+   "id": "c03",
+   "slug": "gandhi-be-the-change",
+   "author": "gandhi",
+   "status": "출처불명·잘못 알려짐",
+   "verdict": "다듬어진 말",
+   "text_ko": "세상에서 보고 싶은 변화가 있다면 네가 먼저 그 변화가 되어라.",
+   "original": "Be the change you wish to see in the world.",
+   "lang": "영어",
+   "title": "「세상에서 보고 싶은 변화가 되어라」, 간디가 한 말일까?",
+   "real_origin": "이 모양의 문장은 1974년 미국 교육자 알린 로런스의 글에서 처음 확인돼요. 간디가 1913년에 쓴 비슷한 생각은 따로 있어요.",
+   "body": "간디의 말로 가장 유명한 문장이지만, 간디 전집에는 이 형태가 없어요. Quote Investigator에 따르면 간디는 1913년 주간지 『인디언 오피니언』에 「우리가 자신을 바꿀 수 있다면 세상의 흐름도 바뀔 것이다. 사람이 자기 본성을 바꾸면 세상이 그를 대하는 태도도 바뀐다」는 취지의 글을 썼어요(구자라트어 원문, 영어 번역은 『간디 전집』 12권). 이 생각이 수십 년 동안 요약되고 다듬어지면서 지금의 짧은 문장이 됐고, 「be the change」라는 표현이 처음 확인되는 건 1974년 알린 로런스의 글이에요. 뜻은 간디의 생각과 통하지만 「간디가 이렇게 말했다」고 따옴표를 붙이면 틀린 인용이 돼요.",
+   "real_quote": {
+    "text_ko": "우리가 자신을 바꿀 수 있다면, 세상의 흐름도 바뀔 것이다.",
+    "original": "If we could change ourselves, the tendencies in the world would also change.",
+    "source": "『인디언 오피니언』 1913년 8월 9일(영어 번역, 『간디 전집』 12권)"
+   },
+   "evidence": [
+    {
+     "label": "Quote Investigator 조사(2017)",
+     "url": "https://quoteinvestigator.com/2017/10/23/be-change/"
+    }
+   ]
+  },
+  {
+   "id": "c04",
+   "slug": "voltaire-defend",
+   "author": null,
+   "attributed": "볼테르",
+   "status": "출처불명·잘못 알려짐",
+   "verdict": "잘못 알려짐",
+   "text_ko": "나는 당신의 말에 동의하지 않는다. 하지만 당신이 그렇게 말할 권리는 목숨을 걸고 지키겠다.",
+   "original": "I disapprove of what you say, but I will defend to the death your right to say it.",
+   "lang": "영어",
+   "title": "「당신 말에 반대하지만 말할 권리는 목숨 걸고 지키겠다」, 볼테르가 한 말일까?",
+   "real_origin": "영국 작가 에벌린 비어트리스 홀(필명 S. G. 탤런타이어, 1956년 사망)이 1906년 책 『볼테르의 친구들』에서 볼테르의 태도를 요약해 쓴 문장이에요.",
+   "body": "표현의 자유를 말할 때 빠지지 않는 문장이지만 볼테르의 글에는 없어요. 홀은 1906년 『볼테르의 친구들』에서 철학자 엘베시우스의 책이 불태워진 사건을 다루며, 그때 볼테르가 보인 태도를 이 한 문장으로 요약했어요. 그런데 따옴표 안에 들어가 있어서 볼테르가 직접 한 말로 읽혔어요. 홀은 훗날 이 말이 자기 표현이고 따옴표를 붙이지 말았어야 했다고 밝혔어요. 볼테르(1778년 사망)가 비슷한 생각을 가졌던 건 사실이지만, 문장의 주인은 홀이에요.",
+   "evidence": [
+    {
+     "label": "Quote Investigator 조사(2015)",
+     "url": "https://quoteinvestigator.com/2015/06/01/defend/"
+    },
+    {
+     "label": "위키백과: The Friends of Voltaire",
+     "url": "https://en.wikipedia.org/wiki/The_Friends_of_Voltaire"
+    }
+   ]
+  },
+  {
+   "id": "c05",
+   "slug": "snow-field-poem",
+   "author": null,
+   "attributed": "서산대사(휴정)",
+   "status": "출처불명·잘못 알려짐",
+   "verdict": "작자 논란",
+   "text_ko": "눈 덮인 들판을 걸어갈 때 함부로 어지러이 걷지 말라. 오늘 내가 남긴 발자국이 뒷사람의 길이 되리니.",
+   "original": "踏雪野中去 不須胡亂行 今日我行跡 遂作後人程",
+   "lang": "한문",
+   "title": "「눈 덮인 들판을 걸어갈 때」, 서산대사의 시일까?",
+   "real_origin": "조선 후기 시인 이양연(1771~1853)의 시로 보는 견해가 있어요. 다만 이번 조사에서는 이양연 문집의 해당 원문을 직접 확인하지 못했어요.",
+   "body": "백범 김구가 좋아해 자주 썼다고 전하는 오언절구로, 흔히 서산대사(휴정, 1520~1604)의 시로 소개돼요. 그런데 서산대사 문집 『청허당집』에서는 이 시가 확인되지 않는다는 지적이 있고, 조선 후기 시인 이양연(산운)의 시 「야설(野雪)」로 보는 견해가 있어요. 전하는 글자도 「踏雪/穿雪」, 「今日/今朝」처럼 판본마다 달라요. 우리 조사로는 어느 쪽이 맞는지 원문으로 확정하지 못해서 「작자 논란」으로 표시해요. 쓸 때는 「서산대사의 시로 전해지는」이라고 소개하는 게 정확해요.",
+   "evidence": [
+    {
+     "label": "시와 김구 일화 소개(브런치, 2차 자료)",
+     "url": "https://brunch.co.kr/@nuruk/107"
+    }
+   ]
+  }
+ ]
+}

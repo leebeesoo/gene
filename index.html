@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>재미랩 — 오늘의 재미판</title>
-<meta name="description" content="사주로 뽑는 오늘의 로또 번호, 로또 명당 지도, 근본 테스트, 가족 궁합, 이름 통계, 인생 시계, 출생연도 타임캡슐, 제철 음식 잘하는 집과 제철 장보기, 버려질 농수산물 지도까지. 매일 숫자가 바뀌는 작은 웹 서비스 10가지.">
+<meta name="description" content="사주로 뽑는 오늘의 로또 번호, 로또 명당 지도, 근본 테스트, 가족 궁합, 이름 통계, 인생 시계, 출생연도 타임캡슐, 제철 음식 잘하는 집과 제철 장보기, 버려질 농수산물 지도, 속마음 칠판, 나이별 혜택·검진 달력, 물가·청약 계산, 상황별 명언까지. 매일 숫자가 바뀌는 작은 웹 서비스 14가지.">
 <meta name="theme-color" content="#FAF7F2" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#1B1917" media="(prefers-color-scheme: dark)">
 <meta name="color-scheme" content="light dark">
@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="재미랩">
 <meta property="og:url" content="https://leebeesoo.github.io/gene/">
 <meta property="og:title" content="재미랩 — 오늘의 재미판">
-<meta property="og:description" content="운세·재미 · 생활·데이터 · 먹거리, 매일 바뀌는 작은 웹 서비스 10가지">
+<meta property="og:description" content="운세·재미 · 생활·데이터 · 먹거리, 매일 바뀌는 작은 웹 서비스 14가지">
 <meta property="og:locale" content="ko_KR">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='26' fill='%23191A1C'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -75,13 +75,17 @@ a{color:inherit}
     "ad ad"
     "year names"
     "life life"
+    "quotes quotes"
+    "donkey silver"
     "ad2 ad2"
+    "money money"
     "family season"
     "sikdang map";
   /* 광고 줄은 내용 높이(auto) — 광고가 접히면 줄이 0이 되어 빈 칸이 안 남는다 */
-  grid-template-rows:minmax(200px,auto) minmax(200px,auto) auto minmax(200px,auto) minmax(200px,auto) auto minmax(200px,auto) minmax(200px,auto)}
+  grid-template-rows:minmax(200px,auto) minmax(200px,auto) auto minmax(200px,auto) minmax(200px,auto) minmax(200px,auto) minmax(232px,auto) auto minmax(200px,auto) minmax(200px,auto) minmax(200px,auto)}
 .t-lotto{grid-area:lotto}.t-roots{grid-area:roots}.t-market{grid-area:market}.t-year{grid-area:year}.t-names{grid-area:names}
 .t-life{grid-area:life}.adtile{grid-area:ad}.adtile.a2{grid-area:ad2}.t-family{grid-area:family}.t-season{grid-area:season}.t-sikdang{grid-area:sikdang}.t-map{grid-area:map}
+.t-donkey{grid-area:donkey}.t-silver{grid-area:silver}.t-money{grid-area:money}.t-quotes{grid-area:quotes}
 .board.filtered{grid-template-areas:none;grid-template-rows:none;grid-auto-flow:row dense}
 .board.filtered>*{grid-area:auto}
 .board.filtered>.w{grid-column:span 2}
@@ -117,6 +121,10 @@ a{color:inherit}
 .t-names{--tb:#F6F7F9;--ti:#15171C;--ta:#2B50D8;--df:"IBM Plex Sans KR",var(--sans)}
 .t-life{--tb:#F7F5F2;--ti:#1E1B1F;--ta:#C2456A;--df:"Gowun Batang",var(--serif)}
 .t-year{--tb:#F2EFE8;--ti:#222020;--ta:#B23A26;--df:"Noto Serif KR",var(--serif)}
+.t-donkey{--tb:#F6F5F1;--ti:#1C1B19;--ta:#8F6200;--nb:#FCF8EE;--nl:#E7DEC6}
+.t-silver{--tb:#F7F6F2;--ti:#141413;--ta:#2C6A8E}
+.t-money{--tb:#F6F6F3;--ti:#191A1C;--ta:#5A4AA8}
+.t-quotes{--tb:#F7F6F3;--ti:#1D1B1E;--ta:#7A3B69;--df:"Gowun Batang",var(--serif)}
 @media (prefers-color-scheme:dark){
   .tile{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ti) 7%,transparent)}
   .tile:hover{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ti) 16%,transparent)}
@@ -130,6 +138,10 @@ a{color:inherit}
   .t-names{--tb:#101114;--ti:#E9EBEF;--ta:#8A9BD8}
   .t-life{--tb:#121113;--ti:#EEEAEC;--ta:#CC8296}
   .t-year{--tb:#141312;--ti:#EEE9E0;--ta:#CF7B66}
+  .t-donkey{--tb:#121211;--ti:#EDEBE6;--ta:#D8AE52;--nb:#221F1A;--nl:#39342A}
+  .t-silver{--tb:#121211;--ti:#F3F1EC;--ta:#7DB6DA}
+  .t-money{--tb:#111213;--ti:#ECECEA;--ta:#A99CF0}
+  .t-quotes{--tb:#121113;--ti:#EEEBEE;--ta:#CF8DBF}
 }
 
 /* 오늘로또 */
@@ -191,6 +203,40 @@ a{color:inherit}
 .t-map .best{margin-top:8px;font-size:13px;line-height:1.35}
 .t-map .best b{color:var(--ta);font-weight:700}
 
+/* 속마음 칠판: 예시 쪽지 몇 장이 겹쳐 붙은 모습 (실제 글 아님) */
+.notes{position:relative;flex:1;min-height:160px;margin-top:8px}
+.note{position:absolute;width:min(78%,210px);padding:8px 10px 10px;border-radius:6px;background:var(--nb);box-shadow:inset 0 0 0 1px var(--nl);font-size:13px;line-height:1.4;font-weight:600;transform:rotate(var(--r,0deg))}
+.note.mine{box-shadow:inset 0 0 0 1.5px var(--ta)}
+.note:nth-child(1){left:0;top:0;--r:-4deg}
+.note:nth-child(2){right:0;top:30%;--r:3deg}
+.note:nth-child(3){left:6%;top:58%;--r:-1.5deg}
+.note:nth-child(4){display:none}
+
+/* 나이별 혜택·검진 달력 */
+.t-silver .age{font-size:15px;font-weight:700;line-height:1.3;margin-top:4px}
+.t-silver .age b{font-size:30px;letter-spacing:-.03em;color:var(--ta);font-variant-numeric:tabular-nums;margin-right:2px}
+.perks{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:7px}
+.perks li{font-size:14px;font-weight:700;line-height:1.3;padding-left:12px;position:relative}
+.perks li::before{content:"";position:absolute;left:0;top:.5em;width:5px;height:5px;border-radius:50%;background:var(--ta)}
+.perks li i{display:block;font-style:normal;font-weight:500;font-size:12px;color:color-mix(in srgb,var(--ti) 64%,var(--tb))}
+.perks li:nth-child(n+4){display:none}
+
+/* 내 미래 머니: 그해 1만 원을 지금 물가로 */
+.t-money .pv{gap:12px}
+.t-money .then{font-size:14px;font-weight:600}
+.t-money .now{font-size:clamp(30px,8vw,40px);line-height:1.05;font-weight:700;letter-spacing:-.03em;color:var(--ta);font-variant-numeric:tabular-nums}
+.t-money .now small{font-size:16px;color:var(--ti);margin-left:2px}
+.bars{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;align-items:end;height:84px;max-width:360px}
+.bars span{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;font-size:11px;line-height:1.2;color:color-mix(in srgb,var(--ti) 64%,var(--tb));font-variant-numeric:tabular-nums}
+.bars i{display:block;width:100%;height:calc(var(--h,0) * 62px);border-radius:3px 3px 0 0;background:color-mix(in srgb,var(--ti) 16%,var(--tb));margin-bottom:4px;min-height:3px}
+.bars .on i{background:var(--ta)}
+.bars .on{color:var(--ti);font-weight:700}
+
+/* 내 상황 명언: 날짜로 고른 한 줄(명조) */
+.t-quotes .qt{font-family:var(--df);font-weight:700;font-size:21px;line-height:1.5;letter-spacing:-.02em;margin-top:6px}
+.t-quotes .qs{margin-top:8px;font-size:12px;line-height:1.4;color:color-mix(in srgb,var(--ti) 64%,var(--tb))}
+.t-quotes .qs b{color:var(--ta);font-weight:700}
+
 /* 광고 타일: 그리드 사이 한 줄(모바일은 늘 꽉 찬 한 줄 — 타일 옆에 붙지 않음), 링크 타일과 24px 넘게 띄움(격자 간격 14 + 여백 10).
    광고 칸은 공용 .jl-ad(common/ads.css). 채워지지 않으면(unfilled·차단·로드 실패) 공용 도우미가 칸을 접고
    그 자리를 「오늘 바뀐 것」 같은 메모가 채운다 → 격자에 구멍이 안 생김 */
@@ -223,9 +269,11 @@ main>.jl-ad.end{margin:48px auto 128px}
       "lotto lotto market year"
       "ad ad ad ad"
       "life life names family"
+      "donkey quotes quotes silver"
+      "donkey money money silver"
       "ad2 ad2 ad2 ad2"
       "season season sikdang map";
-    grid-template-rows:minmax(216px,auto) minmax(216px,auto) auto minmax(216px,auto) auto minmax(216px,auto)}
+    grid-template-rows:minmax(216px,auto) minmax(216px,auto) auto minmax(216px,auto) minmax(216px,auto) minmax(216px,auto) auto minmax(216px,auto)}
   .board.filtered>.w{grid-column:span 2}
   .tile{padding:20px 20px 22px}
   .adtile{margin:8px 0}.adtile.inrow{margin-left:8px}
@@ -242,6 +290,17 @@ main>.jl-ad.end{margin:48px auto 128px}
   .t-season .items{margin:0 0 8px}
   .weeks{gap:4px}
   .penta{max-width:140px}
+  .notes{min-height:200px}
+  .note{font-size:14px}
+  .note:nth-child(1){top:2%}
+  .note:nth-child(2){top:24%}
+  .note:nth-child(3){top:50%}
+  .note:nth-child(4){display:block;right:2%;top:74%;--r:2deg}
+  .perks li:nth-child(n+4){display:block}
+  .t-money .pv{flex-direction:row;align-items:flex-end;justify-content:space-between;gap:24px}
+  .bars{flex:1;height:110px}
+  .bars i{height:calc(var(--h,0) * 86px)}
+  .t-quotes .qt{font-size:26px}
 }
 
 /* 움직임은 하나: 타일이 화면에 들어올 때 미리보기가 한 번 자리 잡는다 */
@@ -258,22 +317,22 @@ main>.jl-ad.end{margin:48px auto 128px}
 
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="./"><span class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span><b>재미랩</b><span>매일 숫자가 바뀌는 작은 재미 10가지</span></span></a>
+    <a class="brand" href="./"><span class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span><b>재미랩</b><span>매일 숫자가 바뀌는 작은 재미 14가지</span></span></a>
     <p class="today" id="today">오늘의 재미판</p>
   </div>
 </header>
 
 <div class="filters">
   <div class="wrap" role="group" aria-label="분류로 거르기">
-    <button type="button" data-f="all" aria-pressed="true">전체<span>10</span></button>
-    <button type="button" data-f="fun" aria-pressed="false">운세·재미<span>4</span></button>
-    <button type="button" data-f="life" aria-pressed="false">생활·데이터<span>3</span></button>
+    <button type="button" data-f="all" aria-pressed="true">전체<span>14</span></button>
+    <button type="button" data-f="fun" aria-pressed="false">운세·재미<span>6</span></button>
+    <button type="button" data-f="life" aria-pressed="false">생활·데이터<span>5</span></button>
     <button type="button" data-f="food" aria-pressed="false">먹거리<span>3</span></button>
   </div>
 </div>
 
 <main class="wrap">
-  <h1 class="sr">재미랩 오늘의 재미판 — 서비스 10가지</h1>
+  <h1 class="sr">재미랩 오늘의 재미판 — 서비스 14가지</h1>
   <div class="board" id="board">
 
     <a class="tile t-lotto w" data-cat="fun" href="lotto/" aria-label="오늘로또 — 사주로 뽑는 오늘의 로또 번호와 살 시간·방향">
@@ -341,6 +400,60 @@ main>.jl-ad.end{margin:48px auto 128px}
       <div class="ft"><p class="nm disp">남은봄</p><p class="ol">남은 주말·명절·벚꽃 세는 인생 시계</p></div>
     </a>
 
+    <a class="tile t-donkey" data-cat="fun" href="donkey/" aria-label="속마음 칠판 — 아무도 모르게 적으면 잠깐 떴다 사라지는 칠판">
+      <div class="hd"><span>운세·재미</span><svg aria-hidden="true"><use href="#go"/></svg></div>
+      <div class="pv">
+        <p class="small">예시 쪽지 · 실제 글이 아니에요</p>
+        <div class="notes m" style="--i:1" aria-hidden="true">
+          <p class="note">월요일 아침이 제일 길다</p>
+          <p class="note mine">사실 칭찬받고 싶었어</p>
+          <p class="note">말 못 했는데, 사실 붙었다</p>
+          <p class="note">오늘은 그냥 일찍 잘래</p>
+        </div>
+      </div>
+      <div class="ft"><p class="nm disp">속마음 칠판</p><p class="ol">아무도 모르게 적으면 잠깐 떴다 사라지는 칠판</p></div>
+    </a>
+
+    <a class="tile t-quotes w" data-cat="fun" href="quotes/" aria-label="내 상황 명언 — 지금 필요한 한 줄, 원문과 출처까지">
+      <div class="hd"><span>운세·재미 · 오늘의 한 줄</span><svg aria-hidden="true"><use href="#go"/></svg></div>
+      <div class="pv">
+        <!-- quotes/data/quotes.json에서 「확인됨」 짧은 명언 15개를 골라 날짜로 돌린다. 원본이 바뀌면 같이 고친다 -->
+        <p class="qt m" id="qText">천 리 길도 발밑에서 시작된다.</p>
+        <p class="qs m" style="--i:1" id="qSrc"><b>노자</b> · 『도덕경』 64장</p>
+      </div>
+      <div class="ft"><p class="nm disp">내 상황 명언</p><p class="ol">지금 필요한 한 줄, 원문과 출처까지</p></div>
+    </a>
+
+    <a class="tile t-silver w" data-cat="life" href="silver/" aria-label="나이별 혜택·검진 달력 — 태어난 해로 보는 올해 받을 혜택·검진">
+      <div class="hd"><span>생활·데이터</span><svg aria-hidden="true"><use href="#go"/></svg></div>
+      <div class="pv">
+        <!-- silver/data/benefits.json(2026-11-13 확인) 중 65세부터 받는 항목. 원본이 바뀌면 같이 고친다 -->
+        <p class="small" id="sbYear">예: 1961년생 · 올해 65세</p>
+        <p class="age m"><b>65세</b>부터 받는 것</p>
+        <ul class="perks m" style="--i:1">
+          <li>기초연금<i>만 65세 · 소득인정액 기준 이하</i></li>
+          <li>폐렴구균 예방접종<i>평생 1회 무료</i></li>
+          <li>독감 예방접종<i>매년 1회 무료</i></li>
+          <li>틀니·임플란트 건강보험<i>비용의 30%만 본인 부담</i></li>
+          <li>교통·문화 경로우대<i>지하철 무료 · 기차 30% 감면</i></li>
+        </ul>
+      </div>
+      <div class="ft"><p class="nm disp">나이별 혜택·검진 달력</p><p class="ol">태어난 해로 보는 올해 받을 혜택·검진</p></div>
+    </a>
+
+    <a class="tile t-money w" data-cat="life" href="money/" aria-label="내 미래 머니 — 청약 가점·이자·물가, 공식 기준으로 계산">
+      <div class="hd"><span>생활·데이터 · 계산기</span><svg aria-hidden="true"><use href="#go"/></svg></div>
+      <div class="pv">
+        <!-- money/js/data.js 소비자물가지수(2020=100, 한국은행 ECOS) 연간치로 계산. 2026년 연간치가 나오면 같이 고친다 -->
+        <div class="m">
+          <p class="then" id="mnThen">1995년 1만 원은 2025년 물가로</p>
+          <p class="now" id="mnNow">22,427<small>원</small></p>
+        </div>
+        <div class="bars m" style="--i:1" id="mnBars" aria-hidden="true"></div>
+      </div>
+      <div class="ft"><p class="nm disp">내 미래 머니</p><p class="ol">청약 가점·이자·물가, 공식 기준으로 계산</p></div>
+    </a>
+
     <div class="adtile" id="adTile">
       <aside class="jl-ad" aria-label="광고"><small>광고</small>
         <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
@@ -404,7 +517,7 @@ main>.jl-ad.end{margin:48px auto 128px}
 
   <section class="about" aria-labelledby="about-h">
     <h2 id="about-h">재미랩은</h2>
-    <p>운세·재미, 생활 데이터, 먹거리를 다루는 작은 웹 서비스 10가지예요. 타일의 숫자와 그림은 오늘 날짜로 바로 계산해서 매일 바뀝니다. 오늘로또 타일의 공은 날짜로 뽑은 미리보기이고, 내 번호는 들어가서 사주로 뽑아요.</p>
+    <p>운세·재미, 생활 데이터, 먹거리를 다루는 작은 웹 서비스 14가지예요. 타일의 숫자와 그림은 오늘 날짜로 바로 계산해서 매일 바뀝니다. 오늘로또 타일의 공은 날짜로 뽑은 미리보기이고, 내 번호는 들어가서 사주로 뽑아요.</p>
   </section>
 
   <aside class="jl-ad jl-ad--multiplex end" aria-label="광고"><small>광고</small>
@@ -419,6 +532,9 @@ main>.jl-ad.end{margin:48px auto 128px}
     <li>맛남의 광장: <a href="https://www.kamis.or.kr/" rel="noopener">KAMIS</a>·농림축산식품부·농업관측센터·언론 보도</li>
     <li>이름레이더: <a href="https://kosis.kr/" rel="noopener">통계청 KOSIS</a> 2015 인구주택총조사</li>
     <li>나때연감: <a href="https://kosis.kr/" rel="noopener">통계청 KOSIS</a> 출생통계</li>
+    <li>나이별 혜택·검진 달력: 보건복지부·국민건강보험공단·질병관리청 공식 안내 (2026-11-13 확인)</li>
+    <li>내 미래 머니: <a href="https://ecos.bok.or.kr/" rel="noopener">한국은행 ECOS</a> 소비자물가지수(2020=100) 연간</li>
+    <li>내 상황 명언: 명언마다 원문·출처 확인 (내 상황 명언 안에서)</li>
   </ul></div>
   <div data-links><a href="lotto/about.html">오늘로또 소개</a><a href="sikdang/about.html">제철식당 소개</a><a href="lotto/privacy.html">개인정보처리방침</a></div>
 </footer>
@@ -534,6 +650,42 @@ main>.jl-ad.end{margin:48px auto 128px}
   $('dLab').textContent = T.m + '월의 음식';
   $('dDish').textContent = SM[3];
 
+  /* 내 상황 명언: quotes/data/quotes.json 「확인됨」 중 짧은 15개, 날짜로 하나 */
+  var QUOTES = [
+    ['천 리 길도 발밑에서 시작된다.', '노자', '『도덕경』 64장'],
+    ['사람은 가르치면서 배운다.', '세네카', '『도덕 서한』 7번째 편지 8절'],
+    ['큰 그릇은 늦게 이루어진다.', '노자', '『도덕경』 41장'],
+    ['무엇보다 너 자신에게 진실하라.', '셰익스피어', '희곡 『햄릿』 1막 3장'],
+    ['미루는 사이에 인생은 지나가 버린다.', '세네카', '『도덕 서한』 1번째 편지 3절'],
+    ['잃는다는 것은 변한다는 것일 뿐이다.', '마르쿠스 아우렐리우스', '『명상록』 9권 35절'],
+    ['사람은 애쓰는 동안에는 헤매기 마련이다.', '괴테', '『파우스트』 1부 「천상의 서곡」'],
+    ['내가 바라지 않는 일을 남에게 하지 말라.', '공자', '『논어』 「위령공」 24장'],
+    ['행복하게 사는 데 필요한 것은 아주 적다.', '마르쿠스 아우렐리우스', '『명상록』 7권 67절'],
+    ['음악이 없다면 삶은 하나의 실수일 것이다.', '니체', '『우상의 황혼』 「잠언과 화살」 33번'],
+    ['옛것을 익혀 새것을 알면 스승이 될 만하다.', '공자', '『논어』 「위정」 11장'],
+    ['열정 없이 이루어진 위대한 일은 하나도 없다.', '에머슨', '에세이 「원」'],
+    ['덕이 있는 사람은 외롭지 않다. 반드시 이웃이 있다.', '공자', '『논어』 「이인」 25장'],
+    ['쉬는 사람은 움직여야 하고, 움직이는 사람은 쉬어야 한다.', '세네카', '『도덕 서한』 3번째 편지 6절'],
+    ['날마다가 한 해 중 가장 좋은 날이라고 마음에 새겨 두라.', '에머슨', '에세이 「일과 날」']
+  ];
+  var QQ = QUOTES[((dayNo % QUOTES.length) + QUOTES.length) % QUOTES.length];
+  $('qText').textContent = QQ[0];
+  $('qSrc').innerHTML = '<b>' + QQ[1] + '</b> · ' + QQ[2];
+
+  /* 나이별 혜택·검진 달력: 올해 65세가 되는 출생연도 (나이는 「올해 − 출생연도」) */
+  $('sbYear').textContent = '예: ' + (T.y - 65) + '년생 · 올해 65세';
+
+  /* 내 미래 머니: 그해 1만 원을 최근 연간 물가(2025)로 — money/js/data.js 소비자물가지수(2020=100) */
+  var CPI = { 1985: 29.555, 1995: 51.995, 2005: 74.413, 2015: 94.861, 2025: 116.61 }, CPI_NOW = 2025;
+  var CY = [1985, 1995, 2005, 2015], cy = CY[((dayNo % CY.length) + CY.length) % CY.length];
+  function won(y) { return Math.round(10000 * CPI[CPI_NOW] / CPI[y]); }
+  $('mnThen').textContent = cy + '년 1만 원은 ' + CPI_NOW + '년 물가로';
+  $('mnNow').innerHTML = fmt(won(cy)) + '<small>원</small>';
+  var maxW = won(1985);
+  $('mnBars').innerHTML = CY.concat(CPI_NOW).map(function (y) {
+    return '<span' + (y === cy ? ' class="on"' : '') + '><i style="--h:' + (won(y) / maxW).toFixed(3) + '"></i>' + (y === CPI_NOW ? '지금' : y) + '</span>';
+  }).join('');
+
   /* 맛남의 광장: 지금 남는 품목 (market/data/surplus.json, 실패하면 예비 문구) */
   var LV = { disposal: [4, '폐기'], crash: [3, '폭락'], surplus: [2, '과잉'], watch: [1, '주의'] };
   function marketFallback() {
@@ -558,7 +710,7 @@ main>.jl-ad.end{margin:48px auto 128px}
   function loadFonts() {
     if (document.getElementById('dispFont')) return;
     var txt = '';
-    document.querySelectorAll('.disp, .tile .nm, .code, .seal, .yr, .hl, .mon, .items, .dish, .stat, .best b, .who, .cnt, .say, .heads, .big, .penta text').forEach(function (el) { txt += el.textContent; });
+    document.querySelectorAll('.disp, .tile .nm, .qt, .code, .seal, .yr, .hl, .mon, .items, .dish, .stat, .best b, .who, .cnt, .say, .heads, .big, .penta text').forEach(function (el) { txt += el.textContent; });
     txt += '0123456789,·월';
     var seen = {}, uniq = '';
     Array.from(txt.replace(/\s+/g, '')).forEach(function (c) { if (!seen[c]) { seen[c] = 1; uniq += c; } });
