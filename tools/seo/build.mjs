@@ -68,7 +68,7 @@ for (const m of maps) {
 const index = fs.readFileSync(path.join(DIST, 'sitemap.xml'), 'utf8');
 for (const m of maps) if (!index.includes(SITE + m)) errors.push(`sitemap.xml에 빠짐: ${m}`);
 const html = all.filter(p => p.endsWith('.html'));
-const noGtm = html.filter(p => !fs.readFileSync(p, 'utf8').includes('googletagmanager.com/gtm.js?id='));
+const noGtm = html.filter(p => !/^google[0-9a-f]+\.html$/.test(path.basename(p))).filter(p => !fs.readFileSync(p, 'utf8').includes('googletagmanager.com/gtm.js?id='));
 if (noGtm.length) errors.push(`GTM 없는 페이지 ${noGtm.length}개: ${noGtm.slice(0, 5).map(p => path.relative(DIST, p)).join(', ')}…`);
 
 console.log(`dist/: 파일 ${files}개, ${(bytes / 1048576).toFixed(1)}MB, HTML ${html.length}개, 사이트맵 ${maps.length}개(주소 ${urls}개)`);

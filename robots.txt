@@ -9,7 +9,5 @@ Disallow: /*/tests/
 Disallow: /*/test/
 Disallow: /donkey/live
 
-# 다음 웹마스터도구 소유 확인: PIN을 받으면 아래 줄의 맨 앞 「# 」만 남기고 PIN을 넣는다(예: #DaumWebMasterTool:abcd1234…)
-#DaumWebMasterTool:PIN-HERE
 
 Sitemap: https://jaemilab.net/sitemap.xml

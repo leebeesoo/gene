@@ -35,19 +35,34 @@
 - ~~GA4 넣기~~ — GTM(GTM-MLZPXGS7)으로 전 페이지 설치 완료(2026-11-14). GA4는 GTM 안에서 설정
 - 남은 확인: 제철식당 어색한 메뉴 이름(굴요리 등), 명당로드 목록 광고 여백
 
-## 사장님 할 일
-1. **새 아이디어 결정** — 아래 「새 서비스 아이디어 검토」의 정할 것 참고. (기존 커밋은 2026-11-12에 모두 푸시돼 있었음. `docs/ideas/`와 이 인계서 수정분은 아직 커밋 안 함)
-2. ~~도메인 사기~~ — 완료: **jaemilab.net** (2026-11-14)
-3. **사이트 공개** — `DEPLOY.md` 순서: Cloudflare Pages에 저장소 연결(프로젝트 이름 `jaemilab`, 빌드 명령 `node tools/seo/build.mjs`, 출력 `dist`, 환경변수 `NODE_VERSION=22`) → PR 머지 → 도메인 `jaemilab.net`·`www` 연결 + www→루트 301 규칙.
-4. **구글 폼 2개** — `docs/google-forms.md` 그대로. 폼 주소·미리 채운 링크·집계 CSV 주소를 Claude에게 전달.
-5. **제철식당 시트 탭 5개 「웹에 게시(CSV)」** — 지역·재료 사전·요리 방식·지역 대표 음식·식당 후보 (`tools/sikdang/README.md`)
-6. **API 키 3개** — KAMIS, 공공데이터포털(경매 3종), 네이버 검색 → GitHub 저장소 Settings → Secrets (`DATA_UPDATE.md`)
-7. **애드센스** — `docs/adsense-setup.md`: 도메인으로 가입 → 게시자 ID 전달 → 검토 요청 → 승인 후 광고 단위 3개 ID 전달 → 자동 광고 설정
-8. **검색엔진 등록** — 도메인 연결 뒤 네이버 서치어드바이저, 구글 서치콘솔(DNS TXT 권장), 다음 웹마스터도구. 확인 값을 Claude에게 주면 허브 `<head>` 주석 자리·`robots.txt`에 넣어 줌. 사이트맵 `https://jaemilab.net/sitemap.xml` 제출
-9. **GA4 연결** — 사이트에는 GTM(GTM-MLZPXGS7)이 들어가 있음. **GTM 안에 GA4 태그(G- 측정 ID)를 만들어야 데이터가 쌓임** (tagmanager.google.com → 태그 → Google 태그 → 측정 ID → 트리거 All Pages → 제출·게시). 권장: 쿼리(`?n=` 이름 등)는 GA로 보내지 않게 설정 (`DEPLOY.md` 2-2)
-10. ~~문의 이메일~~ — 완료: gdf0620@gmail.com (2026-11-14 전 서비스 반영)
-11. **(선택) 카카오 개발자 앱 키** — 카톡 공유 버튼용, 무료
-12. **(선택) 지역 푸드뱅크 협력 문의** — 전국 1688-1377
+## 사장님 할 일 — 진행 현황 (2026-11-14 기준)
+
+### 끝난 것 ✅
+- [x] 도메인 구매: **jaemilab.net**
+- [x] 사이트 공개: Cloudflare **Workers** 프로젝트 `gene`(Pages 아님). 빌드 명령 `node tools/seo/build.mjs`, 배포 명령 `npx wrangler deploy`, 설정은 저장소 `wrangler.jsonc`. 브랜치 `claude/epic-ramanujan-ddvniq`에 푸시하면 자동 배포. https://jaemilab.net 열림 확인
+- [x] 커스텀 도메인 `jaemilab.net` 연결
+- [x] GA4: GTM(GTM-MLZPXGS7) 안에 GA4(G-HG739JDTS6) 연결돼 있음. 실제 사이트에서 수집 요청 나가는 것 확인
+- [x] 문의 이메일: gdf0620@gmail.com (전 서비스 반영)
+- [x] 구글 서치콘솔 확인 파일 받음 → 사이트에 올림(`google0257301bb46d3493.html`, Worker가 리다이렉트 없이 응답). **배포 뒤 서치콘솔에서 「확인」 누르기 → Sitemaps에 `sitemap.xml` 제출**
+- [x] 네이버 서치어드바이저 태그 받음 → 허브 `<head>`에 넣음. **배포 뒤 「소유확인」 누르기 → 요청 → 사이트맵 제출 `https://jaemilab.net/sitemap.xml`**
+
+### 남은 것 ⏳
+- [ ] 애드센스: adsense.google.com 가입(jaemilab.net) → 게시자 ID(pub-…) Claude에게 전달 → Claude가 넣고 배포 → 검토 요청 (`docs/adsense-setup.md`)
+- [ ] 공공데이터포털 인증키: GitHub Settings → Secrets → Actions → `DATA_GO_KR_KEY` (활용신청 3개: 15141809, 15141808, 15141818)
+- [ ] KAMIS 키: `KAMIS_CERT_KEY`, `KAMIS_CERT_ID` (같은 곳)
+- [ ] 구글 폼 2개 (`docs/google-forms.md`) — 사장님 계정 브라우저가 필요. 데스크톱 앱에서 이어 가면 Claude가 진행
+- [ ] 제철식당 시트 탭 5개 「웹에 게시(CSV)」 — 주소 5개 Claude에게
+- [ ] 속마음 칠판 실시간: Turnstile(https://dash.cloudflare.com/6e6ac3f9c62283f3adece9cbc19a5b6e/turnstile) → 사이트 키 Claude에게, 비밀 키·IP_SALT는 Worker `donkey-live` 비밀값, GitHub Secrets `CLOUDFLARE_API_TOKEN`·`CLOUDFLARE_ACCOUNT_ID`, Actions 「donkey-live 배포」 (`workers/donkey-live/README.md`). 안 해도 「혼자 외치기」 모드로 동작
+- [ ] PR 머지 후 Cloudflare 빌드 브랜치를 `main`으로 바꾸기
+
+### 안 된 것 ⚠️
+- 구글 서치콘솔 「Google 태그 관리자」 확인 방법: 실패 → HTML 파일 방식으로 바꿈
+- `www.jaemilab.net`: 아직 연결 안 함(선택). 하려면 Worker Settings → Domains & Routes → Add → Custom Domain에 직접 입력
+
+### 버린 것 ✖
+- 다음 웹마스터도구: 검색량이 작아 진행 안 함 (robots.txt의 PIN 자리도 지움)
+- 네이버 검색 API 키: 2026-07부터 네이버 클라우드 API HUB로 옮겨졌고 결제수단 필요·유료 전환 가능 → 안 받음. 맛남의 광장 뉴스 찾기만 빠지고 나머지는 정상
+- 카카오 JS 키: 당분간 안 받음(없어도 링크 복사·미리보기는 됨)
 
 ## 2026-11-14 노출 1단계·GTM (완료, 커밋 전)
 - 주소 교체: `leebeesoo.github.io/gene/` → `https://jaemilab.net/` 146개 파일(canonical·og:url·og:image·twitter:image·JSON-LD·공유 문구·생성기 `tools/silver/build.mjs`·`tools/quotes/build.mjs`). `workers/donkey-live/wrangler.toml` ALLOWED_ORIGINS = jaemilab.net, www, jaemilab.pages.dev. (`donkey/js/config.js`의 wsUrl은 중계소 배포 전이라 자리표시 그대로 → 혼자 외치기 모드 유지)
