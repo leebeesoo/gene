@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+*{box-sizing:border-box}html,body{margin:0}
+body{width:1200px;height:630px;background:#F6F4F0;color:#1E1C1A;font-family:'Pretendard Variable',Pretendard,sans-serif;letter-spacing:-.03em;display:flex;align-items:center;padding:0 80px;gap:50px}
+.l{flex:1}
+.brand{font-size:30px;font-weight:700;color:#B4532A}
+h1{font-size:68px;line-height:1.18;margin:26px 0 24px;font-weight:800;letter-spacing:-.045em}
+p{font-size:28px;color:#6F6A64;margin:0;font-weight:500;line-height:1.45}
+.g{display:grid;grid-template-columns:repeat(2,190px);gap:16px;flex:none}
+.g img{width:190px;height:190px;object-fit:cover;border-radius:14px;display:block}
+</style></head><body>
+<div class="l">
+  <div class="brand">제철식당</div>
+  <h1>이달 제철 메뉴,<br>잘하는 집</h1>
+  <p>전국 161개 시·군 공공 자료 근거<br>출처를 붙였고 협찬은 없어요</p>
+</div>
+<div class="g" id="g"></div>
+<script>
+// 사진은 렌더 스크립트가 ?imgs=a,b,c,d 로 넘긴다(sikdang/img/ing/*.webp)
+var q=new URLSearchParams(location.search).get('imgs')||'';
+q.split(',').filter(Boolean).forEach(function(s){var i=new Image();i.src=s;document.getElementById('g').appendChild(i);});
+</script>
+</body></html>

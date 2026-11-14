@@ -2,6 +2,7 @@
 (function (root) {
   'use strict';
   var CHECKED = '2026-11-13';
+  var RECHECKED = '2026-11-14'; // 청약·세금·예금자보호·사기: 관보·금융위·예보·법제처 원문 재확인일
 
   var DATA = {
     checked: CHECKED,
@@ -27,11 +28,11 @@
     },
 
     sources: {
-      cheongyak: { name: '주택공급에 관한 규칙 [별표 1] 가점제 적용기준(2024. 12. 18. 개정)', org: '국토교통부 · 국가법령정보센터', url: 'https://www.law.go.kr/법령/주택공급에관한규칙', url2: 'https://www.applyhome.co.kr/', checked: CHECKED },
-      tax: { name: '소득세법 제129조(이자소득 원천징수 14%) · 지방세법(지방소득세 = 소득세의 10%)', org: '국가법령정보센터', url: 'https://www.law.go.kr/법령/소득세법', checked: CHECKED },
+      cheongyak: { name: '주택공급에 관한 규칙 [별표 1] 가점제 적용기준(2024. 12. 18. 개정)', org: '국토교통부 · 국가법령정보센터', url: 'https://www.law.go.kr/법령/주택공급에관한규칙', url2: 'https://www.applyhome.co.kr/ap/apg/selectAddpntCalculatorView.do', checked: RECHECKED },
+      tax: { name: '소득세법 제129조(이자소득 원천징수 14%) · 지방세법(지방소득세 = 소득세의 10%)', org: '국가법령정보센터', url: 'https://www.law.go.kr/법령/소득세법', checked: RECHECKED },
       cpi: { name: '소비자물가지수 총지수(2020=100), 연간', org: '국가데이터처 · 한국은행 ECOS', url: 'https://ecos.bok.or.kr/', checked: CHECKED },
-      deposit: { name: '예금보호한도 1억 원 상향(2025. 9. 1. 시행)', org: '금융위원회 · 예금보험공사 (복지로 정책 소식)', url: 'https://www.bokjiro.go.kr/ssis-tbu/cms/pc/news/promotion/1308414_1118.html', url2: 'https://www.kdic.or.kr/', checked: CHECKED },
-      scam: { name: '보이스피싱지킴이 · 소비자경보 · 전기통신금융사기 통합대응단', org: '금융감독원 · 경찰청', url: 'https://www.fss.or.kr/', url2: 'https://www.counterscam112.go.kr/', checked: CHECKED }
+      deposit: { name: '예금보호한도 상향 관련 주요 Q&A(2025. 9. 1. 시행)', org: '금융위원회 · 예금보험공사', url: 'https://www.fsc.go.kr/po020201/84975', url2: 'https://www.kdic.or.kr/sp/dpstrprot/ProtSystProtLmts/selectScrn.do', checked: RECHECKED },
+      scam: { name: '보이스피싱지킴이 · 소비자경보 · 전기통신금융사기 통합대응단', org: '금융감독원 · 경찰청', url: 'https://www.fss.or.kr/fss/main/contents.do?menuNo=200365', url2: 'https://www.counterscam112.go.kr/', checked: RECHECKED }
     },
 
     /* 사기 위험 신호 — 금융감독원 소비자경보·보이스피싱지킴이, 경찰청 안내를 우리 말로 옮김 */

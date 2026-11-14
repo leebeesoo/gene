@@ -7,6 +7,7 @@ import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from 'node
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
+import { GTM_HEAD, GTM_BODY } from '../seo/gtm.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SILVER = join(ROOT, 'silver');
@@ -16,7 +17,7 @@ const data = JSON.parse(readFileSync(join(SILVER, 'data', 'benefits.json'), 'utf
 const { esc } = R;
 
 const NAME = '나이별 혜택·검진 달력';
-const BASE = 'https://leebeesoo.github.io/gene/silver/';
+const BASE = 'https://jaemilab.net/silver/'; // 사이트 주소(2026-11-14 도메인 연결)
 const Y = data.meta.baseYear;
 const CHECKED = data.meta.checked;
 const AGES = []; for (let a = 60; a <= 85; a++) AGES.push(a);
@@ -34,6 +35,7 @@ function head({ title, desc, path, up, ogTitle, ogDesc, jsonld, extra = '' }) {
 <html lang="ko">
 <head>
 <meta charset="utf-8">
+${GTM_HEAD}
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
@@ -66,6 +68,7 @@ ${JSON.stringify(jsonld, null, 1)}
 </script>
 ${extra}</head>
 <body>
+${GTM_BODY}
 <a class="sr-only" href="#main">본문 바로가기</a>
 <header class="top">
   <div class="top-in">
@@ -116,15 +119,16 @@ function methodBox(up) {
   <div class="box-body">
     <h3>쓴 자료</h3>
     <ul>${orgs.map(o => `<li><a href="${esc(o[2])}" rel="noopener" target="_blank">${esc(o[0])} · ${esc(o[1])}</a></li>`).join('')}</ul>
-    <p>항목마다 원문 링크와 확인일을 따로 달았어요. 공식 기관 자료만 썼고, 블로그·뉴스 요약은 쓰지 않았어요.</p>
+    <p>항목마다 원문 링크와 확인일을 따로 달았어요. 공식 기관 자료를 기본으로 썼고, 지자체마다 다른 대상포진 접종 지원·시내버스만 언론 보도로 전국 현황을 보탰어요. 블로그 요약은 쓰지 않았어요.</p>
     <h3>계산 방식</h3>
     <p>태어난 해로 올해 나이(${Y} − 출생연도)를 구해 제도별 나이 기준과 맞춰 봐요. 기초연금처럼 <b>만 나이</b> 기준인 제도는 그해 생일이 지나야 해당돼서 「올해 생일이 지나면」이라고 적어요.</p>
+    <p>국가건강검진·암검진과 예방접종은 생일과 관계없이 <b>올해 그 나이가 되는 분(출생연도 기준)</b>이 대상이에요. 예를 들어 ${Y}년에는 ${Y - 66}년생이 66세 검진(인지기능·노인신체기능·폐기능, 여성 골밀도)을 1월부터 받을 수 있어요. 건보공단이 출생연도로 대상자를 정해 검진표를 보내요.</p>
     <p>예: 1961년생 → ${Y}년 65세 → 폐렴구균·독감 무료 접종 대상(질병관리청: 1961년 12월 31일 이전 출생), 기초연금은 만 65세 생일부터 받을 수 있는 나이(소득 기준은 따로 확인).</p>
     <p>소득·재산 기준은 계산하지 않아요. 기초연금·노인일자리 같은 제도는 나이만 맞춰 보여 드리고, 소득 조건은 「대상」에 그대로 적었어요.</p>
     <h3>확인일</h3>
     <p>모든 항목 ${R.fmtDate(CHECKED)} 확인. 다음 확인 예정: ${R.fmtDate(data.meta.nextCheck)} (새해 기준액 고시 뒤).</p>
-    <h3>확인하지 못해 넣지 않은 것</h3>
-    <ul>${data.meta.excluded.map(e => `<li><span class="badge-check">확인 필요</span> <b>${esc(e.name)}</b> — ${esc(e.reason)}</li>`).join('')}</ul>
+    <h3>아직 발표되지 않아 넣지 않은 것</h3>
+    <ul>${data.meta.excluded.map(e => `<li><span class="badge-check">발표 전</span> <b>${esc(e.name)}</b> — ${esc(e.reason)}</li>`).join('')}</ul>
     <h3>하지 않는 것</h3>
     <p>병원·약·제품 추천, 증상으로 병을 짐작하는 기능, 건강 조언은 하지 않아요. 입력한 출생연도는 이 기기에만 저장되고 서버로 보내지 않아요.</p>
     <p><a href="${up}about.html">만든 사람과 정정 요청 방법 보기</a></p>
@@ -156,7 +160,7 @@ function buildIndex() {
       { '@type': 'WebApplication', name: NAME, url: BASE, description: '태어난 해를 넣으면 올해 받을 수 있는 혜택과 국가건강검진·예방접종, 내년에 새로 받을 수 있는 것을 연도별로 보여 주는 참고용 달력. 보건복지부·국민건강보험공단·질병관리청·국민연금공단 자료 기준.', applicationCategory: 'ReferenceApplication', operatingSystem: 'Any', inLanguage: 'ko', isAccessibleForFree: true, dateModified: CHECKED, offers: { '@type': 'Offer', price: '0', priceCurrency: 'KRW' } },
       { '@type': 'FAQPage', mainEntity: [
         { '@type': 'Question', name: '기초연금은 몇 살부터 받을 수 있나요?', acceptedAnswer: { '@type': 'Answer', text: `만 65세 이상이며 소득인정액이 선정기준액 이하인 분이 대상입니다. ${Y}년 선정기준액은 단독가구 247만 원, 부부가구 395만 2천 원이고, 월 최대 34만 9,700원(단독가구)입니다(보건복지부, ${CHECKED} 확인). 만 65세 생일이 속한 달의 1개월 전부터 신청할 수 있습니다.` } },
-        { '@type': 'Question', name: '올해 국가건강검진 대상인지 어떻게 아나요?', acceptedAnswer: { '@type': 'Answer', text: '일반건강검진은 2년에 한 번이며, 출생연도 끝자리가 짝수면 짝수 해, 홀수면 홀수 해에 받습니다(국민건강보험공단). 정확한 대상 여부는 공단 누리집의 건강검진 대상 조회나 1577-1000에서 확인할 수 있습니다.' } },
+        { '@type': 'Question', name: '올해 국가건강검진 대상인지 어떻게 아나요?', acceptedAnswer: { '@type': 'Answer', text: '일반건강검진은 2년에 한 번이며, 출생연도 끝자리가 짝수면 짝수 해, 홀수면 홀수 해에 받습니다(국민건강보험공단). 나이별 검사(66세 인지기능·노인신체기능, 여성 54·60·66세 골밀도 등)는 생일과 관계없이 그해 그 나이가 되는 출생연도가 대상입니다. 정확한 대상 여부는 공단 누리집의 건강검진 대상 조회나 1577-1000에서 확인할 수 있습니다.' } },
         { '@type': 'Question', name: '65세 이상 무료 예방접종은 무엇인가요?', acceptedAnswer: { '@type': 'Answer', text: `폐렴구균(PPSV23) 1회와 인플루엔자 매년 1회가 무료입니다. ${Y}년 기준 1961년 12월 31일 이전 출생자가 대상이며, 위탁의료기관이나 보건소에서 신분증을 가지고 접종합니다(질병관리청 예방접종도우미).` } }
       ] }
     ]
@@ -401,7 +405,7 @@ function buildAbout() {
   <p>${NAME}은 작은 무료 웹 서비스 모음 「재미랩」에서 만들었어요. 재미랩 운영자 한 사람이 운영하며, 의료인·사회복지 전문가가 아니에요. 그래서 직접 판단하거나 조언하지 않고, 공식 기관이 발표한 기준만 옮겨 정리해요.</p>
   <ul>
     <li>운영: 재미랩 운영자 (개인)</li>
-    <li>문의·정정 요청: 사이트 운영 저장소의 이슈로 남겨 주세요. 공식 자료와 다른 부분을 알려 주시면 확인 후 고치고 아래 기록에 남겨요.</li>
+    <li>문의·정정 요청: 이메일 <a href="mailto:gdf0620@gmail.com">gdf0620@gmail.com</a> 로 보내 주세요. 공식 자료와 다른 부분을 알려 주시면 확인 후 고치고 아래 기록에 남겨요.</li>
     <li>광고: Google AdSense 광고가 붙을 수 있어요. 제휴 링크, 병원·상품 홍보, 유료 게재는 없어요.</li>
   </ul>
 
@@ -412,12 +416,13 @@ function buildAbout() {
   <ul>
     <li>보건복지부·복지로, 국민건강보험공단, 질병관리청, 국민연금공단의 누리집과 「${esc(data.meta.guide.title)}」 안내서를 직접 열어 보고 옮겼어요.</li>
     <li>숫자·나이·조건마다 출처와 확인일을 달았어요. 확인하지 못한 값은 사실처럼 보여 주지 않고 빼 두었어요.</li>
-    <li>나이 계산: 올해 나이 = ${Y} − 출생연도. 만 나이 기준 제도는 생일이 지나야 해당돼요. 예방접종은 질병관리청이 출생연도로 대상을 정해요.</li>
+    <li>대상포진 접종 지원과 시내버스 요금처럼 지자체마다 다른 것은 공식 일괄 기준이 없어서, 언론 보도로 전국 현황만 적고 「사는 곳에 확인」이라고 안내해요.</li>
+    <li>나이 계산: 올해 나이 = ${Y} − 출생연도. 만 나이 기준 제도는 생일이 지나야 해당돼요. 예방접종(질병관리청)과 국가건강검진·암검진(건보공단)은 출생연도로 대상을 정해서, 생일과 관계없이 올해 그 나이가 되는 분이 대상이에요.</li>
     <li>소득·재산 기준은 계산하지 않아요. 실제 대상 여부는 기관에서 확인해야 해요.</li>
     <li>병원·약·제품을 추천하지 않고, 증상으로 병을 짐작하는 기능도 없어요.</li>
   </ul>
 
-  <h2>확인하지 못해 넣지 않은 것</h2>
+  <h2>아직 발표되지 않아 넣지 않은 것</h2>
   <ul>${data.meta.excluded.map(e => `<li><b>${esc(e.name)}</b> — ${esc(e.reason)}</li>`).join('')}</ul>
 
   <h2>출처 목록</h2>
@@ -425,7 +430,8 @@ function buildAbout() {
 
   <h2>바뀐 내용 기록</h2>
   <ul class="log">
-    <li><b class="num">${R.fmtDate(CHECKED)}</b> 처음 공개. ${items.length}개 항목, ${Y}년 기준으로 확인.</li>
+    <li><b class="num">${R.fmtDate(CHECKED)}</b> 건강검진 나이 기준(출생연도) 확인·문구 반영, 여성 골밀도 60세 확인, 대상포진 접종(지자체 지원) 추가, 시내버스는 지역마다 다르다는 안내 추가.</li>
+    <li><b class="num">2026.11.13</b> 처음 공개. ${Y}년 기준으로 확인.</li>
   </ul>
 
   <h2>도움이 필요할 때</h2>
@@ -464,6 +470,7 @@ function buildPrivacy() {
     <li>자세한 내용: <a href="https://policies.google.com/technologies/ads?hl=ko" rel="noopener">Google 광고 정책</a></li>
   </ul>
   <p>입력한 태어난 해·성별은 광고 사업자에게 전달되지 않습니다.</p>
+  <p>방문 통계를 위해 Google 태그 관리자(Google Tag Manager)로 Google Analytics를 사용합니다. Google Analytics는 쿠키로 어떤 페이지를 얼마나 보는지 같은 익명 이용 통계를 모으며, 이름처럼 개인을 알아볼 수 있는 정보는 모으지 않습니다. 원하지 않으면 브라우저 설정에서 쿠키를 차단하거나 <a href="https://tools.google.com/dlpage/gaoptout?hl=ko" rel="noopener">Google 애널리틱스 차단 브라우저 부가기능</a>을 설치하면 됩니다.</p>
 
   <h2>3. 외부 리소스</h2>
   <p>글꼴(Pretendard)은 jsDelivr CDN에서 불러옵니다. 이 과정에서 CDN 사업자가 일반적인 접속 기록(IP, 브라우저 정보)을 처리할 수 있습니다.</p>
@@ -472,7 +479,7 @@ function buildPrivacy() {
   <p>이 서비스는 공식 기관 자료를 옮겨 정리한 참고용 안내이며, 의학적 조언이나 자격 판정이 아닙니다. 정확한 대상 여부는 해당 기관(보건복지상담센터 129, 국민건강보험공단 1577-1000 등)에 확인하세요.</p>
 
   <h2>5. 문의</h2>
-  <p>개인정보 관련 문의는 사이트 운영 저장소의 이슈로 남겨 주세요.</p>
+  <p>개인정보 관련 문의는 이메일 <a href="mailto:gdf0620@gmail.com">gdf0620@gmail.com</a> 로 보내 주세요.</p>
 </main>
 ` + foot(up, FOOT_NOTE);
   write('privacy.html', html);
@@ -487,4 +494,4 @@ buildAbout();
 buildPrivacy();
 const verified = items.filter(i => i.status === 'verified').length;
 console.log(`silver: index 1 + age ${AGES.length} + item ${items.length} + about + privacy = ${3 + AGES.length + items.length} pages`);
-console.log(`items verified ${verified}/${items.length}, excluded(확인 필요) ${data.meta.excluded.length}`);
+console.log(`items verified ${verified}/${items.length}, excluded(발표 전) ${data.meta.excluded.length}`);

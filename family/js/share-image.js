@@ -144,7 +144,7 @@ export async function drawShareImage(model) {
 
   // 푸터
   ctx.fillStyle = C.muted; ctx.font = `600 21px ${SANS}`; ctx.textAlign = 'left';
-  ctx.fillText('leebeesoo.github.io/gene/family', 56, H - 22);
+  ctx.fillText('jaemilab.net/family', 56, H - 22);
   ctx.textAlign = 'right'; ctx.fillText('전통 이론으로 재미로 보는 궁합', W - 56, H - 22);
   return cv;
 }

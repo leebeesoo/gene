@@ -9,3 +9,11 @@
 # 이미지는 길게 (파일을 바꿀 때는 이름을 바꿉니다)
 /*.png
   Cache-Control: public, max-age=31536000, immutable
+
+# 미리보기·기본 주소(*.pages.dev)는 검색에 안 나오게 — 정식 주소는 https://jaemilab.net/
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex
+
+# 참고: 지금은 Content-Security-Policy를 쓰지 않는다. 나중에 넣으면 script-src·img-src·connect-src·frame-src에
+# https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com
+# (광고) https://pagead2.googlesyndication.com https://*.doubleclick.net 를 꼭 허용한다.

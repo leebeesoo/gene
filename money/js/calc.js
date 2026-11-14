@@ -29,7 +29,7 @@
     return r;
   }
 
-  /* ---------- 1. 청약 가점 (주택공급에 관한 규칙 별표1, 2024-12-18 개정본) ---------- */
+  /* ---------- 1. 청약 가점 (주택공급에 관한 규칙 별표1, 2024-12-18 개정본 — 2026-11-13 관보까지 별표1 개정 없음) ---------- */
   var CHEONGYAK_MAX = { homeless: 32, family: 35, account: 17, total: 84 };
 
   /* 무주택기간(꽉 찬 해 수) → 점수. years < 0 이면 기산 전(0점) */
@@ -56,6 +56,32 @@
   function spouseBonus(spouseMonths) {
     if (!spouseMonths || spouseMonths <= 0) return 0;
     return Math.min(3, accountPoints(Math.floor(spouseMonths / 2)));
+  }
+
+  /*
+   * 청약통장 가입기간(개월). 미성년자(만 19세 미만)로서 가입한 기간은 최대 5년(60개월)만 인정
+   * (주택공급에 관한 규칙 제10조제6항). 개정 시행(2024-01-01) 전의 미성년 기간은 종전대로 최대 2년(24개월),
+   * 시행 뒤 기간과 합쳐 최대 5년. 청약홈 청약가점계산기에 여러 생년월일·가입일을 넣어 같은 결과임을 확인함.
+   * birth 가 없으면 상한을 적용하지 않는다.
+   */
+  var MINOR_CAP_MONTHS = 60, MINOR_OLD_CAP_MONTHS = 24, MINOR_RULE_DATE = new Date(2024, 0, 1);
+  function accountMonths(accountStart, ref, birth) {
+    var total = fullMonths(accountStart, ref);
+    var r = { months: total, minorMonths: 0, cut: 0 };
+    if (!birth || !accountStart) return r;
+    var adult = addYears(birth, 19);
+    var minorEnd = adult < ref ? adult : ref;
+    if (accountStart >= minorEnd) return r;
+    var split = MINOR_RULE_DATE < minorEnd ? MINOR_RULE_DATE : minorEnd;
+    var pre = accountStart < split ? fullMonths(accountStart, split) : 0;
+    var postFrom = accountStart > MINOR_RULE_DATE ? accountStart : MINOR_RULE_DATE;
+    var post = postFrom < minorEnd ? fullMonths(postFrom, minorEnd) : 0;
+    var recPre = Math.min(pre, MINOR_OLD_CAP_MONTHS);
+    var rec = Math.min(recPre + post, MINOR_CAP_MONTHS);
+    r.minorMonths = pre + post;
+    r.cut = r.minorMonths - rec;
+    r.months = Math.max(0, total - r.cut);
+    return r;
   }
 
   /*
@@ -95,7 +121,8 @@
       else h.points = homelessPoints(hy.years);
     }
     var fam = familyPoints(input.family);
-    var am = input.accountStart ? fullMonths(input.accountStart, ref) : 0;
+    var amr = input.accountStart ? accountMonths(input.accountStart, ref, input.birth) : { months: 0, cut: 0 };
+    var am = amr.months;
     var own = input.accountStart ? accountPoints(am) : 0;
     var sm = input.spouseAccountStart ? fullMonths(input.spouseAccountStart, ref) : 0;
     var bonus = input.spouseAccountStart ? spouseBonus(sm) : 0;
@@ -103,7 +130,7 @@
     return {
       homeless: h,
       family: { n: Math.max(0, Math.floor(+input.family || 0)), points: fam },
-      account: { months: am, own: own, spouseMonths: sm, bonus: acc - own, points: acc },
+      account: { months: am, minorCut: amr.cut, own: own, spouseMonths: sm, bonus: acc - own, points: acc },
       total: h.points + fam + acc
     };
   }
@@ -242,7 +269,7 @@
   var API = {
     parseYMD: parseYMD, ymd: ymd, fullMonths: fullMonths, addYears: addYears,
     CHEONGYAK_MAX: CHEONGYAK_MAX, homelessPoints: homelessPoints, familyPoints: familyPoints,
-    accountPoints: accountPoints, spouseBonus: spouseBonus, homelessStart: homelessStart, homelessYears: homelessYears, cheongyak: cheongyak,
+    accountPoints: accountPoints, spouseBonus: spouseBonus, accountMonths: accountMonths, MINOR_CAP_MONTHS: MINOR_CAP_MONTHS, homelessStart: homelessStart, homelessYears: homelessYears, cheongyak: cheongyak,
     interestTax: interestTax, savings: savings, savingsTable: savingsTable,
     inflate: inflate, cagr: cagr,
     DEPOSIT_LIMIT: DEPOSIT_LIMIT, depositProtection: depositProtection,

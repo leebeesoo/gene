@@ -12,7 +12,7 @@ test/room.test.js           node --test 로 방 규칙 시험
 ## 사장님 할 일 (처음 한 번, 약 15분)
 
 1. **Turnstile 위젯 만들기** — Cloudflare 대시보드 → Turnstile → Add widget
-   - 도메인: 내 도메인(예: `example.com`)과 `<프로젝트>.pages.dev`
+   - 도메인: `jaemilab.net`, `www.jaemilab.net`과 `<프로젝트>.pages.dev`(프로젝트 이름이 jaemilab이 아니면 wrangler.toml의 ALLOWED_ORIGINS도 고침)
    - Widget mode: **Managed**
    - 나오는 **사이트 키**(0x4AAAA…)는 Claude에게 → `donkey/js/config.js`의 `turnstileSiteKey`
    - **비밀 키**는 아래 4번에서 Cloudflare에 직접 넣음(채팅·저장소에 올리지 않기)

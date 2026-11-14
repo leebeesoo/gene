@@ -3,7 +3,7 @@
   'use strict';
   var D = window.LC_DATA, C = window.LC_CALC, S = window.LC_SHARE;
   var KEY = 'lifeclock.v1';
-  var SITE = 'leebeesoo.github.io/gene/lifeclock';
+  var SITE = 'jaemilab.net/lifeclock';
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 

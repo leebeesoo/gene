@@ -112,7 +112,7 @@
     else if (h.note === 'notStarted') hd = '기산일 ' + C.ymd(h.start) + '(만 30세)이 아직 오지 않아 0점이에요.';
     else hd = C.ymd(h.start) + '부터 ' + ymText(h.months) + ' · ' + (h.years >= 15 ? '15년 이상' : h.years + '년 이상 ' + (h.years + 1) + '년 미만');
     var a = r.account;
-    var ad = '본인 ' + ymText(a.months) + ' → ' + a.own + '점' + (a.bonus ? ' · 배우자 통장 +' + a.bonus + '점' : '') + (a.own + C.spouseBonus(a.spouseMonths) > 17 ? ' (17점 상한)' : '');
+    var ad = '본인 ' + ymText(a.months) + (a.minorCut ? '(미성년 기간 중 인정 안 되는 ' + ymText(a.minorCut) + ' 뺌)' : '') + ' → ' + a.own + '점' + (a.bonus ? ' · 배우자 통장 +' + a.bonus + '점' : '') + (a.own + C.spouseBonus(a.spouseMonths) > 17 ? ' (17점 상한)' : '');
     out.innerHTML =
       '<p class="res-k">' + esc(C.ymd(ref)) + ' 기준 내 청약 가점</p>' +
       '<p class="res-big"><b>' + r.total + '</b>점 <small>/ 84점</small></p>' +
@@ -256,7 +256,7 @@
           (b.none ? '<div class="row"><span>보호 대상 아님</span><span>' + fmt(b.none) + '원</span></div>' : '') +
           '</div>';
       }).join('') + '</div>' +
-      foot('deposit', '보호 한도는 금융회사별·1인당, 원금과 이자를 합친 금액이에요. 새마을금고·신협·지역 농협 등은 각 법에 따른 기금이 보호해요. 내 상품이 보호 대상인지는 <a href="https://www.kdic.or.kr/" rel="noopener" target="_blank">예금보험공사</a>에서 확인하세요.');
+      foot('deposit', '보호 한도는 금융회사별·1인당, 원금과 이자를 합친 금액이에요. 새마을금고·신협·지역 농협 등은 각 중앙회가 같은 1억 원까지 보호해요. 내 상품이 보호 대상인지는 <a href="https://www.kdic.or.kr/sp/dpstrprot/selectProtSystProtTrgtPrdctSrchList.do" rel="noopener" target="_blank">예금보험공사 보호금융상품 검색</a>에서 확인하세요.');
   }
   drawDp();
   $('#dpRows').addEventListener('input', function (e) {
@@ -313,7 +313,7 @@
     $('#scOut').innerHTML = head +
       '<ul class="todo">' + TODO[g.id].map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>' +
       '<p class="fine"><a href="scam/' + g.page + '/">이 유형 자세히 보기</a></p>' +
-      foot('scam', '신호 수는 참고용이에요. 신호가 없다고 안전하다는 뜻이 아니에요. 급하면 112, 상담은 금융감독원 1332.');
+      foot('scam', '신호 수는 참고용이에요. 신호가 없다고 안전하다는 뜻이 아니에요. 급하면 112, 상담은 금융감독원 1332·경찰청 1394.');
   }
   $('#scChips').addEventListener('click', function (e) {
     var b = e.target.closest('[data-kind]'); if (!b) return;

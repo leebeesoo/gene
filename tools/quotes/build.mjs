@@ -7,13 +7,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { SITUATIONS, TOPICS, TEMPLATES } from './meta.mjs';
+import { GTM_HEAD, GTM_BODY } from '../seo/gtm.mjs';
 
 const __dir = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dir, '../..');
 const OUT = path.join(ROOT, 'quotes');
 const DATA = JSON.parse(fs.readFileSync(path.join(OUT, 'data/quotes.json'), 'utf8'));
-// 도메인이 정해지면 여기 한 곳만 바꾼다(다른 서비스와 같은 임시 주소).
-export const BASE = 'https://leebeesoo.github.io/gene';
+// 사이트 주소(2026-11-14 도메인 jaemilab.net 연결). 바꿀 때는 여기 한 곳만.
+export const BASE = 'https://jaemilab.net';
 const SITE = BASE + '/quotes/';
 // 서비스 이름(2026-11-13 확정). 머리글 로고·og:site_name·WebSite 이름·제목 꼬리에 쓴다.
 const BRAND = '내 상황 명언';
@@ -89,6 +90,8 @@ const anchorUrl = q => homeOf(q) + (q.page ? '' : '#' + q.id);
 const absUrl = rel => SITE + rel;
 const cardRel = id => `cards/${id}.png`;
 const authorLabel = q => persons[q.author].name + (q.speaker ? `(${q.speaker})` : '');
+// 추정: 원문을 못 찾은 말은 「~의 말로 알려져 있어요」로 보여 준다(카드·공유 문구·첫 화면 포함)
+const attrLabel = q => authorLabel(q) + (q.status === '추정' ? '의 말로 알려져 있어요' : '');
 const STATUS_CLASS = { '확인됨': 'ok', '추정': 'maybe', '출처불명·잘못 알려짐': 'no' };
 
 const ICON = {
@@ -110,6 +113,7 @@ function page({ rel, depth, title, desc, ogTitle, ogImage, ogType = 'website', j
 <html lang="ko">
 <head>
 <meta charset="utf-8">
+${GTM_HEAD}
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
@@ -142,6 +146,7 @@ ${fonts === 'serif' ? `<link rel="preconnect" href="https://fonts.googleapis.com
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 ${jsonld ? `<script type="application/ld+json">\n${JSON.stringify(jsonld, null, 1)}\n</script>\n` : ''}</head>
 <body class="${bodyClass}" data-root="${up || './'}">
+${GTM_BODY}
 <a class="sr-only" href="#main">본문 바로가기</a>
 <header class="top">
   <div class="top-in">
@@ -190,14 +195,14 @@ function statusBadge(st) { return `<span class="badge badge-${STATUS_CLASS[st]}"
 function sourceLine(q, up, { linkAuthor = true } = {}) {
   const p = persons[q.author];
   const a = linkAuthor && hasPersonPage(q.author) ? `<a href="${up}p/${q.author}/">${esc(authorLabel(q))}</a>` : esc(authorLabel(q));
-  return `${a} · ${esc(q.source)}${q.year && q.year !== '미상' ? ` · <span class="num">${esc(q.year)}</span>` : ''}`;
+  return `${a}${q.status === '추정' ? '의 말로 알려져 있어요' : ''} · ${esc(q.source)}${q.year && q.year !== '미상' ? ` · <span class="num">${esc(q.year)}</span>` : ''}`;
 }
 
 // 명언 한 개(목록용). full=true면 본가: 원문·해설·근거까지 / false면 한 줄 + 본가 링크
 function quoteBlock(q, up, { full = true, hTag = 'h3' } = {}) {
   const lc = LANG_CODE[q.lang] || 'und';
   const showOrig = q.lang !== '한국어' || q.original !== q.text_ko;
-  const shareData = esc(JSON.stringify({ id: q.id, t: oneLine(q.text_ko), a: authorLabel(q), s: q.source, u: anchorUrl(q), c: cardRel(q.id) }));
+  const shareData = esc(JSON.stringify({ id: q.id, t: oneLine(q.text_ko), a: attrLabel(q), s: q.source, u: anchorUrl(q), c: cardRel(q.id) }));
   const ev = q.evidence.map(e => `<a href="${esc(e.url)}" rel="noopener">${esc(e.label)}</a>`).join(' · ');
   return `<article class="q" id="${q.id}" data-q='${shareData}'>
   <${hTag} class="q-text">${br(q.text_ko)}</${hTag}>
@@ -224,7 +229,7 @@ function hero(q, tpl, extra = '') {
   ${extra}
   ${tpl === 'book' && showOrig ? `<p class="hero-orig" lang="${LANG_CODE[q.lang] || 'und'}"${q.lang === '히브리어' ? ' dir="rtl"' : ''}>${br(q.original)}</p>` : ''}
   <blockquote class="hero-text"><p>${br(q.text_ko)}</p></blockquote>
-  <figcaption class="hero-cap">${esc(authorLabel(q))}<span>${esc(q.source)}</span></figcaption>
+  <figcaption class="hero-cap">${esc(attrLabel(q))}<span>${esc(q.source)}</span></figcaption>
 </figure>`;
 }
 
@@ -507,7 +512,7 @@ ${crumbs([['출처 확인 기준', null]], up)}
   <li><b>출처불명·잘못 알려짐</b>: 그 사람의 말이 아니라는 근거가 있는 것. 일반 목록에는 넣지 않고 <a href="${up}check/">진위 확인</a>에서만 다뤄요.</li>
 </ul>
 <h2>4. 잘못된 곳을 알려 주세요</h2>
-<p>번역이 어색하거나 출처가 틀렸다면 사이트 운영 저장소의 이슈로 알려 주세요. 확인한 뒤 고치고 확인일을 바꿔요. (문의 이메일은 준비 중이에요.)</p>
+<p>번역이 어색하거나 출처가 틀렸다면 이메일 <a href="mailto:gdf0620@gmail.com">gdf0620@gmail.com</a> 로 알려 주세요. 확인한 뒤 고치고 확인일을 바꿔요.</p>
 <h2>5. 카드 이미지</h2>
 <p>공유 카드 이미지는 SIL 오픈 폰트 라이선스(OFL) 글꼴(고운바탕, 검은고딕, 도현, 본명조(Noto Serif KR), 프리텐다드)로 만들어요. 사진은 쓰지 않았어요.</p>
 </div>`;
@@ -518,7 +523,7 @@ ${crumbs([['출처 확인 기준', null]], up)}
 {
   const rel = '', up = '';
   // 오늘의 명언 후보: 짧은 것(카드·위젯에 맞게) — 계절 상황 우선은 화면 JS가 고른다
-  const pool = quotes.filter(q => oneLine(q.text_ko).length <= 70).map(q => ({ id: q.id, t: oneLine(q.text_ko), a: authorLabel(q), s: q.source, u: anchorUrl(q), g: q.situations, st: q.status }));
+  const pool = quotes.filter(q => oneLine(q.text_ko).length <= 70).map(q => ({ id: q.id, t: oneLine(q.text_ko), a: attrLabel(q), s: q.source, u: anchorUrl(q), g: q.situations, st: q.status }));
   const seasonal = Object.fromEntries(SITUATIONS.filter(s => s.months.length).map(s => [s.slug, s.months]));
   const dayIdx = Math.floor(Date.parse(TODAY) / 864e5);
   const first = byId[pool[dayIdx % pool.length].id];
@@ -535,7 +540,7 @@ ${crumbs([['출처 확인 기준', null]], up)}
   <h2 class="today-h" id="todayH">오늘의 명언 <span class="num" data-today-date>${TODAY.replace(/-/g, '.')}</span></h2>
   <div class="today-card" data-today>
     <p class="today-text">${br(first.text_ko)}</p>
-    <p class="today-cap"><span data-today-a>${esc(authorLabel(first))}</span> · <span data-today-s>${esc(first.source)}</span></p>
+    <p class="today-cap"><span data-today-a>${esc(attrLabel(first))}</span> · <span data-today-s>${esc(first.source)}</span></p>
     <div class="today-acts">
       <a class="btn btn-accent" data-today-link href="${anchorUrl(first)}">원문과 출처 보기</a>
       <button class="btn" type="button" data-today-share>공유</button>
@@ -596,7 +601,7 @@ ${AD}
 
 // 카드 목록(cards.mjs가 읽음)
 const cardJobs = [
-  ...quotes.map(q => ({ id: q.id, tpl: tplOf(q), text: q.text_ko, author: authorLabel(q), source: q.source, year: q.year, status: q.status })),
+  ...quotes.map(q => ({ id: q.id, tpl: tplOf(q), text: q.text_ko, author: attrLabel(q), source: q.source, year: q.year, status: q.status })),
   ...checks.map(c => ({ id: c.id, tpl: 'verdict', text: c.text_ko, author: (c.author ? persons[c.author].name : c.attributed) + '의 말로 알려짐', source: c.real_origin.split(/(?<=[요다])\.\s/)[0], verdict: c.verdict })),
   { id: 'og-home', tpl: 'home', text: '지금 필요한 한 줄,\n원문과 출처까지.', author: `상황별 명언 ${quotes.length}개`, source: '졸업 · 수능 · 위로 · 새해 · 결혼 · 생일 · 감사' },
 ];

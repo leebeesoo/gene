@@ -142,3 +142,35 @@ test('원 표시', () => {
   assert.equal(C.wonKo(100000000), '1억원');
   assert.equal(C.won(22427.16), '22,427원');
 });
+
+test('미성년 가입기간 인정(주택공급에 관한 규칙 제10조제6항): 2024년 전 최대 2년, 합쳐서 최대 5년', () => {
+  const ref = D('2026-11-13');
+  // 2000-01-01생, 5세(2005-01-01) 가입 → 전체 262개월. 미성년 168개월이 모두 2024년 전 → 24개월만 인정
+  // → 262 − 144 = 118개월(9년 10개월) → 11점. 청약홈 계산기도 「9년 이상~10년 미만」. 상한이 없으면 17점.
+  let r = C.accountMonths(D('2005-01-01'), ref, D('2000-01-01'));
+  assert.equal(r.minorMonths, 168); assert.equal(r.cut, 144); assert.equal(r.months, 118);
+  assert.equal(C.accountPoints(r.months), 11);
+  assert.equal(C.accountPoints(C.fullMonths(D('2005-01-01'), ref)), 17);
+  // 2010-01-01생, 2015-01-01 가입(지금도 미성년) → 2024년 전 108개월 중 24 + 2024년 뒤 34개월 = 58개월(4년 10개월) → 6점
+  // (청약홈 「4년 이상~5년 미만」)
+  r = C.accountMonths(D('2015-01-01'), ref, D('2010-01-01'));
+  assert.equal(r.cut, 84); assert.equal(r.months, 58); assert.equal(C.accountPoints(r.months), 6);
+  // 2024년 뒤 미성년 기간만 77개월 → 60개월 상한 → 5년 → 7점
+  r = C.accountMonths(D('2024-01-01'), D('2030-06-01'), D('2015-01-01'));
+  assert.equal(r.minorMonths, 77); assert.equal(r.months, 60); assert.equal(C.accountPoints(r.months), 7);
+  // 17세 가입: 2024년 전 19개월 + 뒤 5개월 = 24개월 → 깎이지 않음, 53개월(4년 5개월)
+  r = C.accountMonths(D('2022-06-01'), ref, D('2005-06-01'));
+  assert.equal(r.minorMonths, 24); assert.equal(r.cut, 0); assert.equal(r.months, 53);
+  // 성년 뒤 가입·생년월일 없음 → 상한 없음
+  assert.equal(C.accountMonths(D('2015-03-01'), ref, D('1990-01-01')).cut, 0);
+  assert.equal(C.accountMonths(D('2005-01-01'), ref, null).months, 262);
+  // 합계에도 반영: 유주택(무주택 0점) + 부양 0명 5점 + 통장 11점 = 16점
+  const s = C.cheongyak({ ownsHome: true, birth: D('2000-01-01'), ref, family: 0, accountStart: D('2005-01-01') });
+  assert.equal(s.account.own, 11); assert.equal(s.account.minorCut, 144); assert.equal(s.total, 16);
+});
+
+test('청약홈 계산기와 같은 예: 무주택 10년·부양가족 3명·통장 15년 이상 → 22+20+17 = 59점', () => {
+  // 청약홈 청약가점계산기(2026-11-14 실행): 10년 이상~11년 미만 22점, 3명 20점, 15년 이상 17점, 총점 59
+  const r = C.cheongyak({ ownsHome: false, birth: D('1980-01-01'), marriage: D('2005-06-01'), homelessSince: D('2016-06-01'), ref: D('2026-11-14'), family: 3, accountStart: D('2011-01-01') });
+  assert.equal(r.homeless.points, 22); assert.equal(r.family.points, 20); assert.equal(r.account.points, 17); assert.equal(r.total, 59);
+});

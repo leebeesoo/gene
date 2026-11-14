@@ -16,7 +16,7 @@
 | `/season/` | 제철장보기 — 이달 제철 식재료와 지금 싼 품목 (사러 가기) |
 | `/market/` | 맛남의 광장 — 버려질 농수산물이 어디서 남는지, 버려지기 전에 |
 
-배포 주소: https://leebeesoo.github.io/gene/
+배포 주소: https://jaemilab.net/ (Cloudflare Pages, 빌드 `node tools/seo/build.mjs` → `dist/`)
 
 ## 로컬 실행
 

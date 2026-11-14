@@ -2,6 +2,7 @@
  * 나이별 혜택·검진 달력 — 나이별 판단 규칙 + 카드 그리기 (브라우저와 빌드 스크립트가 같이 씀)
  * 데이터: data/benefits.json (사람이 공식 출처를 보고 손으로 정리)
  * 나이: basis "year" = 올해 연도 − 출생연도, basis "full" = 만 나이(생일 기준)
+ * 국가건강검진·암검진은 생일과 관계없이 「그해 그 나이가 되는 출생연도」가 대상(건보공단 검진 안내문) → basis "year"
  */
 (function (root) {
   'use strict';
@@ -28,9 +29,9 @@
     if (!sexOk(r.sex, sex)) return { state: 'hidden' };
     switch (r.kind) {
       case 'from':
-        if (a > r.age || (a === r.age && r.basis === 'year')) return { state: 'now', label: r.nowLabel || (r.basis === 'year' ? r.age + '세 이상이라 대상이에요' : '만 ' + r.age + '세가 지나 대상이에요') };
+        if (a > r.age || (a === r.age && r.basis === 'year')) return { state: 'now', label: r.nowLabel || (r.basis === 'year' ? (a === r.age ? '올해 ' + r.age + '세가 되는 분(' + birthYear + '년생)부터 대상이에요' : r.age + '세 이상이라 대상이에요') : '만 ' + r.age + '세가 지나 대상이에요') };
         if (a === r.age) return { state: 'birthday', label: '올해 생일이 지나면 (만 ' + r.age + '세부터)' };
-        return { state: 'later', opens: birthYear + r.age, label: (birthYear + r.age) + '년(' + r.age + '세)부터' };
+        return { state: 'later', opens: birthYear + r.age, label: (birthYear + r.age) + '년(' + r.age + '세)부터' + (r.laterNote ? ', ' + r.laterNote : '') };
       case 'pension':
         var p = pensionAge(r, birthYear);
         if (a > p) return { state: 'now', label: birthYear + '년생은 만 ' + p + '세부터 받아요' };
@@ -41,10 +42,12 @@
         if ((birthYear % 2) === (year % 2)) return { state: 'now', label: year + '년이 검진 차례예요 (' + (birthYear % 2 ? '홀수' : '짝수') + '년생)' };
         return { state: 'next', label: (year + 1) + '년이 검진 차례예요 (' + (birthYear % 2 ? '홀수' : '짝수') + '년생)' };
       case 'ages':
-        if (r.ages.indexOf(a) >= 0) lines.push('올해 ' + a + '세, 대상 나이예요');
-        if (r.fromAge && a >= r.fromAge) lines.unshift('인지기능 검사는 ' + r.fromAge + '세부터 2년에 한 번');
+        var turn = (r.fromAge && a >= r.fromAge) ? ((a - r.fromAge) % 2 === 0) : null;
+        if (r.ages.indexOf(a) >= 0) lines.push('올해 ' + a + '세가 되는 분(' + birthYear + '년생) 대상이에요');
+        if (turn === true) lines.push((lines.length ? '인지기능 검사도 올해 차례예요' : '인지기능 검사는 올해 차례예요') + ' (' + r.fromAge + '세부터 2년에 한 번)');
         if (r.decades) r.decades.forEach(function (d) { if (a >= d[0] && a <= d[1]) lines.push('우울증 검사는 ' + d[0] + '~' + d[1] + '세 사이 한 번'); });
         if (lines.length) return { state: 'now', label: lines.join(' · ') };
+        if (turn === false) return { state: 'next', label: '인지기능 검사는 ' + (year + 1) + '년이 차례예요 (2년에 한 번)' };
         var nx = r.ages.filter(function (x) { return x > a; })[0];
         if (r.fromAge && a < r.fromAge) nx = Math.min(nx || 999, r.fromAge);
         return nx ? { state: 'later', opens: birthYear + nx, label: (birthYear + nx) + '년(' + nx + '세)에 대상' } : { state: 'hidden' };
@@ -58,7 +61,7 @@
     if (!sexOk(r.sex, sex)) return out;
     switch (r.kind) {
       case 'from':
-        if (a === r.age) out.push({ text: r.basis === 'full' ? '만 ' + r.age + '세 생일부터 받을 수 있어요' : '올해부터 대상이에요' });
+        if (a === r.age) out.push({ text: r.eventText || (r.basis === 'full' ? '만 ' + r.age + '세 생일부터 받을 수 있어요' : '올해부터 대상이에요 (생일과 관계없이)') });
         (r.extra || []).forEach(function (e) { if (a === e.age) out.push({ text: e.text }); });
         break;
       case 'pension':
@@ -70,10 +73,11 @@
       case 'ages':
         if (item.id === 'senior-checkups') {
           if (a === 66) out.push({ text: '인지기능 검사 시작(2년마다), 노인신체기능·폐기능 검사' });
-          else if (r.ages.indexOf(a) >= 0) out.push({ text: '노인신체기능검사 대상 나이' });
+          else if (r.ages.indexOf(a) >= 0) out.push({ text: '노인신체기능검사, 인지기능 검사 차례' });
+          else if (a > 66 && (a - 66) % 2 === 0) out.push({ text: '인지기능 검사 차례 (2년마다)', minor: true });
         } else if (item.id === 'lifestyle-mental') {
           if (r.ages.indexOf(a) >= 0) out.push({ text: '생활습관평가, 우울증 검사(' + a + '대에 한 번)' });
-        } else if (r.ages.indexOf(a) >= 0) out.push({ text: '대상 나이 (' + a + '세)' });
+        } else if (r.ages.indexOf(a) >= 0) out.push({ text: '올해 ' + a + '세가 되는 분(' + birthYear + '년생) 대상, 생일과 관계없이 1월부터' });
         break;
     }
     return out;

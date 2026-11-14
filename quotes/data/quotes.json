@@ -1,6 +1,6 @@
 {
  "version": 1,
- "updated": "2026-11-13",
+ "updated": "2026-11-14",
  "persons": [
   {
    "id": "confucius",
@@ -1707,21 +1707,30 @@
   {
    "id": "q060",
    "text_ko": "나쁜 버릇과는 싸우고, 이웃과는 평화롭게 지내라. 그리고 새해마다 조금 더 나은 사람이 되어라.",
-   "original": "Be at war with your vices, at peace with your neighbours, and let each new year find you a better man.",
+   "original": "Be at War with your Vices, at Peace with your Neighbours, and let every New-Year find you a better Man.",
    "lang": "영어",
    "author": "franklin",
-   "source": "『가난한 리처드의 달력』 1755년판",
+   "source": "『가난한 리처드의 달력』(Poor Richard Improved) 1755년판, 12월 면",
    "year": "1755",
-   "status": "추정",
-   "evidence": [],
-   "checked": "2026-11-13",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "Quote Investigator(1755년판 달력 면 사진과 서지)",
+     "url": "https://quoteinvestigator.com/2011/12/29/franklin-new-year/"
+    },
+    {
+     "label": "The Papers of Benjamin Franklin 5권 「Poor Richard Improved, 1755」(달력 전사본)",
+     "url": "https://franklinpapers.org/yale?vol=5&page=467a"
+    }
+   ],
+   "checked": "2026-11-14",
    "situations": [
     "newyear"
    ],
    "topics": [
     "time"
    ],
-   "note": "1755년판 달력에 실린 격언으로 널리 인용돼요. 이번 조사에서는 1755년판 원본 이미지나 전자 텍스트로 문장을 직접 확인하지 못해 「추정」으로 뒀어요."
+   "note": "1755년판 달력 12월 면에 천문 정보 사이사이로 나눠 실린 격언이에요. Quote Investigator가 보여 주는 원본 면 사진과 서지로 「Be at War with your Vices, at Peace with your Neighbours, and let every New-Year find you a better Man.」을 확인했어요. 프랭클린은 달력 빈칸을 남의 격언으로도 채웠기 때문에, 그가 처음 지은 말인지는 알 수 없어요. 새해 인사에 쓰기 좋은 말이에요."
   },
   {
    "id": "q061",
@@ -1729,18 +1738,23 @@
    "original": "Well done is better than well said.",
    "lang": "영어",
    "author": "franklin",
-   "source": "『가난한 리처드의 달력』 1737년판",
+   "source": "『가난한 리처드의 달력』(Poor Richard) 1737년판",
    "year": "1737",
-   "status": "추정",
-   "evidence": [],
-   "checked": "2026-11-13",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "The Papers of Benjamin Franklin 2권 「Poor Richard, 1737」",
+     "url": "https://franklinpapers.org/yale?vol=2&page=162c"
+    }
+   ],
+   "checked": "2026-11-14",
    "situations": [
     "challenge"
    ],
    "topics": [
     "courage"
    ],
-   "note": "1737년판 달력의 격언으로 알려져 있어요. 원본 대조는 아직 하지 못했어요."
+   "note": "1737년판 달력에 실린 짧은 격언이에요. 『벤저민 프랭클린 문서집』의 1737년판 전사본에서 「Well done is better than well said.」를 그대로 찾았어요. 프랭클린이 달력에 옮겨 실은 옛말일 수도 있어요. 말보다 행동으로 보여 주자는 다짐에 잘 어울려요."
   },
   {
    "id": "q062",
@@ -1996,14 +2010,23 @@
   {
    "id": "q072",
    "text_ko": "하루를 마치면 그날은 거기서 끝내라. 너는 할 수 있는 만큼 했다. 실수와 엉뚱한 일도 끼어들었겠지만 되도록 빨리 잊어라. 내일은 새날이다.",
-   "original": "Finish each day and be done with it. You have done what you could. Some blunders and absurdities no doubt crept in; forget them as soon as you can. Tomorrow is a new day.",
+   "original": "Finish every day and be done with it. […] You have done what you could; some blunders and absurdities no doubt crept in; forget them as soon as you can. To-morrow is a new day.",
    "lang": "영어",
    "author": "emerson",
-   "source": "딸 엘런에게 보낸 편지로 전해짐",
-   "year": "미상",
-   "status": "추정",
-   "evidence": [],
-   "checked": "2026-11-13",
+   "source": "딸 엘런에게 보낸 편지(1854년 4월 8일). 캐벗 『에머슨 회고록』 2권 107쪽에 실림",
+   "year": "1854",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "캐벗 『A Memoir of Ralph Waldo Emerson』(1887) 2권 107쪽(archive.org)",
+     "url": "https://archive.org/details/amemoirralphwal04cabogoog"
+    },
+    {
+     "label": "Quote Investigator(러스크 편 『에머슨 서간집』 4권 439쪽 인용)",
+     "url": "https://quoteinvestigator.com/2018/12/19/finish-day/"
+    }
+   ],
+   "checked": "2026-11-14",
    "situations": [
     "rest",
     "comfort"
@@ -2012,7 +2035,7 @@
     "failure",
     "time"
    ],
-   "note": "에머슨이 딸에게 쓴 편지로 널리 소개되지만, 편지 날짜와 원본이 실린 책을 이번 조사에서 찾지 못했어요. 출처를 확인하기 전까지 「추정」으로 둬요."
+   "note": "에머슨이 1854년 4월 8일, 학교에 가 있던 딸 엘런에게 쓴 편지예요. 1887년 캐벗이 쓴 『에머슨 회고록』에 이 편지가 실려 있어서 원문을 확인했어요. 원문은 「Finish each day」가 아니라 「Finish every day」이고, 중간에 「예의와 지혜로운 삶을 위해서는 지난 일을 곱씹는 게 오히려 나쁜 버릇」이라는 문장이 더 있어요. 지친 하루 끝에 보내기 좋은 말이에요."
   },
   {
    "id": "q073",
@@ -2524,18 +2547,27 @@
    "original": "Imagination is more important than knowledge.",
    "lang": "영어",
    "author": "einstein",
-   "source": "조지 실베스터 비에렉과의 인터뷰 「What Life Means to Einstein」, 새터데이 이브닝 포스트",
+   "source": "조지 실베스터 비에렉과의 인터뷰 「What Life Means to Einstein」, 『새터데이 이브닝 포스트』 1929년 10월 26일자 117쪽",
    "year": "1929",
-   "status": "추정",
-   "evidence": [],
-   "checked": "2026-11-13",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "Quote Investigator(잡지 원문 쪽수 인용)",
+     "url": "https://quoteinvestigator.com/2013/01/01/einstein-imagination/"
+    },
+    {
+     "label": "Saturday Evening Post 아카이브 재수록",
+     "url": "https://saturdayeveningpost.com/2010/03/imagination-important-knowledge"
+    }
+   ],
+   "checked": "2026-11-14",
    "situations": [
     "graduation"
    ],
    "topics": [
     "learning"
    ],
-   "note": "1929년 10월 26일자 잡지 인터뷰에 실린 말로 알려져 있어요. 이번 조사에서는 잡지 원문을 직접 보지 못해 「추정」으로 둬요."
+   "note": "1929년 잡지 인터뷰에서 「나는 상상력에 마음껏 기댈 만큼은 예술가다. 상상력은 지식보다 중요하다. 지식에는 한계가 있지만 상상력은 온 세상을 감싼다」라고 이어 말한 대목이에요. 잡지를 낸 곳이 다시 실은 글과 원문 쪽수를 밝힌 조사 자료로 확인했어요. 지식이 쓸모없다는 뜻이 아니라, 직관을 믿는다는 이야기였어요."
   },
   {
    "id": "q093",
@@ -2543,30 +2575,44 @@
    "original": "Ich habe keine besondere Begabung, sondern bin nur leidenschaftlich neugierig.",
    "lang": "독일어",
    "author": "einstein",
-   "source": "카를 젤리히에게 보낸 편지",
+   "source": "전기 작가 카를 젤리히에게 보낸 편지(1952년 3월 11일)",
    "year": "1952",
-   "status": "추정",
-   "evidence": [],
-   "checked": "2026-11-13",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키인용집(독일어) — 바인치얼 『Carl Seelig, Schriftsteller』(1982) 135쪽 인용",
+     "url": "https://de.wikiquote.org/wiki/Albert_Einstein"
+    },
+    {
+     "label": "ETH 도서관 아인슈타인 온라인(편지 소장처)",
+     "url": "http://www.library.ethz.ch/de/Ressourcen/Digitale-Kollektionen/Einstein-Online/Princeton-1933-1955"
+    }
+   ],
+   "checked": "2026-11-14",
    "situations": [
     "exam"
    ],
    "topics": [
     "learning"
    ],
-   "note": "1952년 3월 11일 전기 작가 젤리히에게 보낸 편지로 알려져 있어요. 편지 원본은 확인하지 못했어요."
+   "note": "젤리히가 「과학 재능은 아버지 쪽, 음악 재능은 어머니 쪽에서 물려받았나요?」라고 묻자 1952년 3월 11일 편지로 답한 말이에요. 편지 원본을 직접 보지는 못했지만, 젤리히 연구서(1982)와 아인슈타인 인용 연구서가 편지 날짜와 소장처를 밝혀 인용하고 있어 「확인됨」으로 뒀어요."
   },
   {
    "id": "q094",
-   "text_ko": "살면서 두려워할 것은 아무것도 없다. 이해해야 할 것이 있을 뿐이다. 이제는 더 많이 이해해서 덜 두려워할 때다.",
-   "original": "Nothing in life is to be feared, it is only to be understood. Now is the time to understand more, so that we may fear less.",
+   "text_ko": "살면서 두려워할 것은 아무것도 없다. 이해해야 할 것이 있을 뿐이다.",
+   "original": "Nothing in life is to be feared, it is only to be understood.",
    "lang": "영어(원어 미상)",
    "author": "curie",
-   "source": "출처 미확인",
+   "source": "출처 미확인(1960~70년대 영어 인용 사전부터 보임)",
    "year": "미상",
    "status": "추정",
-   "evidence": [],
-   "checked": "2026-11-13",
+   "evidence": [
+    {
+     "label": "위키인용집(영어) — 베너드 『Our Precarious Habitat』 재인용",
+     "url": "https://en.wikiquote.org/wiki/Marie_Curie"
+    }
+   ],
+   "checked": "2026-11-14",
    "situations": [
     "exam"
    ],
@@ -2574,7 +2620,7 @@
     "courage",
     "learning"
    ],
-   "note": "퀴리의 말로 널리 쓰이지만, 처음 실린 글을 이번 조사에서 찾지 못했어요. 출처가 확인되지 않으면 「진위 확인」으로 옮길 예정이에요."
+   "note": "퀴리의 말로 널리 쓰이지만, 퀴리가 직접 쓴 글이나 강연에서는 찾지 못했어요. 지금 찾을 수 있는 가장 이른 기록은 1969년 영어 인용 사전과 1973년 환경 교양서처럼 퀴리가 세상을 떠난 뒤 나온 책이에요. 그래서 「퀴리의 말로 알려져 있어요」라고 소개해요. 흔히 붙는 뒷문장 「이제는 더 많이 이해해서 덜 두려워할 때다」는 더 늦게 덧붙은 것으로 보여 뺐어요."
   },
   {
    "id": "q095",
@@ -2745,35 +2791,45 @@
    "original": "나는 우리나라가 세계에서 가장 아름다운 나라가 되기를 원한다. 가장 부강한 나라가 되기를 원하는 것은 아니다.",
    "lang": "한국어",
    "author": "kim-gu",
-   "source": "「나의 소원」 중 「내가 원하는 우리나라」, 『백범일지』",
+   "source": "『백범일지』(국사원, 1947) 끝에 붙은 「나의 소원」 중 「내가 원하는 우리 나라」",
    "year": "1947",
-   "status": "추정",
-   "evidence": [],
-   "checked": "2026-11-13",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌 『백범일지』 「나의 소원」",
+     "url": "https://ko.wikisource.org/wiki/%EB%B0%B1%EB%B2%94%EC%9D%BC%EC%A7%80#%EB%82%98%EC%9D%98_%EC%86%8C%EC%9B%90"
+    }
+   ],
+   "checked": "2026-11-14",
    "situations": [],
    "topics": [
     "happiness"
    ],
-   "note": "1947년 국사원판 『백범일지』 끝에 붙은 「나의 소원」의 한 대목이에요. 문장은 판본마다 조금씩 다르고, 「나의 소원」은 이광수가 다듬었다는 논란도 있어요. 판본 원문과 직접 대조하지 못해 「추정」으로 둬요."
+   "note": "1947년 국사원판 『백범일지』 끝에 붙은 「나의 소원」의 한 대목이에요. 위키문헌에 올라 있는 『백범일지』 본문에서 문장을 그대로 확인했어요. 국사원판은 이광수가 문장을 다듬었다는 이야기가 있어서, 김구의 뜻을 담았지만 글맛은 다듬어진 글로 보는 게 정확해요."
   },
   {
    "id": "q102",
-   "text_ko": "오직 한없이 가지고 싶은 것은 높은 문화의 힘이다. 문화의 힘은 우리 자신을 행복되게 하고, 나아가서 남에게 행복을 주겠기 때문이다.",
-   "original": "오직 한없이 가지고 싶은 것은 높은 문화의 힘이다. 문화의 힘은 우리 자신을 행복되게 하고, 나아가서 남에게 행복을 주겠기 때문이다.",
+   "text_ko": "오직 한없이 가지고 싶은 것은 높은 문화의 힘이다. 문화의 힘은 우리 자신을 행복하게 하고, 나아가서 남에게 행복을 주겠기 때문이다.",
+   "original": "오직 한없이 가지고 싶은 것은 높은 문화의 힘이다. 문화의 힘은 우리 자신을 행복하게 하고, 나아가서 남에게 행복을 주겠기 때문이다.",
    "lang": "한국어",
    "author": "kim-gu",
-   "source": "「나의 소원」 중 「내가 원하는 우리나라」, 『백범일지』",
+   "source": "『백범일지』(국사원, 1947) 끝에 붙은 「나의 소원」 중 「내가 원하는 우리 나라」",
    "year": "1947",
-   "status": "추정",
-   "evidence": [],
-   "checked": "2026-11-13",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "위키문헌 『백범일지』 「나의 소원」",
+     "url": "https://ko.wikisource.org/wiki/%EB%B0%B1%EB%B2%94%EC%9D%BC%EC%A7%80#%EB%82%98%EC%9D%98_%EC%86%8C%EC%9B%90"
+    }
+   ],
+   "checked": "2026-11-14",
    "situations": [
     "thanks"
    ],
    "topics": [
     "happiness"
    ],
-   "note": "케이컬처 이야기에 자주 인용되는 문장이에요. 판본에 따라 「행복하게」/「행복되게」처럼 표기가 달라요. 판본 원문과 직접 대조하지 못해 「추정」으로 둬요."
+   "note": "케이컬처 이야기에 자주 인용되는 문장이에요. 위키문헌 『백범일지』 본문에서 확인했어요. 책에 따라 「행복되게」로 적힌 것도 있는데, 여기서는 위키문헌 본문대로 「행복하게」로 적었어요."
   },
   {
    "id": "q103",
@@ -2781,18 +2837,23 @@
    "original": "一日不讀書 口中生荊棘",
    "lang": "한문",
    "author": "ahn-junggeun",
-   "source": "뤼순 감옥 유묵",
+   "source": "뤼순 감옥 유묵(보물 「안중근의사유묵」, 동국대학교박물관 소장)",
    "year": "1910",
-   "status": "추정",
-   "evidence": [],
-   "checked": "2026-11-13",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "한국민족문화대백과사전 「안중근의사유묵」",
+     "url": "https://encykorea.aks.ac.kr/Article/E0035027"
+    }
+   ],
+   "checked": "2026-11-14",
    "situations": [
     "exam"
    ],
    "topics": [
     "learning"
    ],
-   "note": "1910년 3월 뤼순 감옥에서 쓴 붓글씨로, 보물로 지정된 안중근 유묵 가운데 하나로 알려져 있어요. 국가유산청 기록과 직접 대조하지 못해 「추정」으로 둬요."
+   "note": "1910년 2~3월 뤼순 감옥에서 쓴 붓글씨 가운데 하나예요. 1972년 보물로 지정된 「안중근의사유묵」 목록에 「일일부독서구중생형극(동국대학교박물관)」으로 올라 있어요. 시험을 앞두고 꾸준함을 다짐할 때 많이 써요."
   },
   {
    "id": "q104",
@@ -2800,21 +2861,25 @@
    "original": "見利思義 見危授命",
    "lang": "한문",
    "author": "ahn-junggeun",
-   "source": "뤼순 감옥 유묵(『논어』 「헌문」의 구절)",
+   "source": "뤼순 감옥 유묵(보물 제569-6호, 동아대학교 석당박물관 소장). 『논어』 「헌문」의 구절",
    "year": "1910",
-   "status": "추정",
+   "status": "확인됨",
    "evidence": [
+    {
+     "label": "한국민족문화대백과사전 「안중근의사유묵」",
+     "url": "https://encykorea.aks.ac.kr/Article/E0035027"
+    },
     {
      "label": "위키문헌 『논어』 「헌문」 원문",
      "url": "https://zh.wikisource.org/wiki/%E8%AB%96%E8%AA%9E/%E6%86%B2%E5%95%8F%E7%AC%AC%E5%8D%81%E5%9B%9B"
     }
    ],
-   "checked": "2026-11-13",
+   "checked": "2026-11-14",
    "situations": [],
    "topics": [
     "courage"
    ],
-   "note": "『논어』 「헌문」 편의 「見利思義，見危授命」을 안중근이 옥중에서 붓으로 쓴 거예요. 『논어』 문장은 원문에서 확인했지만, 유묵 자체는 국가유산청 기록과 대조하지 못했어요."
+   "note": "『논어』 「헌문」 편의 「見利思義，見危授命」을 안중근이 1910년 뤼순 감옥에서 붓으로 쓴 거예요. 보물 「안중근의사유묵」 목록에 「견리사의견위수명(동아대학교박물관)」으로 올라 있고, 『논어』 문장도 원문에서 확인했어요."
   },
   {
    "id": "q105",
@@ -2857,15 +2922,20 @@
   },
   {
    "id": "q106",
-   "text_ko": "지금 신에게는 아직 전선 열두 척이 있습니다.",
-   "original": "今臣戰船 尙有十二",
+   "text_ko": "지금 신에게는 아직 전선 열두 척이 있습니다. 죽을힘을 다해 막아 싸우면 오히려 해 볼 만합니다.",
+   "original": "今臣戰船 尙有十二 出死力拒戰 則猶可爲也",
    "lang": "한문",
    "author": "yi-sunsin",
-   "source": "조정에 올린 장계(이분 『행록』에 전함)",
+   "source": "조정에 올린 장계(조카 이분 「행록」, 『이충무공전서』 권9에 실림)",
    "year": "1597",
-   "status": "추정",
-   "evidence": [],
-   "checked": "2026-11-13",
+   "status": "확인됨",
+   "evidence": [
+    {
+     "label": "한국고전종합DB 『이충무공전서』 권9 「행록」",
+     "url": "https://db.itkc.or.kr/inLink?DCI=ITKC_MO_0232A_0120_010_0010_2000_A055_XML"
+    }
+   ],
+   "checked": "2026-11-14",
    "situations": [
     "cheer",
     "comfort"
@@ -2874,7 +2944,7 @@
     "courage",
     "patience"
    ],
-   "note": "칠천량 패전 뒤 수군을 없애라는 명령에 답한 장계로 전해요. 장계 원본은 남아 있지 않고 조카 이분이 쓴 『행록』 같은 뒷날 기록으로 전해져 「추정」으로 둬요. 남은 것이 적어도 끝나지 않았다는 응원으로 많이 쓰여요."
+   "note": "1597년 칠천량 패전 뒤 조정이 수군을 없애고 육지에서 싸우라고 하자 올린 장계예요. 장계 원본은 남아 있지 않지만, 조카 이분이 쓴 「행록」에 「今臣戰船尙有十二 出死力拒戰 則猶可爲也」가 실려 있고, 1795년 나라에서 펴낸 『이충무공전서』 권9에 들어 있어요. 이 기록으로 확인했어요. 남은 것이 적어도 끝나지 않았다는 응원으로 많이 써요."
   }
  ],
  "checks": [
@@ -2975,14 +3045,22 @@
    "author": null,
    "attributed": "서산대사(휴정)",
    "status": "출처불명·잘못 알려짐",
-   "verdict": "작자 논란",
+   "verdict": "잘못 알려짐",
    "text_ko": "눈 덮인 들판을 걸어갈 때 함부로 어지러이 걷지 말라. 오늘 내가 남긴 발자국이 뒷사람의 길이 되리니.",
    "original": "踏雪野中去 不須胡亂行 今日我行跡 遂作後人程",
    "lang": "한문",
    "title": "「눈 덮인 들판을 걸어갈 때」, 서산대사의 시일까?",
-   "real_origin": "조선 후기 시인 이양연(1771~1853)의 시로 보는 견해가 있어요. 다만 이번 조사에서는 이양연 문집의 해당 원문을 직접 확인하지 못했어요.",
-   "body": "백범 김구가 좋아해 자주 썼다고 전하는 오언절구로, 흔히 서산대사(휴정, 1520~1604)의 시로 소개돼요. 그런데 서산대사 문집 『청허당집』에서는 이 시가 확인되지 않는다는 지적이 있고, 조선 후기 시인 이양연(산운)의 시 「야설(野雪)」로 보는 견해가 있어요. 전하는 글자도 「踏雪/穿雪」, 「今日/今朝」처럼 판본마다 달라요. 우리 조사로는 어느 쪽이 맞는지 원문으로 확정하지 못해서 「작자 논란」으로 표시해요. 쓸 때는 「서산대사의 시로 전해지는」이라고 소개하는 게 정확해요.",
+   "real_origin": "조선 후기 시인 이양연(1771~1853)의 시로 보는 견해가 더 힘을 얻고 있어요. 장지연이 엮은 『대동시선』(1918) 권8에 이양연의 「천설(穿雪)」로 실려 있어요.",
+   "body": "백범 김구가 좋아해 자주 썼다고 전하는 오언절구로, 흔히 서산대사(휴정, 1520~1604)의 시로 소개돼요. 그런데 한문학자들이 서산대사 문집 『청허집』에는 이 시가 없다고 짚었어요. 반대로 장지연이 엮은 『대동시선』(1918) 권8에는 조선 후기 시인 이양연(호 임연·산운)의 「천설(穿雪)」로 실려 있고, 이양연의 시를 모은 『임연당별집』에도 들어 있다고 소개돼요. 1985년 북한에서 낸 『한시집』도 지은이를 이양연, 제목을 「야설(野雪)」로 적었어요. 그래서 지금은 이양연의 시로 보는 쪽이 근거가 더 많아요. 글자도 판본마다 조금씩 달라서 「踏雪」이 「穿雪」로, 「今日」이 「今朝」로, 「遂作」이 「遂爲」로 적히기도 해요. 다만 우리는 『대동시선』과 『임연당별집』 원본 면을 직접 보지는 못했어요. 쓸 때는 「서산대사의 시로 알려졌지만, 이양연의 시로 보는 견해가 많은」이라고 소개하는 게 정확해요.",
    "evidence": [
+    {
+     "label": "충북인뉴스 「踏雪」(정민 교수의 『청허집』 미수록 지적 소개)",
+     "url": "https://www.cbinews.co.kr/news/articleView.html?idxno=120282"
+    },
+    {
+     "label": "박동욱 「『임연당별집』 제가 평으로 살펴본 산운시의 특징과 의미」(2021, 이양연 시집 소개)",
+     "url": "https://scholarworks.bwise.kr/hanyang/bitstream/2021.sw.hanyang/140984/1/KCI_FI002766447.pdf"
+    },
     {
      "label": "시와 김구 일화 소개(브런치, 2차 자료)",
      "url": "https://brunch.co.kr/@nuruk/107"

@@ -27,27 +27,38 @@
 공용 부품: `common/footer.*`(모든 푸터), `common/ads.*`(모든 광고). 디자인 기준 `docs/design-direction.md`, 광고 기준 `docs/ads-plan.md`.
 
 ## 다음에 할 일 (Claude)
-- 도메인이 정해지면: 노출 1단계 — `docs/seo/README.md` 참고 (주소 교체 28개 파일, robots·sitemap, 검색엔진 확인 태그, 첫 화면 타이틀·설명·OG 교체, 빌드 결과만 배포)
+- ~~노출 1단계~~ — **완료(2026-11-14)**, 아래 「2026-11-14 노출 1단계·GTM」 참고
 - 사장님 "진행해" 후: 노출 2단계 — 정적 페이지 약 5,700개 생성 (`tools/seo/build.mjs`)
 - 폼 주소를 받으면 `market/js/config.js`, `sikdang/js/config.js`에 넣기
 - 애드센스 ID를 받으면 전 파일 `ca-pub-XXXXXXXXXXXXXXXX`, `data-ad-slot="0000000000"`, 루트 `ads.txt` 교체
 - 출시 때 `.github/workflows/surplus-data.yml`의 schedule 주석 해제(매일 자동 수집)
-- GA4 측정 ID(G-XXXXXXX)를 받으면 공용 부품으로 전 페이지에 넣기 + 개인정보처리방침에 분석 도구 문구 추가 (서비스별 체류시간·스크롤 확인용)
+- ~~GA4 넣기~~ — GTM(GTM-MLZPXGS7)으로 전 페이지 설치 완료(2026-11-14). GA4는 GTM 안에서 설정
 - 남은 확인: 제철식당 어색한 메뉴 이름(굴요리 등), 명당로드 목록 광고 여백
 
 ## 사장님 할 일
 1. **새 아이디어 결정** — 아래 「새 서비스 아이디어 검토」의 정할 것 참고. (기존 커밋은 2026-11-12에 모두 푸시돼 있었음. `docs/ideas/`와 이 인계서 수정분은 아직 커밋 안 함)
-2. **도메인 고르고 사기** — 추천 oneuljaemi.com 또는 jaemilab.net (2026-11-12 조회 시 비어 있음). Cloudflare에서 구매.
-3. **사이트 공개** — `DEPLOY.md` 순서: Cloudflare Pages에 저장소 연결 → PR 머지 → 도메인 연결.
+2. ~~도메인 사기~~ — 완료: **jaemilab.net** (2026-11-14)
+3. **사이트 공개** — `DEPLOY.md` 순서: Cloudflare Pages에 저장소 연결(프로젝트 이름 `jaemilab`, 빌드 명령 `node tools/seo/build.mjs`, 출력 `dist`, 환경변수 `NODE_VERSION=22`) → PR 머지 → 도메인 `jaemilab.net`·`www` 연결 + www→루트 301 규칙.
 4. **구글 폼 2개** — `docs/google-forms.md` 그대로. 폼 주소·미리 채운 링크·집계 CSV 주소를 Claude에게 전달.
 5. **제철식당 시트 탭 5개 「웹에 게시(CSV)」** — 지역·재료 사전·요리 방식·지역 대표 음식·식당 후보 (`tools/sikdang/README.md`)
 6. **API 키 3개** — KAMIS, 공공데이터포털(경매 3종), 네이버 검색 → GitHub 저장소 Settings → Secrets (`DATA_UPDATE.md`)
 7. **애드센스** — `docs/adsense-setup.md`: 도메인으로 가입 → 게시자 ID 전달 → 검토 요청 → 승인 후 광고 단위 3개 ID 전달 → 자동 광고 설정
-8. **검색엔진 등록** — 도메인 연결 뒤 네이버 서치어드바이저, 구글 서치콘솔, 다음 웹마스터도구 (Claude가 확인 태그를 넣어 줌)
-9. **GA4 만들기** — analytics.google.com에서 속성 1개(도메인 하나) 만들고 측정 ID(G-로 시작)를 Claude에게 전달. 무료.
-10. **문의 이메일 정하기** — 개인정보처리방침·연락처에 들어감
+8. **검색엔진 등록** — 도메인 연결 뒤 네이버 서치어드바이저, 구글 서치콘솔(DNS TXT 권장), 다음 웹마스터도구. 확인 값을 Claude에게 주면 허브 `<head>` 주석 자리·`robots.txt`에 넣어 줌. 사이트맵 `https://jaemilab.net/sitemap.xml` 제출
+9. **GA4 연결** — 사이트에는 GTM(GTM-MLZPXGS7)이 들어가 있음. **GTM 안에 GA4 태그(G- 측정 ID)를 만들어야 데이터가 쌓임** (tagmanager.google.com → 태그 → Google 태그 → 측정 ID → 트리거 All Pages → 제출·게시). 권장: 쿼리(`?n=` 이름 등)는 GA로 보내지 않게 설정 (`DEPLOY.md` 2-2)
+10. ~~문의 이메일~~ — 완료: gdf0620@gmail.com (2026-11-14 전 서비스 반영)
 11. **(선택) 카카오 개발자 앱 키** — 카톡 공유 버튼용, 무료
 12. **(선택) 지역 푸드뱅크 협력 문의** — 전국 1688-1377
+
+## 2026-11-14 노출 1단계·GTM (완료, 커밋 전)
+- 주소 교체: `leebeesoo.github.io/gene/` → `https://jaemilab.net/` 146개 파일(canonical·og:url·og:image·twitter:image·JSON-LD·공유 문구·생성기 `tools/silver/build.mjs`·`tools/quotes/build.mjs`). `workers/donkey-live/wrangler.toml` ALLOWED_ORIGINS = jaemilab.net, www, jaemilab.pages.dev. (`donkey/js/config.js`의 wsUrl은 중계소 배포 전이라 자리표시 그대로 → 혼자 외치기 모드 유지)
+- 첫 화면 문구: 허브 + 10개 서비스 title·description·og를 `docs/seo` 제안으로 교체(월 숫자 대신 「이달」, 확인 안 된 숫자는 뺌). H1은 화면 모양을 안 바꾸게 숨김 글자로 보강(lotto·lifeclock·birthyear·season·허브), sikdang·market은 `#app` 안에 정적 H1(앱이 그리면 교체). 허브 JSON-LD(WebSite+ItemList 14) 추가.
+- 새 공유 이미지: `og/hub.v1.jpg`, `family/og.v1.jpg`(roots 것 빌려 쓰던 것 교체), `sikdang/og.v1.jpg`. 다시 만들기 `NODE_PATH=$(npm root -g) node tools/seo/og.mjs`(틀: `tools/seo/og/*.html`).
+- `robots.txt`, `sitemap.xml`(색인) + `sitemap-<서비스>.xml` 15개, 136쪽(noindex 4쪽 제외). 다시 만들기 `node tools/seo/sitemap.mjs [날짜]`. `quotes/sitemap.xml`(조각)은 빌드에서 뺌.
+- 빌드: `node tools/seo/build.mjs` → `dist/`(공개 파일만, 827개·24MB, HTML 140). docs·tools·workers·tests·*.md·package 파일 제외, 사이트맵 주소↔파일·GTM 누락 검사. `dist/`는 `.gitignore`.
+- **Cloudflare Pages 설정**: 프로젝트 이름 `jaemilab`(gene.pages.dev는 남이 씀) · Framework None · Build command `node tools/seo/build.mjs` · Output `dist` · 환경변수 `NODE_VERSION=22` · Custom domain `jaemilab.net` + `www.jaemilab.net`(www→루트 301 Redirect Rule). `_headers`에 `*.pages.dev` noindex.
+- 검색엔진 확인: 허브 `<head>`에 naver/google 메타 주석 자리, 다음은 `robots.txt`의 `#DaumWebMasterTool:` 줄.
+- GTM: GTM-MLZPXGS7 공식 코드(head 맨 위 + body 뒤 noscript)를 공개 HTML 140쪽 전부와 생성기 틀에 넣음(`tools/seo/gtm.mjs`, 새 페이지에 넣기 `node tools/seo/gtm.mjs 경로`). 개인정보처리방침 14곳에 Google Analytics(GTM) 쿠키·익명 통계·거부 방법 문장 추가. CSP는 없음. **GTM 안에 GA4 태그(G- 측정 ID)를 만들어야 데이터가 쌓임.**
+- 남은 노출 1단계 권장(선택): 근본 테스트·제철식당·맛남의 광장 첫 화면 보이는 본문(FAQ), favicon 파일, 기존 og.png 200KB 이하로 줄이기.
 
 ## 새 서비스 아이디어 최종안 (2026-11-13, 사장님 결정 대기)
 상세는 `docs/ideas/` 4개 파일. 아직 아무것도 만들지 않았다. 사장님이 정하면 만든다.

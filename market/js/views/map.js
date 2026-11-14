@@ -180,7 +180,7 @@ export async function homeView(ctx) {
   const sum = regionSummary(data);
   const heads = itemHeadlines(data);
   const hot = REGION_NAMES.filter((r) => sum[r].level).length;
-  ctx.title = '맛남의 광장 — 버려질 농수산물이 어디서 남는지, 버려지기 전에';
+  ctx.title = '농산물 가격 폭락·산지폐기 지도 | 맛남의 광장';
   const news = dedupeEvents(data.events.filter((e) => e.type !== 'forecast')).slice(0, 6);
   const today = new Date();
   const todayTxt = `${today.getMonth() + 1}월 ${today.getDate()}일 ${'일월화수목금토'[today.getDay()]}요일`;
