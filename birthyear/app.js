@@ -465,7 +465,7 @@
   // 해(화면)를 새로 그릴 때마다 광고 칸을 새로 만들고 JLAds.mount로 새 칸만 요청한다
   var AD_CLS = { news: '', peer: '', price: 'gap-b', 'after-quiz': 'gap-b', bottom: 'gap-t ad-end' };
   function adSlot(cls) {
-    return '<aside class="jl-ad' + (cls ? ' ' + cls : '') + '" aria-label="광고"><small>광고</small><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></aside>';
+    return '<aside class="jl-ad' + (cls ? ' ' + cls : '') + '" aria-label="광고"><small>광고</small><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8074161899415977" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></aside>';
   }
   function mountAds(root) { if (window.JLAds) window.JLAds.mount(root); }
   function renderAds(names) {

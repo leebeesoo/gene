@@ -591,7 +591,7 @@ function toast(msg, actionLabel, action) {
 }
 
 /* 광고: 공용 common/ads.js (모든 서비스 같은 방식). 새 칸만 한 번씩 요청해요. */
-const AD_INS = multi => `<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" ${multi ? 'data-ad-format="autorelaxed"' : 'data-ad-format="auto" data-full-width-responsive="true"'}></ins>`;
+const AD_INS = multi => `<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8074161899415977" data-ad-slot="0000000000" ${multi ? 'data-ad-format="autorelaxed"' : 'data-ad-format="auto" data-full-width-responsive="true"'}></ins>`;
 function mountAds() { if (window.JLAds) window.JLAds.mount(document.getElementById('main')); }
 /** 공유 링크로 새 보드가 열리면 = 새 화면 → 광고 칸을 새로 만들어 요청 (같은 칸 재요청 금지) */
 function freshAds() {

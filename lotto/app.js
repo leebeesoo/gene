@@ -902,7 +902,7 @@
   // 광고는 공용 ../common/ads.js(JLAds)가 요청·접기를 맡는다.
   // 입력 화면 ↔ 결과 화면, 다른 프로필로 바뀌면 = 새 화면 → 본문 아래 광고 칸을 새로 그린다(같은 칸 재요청 없음).
   var AD_AUTO = '<aside class="jl-ad" aria-label="광고"><small>광고</small>' +
-    '<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></aside>';
+    '<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8074161899415977" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></aside>';
   var adScreen = null;
   function refreshScreenAd() {
     var p = activeProfile();

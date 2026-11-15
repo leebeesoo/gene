@@ -143,7 +143,7 @@ ${fonts === 'serif' ? `<link rel="preconnect" href="https://fonts.googleapis.com
 <link rel="stylesheet" href="${up}../common/footer.css">
 <link rel="stylesheet" href="${up}../common/ads.css">
 <script>try{var t=localStorage.getItem('quotes.theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8074161899415977" crossorigin="anonymous"></script>
 ${jsonld ? `<script type="application/ld+json">\n${JSON.stringify(jsonld, null, 1)}\n</script>\n` : ''}</head>
 <body class="${bodyClass}" data-root="${up || './'}">
 ${GTM_BODY}
@@ -187,7 +187,7 @@ ${body}
 }
 
 const AD = `<aside class="jl-ad" aria-label="광고"><small>광고</small>
-  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8074161899415977" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
 </aside>`;
 
 function statusBadge(st) { return `<span class="badge badge-${STATUS_CLASS[st]}">${esc(st)}</span>`; }

@@ -33,7 +33,7 @@
 
   /* ---------- 광고 (공용 ../common/ads.js) ---------- */
   // 결과를 새로 그릴 때마다 새 광고 칸을 만들고, 그린 뒤 JLAds.mount로 새 칸만 요청한다
-  const AD_HTML = '<aside class="jl-ad" aria-label="광고"><small>광고</small><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></aside>';
+  const AD_HTML = '<aside class="jl-ad" aria-label="광고"><small>광고</small><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8074161899415977" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></aside>';
   const mountAds = root => { if (window.JLAds) window.JLAds.mount(root); };
 
   /* ---------- 토스트 ---------- */

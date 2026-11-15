@@ -16,7 +16,7 @@
 | `/birthyear/` | 나때연감 — 내가 태어난 해 타임캡슐 |
 | `/sikdang/` | 제철식당 — 이달 이 지역 제철 음식을 잘하는 집 (먹으러 가기) |
 | `/season/` | 제철장보기 — 이달 제철 식재료와 지금 싼 품목 (사러 가기) |
-| `/market/` | 맛남의 광장 — 버려질 농수산물이 어디서 남는지, 버려지기 전에 |
+| `/market/` | 구출장터 — 버려질 농수산물이 어디서 남는지, 버려지기 전에 |
 
 배포 주소: https://jaemilab.net/ (Cloudflare Pages, 빌드 `node tools/seo/build.mjs` → `dist/`)
 
@@ -43,4 +43,4 @@ grep -rl 'XXXXXXXXXXXXXXXX' . | xargs sed -i 's/XXXXXXXXXXXXXXXX/123456789012345
 
 ## 데이터
 
-모든 데이터는 브라우저 localStorage에 저장됩니다. 맛남의 광장을 여러 사용자가 실제로 거래하는 장터로 운영하려면 `market/store.js`만 백엔드(예: Supabase)로 교체하면 됩니다.
+모든 데이터는 브라우저 localStorage에 저장됩니다. 구출장터를 여러 사용자가 실제로 거래하는 장터로 운영하려면 `market/store.js`만 백엔드(예: Supabase)로 교체하면 됩니다.

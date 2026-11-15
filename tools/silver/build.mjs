@@ -31,7 +31,7 @@ const byId = Object.fromEntries(items.map(i => [i.id, i]));
 const FAVICON = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='8' y='12' width='48' height='44' rx='8' fill='none' stroke='%23141413' stroke-width='5'/%3E%3Cpath d='M8 26h48M22 6v12M42 6v12' stroke='%23141413' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cx='40' cy='42' r='7' fill='%232C6A8E'/%3E%3C/svg%3E";
 const LOGO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8.5 3v4M15.5 3v4"/><circle cx="15" cy="15.5" r="1.6" fill="currentColor" stroke="none"/></svg>';
 const ICON_MOON = '<svg class="ico ico-s" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>';
-const AD = '<aside class="jl-ad" aria-label="광고"><small>광고</small><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></aside>';
+const AD = '<aside class="jl-ad" aria-label="광고"><small>광고</small><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8074161899415977" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></aside>';
 
 function head({ title, desc, path, up, ogTitle, ogDesc, jsonld, extra = '', noindex = false }) {
   const url = BASE + path;
@@ -66,7 +66,7 @@ ${noindex ? '<meta name="robots" content="noindex,follow">\n' : ''}<meta name="t
 <link rel="stylesheet" href="${up}../common/footer.css">
 <link rel="stylesheet" href="${up}../common/ads.css">
 <script>try{var t=localStorage.getItem('silver.theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);if(localStorage.getItem('silver.size')==='xl')document.documentElement.setAttribute('data-size','xl');}catch(e){}</script>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8074161899415977" crossorigin="anonymous"></script>
 <script type="application/ld+json">
 ${JSON.stringify(jsonld, null, 1)}
 </script>

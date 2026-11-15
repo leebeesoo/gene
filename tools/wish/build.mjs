@@ -105,7 +105,7 @@ const I = {
   search: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>',
   arrow: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>'
 };
-const AD = '<aside class="jl-ad" aria-label="광고"><small>광고</small><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></aside>';
+const AD = '<aside class="jl-ad" aria-label="광고"><small>광고</small><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8074161899415977" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></aside>';
 const AD_MARK = '<!--AD-->';
 
 function head({ title, desc, path, up, jsonld, ads }) {
@@ -140,7 +140,7 @@ ${GTM_HEAD}
 <link rel="stylesheet" href="${up}css/style.css">
 <link rel="stylesheet" href="${up}../common/footer.css">
 ${ads ? `<link rel="stylesheet" href="${up}../common/ads.css">\n` : ''}<script>try{var t=localStorage.getItem('wish.theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
-${ads ? '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>\n' : ''}<script type="application/ld+json">
+${ads ? '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8074161899415977" crossorigin="anonymous"></script>\n' : ''}<script type="application/ld+json">
 ${JSON.stringify(jsonld)}
 </script>
 </head>

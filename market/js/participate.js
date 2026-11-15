@@ -14,7 +14,7 @@ export const ROLES = [
     id: 'buyer', label: ROLE_LABELS.buyer, short: '받을 곳', icon: 'box',
     who: '산지 물량을 받아 쓸 수 있는 식당·급식·반찬가게·가공업체',
     what: '필요한 품목·양·받을 지역을 남겨 주세요. 맞는 농가가 있으면 양쪽 동의를 받은 뒤 소개해 드려요.',
-    after: '맛남의 광장은 거래 당사자가 아니에요. 물건이나 대금을 받지 않고, 소개 수수료도 받지 않아요.',
+    after: '구출장터는 거래 당사자가 아니에요. 물건이나 대금을 받지 않고, 소개 수수료도 받지 않아요.',
   },
   {
     id: 'report', label: ROLE_LABELS.report, short: '제보', icon: 'pin',
@@ -184,7 +184,7 @@ export function foodbankHTML({ compact = false, headingTag = 'h2', id = '' } = {
   }
   return `<section class="fb"${id ? ` id="${esc(id)}"` : ''} aria-labelledby="h-fb${id ? `-${esc(id)}` : ''}">
     <${H} id="h-fb${id ? `-${esc(id)}` : ''}">푸드뱅크 기부 안내</${H}>
-    <p>맛남의 광장은 기부금이나 물품을 받지 않아요. 남는 농수산물은 지역 푸드뱅크에 직접 기부할 수 있도록 연락처와 절차를 알려 드려요.</p>
+    <p>구출장터는 기부금이나 물품을 받지 않아요. 남는 농수산물은 지역 푸드뱅크에 직접 기부할 수 있도록 연락처와 절차를 알려 드려요.</p>
     ${steps}${btns}
     <ul class="fb-notes">
       <li>출하정지·산지폐기 <b>약정 물량은 기부할 수 없어요.</b></li>

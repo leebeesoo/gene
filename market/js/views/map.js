@@ -180,7 +180,7 @@ export async function homeView(ctx) {
   const sum = regionSummary(data);
   const heads = itemHeadlines(data);
   const hot = REGION_NAMES.filter((r) => sum[r].level).length;
-  ctx.title = '농산물 가격 폭락·산지폐기 지도 | 맛남의 광장';
+  ctx.title = '농산물 가격 폭락·산지폐기 지도 | 구출장터';
   const news = dedupeEvents(data.events.filter((e) => e.type !== 'forecast')).slice(0, 6);
   const today = new Date();
   const todayTxt = `${today.getMonth() + 1}월 ${today.getDate()}일 ${'일월화수목금토'[today.getDay()]}요일`;
@@ -228,7 +228,7 @@ export async function homeView(ctx) {
   <div class="wrap">${knowBox()}</div>
 
   <section class="sec wrap" aria-labelledby="h-svc">
-    <header class="sec-head"><h2 id="h-svc">버려지기 전에, 이어 드려요</h2><p>맛남의 광장은 물건을 팔거나 사지 않아요. 정보를 모으고, 필요한 사람끼리 소개해 드려요.</p></header>
+    <header class="sec-head"><h2 id="h-svc">버려지기 전에, 이어 드려요</h2><p>구출장터는 물건을 팔거나 사지 않아요. 정보를 모으고, 필요한 사람끼리 소개해 드려요.</p></header>
     <ul class="svc">${SERVICES.map(([href, t, d]) => `<li><a href="${href}"><b>${esc(t)}</b><span>${esc(d)}</span></a></li>`).join('')}</ul>
   </section>
 
@@ -259,7 +259,7 @@ export async function regionView(ctx) {
   const all = regionSummary(data);
   const sum = all[sido];
   const evs = dedupeEvents(sum.events);
-  ctx.title = `${sido} 남는 지도 — 맛남의 광장`;
+  ctx.title = `${sido} 남는 지도 — 구출장터`;
   ctx.description = `${sido}에서 지금 남거나 값이 떨어진 농수산물, 갈아엎기·시장격리 소식과 연결 신청 안내.`;
   ctx.el.innerHTML = `<section class="page wrap region">
     <nav class="crumbs" aria-label="위치"><a href="#/">오늘 남는 것</a>${icon('chevron', 12)}<span aria-current="page">${esc(sido)}</span></nav>
@@ -342,7 +342,7 @@ export async function signalView(ctx) {
   const place = placeText(sig) || '전국';
   const h = headlinePct(sig);
   const basis = basisText(sig);
-  ctx.title = `${place} ${sig.item} ${levelOf(sig.level).label} — 맛남의 광장`;
+  ctx.title = `${place} ${sig.item} ${levelOf(sig.level).label} — 구출장터`;
   ctx.description = `${place} ${sig.item}: ${h ? `${h.vs} ${pctText(h.v)}` : levelOf(sig.level).desc}. 농가·받을 곳 연결 신청, 푸드뱅크 기부 안내, 구출 원정대, 가공 방법.`;
   const who = { role: 'farmer', sido: sig.sido || '', sigungu: sig.sigungu || '', item: sig.item };
   const sidoLink = sig.sido ? `<a href="#/region/${encodeURIComponent(sig.sido)}">${esc(sig.sido)}</a>${icon('chevron', 12)}` : '';
@@ -370,7 +370,7 @@ export async function signalView(ctx) {
 
     ${evs.length ? `<section class="sec" aria-labelledby="h-sev"><header class="sec-head"><h2 id="h-sev">관련 소식</h2></header><ul class="ev-list">${evs.map(eventRow).join('')}</ul></section>` : ''}
 
-    <section class="sec" id="act" aria-labelledby="h-act"><header class="sec-head"><h2 id="h-act">버려지기 전에 할 수 있는 일</h2><p>맛남의 광장은 물건을 사고팔지 않아요. 필요한 사람끼리 양쪽 동의를 받아 소개해 드려요.</p></header>
+    <section class="sec" id="act" aria-labelledby="h-act"><header class="sec-head"><h2 id="h-act">버려지기 전에 할 수 있는 일</h2><p>구출장터는 물건을 사고팔지 않아요. 필요한 사람끼리 양쪽 동의를 받아 소개해 드려요.</p></header>
       <div class="acts">
         <article class="act">
           <h3>연결 신청</h3>
@@ -380,7 +380,7 @@ export async function signalView(ctx) {
         </article>
         <article class="act">
           <h3>푸드뱅크 기부</h3>
-          <p>받을 곳을 찾기 어려운 물량은 지역 푸드뱅크에 직접 기부할 수 있어요. 맛남의 광장은 기부를 받지 않고 절차만 안내해요.</p>
+          <p>받을 곳을 찾기 어려운 물량은 지역 푸드뱅크에 직접 기부할 수 있어요. 구출장터는 기부를 받지 않고 절차만 안내해요.</p>
           ${foodbankHTML({ compact: true })}
         </article>
         <article class="act">

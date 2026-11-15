@@ -26,7 +26,7 @@
 | 허브 | #F7F7F5 / #FFFFFF / #191A1C / #6E7076 / #E6E6E3 / (accent 없음, ink) | #111213 / #1A1B1D / #ECECEA / #8E9096 / #2A2B2E |
 | lotto 오늘로또 | #F6F6F4 / #FFFFFF / #16171A / #6B6E75 / #E4E4E1 / #D9381E | #101113 / #191A1D / #EDEDEB / #8C8F96 / #2A2B2F / #FF5C41 |
 | lottomap 명당로드 | lotto와 같음, accent #C8361F | accent #F06A50 |
-| market 맛남의 광장 | #F5F5F0 / #FFFFFF / #1D211D / #687066 / #E2E3DC / #3E6B3A (보조 #A8642C) | #121412 / #1A1D1A / #E9ECE6 / #8F978C / #2B2F2A / #7FAF6F |
+| market 구출장터 | #F5F5F0 / #FFFFFF / #1D211D / #687066 / #E2E3DC / #3E6B3A (보조 #A8642C) | #121412 / #1A1D1A / #E9ECE6 / #8F978C / #2B2F2A / #7FAF6F |
 | season 제철장보기 | #F7F6F1 / #FFFFFF / #1F221E / #6B6F66 / #E5E3DA / #2F6B4F | #111311 / #1A1C19 / #ECECE6 / #90958B / #2C2E29 / #6DB08C |
 | sikdang 제철식당 | #F6F4F0 / #FFFFFF / #1E1C1A / #6F6A64 / #E4E0D8 / #B4532A (구이 불 색) | #121110 / #1C1A18 / #EEEAE4 / #97918A / #2E2B28 / #E07F52 |
 | roots 근본 테스트 | #F3F1EC / #FBFAF7 / #1C1C1E / #6F6B64 / #DDD8CE / #8E2B22 (인주) | #141413 / #1D1C1A / #ECE8E0 / #96918A / #2E2C29 / #C9584A |
@@ -48,7 +48,7 @@
 |---|---|---|
 | /lotto/ | 오늘로또 | 사주로 뽑는 오늘의 로또 번호와 살 시간·방향 |
 | /lottomap/ | 명당로드 | 로또 1등 명당 지도와 번호 통계 |
-| /market/ | 맛남의 광장 | 버려질 농수산물이 어디서 남는지, 버려지기 전에 |
+| /market/ | 구출장터 | 버려질 농수산물이 어디서 남는지, 버려지기 전에 |
 | /season/ | 제철장보기 | 이달 제철 식재료와 지금 싼 품목 (사러 가기) |
 | /sikdang/ | 제철식당 | 이달 이 지역 제철 음식을 잘하는 집 (먹으러 가기) |
 | /roots/ | 근본 테스트 | 사주와 퀴즈로 찾는 나의 근본 코드 |

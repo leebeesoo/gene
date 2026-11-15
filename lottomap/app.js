@@ -641,7 +641,7 @@
   /* ================= ads ================= */
   // 요청·접기는 공용 ../common/ads.js(JLAds)가 맡는다. 여기선 칸을 그리기만 한다.
   // 지역·기간·회차를 바꿔 목록을 다시 그리면 = 새 화면 → 새 광고 칸(<ins>)을 만들고 그 칸만 요청한다.
-  var AD_INS = '<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>';
+  var AD_INS = '<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8074161899415977" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>';
   var AD_HTML = '<aside class="jl-ad" aria-label="광고"><small>광고</small>' + AD_INS + '</aside>';
   // 한 페이지 광고는 HTML의 4칸(지도 아래·이번 주 아래·TOP 50 아래·맨 끝 멀티플렉스)만 쓴다(docs/ads-plan.md, 페이지당 4–5개).
   // 목록 사이 인피드는 끈다(0). 다시 켜려면 카드 수(예: 10)를 넣는다 — 그래도 페이지 합계 5칸을 넘기지 말 것.

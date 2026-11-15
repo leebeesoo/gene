@@ -62,7 +62,7 @@ async function route() {
   if (my !== token) return undefined;
   app.replaceChildren(el);
 
-  document.title = ctx.title || '맛남의 광장';
+  document.title = ctx.title || '구출장터';
   const desc = ctx.description || DEFAULT_DESC;
   $('meta[name=description]').content = desc;
   $('meta[property="og:description"]').content = desc;

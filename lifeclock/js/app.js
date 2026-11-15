@@ -67,7 +67,7 @@
   /* ---------- 광고 (공용 ../common/ads.js) ---------- */
   // 화면을 그릴 때마다 새 광고 칸을 만들고, 그린 뒤 JLAds.mount로 새 칸만 요청한다
   function adSlot(cls) {
-    return '<aside class="jl-ad' + (cls ? ' ' + cls : '') + '" aria-label="광고"><small>광고</small><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></aside>';
+    return '<aside class="jl-ad' + (cls ? ' ' + cls : '') + '" aria-label="광고"><small>광고</small><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8074161899415977" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins></aside>';
   }
   function mountAds(root) { if (window.JLAds) window.JLAds.mount(root); }
   // 홈 화면 맨 아래 칸: 홈을 다시 그릴 때마다 새로 만든다

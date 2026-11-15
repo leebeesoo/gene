@@ -27,12 +27,12 @@ export async function joinView(ctx) {
   };
   const focus = roleById(q.get('role'))?.id || '';
   const ready = formReady();
-  ctx.title = '연결 신청 — 농가와 받을 곳을 이어 드려요 | 맛남의 광장';
+  ctx.title = '연결 신청 — 농가와 받을 곳을 이어 드려요 | 구출장터';
   ctx.description = '남는 물량이 있는 농가·어가와 받아 쓸 수 있는 식당·가공업체·급식처를, 양쪽 동의를 받은 뒤 서로 소개해 드려요. 제보와 구출 원정대 신청도 받아요.';
 
   ctx.el.innerHTML = `<section class="page wrap join">
     <h1 class="page-title">연결 신청</h1>
-    <p class="lead">맛남의 광장은 물건을 팔거나 사지 않아요. 남는 물량이 있는 농가와 받아 쓸 수 있는 곳을 찾아, <b>양쪽 동의를 받은 뒤 서로 소개</b>해 드려요.</p>
+    <p class="lead">구출장터는 물건을 팔거나 사지 않아요. 남는 물량이 있는 농가와 받아 쓸 수 있는 곳을 찾아, <b>양쪽 동의를 받은 뒤 서로 소개</b>해 드려요.</p>
 
     <ol class="flow-steps" aria-label="연결 순서">
       <li><b>1. 신청</b><span>구글 폼에 품목·물량·지역과 연락처를 남겨요.</span></li>
@@ -47,7 +47,7 @@ export async function joinView(ctx) {
       <div class="field"><label for="jn-sido">지역</label><select id="jn-sido" name="sido"><option value="">선택 안 함</option>${REGION_NAMES.map((r) => `<option ${r === p.sido ? 'selected' : ''}>${r}</option>`).join('')}</select></div>
       <div class="field"><label for="jn-item">품목 <span class="muted">선택</span></label><input id="jn-item" name="item" value="${esc(p.item)}" maxlength="20" placeholder="예) 쪽파" autocomplete="off"></div>
       <p class="hint">고른 지역·품목은 신청 폼에 미리 채워져요.</p>
-    </form>` : `<p class="lead" id="form-soon">연결 신청은 곧 열려요. 지금은 이메일 <a class="link" href="mailto:gdf0620@gmail.com?subject=${encodeURIComponent('[맛남의 광장] 연결 신청')}">gdf0620@gmail.com</a>으로 품목·물량·지역과 연락처를 알려 주세요.</p>`}
+    </form>` : `<p class="lead" id="form-soon">연결 신청은 곧 열려요. 지금은 이메일 <a class="link" href="mailto:gdf0620@gmail.com?subject=${encodeURIComponent('[구출장터] 연결 신청')}">gdf0620@gmail.com</a>으로 품목·물량·지역과 연락처를 알려 주세요.</p>`}
 
     <div class="roles">${ROLES.map((r) => roleCard(r, p, r.id === focus, ready)).join('')}</div>
     <p class="note">신청 내용은 구글 폼(운영자 구글 시트)에 저장되고, 연결 안내와 제보 확인에만 써요. 상대에게 연락처를 전하기 전에는 꼭 따로 동의를 받아요. 지역별 신청 수는 5 미만이면 숫자를 밝히지 않아요. <a class="link" href="./privacy.html">개인정보처리방침</a> · <a class="link" href="./terms.html">이용약관</a></p>

@@ -22,7 +22,7 @@
 | /birthyear/ | 나때연감 | |
 | /sikdang/ | 제철식당 | 식당 3,778곳(시트 초안), 원재료 사진 281장(힉스필드), 사진 그리드 |
 | /season/ | 제철장보기 | 품목별 페이지(원산지 동네·어디서 사나) |
-| /market/ | 맛남의 광장 | 판매 없음. 남는 지도·헐값 경매·가공·농가 판단·연결 신청(구글 폼) |
+| /market/ | 구출장터 | 판매 없음. 남는 지도·헐값 경매·가공·농가 판단·연결 신청(구글 폼) |
 
 공용 부품: `common/footer.*`(모든 푸터), `common/ads.*`(모든 광고). 디자인 기준 `docs/design-direction.md`, 광고 기준 `docs/ads-plan.md`.
 
@@ -49,30 +49,28 @@
 - 남은 「재미랩」은 의도한 것뿐: 허브 alternateName, about 한 줄. docs의 옛 기록은 그대로 둠.
 - 사장님 할 일: 서치콘솔 홈 URL 재수집 요청, 서치어드바이저 사이트맵 재제출(구글 사이트 이름 반영엔 며칠~몇 주).
 
-## 사장님 할 일 — 진행 현황 (2026-11-14 기준)
+## 사장님 할 일 — 진행 현황 (2026-11-15 기준)
 
-### 끝난 것 ✅
-- [x] 도메인 구매: **jaemilab.net**
-- [x] 사이트 공개: Cloudflare **Workers** 프로젝트 `gene`(Pages 아님). 빌드 명령 `node tools/seo/build.mjs`, 배포 명령 `npx wrangler deploy`, 설정은 저장소 `wrangler.jsonc`. 브랜치 `claude/epic-ramanujan-ddvniq`에 푸시하면 자동 배포. https://jaemilab.net 열림 확인
-- [x] 커스텀 도메인 `jaemilab.net` 연결
-- [x] GA4: GTM(GTM-MLZPXGS7) 안에 GA4(G-HG739JDTS6) 연결돼 있음. 실제 사이트에서 수집 요청 나가는 것 확인
-- [x] 문의 이메일: gdf0620@gmail.com (전 서비스 반영)
-- [x] 구글 서치콘솔 확인 파일 받음 → 사이트에 올림(`google0257301bb46d3493.html`, Worker가 리다이렉트 없이 응답). **확인 완료 (2026-11-14), 사이트맵 제출**
-- [x] 네이버 서치어드바이저 태그 받음 → 허브 `<head>`에 넣음. **확인 완료 (2026-11-14), 사이트맵 제출**
+### 🔴 아직 안 된 것 (사장님 차례)
+| 무엇 | 언제 | 어떻게 |
+|---|---|---|
+| **KAMIS 키** | 주말 지나 발급되면 | kamis.or.kr 회원가입 → 고객센터 → Open-API → 이용신청(https://www.kamis.or.kr/customer/reference/openapi_write.do). 받은 인증키는 `KAMIS_CERT_KEY`, KAMIS 로그인 아이디는 `KAMIS_CERT_ID`로 https://github.com/leebeesoo/gene/settings/secrets/actions 에 넣기 |
+| **애드센스 검토 요청** | Claude가 「지금」이라고 할 때만 (구글 색인 뒤, 보통 1~3주) | 그 전에는 애드센스 화면에서 아무것도 누르지 않기. 「Ads.txt 찾을 수 없음」은 배포 뒤 며칠 안에 저절로 바뀜 |
+| (선택) 소원명당 TourAPI | 아무 때나 | data.go.kr에서 15101578 활용신청만. 키는 이미 넣은 `DATA_GO_KR_KEY`와 같아서 더 넣을 것 없음 |
+| (선택) 구글 폼 2개 | 미뤄도 됨 | 없으면 신청·제보가 문의 메일로 열림. 만들 때는 `docs/google-forms.md` (이 클라우드 대화는 사장님 크롬을 조작할 수 없음) |
+| (선택) 제철식당 시트 CSV 게시 | 미뤄도 됨 | 시트 탭 5개 「파일 → 공유 → 웹에 게시 → CSV」 주소 5개를 Claude에게 |
+| (선택) 속마음 칠판 실시간 | 애드센스 승인 뒤 | `workers/donkey-live/README.md`. 안 해도 「혼자 외치기」로 동작 |
+| PR 머지 후 빌드 브랜치 변경 | 머지할 때 | Cloudflare Worker `gene` 설정에서 빌드 브랜치를 `main`으로 |
 
-### 남은 것 ⏳
-- [ ] **애드센스 가입** (adsense.google.com, 사이트 `jaemilab.net`, 결제 프로필 이름 = 신분증 이름) → 게시자 ID(pub-…) Claude에게. **검토 요청은 Claude가 「지금」이라고 할 때** (서치콘솔 색인 뒤, 보통 1~3주). 공략: `docs/adsense-strategy.md`
-- [ ] **소원명당(가칭, `/wish/`) 이름 정하기** — 추천: 소원명당 / 소원지도 / 빌러가는길 중 고르기
-- [ ] **소원명당 TourAPI 키** (선택, 사진·주소 보강용): data.go.kr에서 「한국관광공사_국문 관광정보 서비스」(15101578) 활용신청 → 같은 일반 인증키라 `DATA_GO_KR_KEY` 하나로 됨
-- [ ] **소원명당 문구 검토** — 1차 완성(39곳, 29쪽, `wish/`, 커밋 전). 미리보기 https://claude.ai/artifact/EeCj4QdQJAJpJf3A65j2d9 . 「사실」/「전해지는 이야기」 구분, 칠장사 2023년 화재 언급, 대략 좌표 6곳(돌할매·꽃지·솥바위·전의초수·진도 바닷길·승산마을) 확인. 사진 0장(직접 찍은 사진 있으면 주기). 허브·푸터·사이트맵 연결은 이름 확정 후
-- [ ] **(선택) 「맛남의 광장」 이름 바꿀지** — SBS 예능과 같은 이름이라 혼동·상표 위험 (`docs/brand-name.md`)
-- [ ] 애드센스: adsense.google.com 가입(jaemilab.net) → 게시자 ID(pub-…) Claude에게 전달 → Claude가 넣고 배포 → 검토 요청 (`docs/adsense-setup.md`)
-- [ ] 공공데이터포털 인증키: GitHub Settings → Secrets → Actions → `DATA_GO_KR_KEY` (활용신청 3개: 15141809, 15141808, 15141818)
-- [ ] KAMIS 키: `KAMIS_CERT_KEY`, `KAMIS_CERT_ID` (같은 곳)
-- [ ] 구글 폼 2개 (`docs/google-forms.md`) — 사장님 계정 브라우저가 필요. 데스크톱 앱에서 이어 가면 Claude가 진행
-- [ ] 제철식당 시트 탭 5개 「웹에 게시(CSV)」 — 주소 5개 Claude에게
-- [ ] 속마음 칠판 실시간: Turnstile(https://dash.cloudflare.com/6e6ac3f9c62283f3adece9cbc19a5b6e/turnstile) → 사이트 키 Claude에게, 비밀 키·IP_SALT는 Worker `donkey-live` 비밀값, GitHub Secrets `CLOUDFLARE_API_TOKEN`·`CLOUDFLARE_ACCOUNT_ID`, Actions 「donkey-live 배포」 (`workers/donkey-live/README.md`). 안 해도 「혼자 외치기」 모드로 동작
-- [ ] PR 머지 후 Cloudflare 빌드 브랜치를 `main`으로 바꾸기
+### ✅ 끝난 것
+- 도메인 **jaemilab.net** 구매·연결, Cloudflare **Workers** 프로젝트 `gene` 자동 배포(브랜치 `claude/epic-ramanujan-ddvniq`, 빌드 `node tools/seo/build.mjs`, 배포 `npx wrangler deploy`, 설정 `wrangler.jsonc`)
+- GA4: GTM(GTM-MLZPXGS7) 안에 GA4(G-HG739JDTS6), 수집 확인
+- 문의 이메일 gdf0620@gmail.com
+- 구글 서치콘솔(HTML 파일 `google0257301bb46d3493.html`)·네이버(메타 태그) 확인, 사이트맵 제출, 2026-11-15 재제출
+- 애드센스 가입, 게시자 ID **pub-8074161899415977** → 전 페이지·`ads.txt`에 넣음(2026-11-15)
+- 공공데이터포털 3개 활용신청(15141809, 15141808, 15141818) + `DATA_GO_KR_KEY` GitHub Secret 등록(2026-11-15)
+- 소원명당 이름 확정·공개(87곳, 사진 41장). 대략 좌표 22곳·출처 약한 곳은 `wish/LICENSES.md`·`tools/wish/README.md`
+- 「맛남의 광장」 → **「구출장터」** 이름 변경(2026-11-15, SBS 예능과 겹쳐서). 공유 이미지·허브 이미지(hub.v5)도 바꿈
 
 ### 안 된 것 ⚠️
 - 구글 서치콘솔 「Google 태그 관리자」 확인 방법: 실패 → HTML 파일 방식으로 바꿈
@@ -80,7 +78,7 @@
 
 ### 버린 것 ✖
 - 다음 웹마스터도구: 검색량이 작아 진행 안 함 (robots.txt의 PIN 자리도 지움)
-- 네이버 검색 API 키: 2026-07부터 네이버 클라우드 API HUB로 옮겨졌고 결제수단 필요·유료 전환 가능 → 안 받음. 맛남의 광장 뉴스 찾기만 빠지고 나머지는 정상
+- 네이버 검색 API 키: 2026-07부터 네이버 클라우드 API HUB로 옮겨졌고 결제수단 필요·유료 전환 가능 → 안 받음. 구출장터 뉴스 찾기만 빠지고 나머지는 정상
 - 카카오 JS 키: 당분간 안 받음(없어도 링크 복사·미리보기는 됨)
 
 ## 2026-11-14 노출 1단계·GTM (완료, 커밋 전)
@@ -92,7 +90,7 @@
 - **Cloudflare Pages 설정**: 프로젝트 이름 `jaemilab`(gene.pages.dev는 남이 씀) · Framework None · Build command `node tools/seo/build.mjs` · Output `dist` · 환경변수 `NODE_VERSION=22` · Custom domain `jaemilab.net` + `www.jaemilab.net`(www→루트 301 Redirect Rule). `_headers`에 `*.pages.dev` noindex.
 - 검색엔진 확인: 허브 `<head>`에 naver/google 메타 주석 자리, 다음은 `robots.txt`의 `#DaumWebMasterTool:` 줄.
 - GTM: GTM-MLZPXGS7 공식 코드(head 맨 위 + body 뒤 noscript)를 공개 HTML 140쪽 전부와 생성기 틀에 넣음(`tools/seo/gtm.mjs`, 새 페이지에 넣기 `node tools/seo/gtm.mjs 경로`). 개인정보처리방침 14곳에 Google Analytics(GTM) 쿠키·익명 통계·거부 방법 문장 추가. CSP는 없음. **GTM 안에 GA4 태그(G- 측정 ID)를 만들어야 데이터가 쌓임.**
-- 남은 노출 1단계 권장(선택): 근본 테스트·제철식당·맛남의 광장 첫 화면 보이는 본문(FAQ), favicon 파일, 기존 og.png 200KB 이하로 줄이기.
+- 남은 노출 1단계 권장(선택): 근본 테스트·제철식당·구출장터 첫 화면 보이는 본문(FAQ), favicon 파일, 기존 og.png 200KB 이하로 줄이기.
 
 ## 새 서비스 아이디어 최종안 (2026-11-13, 사장님 결정 대기)
 상세는 `docs/ideas/` 4개 파일. 아직 아무것도 만들지 않았다. 사장님이 정하면 만든다.

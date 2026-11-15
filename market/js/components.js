@@ -1,7 +1,7 @@
 // 재사용 UI 조각: 광고 칸, 빈 상태
 import { esc } from './util.js';
 
-export const AD_CLIENT = 'ca-pub-XXXXXXXXXXXXXXXX';
+export const AD_CLIENT = 'ca-pub-8074161899415977';
 
 /**
  * 광고 칸 — 모든 서비스 공용 마크업(common/ads.js·ads.css). 요청은 라우터가 JLAds.mount(뷰)로 해요.

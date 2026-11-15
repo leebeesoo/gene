@@ -3,7 +3,7 @@
  *
  * 마크업(어디서나 동일):
  *   <aside class="jl-ad" aria-label="광고"><small>광고</small>
- *     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+ *     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8074161899415977"
  *          data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
  *   </aside>
  *   (인피드: data-ad-format="fluid" data-ad-layout-key="…", 멀티플렉스: data-ad-format="autorelaxed")

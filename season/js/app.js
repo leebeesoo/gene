@@ -24,7 +24,7 @@ const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // ── 형제 사이트 데이터(실행 중 한 번만 읽음, 실패하면 조용히 대체) ──
 const getJSON = (url) => fetch(url, { cache: 'no-cache' }).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); });
-// 맛남의 광장: 남는 신호·기사
+// 구출장터: 남는 신호·기사
 const surplusP = getJSON(`${MARKET}data/surplus.json`).catch(() => null);
 const LEVEL_RANK = { disposal: 4, crash: 3, surplus: 2, watch: 1 };
 const LEVEL_TXT = { disposal: '산지폐기', crash: '가격 폭락', surplus: '공급 과잉', watch: '지켜보는 중' };
@@ -278,7 +278,7 @@ function renderPrices() {
   $$('#cheap .seg button').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.sort === state.sort)));
 }
 
-// ── 렌더: 남는 소식 (맛남의 광장 기사 목록을 실행 중에 읽음, 실패하면 내장 사본) ──
+// ── 렌더: 남는 소식 (구출장터 기사 목록을 실행 중에 읽음, 실패하면 내장 사본) ──
 const NEWS_T = { plow: '갈아엎기', dispose: '산지폐기·격리', crash: '가격 폭락', disposal: '산지폐기', price_crash: '가격 폭락', isolation: '시장격리', forecast: '출하 전망', campaign: '소비 촉진' };
 const dateTxt = (d) => { const [y, m, dd] = d.split('-').map(Number); return `${y}. ${m}. ${dd}.`; };
 function newsRow({ date, type, item, region, title, text, src, url }) {
@@ -306,7 +306,7 @@ function renderNews(D) {
   }
   if (rows) {
     const up = typeof D.generated_at === 'string' ? D.generated_at.slice(0, 10) : '';
-    $('#news-meta').textContent = `값이 떨어진 품목은 장보기엔 기회예요. 맛남의 광장이 모은 기사 원문에서 품목별 최근 소식${up ? ` · ${up} 갱신` : ''}.`;
+    $('#news-meta').textContent = `값이 떨어진 품목은 장보기엔 기회예요. 구출장터가 모은 기사 원문에서 품목별 최근 소식${up ? ` · ${up} 갱신` : ''}.`;
   } else {
     rows = [...NEWS].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3).map((n) => ({ ...n }));
     $('#news-meta').textContent = `값이 떨어진 품목은 장보기엔 기회예요. 기사 원문을 확인한 최근 3건(2026-11-05 정리).`;
@@ -394,9 +394,9 @@ function openDlg(id) {
 
 // ── 광고 칸: 화면(라우트)을 그릴 때마다 새 <ins>를 만들고 JLAds.mount로 그 칸만 요청 ──
 const AD_INS = {
-  auto: '<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>',
-  article: '<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-layout="in-article" data-ad-format="fluid"></ins>',
-  multiplex: '<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="autorelaxed"></ins>',
+  auto: '<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8074161899415977" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>',
+  article: '<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-client="ca-pub-8074161899415977" data-ad-slot="0000000000" data-ad-layout="in-article" data-ad-format="fluid"></ins>',
+  multiplex: '<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8074161899415977" data-ad-slot="0000000000" data-ad-format="autorelaxed"></ins>',
 };
 const adBox = (kind = 'auto') => `<aside class="jl-ad${kind === 'multiplex' ? ' jl-ad--multiplex' : ''}" aria-label="광고"><small>광고</small>${AD_INS[kind] || AD_INS.auto}</aside>`;
 const mountAds = (root) => { if (window.JLAds) window.JLAds.mount(root); };
@@ -463,7 +463,7 @@ function townsHTML(it, R, D) {
     const name = `<b>${esc(t.label)}</b>${t.note ? `<small>${esc(t.note)}</small>` : ''}`;
     const links = [
       rg ? `<a class="town-link" href="${SIKDANG}#/region/${encodeURIComponent(rg.id)}">${esc(rg.name.replace(/\(.*\)/, ''))} 식당${typeof rg.nr === 'number' ? ` ${rg.nr.toLocaleString('ko-KR')}곳` : ''} → 제철식당</a>` : '',
-      sg ? `<a class="town-link sig" href="${MARKET}#/signal/${encodeURIComponent(sg.id)}">${esc(baseName(it))} ${esc(LEVEL_TXT[sg.level] || '신호')} → 맛남의 광장</a>` : '',
+      sg ? `<a class="town-link sig" href="${MARKET}#/signal/${encodeURIComponent(sg.id)}">${esc(baseName(it))} ${esc(LEVEL_TXT[sg.level] || '신호')} → 구출장터</a>` : '',
     ].filter(Boolean).join('');
     return `<li class="town"><span class="town-name">${name}</span>${links ? `<span class="town-links">${links}</span>` : ''}</li>`;
   }).join('')}</ul>`;
@@ -572,9 +572,9 @@ function marketCta(it, D) {
     const base = mt.price_vs_normal_pct != null ? '평년' : '전년';
     const fig = typeof pct === 'number' ? ` · ${mt.price_basis || '도매'} ${base} 대비 ${pct > 0 ? '+' : ''}${pct}%${mt.as_of ? ` (${String(mt.as_of).slice(5).replace('-', '.')})` : ''}` : '';
     const where = [sg.sido, sg.sigungu].filter(Boolean).join(' ') || '전국';
-    return `<a class="cta-row" href="${MARKET}#/signal/${encodeURIComponent(sg.id)}"><span><b>남는 곳 보기 → 맛남의 광장</b><small>${esc(where)} ${esc(baseName(it))} ${esc(LEVEL_TXT[sg.level] || '신호')}${esc(fig)}</small></span>${IC.arrow}</a>`;
+    return `<a class="cta-row" href="${MARKET}#/signal/${encodeURIComponent(sg.id)}"><span><b>남는 곳 보기 → 구출장터</b><small>${esc(where)} ${esc(baseName(it))} ${esc(LEVEL_TXT[sg.level] || '신호')}${esc(fig)}</small></span>${IC.arrow}</a>`;
   }
-  return `<a class="cta-row" href="${MARKET}"><span><b>남는 곳 보기 → 맛남의 광장</b><small>버려질 농수산물이 어디서 남는지 지도로 보기</small></span>${IC.arrow}</a>`;
+  return `<a class="cta-row" href="${MARKET}"><span><b>남는 곳 보기 → 구출장터</b><small>버려질 농수산물이 어디서 남는지 지도로 보기</small></span>${IC.arrow}</a>`;
 }
 function sikdangCta(it, F, DS) {
   const n = restaurantCount(F, baseName(it)) || dishCount(DS, baseName(it));

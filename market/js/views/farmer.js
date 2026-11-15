@@ -51,7 +51,7 @@ export async function farmerView(ctx) {
   const st = stabItem(item);
   const recentIso = data.events.filter((e) => (e.type === 'isolation' || e.type === 'disposal') && (!sido || e.sido === sido));
 
-  ctx.title = '농가 판단 도구 — 갈아엎기·출하·원정대 손익 | 맛남의 광장';
+  ctx.title = '농가 판단 도구 — 갈아엎기·출하·원정대 손익 | 구출장터';
   ctx.description = '출하정지·산지폐기 약정 물량인지 먼저 확인하고, 갈아엎기·직접 출하·구출 원정대 중 무엇이 더 남는지 평당 손익으로 비교해요.';
 
   ctx.el.innerHTML = `<section class="page wrap farmer">
@@ -144,7 +144,7 @@ export async function farmerView(ctx) {
 
     <section class="step-card" id="step3" aria-labelledby="h-s3" hidden>
       <h2 id="h-s3"><span class="step-no">3</span>연결·나눔</h2>
-      <p>받을 곳(식당·가공업체·급식)을 찾고 있다면 <b>농가 연결 신청</b>을 남겨 주세요. 맞는 곳이 있으면 양쪽에 먼저 동의를 받은 뒤 서로 소개해 드려요. 값과 조건은 직접 정하고, 맛남의 광장은 물건이나 대금을 받지 않아요.</p>
+      <p>받을 곳(식당·가공업체·급식)을 찾고 있다면 <b>농가 연결 신청</b>을 남겨 주세요. 맞는 곳이 있으면 양쪽에 먼저 동의를 받은 뒤 서로 소개해 드려요. 값과 조건은 직접 정하고, 구출장터는 물건이나 대금을 받지 않아요.</p>
       <p class="notice warn" id="s3-pledge"><span><b>신청 폼에서 한 번 더 확인해요: 출하정지·산지폐기 약정 물량이 아닌가요?</b> 약정 물량은 연결 신청을 할 수 없어요. 약정 외 물량(의무 50% 초과분, 규격외·비상품)만 남겨 주세요.</span></p>
       <div class="btns">${joinCta({ role: 'farmer', sido, sigungu, item }, { label: '농가 연결 신청', cls: 'btn primary' }).replace('<a ', '<a id="go-join" ')}</div>
       <div class="s3-grid">

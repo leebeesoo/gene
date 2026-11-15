@@ -39,7 +39,7 @@ export async function processView(ctx) {
   const q = ctx.query;
   const sel = procFor(q.get('item'));
   const cat = PROC_CATS.some((c) => c.id === q.get('cat')) ? q.get('cat') : '';
-  ctx.title = '가공 연결 — 남는 농수산물, 버리기 전에 가공 | 맛남의 광장';
+  ctx.title = '가공 연결 — 남는 농수산물, 버리기 전에 가공 | 구출장터';
   ctx.description = '감귤·사과·배추·무·양파·마늘·굴 등 남는 농수산물을 집에서 할 수 있는 가공과 업체에 맡길 가공, 대략 수율·보관·식품 안전 메모로 정리했어요.';
   const items = PROCESSING.filter((p) => !cat || p.cat === cat);
   const catChip = (id, label) => `<a class="chip ${cat === id ? 'on' : ''}" href="#/process${id ? `?cat=${id}` : ''}"${cat === id ? ' aria-current="true"' : ''}>${esc(label)}</a>`;

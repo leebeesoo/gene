@@ -20,7 +20,7 @@ export const CONFIG = {
   // 문의·제보 이메일 — 배포 전에 실제 주소로 바꾸세요 (폼이 없을 때 제보 버튼도 이 주소로 메일을 엶)
   CONTACT_EMAIL: 'gdf0620@gmail.com',
 
-  ADSENSE_CLIENT: 'ca-pub-XXXXXXXXXXXXXXXX',
+  ADSENSE_CLIENT: 'ca-pub-8074161899415977',
   ADSENSE_SLOT: '0000000000', // 디스플레이(인피드·사각)
   ADSENSE_SLOT_MULTIPLEX: '0000000000', // 멀티플렉스(음식 화면 끝)
 };

@@ -101,7 +101,7 @@ function miniTests(exclude = '') {
 }
 function adSlotTpl(kind = 'display') {
   const multi = kind === 'multiplex';
-  return `<aside class="jl-ad${multi ? ' jl-ad--multiplex' : ''}" aria-label="광고"><small>광고</small><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" ${multi ? 'data-ad-format="autorelaxed"' : 'data-ad-format="auto" data-full-width-responsive="true"'}></ins></aside>`;
+  return `<aside class="jl-ad${multi ? ' jl-ad--multiplex' : ''}" aria-label="광고"><small>광고</small><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8074161899415977" data-ad-slot="0000000000" ${multi ? 'data-ad-format="autorelaxed"' : 'data-ad-format="auto" data-full-width-responsive="true"'}></ins></aside>`;
 }
 /* 인주 도장: 유형 한자를 세로로 찍은 낙관 */
 function sealHTML(id, cls = '') {
