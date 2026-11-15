@@ -64,7 +64,7 @@
 - [ ] **애드센스 가입** (adsense.google.com, 사이트 `jaemilab.net`, 결제 프로필 이름 = 신분증 이름) → 게시자 ID(pub-…) Claude에게. **검토 요청은 Claude가 「지금」이라고 할 때** (서치콘솔 색인 뒤, 보통 1~3주). 공략: `docs/adsense-strategy.md`
 - [ ] **소원명당(가칭, `/wish/`) 이름 정하기** — 추천: 소원명당 / 소원지도 / 빌러가는길 중 고르기
 - [ ] **소원명당 TourAPI 키** (선택, 사진·주소 보강용): data.go.kr에서 「한국관광공사_국문 관광정보 서비스」(15101578) 활용신청 → 같은 일반 인증키라 `DATA_GO_KR_KEY` 하나로 됨
-- [ ] **소원명당 문구·사진 검토** — 1차가 만들어지면 미리보기로 보고 고칠 곳 알려 주기
+- [ ] **소원명당 문구 검토** — 1차 완성(39곳, 29쪽, `wish/`, 커밋 전). 미리보기 https://claude.ai/artifact/EeCj4QdQJAJpJf3A65j2d9 . 「사실」/「전해지는 이야기」 구분, 칠장사 2023년 화재 언급, 대략 좌표 6곳(돌할매·꽃지·솥바위·전의초수·진도 바닷길·승산마을) 확인. 사진 0장(직접 찍은 사진 있으면 주기). 허브·푸터·사이트맵 연결은 이름 확정 후
 - [ ] **(선택) 「맛남의 광장」 이름 바꿀지** — SBS 예능과 같은 이름이라 혼동·상표 위험 (`docs/brand-name.md`)
 - [ ] 애드센스: adsense.google.com 가입(jaemilab.net) → 게시자 ID(pub-…) Claude에게 전달 → Claude가 넣고 배포 → 검토 요청 (`docs/adsense-setup.md`)
 - [ ] 공공데이터포털 인증키: GitHub Settings → Secrets → Actions → `DATA_GO_KR_KEY` (활용신청 3개: 15141809, 15141808, 15141818)
