@@ -59,18 +59,21 @@ async function collectKamis(doc, status) {
   const certKey = env.KAMIS_CERT_KEY, certId = env.KAMIS_CERT_ID;
   if (!certKey || !certId) { status.kamis = 'skip: KAMIS_CERT_KEY/KAMIS_CERT_ID 없음'; return; }
   const rows = [];
+  const seen = []; // 비었을 때 KAMIS가 준 코드(원인 확인용, 키 값은 남기지 않음)
   let regdayUsed = null;
   for (const { code } of L.KAMIS_CATEGORIES) {
     for (let back = 0; back <= 6; back++) {
       const regday = L.shiftDate(TODAY, -back);
       const url = L.kamisUrl({ certKey, certId, regday, category: code });
       vlog('KAMIS', redact(url));
-      const r = L.parseKamis(await fetchJson(url), { regday, category: code });
+      const j = await fetchJson(url);
+      const r = L.parseKamis(j, { regday, category: code });
+      if (r.status === 'empty' && back === 0) seen.push(`${code}:${Array.isArray(j?.data) ? j.data[0] : (j?.data?.error_code ?? Object.keys(j || {}).join('/'))}`);
       if (r.status === 'error') throw new Error(`KAMIS error_code ${r.code}`);
       if (r.status === 'ok') { rows.push(...r.rows); regdayUsed = regdayUsed && regdayUsed > regday ? regdayUsed : regday; break; }
     }
   }
-  if (!rows.length) throw new Error('KAMIS: 최근 7일 조사값 없음');
+  if (!rows.length) throw new Error(`KAMIS: 최근 7일 조사값 없음 (응답 코드 ${seen.join(' ') || '-'})`);
   doc.metrics = L.replaceMetrics(doc.metrics, 'kamis-daily', rows);
   status.kamis = `ok: ${rows.length}품목 (${regdayUsed})`;
 }
