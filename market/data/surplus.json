@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_at": "2026-11-12T19:44:31+09:00",
+  "generated_at": "2026-11-16T13:39:08+09:00",
   "sources": [
     {
       "id": "kamis",
@@ -8,6 +8,13 @@
       "url": "https://www.kamis.or.kr",
       "license": "공공데이터",
       "as_of": "2026-10"
+    },
+    {
+      "id": "at",
+      "name": "aT 전국 공영도매시장 정산정보",
+      "url": "https://www.data.go.kr/data/15141809/openapi.do",
+      "license": "공공데이터(이용허락범위 제한 없음)",
+      "as_of": "2026-11-15"
     },
     {
       "id": "news",
@@ -530,8 +537,8 @@
         "as_of": "2026-10"
       },
       "support": {
-        "program": "수급대책",
-        "note": "정부·지자체 수급대책(시장격리·출하조절) 진행 중 — 보상은 해당 물량만"
+        "program": null,
+        "note": "정부 폐기 보상 대상 아님 — 판매·나눔 가능"
       },
       "event_ids": [
         "2026-10-13-kr-ssal"
@@ -830,7 +837,38 @@
       "source_id": "news"
     }
   ],
-  "auction_lows": [],
+  "auction_lows": [
+    {
+      "date": "2026-11-15",
+      "market": "익산",
+      "sido": "전북",
+      "sigungu": "익산시",
+      "item": "배추",
+      "variety": "포장배추",
+      "grade": null,
+      "unit_kg": 10,
+      "price": 100,
+      "price_per_kg": 10,
+      "avg_price_per_kg": 49,
+      "ratio": 0.2,
+      "qty": 100
+    },
+    {
+      "date": "2026-11-15",
+      "market": "익산",
+      "sido": "전북",
+      "sigungu": "익산시",
+      "item": "배추",
+      "variety": "포장배추",
+      "grade": null,
+      "unit_kg": 10,
+      "price": 140,
+      "price_per_kg": 14,
+      "avg_price_per_kg": 49,
+      "ratio": 0.29,
+      "qty": 100
+    }
+  ],
   "forecasts": [
     {
       "item": "배추",
@@ -960,6 +998,25 @@
       "url": "https://aglook.krei.re.kr/main/uObserveMonth/OVR0000000013?queryType=2026&queryType2=8055",
       "note": "KREI 과일관측 2026년 11월호",
       "key": "manual||사과"
+    },
+    {
+      "key": "at-lows|전북|익산시|배추|2026-11-15",
+      "origin": "at-lows",
+      "source_id": "at",
+      "sido": "전북",
+      "sigungu": "익산시",
+      "item": "배추",
+      "category": "veg",
+      "price": null,
+      "unit": null,
+      "price_basis": null,
+      "price_vs_normal_pct": null,
+      "price_vs_last_year_pct": null,
+      "volume_vs_normal_ratio": null,
+      "auction_lows": 2,
+      "min_ratio": 0.2,
+      "market": "전국 공영도매시장",
+      "as_of": "2026-11-15"
     },
     {
       "key": "kamis-monthly||배추",
