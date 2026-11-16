@@ -533,7 +533,7 @@ ${crumbs([['출처 확인 기준', null]], up)}
   const dayIdx = Math.floor(Date.parse(TODAY) / 864e5);
   const first = byId[pool[dayIdx % pool.length].id];
   const ok = quotes.filter(q => q.status === '확인됨').length;
-  const title = `${BRAND} — 졸업·위로·새해 상황별 명언 모음, 원문과 출처까지`;
+  const title = `상황별 명언 모음 · 졸업·위로·새해 명언 원문과 출처 | ${BRAND}`;
   const desc = `졸업·수능·위로·새해·결혼 등 상황별로 고른 명언 ${quotes.length}개. 원문과 출처, 우리말 번역, 진짜 그 사람이 한 말인지까지 확인했어요. 카톡으로 명언 카드를 보낼 수 있어요.`;
   const body = `<div class="wrap">
 <section class="home-head">

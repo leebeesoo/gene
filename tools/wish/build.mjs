@@ -274,7 +274,7 @@ function buildIndex() {
   const sorted = places.slice().sort((a, b) => REGIONS.findIndex(r => r[0] === a.sido) - REGIONS.findIndex(r => r[0] === b.sido));
   const typeCounts = TYPES.map(t => `${t.short} ${places.filter(p => p.wishTypes.includes(t.key)).length}곳`).join(', ');
   const html = head({
-    title: `${SERVICE} — 소원 빌러 가는 곳 지도 | ${SITE}`,
+    title: `소원 비는 곳 · 전국 소원 명소 지도 | ${SERVICE}`,
     desc: `합격·건강·사랑·재물·자녀·새해·무사안녕, 소원 이야기가 전하는 전국 ${places.length}곳을 지도와 목록으로. 출처 2곳 이상 대조, 카카오맵·네이버 지도 길찾기.`,
     path: '', up, ads: true,
     jsonld: { '@context': 'https://schema.org', '@graph': [
@@ -329,7 +329,7 @@ function buildType(t) {
   const list = places.filter(p => p.wishTypes.includes(t.key));
   const intro = TYPE_INTRO[t.key];
   const html = head({
-    title: `${t.h1} ${list.length}곳 — ${SERVICE} | ${SITE}`,
+    title: `${t.h1} ${list.length}곳 · 지도와 가는 길 | ${SERVICE}`,
     desc: `${intro[0].slice(0, 90)}… 전국 ${list.length}곳의 이야기·가는 길·예절과 출처.`,
     path: `type/${t.slug}/`, up, ads: true,
     jsonld: { '@context': 'https://schema.org', '@graph': [itemListLd(`${t.h1}`, list), crumbLd([[SERVICE, BASE], [t.h1, `${BASE}type/${t.slug}/`]])] }
@@ -360,7 +360,7 @@ function buildRegion(k) {
   const h1 = `${name} 소원 명소 ${list.length}곳`;
   const g = GEO.regions[k];
   const html = head({
-    title: `${h1} — ${SERVICE} | ${SITE}`,
+    title: `${h1} · 지도와 가는 길 | ${SERVICE}`,
     desc: `${REGION_INTRO[k].slice(0, 100)}…`,
     path: `region/${k}/`, up, ads: true,
     jsonld: { '@context': 'https://schema.org', '@graph': [itemListLd(h1, list), crumbLd([[SERVICE, BASE], [h1, `${BASE}region/${k}/`]])] }
