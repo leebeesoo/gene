@@ -4,7 +4,7 @@
 
 ## 사장님 규칙
 - 사장님께 보이는 글은 한글, 첫 줄 결론, 쉬운 말.
-- 커밋·푸시는 사장님이 말할 때만. (커밋까지만 하라고 하면 푸시하지 않음)
+- 커밋·푸시: 2026-11-16부터 Claude가 검사(빌드·테스트)를 통과하면 묻지 않고 바로 올리고 결과만 알린다(사장님 「그냥 해」). 사장님 손이 가는 일은 최대한 만들지 않는다.
 - 긴 작업은 서브에이전트로 나눠 동시에. 결과는 화면을 직접 확인한 뒤 보고.
 - 무료 도구만: Cloudflare Pages(무료) + 구글 시트·폼 + GitHub Actions. 유료는 도메인 하나.
 - 도메인 하나 아래 하위 경로로 10개 서비스.
@@ -63,7 +63,7 @@
 | (선택) 구글 폼 2개 | 미뤄도 됨 | 없으면 신청·제보가 문의 메일로 열림. 만들 때는 `docs/google-forms.md` (이 클라우드 대화는 사장님 크롬을 조작할 수 없음) |
 | (선택) 제철식당 시트 CSV 게시 | 미뤄도 됨 | 시트 탭 5개 「파일 → 공유 → 웹에 게시 → CSV」 주소 5개를 Claude에게 |
 | (선택) 속마음 칠판 실시간 | 애드센스 승인 뒤 | `workers/donkey-live/README.md`. 안 해도 「혼자 외치기」로 동작 |
-| PR 머지 후 빌드 브랜치 변경 | 머지할 때 | Cloudflare Worker `gene` 설정에서 빌드 브랜치를 `main`으로 |
+| (안 해도 됨) Cloudflare 배포 브랜치 | 그대로 둠 | 매일 수집 데이터는 배포 브랜치 `claude/epic-ramanujan-ddvniq`로 바로 커밋되게 바꿈(`.github/workflows/surplus-data.yml`의 DEPLOY_BRANCH). 나중에 main으로 바꾸면 DEPLOY_BRANCH도 main으로. |
 
 ### ✅ 끝난 것
 - 도메인 **jaemilab.net** 구매·연결, Cloudflare **Workers** 프로젝트 `gene` 자동 배포(브랜치 `claude/epic-ramanujan-ddvniq`, 빌드 `node tools/seo/build.mjs`, 배포 `npx wrangler deploy`, 설정 `wrangler.jsonc`)
