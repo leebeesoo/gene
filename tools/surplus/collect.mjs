@@ -70,6 +70,8 @@ async function collectKamis(doc, status) {
       const r = L.parseKamis(j, { regday, category: code });
       if (r.status === 'empty' && back === 0) seen.push(`${code}:${Array.isArray(j?.data) ? j.data[0] : (j?.data?.error_code ?? Object.keys(j || {}).join('/'))}`);
       if (r.status === 'error') throw new Error(`KAMIS error_code ${r.code}`);
+      // 오늘 자료가 아직 안 올라오면 KAMIS는 정상(000)으로 답하되 값이 「-」뿐이다 → 하루 전으로 계속
+      if (r.status === 'ok' && !r.rows.length) { if (back === 0) seen.push(`${code}:000(값 없음)`); continue; }
       if (r.status === 'ok') { rows.push(...r.rows); regdayUsed = regdayUsed && regdayUsed > regday ? regdayUsed : regday; break; }
     }
   }
