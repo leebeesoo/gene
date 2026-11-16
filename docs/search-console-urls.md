@@ -4,17 +4,17 @@
 방법: https://search.google.com/search-console → 맨 위 「URL 검사」에 주소 붙여 넣기 → 엔터 → 「색인 생성 요청」.
 「할당량 초과」가 뜨면 그날은 멈추고 다음 날 이어서.
 
-## 1일차 — 서비스 첫 화면
-- [ ] https://jaemilab.net/
-- [ ] https://jaemilab.net/lotto/
-- [ ] https://jaemilab.net/money/
-- [ ] https://jaemilab.net/silver/
-- [ ] https://jaemilab.net/lottomap/
-- [ ] https://jaemilab.net/quotes/
-- [ ] https://jaemilab.net/wish/
-- [ ] https://jaemilab.net/season/
-- [ ] https://jaemilab.net/names/
-- [ ] https://jaemilab.net/lifeclock/
+## 1일차 — 서비스 첫 화면 (2026-11-16 요청 완료)
+- [x] https://jaemilab.net/
+- [x] https://jaemilab.net/lotto/
+- [x] https://jaemilab.net/money/
+- [x] https://jaemilab.net/silver/
+- [x] https://jaemilab.net/lottomap/
+- [x] https://jaemilab.net/quotes/
+- [x] https://jaemilab.net/wish/
+- [x] https://jaemilab.net/season/
+- [x] https://jaemilab.net/names/
+- [x] https://jaemilab.net/lifeclock/
 
 ## 2일차 — 나머지 첫 화면과 사이트 소개
 - [ ] https://jaemilab.net/birthyear/
