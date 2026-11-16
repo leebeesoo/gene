@@ -1,0 +1,15 @@
+/* 혹시나랩 공용 광고 칸
+ * 기본은 자리도 「광고」 라벨도 없음(높이 0). 애드센스가 칸을 채우면(ins[data-ad-status="filled"])
+ * ads.js가 .jl-ad--filled를 붙여 그때만 칸·라벨·여백이 보인다. 안 채워지면 .jl-ad--empty로 완전히 접는다.
+ * 높이 0이어도 너비는 그대로라 반응형 광고 요청(availableWidth)은 정상으로 나간다.
+ * 게시자 ID가 아직 자리표시(ca-pub-XXXX…)면 ads.js가 <html>에 .jl-ads-off를 붙이고 아무것도 요청하지 않는다. */
+.jl-ad{display:block;margin:48px auto;max-width:100%;text-align:center;position:relative}
+.jl-ad > small{display:block;font-size:12px;line-height:1;color:var(--muted,#7a7670);text-align:left;margin:0 0 6px;letter-spacing:0}
+.jl-ad ins.adsbygoogle{display:block}
+/* 채워지기 전: 공간 0, 라벨 숨김. 사이트별 여백(.ad-slot .jl-ad 등)보다 우선 */
+.jl-ad:not(.jl-ad--filled){height:0!important;min-height:0!important;margin-top:0!important;margin-bottom:0!important;padding:0!important;border:0!important;overflow:hidden}
+.jl-ad:not(.jl-ad--filled) > small{display:none}
+/* 광고 칸만 담은 감싸개(ads.js가 .jl-ad-host를 붙임)도 채워지기 전엔 공간 0 */
+.jl-ad-host:not(.jl-ad-host--filled){height:0!important;min-height:0!important;margin-top:0!important;margin-bottom:0!important;padding-top:0!important;padding-bottom:0!important;border:0!important;overflow:hidden}
+/* 안 채워짐 · 광고 끔 */
+.jl-ad--empty,.jl-ad-host--empty,.jl-ads-off .jl-ad,.jl-ads-off .jl-ad-host{display:none!important}

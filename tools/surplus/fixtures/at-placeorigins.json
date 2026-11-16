@@ -1,0 +1,6 @@
+{
+  "_note": "합성 예시. 구조·필드명은 공공데이터포털 15141818(katCode /placeOrigins) placeOrigins_response 명세(plor_cd, plor_nm)를 따름. 코드값은 테스트용.",
+  "response": {"header": {"resultCode": "00", "resultMsg": "NORMAL SERVICE"},
+    "body": {"dataType": "JSON", "numOfRows": 1000, "pageNo": 1, "totalCount": 2,
+      "items": {"item": [{"plor_cd": "460820", "plor_nm": "전남 해남군"}, {"plor_cd": "460800", "plor_nm": "전남 장흥군"}]}}}
+}

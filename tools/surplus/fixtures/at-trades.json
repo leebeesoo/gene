@@ -1,0 +1,26 @@
+{
+  "_note": "합성 예시. 구조·필드명은 공공데이터포털 15141809(katSale /trades) OpenAPI 명세(swagger)의 trades_response를 따름. 값은 테스트용.",
+  "response": {
+    "header": {"resultCode": "00", "resultMsg": "NORMAL SERVICE"},
+    "body": {
+      "dataType": "JSON", "numOfRows": 1000, "pageNo": 1, "totalCount": 4,
+      "items": {"item": [
+        {"trd_clcln_ymd": "2026-11-10", "whsl_mrkt_cd": "110001", "whsl_mrkt_nm": "서울가락", "corp_cd": "11000101", "corp_nm": "서울청과",
+         "gds_lclsf_cd": "06", "gds_lclsf_nm": "엽경채류", "gds_mclsf_cd": "01", "gds_mclsf_nm": "배추", "gds_sclsf_cd": "02", "gds_sclsf_nm": "가을배추",
+         "trd_se": "경매", "unit_qty": "10", "unit_cd": "12", "unit_nm": "kg", "pkg_cd": "", "pkg_nm": "망", "sz_cd": "", "sz_nm": "", "grd_cd": "11", "grd_nm": "특",
+         "plor_cd": "460820", "plor_nm": "전남 해남군", "unit_tot_qty": "60000", "totprc": "27000000", "avgprc": "4500", "lwprc": "2000", "hgprc": "6500"},
+        {"trd_clcln_ymd": "2026-11-10", "whsl_mrkt_cd": "110001", "whsl_mrkt_nm": "서울가락", "corp_cd": "11000102", "corp_nm": "중앙청과",
+         "gds_lclsf_cd": "06", "gds_lclsf_nm": "엽경채류", "gds_mclsf_cd": "01", "gds_mclsf_nm": "배추", "gds_sclsf_cd": "02", "gds_sclsf_nm": "가을배추",
+         "trd_se": "경매", "unit_qty": "10", "unit_cd": "12", "unit_nm": "kg", "pkg_nm": "망", "grd_nm": "상",
+         "plor_cd": "460820", "plor_nm": "", "unit_tot_qty": "20000", "totprc": "7000000", "avgprc": "3500", "lwprc": "1500", "hgprc": "5000"},
+        {"trd_clcln_ymd": "2026-11-10", "whsl_mrkt_cd": "110001", "whsl_mrkt_nm": "서울가락", "corp_cd": "11000101", "corp_nm": "서울청과",
+         "gds_lclsf_cd": "07", "gds_lclsf_nm": "조미채소류", "gds_mclsf_cd": "04", "gds_mclsf_nm": "쪽파", "gds_sclsf_cd": "00", "gds_sclsf_nm": "쪽파",
+         "trd_se": "경매", "unit_qty": "10", "unit_cd": "12", "unit_nm": "kg", "pkg_nm": "단", "grd_nm": "특",
+         "plor_cd": "460800", "plor_nm": "장흥", "unit_tot_qty": "8000", "totprc": "13600000", "avgprc": "17000", "lwprc": "9000", "hgprc": "25000"},
+        {"trd_clcln_ymd": "2026-11-10", "whsl_mrkt_cd": "110001", "whsl_mrkt_nm": "서울가락", "corp_cd": "11000101", "corp_nm": "서울청과",
+         "gds_lclsf_cd": "10", "gds_lclsf_nm": "화훼류", "gds_mclsf_cd": "01", "gds_mclsf_nm": "장미", "gds_sclsf_cd": "00", "gds_sclsf_nm": "장미",
+         "trd_se": "경매", "unit_qty": "1", "unit_cd": "30", "unit_nm": "속", "plor_cd": "410000", "plor_nm": "경기 고양시", "unit_tot_qty": "300", "totprc": "900000"}
+      ]}
+    }
+  }
+}

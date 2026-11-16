@@ -1,0 +1,14 @@
+{
+  "name": "donkey-live",
+  "private": true,
+  "type": "module",
+  "description": "속마음 칠판 실시간 칠판 중계소 (Cloudflare Worker + Durable Object)",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}

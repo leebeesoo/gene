@@ -1,0 +1,23 @@
+# 속마음 칠판 실시간 중계소 배포 (workers/donkey-live)
+# 사장님이 GitHub Secrets에 CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID 를 넣은 뒤 Actions 화면에서 직접 실행합니다.
+name: donkey-live 배포
+on:
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: 시험
+        run: |
+          node --test donkey/tests/*.test.mjs
+          cd workers/donkey-live && node --test test/*.test.js
+      - name: 배포
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: workers/donkey-live

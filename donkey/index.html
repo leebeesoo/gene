@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MLZPXGS7');</script>
+<!-- End Google Tag Manager -->
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
+<!-- 애드센스 심사 동안 noindex(승인 뒤 이 두 줄 삭제, HANDOFF.md) -->
+<meta name="robots" content="noindex">
+<title>속마음 칠판 — 익명으로 적으면 잠깐 떴다 사라지는 쪽지 칠판</title>
+<meta name="description" content="속마음 칠판은 마음속 한 줄을 익명으로 적으면 지금 접속한 사람들의 칠판에 쪽지처럼 잠깐 떴다가 사라지는 실시간 칠판이에요. 가입 없이 바로 쓰고, 글은 어디에도 저장하지 않아요.">
+<meta name="keywords" content="속마음 칠판, 대나무숲, 임금님 귀는 당나귀 귀, 익명 게시판, 속마음, 털어놓기, 익명 글쓰기, 실시간 칠판, 사라지는 메시지">
+<meta name="theme-color" content="#F6F5F1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121211" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://jaemilab.net/donkey/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="혹시나랩">
+<meta property="og:title" content="속마음 칠판 — 익명으로 적으면 잠깐 떴다 사라지는 쪽지 칠판">
+<meta property="og:description" content="한 줄 적으면 지금 접속한 사람들의 칠판에 잠깐 떴다 사라져요. 가입도 저장도 없어요.">
+<meta property="og:url" content="https://jaemilab.net/donkey/">
+<meta property="og:image" content="https://jaemilab.net/donkey/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="속마음 칠판 — 익명으로 적으면 잠깐 떴다 사라지는 쪽지 칠판">
+<meta name="twitter:description" content="한 줄 적으면 잠깐 떴다 사라지는 실시간 칠판. 가입도 저장도 없어요.">
+<meta name="twitter:image" content="https://jaemilab.net/donkey/og.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23F6F5F1'/%3E%3Cg fill='none' stroke='%231C1B19' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 34c-5-9-5-22 0-26 5 4 5 17 3 26'/%3E%3Cpath d='M42 34c5-9 5-22 0-26-5 4-5 17-3 26'/%3E%3C/g%3E%3Cpath d='M16 42c0-6 7-9 16-9s16 3 16 9-7 14-16 14-16-8-16-14z' fill='%238F6200'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="css/style.css">
+<script>try{var t=localStorage.getItem('donkey.theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "속마음 칠판",
+      "url": "https://jaemilab.net/donkey/",
+      "description": "한 줄 적으면 지금 접속한 사람들의 칠판에 잠깐 떴다가 사라지는 익명 칠판. 회원가입이 없고 글을 저장하지 않습니다.",
+      "applicationCategory": "SocialNetworkingApplication",
+      "operatingSystem": "Any",
+      "inLanguage": "ko",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "KRW" }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "쓴 글은 어디에 저장되나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "저장하지 않습니다. 글은 중계소를 지나 지금 접속한 사람들의 화면에 20초~1분 동안 보였다가 사라집니다. 다만 보는 사람이 화면을 캡처하는 것은 막을 수 없습니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "혼자 외치기 모드는 무엇인가요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "중계소에 연결할 수 없거나 하루 무료 사용량을 넘으면, 쓴 글이 내 화면에만 잠깐 떴다 사라지는 모드로 바뀝니다. 이때도 글은 어디에도 보내거나 저장하지 않습니다." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MLZPXGS7"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<a class="sr-only" href="#msg">쓰기 칸으로 바로가기</a>
+<div class="app">
+  <header class="top">
+    <div class="top-in">
+      <h1 class="brand"><a href="./" aria-label="속마음 칠판 처음으로">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 12.5C6.6 9.3 6.6 4.2 8.3 2.6c1.8 1.4 2 6.4 1.3 9.6"/><path d="M15.5 12.5c1.9-3.2 1.9-8.3.2-9.9-1.8 1.4-2 6.4-1.3 9.6"/><path d="M5.5 16c0-2.6 2.9-4 6.5-4s6.5 1.4 6.5 4-2.9 5.5-6.5 5.5-6.5-2.9-6.5-5.5z"/></svg>
+        <span>속마음 칠판</span></a></h1>
+      <span class="top-sp"></span>
+      <span class="live" id="live" data-mode="connecting" role="status"><i aria-hidden="true"></i><span id="liveText">연결하는 중</span></span>
+      <button class="icon-btn" type="button" id="btnTheme" aria-label="화면 테마 바꾸기">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="head">
+    <div class="head-txt">
+      <p class="guide">속마음을 적어 보세요. 잠깐 보였다 사라져요</p>
+      <p class="guide-sub" id="guideSub">어디에도 저장하지 않아요. 다만 보는 사람이 캡처할 수는 있어요.</p>
+    </div>
+    <div class="head-act">
+      <button class="link-btn" type="button" id="btnRetry" hidden>다시 연결</button>
+    </div>
+  </div>
+
+  <div class="board-wrap">
+    <section class="board" id="board" aria-label="칠판 — 지금 떠 있는 글" aria-describedby="boardHelp">
+      <p class="sr-only" id="boardHelp">글은 20초에서 1분 뒤 사라져요. 글을 누르거나 Tab으로 고르면 맨 앞으로 오고 신고 버튼이 보여요.</p>
+    </section>
+  </div>
+
+  <div class="dock">
+    <section class="care" id="care" hidden aria-labelledby="careTitle">
+      <h2 id="careTitle">혼자 견디지 않아도 돼요</h2>
+      <p id="careMsg">이 글은 다른 사람에게 보내지 않고 내 화면에만 보여요. 지금 이야기 나눌 사람이 필요하면 전화해 주세요.</p>
+      <div class="care-act">
+        <a class="btn btn-primary btn-sm" href="tel:109">자살예방상담전화 109</a>
+        <a class="btn btn-ghost btn-sm" href="tel:1388">청소년상담 1388</a>
+        <button class="btn btn-ghost btn-sm" type="button" id="careClose">닫기</button>
+      </div>
+    </section>
+    <form class="composer" id="composer" autocomplete="off" novalidate>
+      <div class="field">
+        <label class="sr-only" for="msg">속마음 한 줄 (100자까지)</label>
+        <textarea id="msg" name="msg" rows="1" maxlength="120" placeholder="못 한 말을 적어 보세요" enterkeyhint="send" aria-describedby="count status"></textarea>
+        <span class="count num" id="count" aria-hidden="true">0/100</span>
+      </div>
+      <button class="btn btn-primary" type="submit" id="btnSend">외치기</button>
+    </form>
+    <div id="turnstile"></div>
+    <p class="status" id="status" role="status" aria-live="polite"></p>
+    <p class="notice">
+      <span>만 14세 이상 이용을 권해요. 낯선 사람에게 연락처를 알려 주지 마세요.</span>
+      <span>힘들 땐 <a href="tel:109"><b>109</b></a> 자살예방상담전화(24시간)</span>
+      <a href="rules.html">이용규칙·신고</a>
+    </p>
+  </div>
+</div>
+
+<div class="sr-only" id="announce" aria-live="polite" aria-atomic="true"></div>
+
+<main class="wrap more" id="main">
+  <h2>이 칠판은 이렇게 돌아가요</h2>
+  <ul>
+    <li>한 줄(100자까지) 적으면 지금 이 화면을 보고 있는 사람들의 칠판에 쪽지처럼 붙어요. 아무 데나 붙고, 겹칠 수도 있어요.</li>
+    <li>쪽지는 글 길이에 따라 20초에서 1분 뒤 사라지고, 쪽지가 많으면 오래된 것부터 먼저 사라져요.</li>
+    <li>글은 어디에도 저장하지 않아요. 회원가입도 닉네임도 없어요. 다만 보는 사람이 캡처하는 것은 막을 수 없어요.</li>
+    <li>10초에 한 번 쓸 수 있어요. 욕설·성적 표현·혐오, 링크, 전화번호·메신저 아이디는 보내지 않아요.</li>
+    <li>불편한 글은 신고하면 내 화면에서 바로 숨겨지고, 서로 다른 3명이 신고하면 모두에게서 숨겨져요.</li>
+    <li>연결이 안 되거나 하루 무료 사용량을 넘으면 「혼자 외치기」로 바뀌어요. 쓴 글이 내 화면에만 잠깐 떴다 사라져요.</li>
+  </ul>
+  <p>더 자세한 이야기는 <a href="about.html">이야기·사용법</a>에 있어요.</p>
+</main>
+
+<footer class="mini-foot">
+  <nav aria-label="속마음 칠판 안내">
+    <a class="home" href="../">← 혹시나랩 홈</a>
+    <a href="about.html">이야기·사용법</a>
+    <a href="rules.html">이용규칙·신고</a>
+    <a href="privacy.html">개인정보처리방침</a>
+  </nav>
+  <p>© 혹시나랩 · 속마음 칠판 · 쓴 글은 저장하지 않아요</p>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/filter.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

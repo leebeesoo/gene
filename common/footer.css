@@ -1,0 +1,29 @@
+/* 혹시나랩 공용 푸터 — 모든 서비스가 같은 모양을 씁니다. 색은 각 사이트 토큰을 따라가고, 없으면 기본값. */
+.jl-footer{--jf-ink:var(--ink,var(--fg,#1c1c1e));--jf-muted:var(--muted,#6b6b70);--jf-line:var(--line,#e2e0db);--jf-bg:var(--surface,transparent);
+  border-top:1px solid var(--jf-line);margin-top:56px;padding:28px max(16px,env(safe-area-inset-right,0px)) calc(32px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+  font:15px/1.6 "Pretendard Variable",Pretendard,system-ui,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;color:var(--jf-muted)}
+.jl-footer .jf-in{max-width:960px;margin:0 auto;display:grid;gap:16px}
+.jl-footer a{color:inherit}
+.jl-footer .jf-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px}
+.jl-footer .jf-home{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--jf-ink);text-decoration:none;font-size:16px;min-height:44px}
+.jl-footer .jf-home:hover{text-decoration:underline}
+.jl-footer .jf-links{display:flex;flex-wrap:wrap;gap:0 18px;font-size:15px}
+.jl-footer .jf-links a{text-decoration:none;display:inline-flex;align-items:center;min-height:44px}
+.jl-footer .jf-links a:hover{text-decoration:underline}
+.jl-footer details{border-top:1px solid var(--jf-line);padding-top:4px}
+.jl-footer summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;padding:10px 0;font-weight:600;color:var(--jf-ink);font-size:15px;min-height:44px}
+.jl-footer summary::-webkit-details-marker{display:none}
+.jl-footer summary::after{content:"";width:8px;height:8px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);margin:-4px 4px 0 12px;transition:transform .15s}
+.jl-footer details[open] summary::after{transform:rotate(-135deg);margin-top:4px}
+.jl-footer .jf-svc{list-style:none;margin:0 0 8px;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:2px 24px}
+.jl-footer .jf-svc a{display:flex;align-items:center;flex-wrap:wrap;text-decoration:none;min-height:44px;padding:4px 0}
+.jl-footer .jf-svc b{color:var(--jf-ink);font-weight:600;margin-right:8px}
+.jl-footer .jf-body{padding:0 0 12px;font-size:15px}
+.jl-footer .jf-body ul{margin:0;padding-left:18px}
+.jl-footer .jf-notes{font-size:15px}
+.jl-footer .jf-notes p{margin:0 0 4px}
+.jl-footer .jf-site{display:flex;flex-wrap:wrap;gap:0 18px;font-size:14px;border-top:1px solid var(--jf-line);padding-top:4px}
+.jl-footer .jf-site a{text-decoration:none;display:inline-flex;align-items:center;min-height:44px}
+.jl-footer .jf-site a:hover{text-decoration:underline}
+.jl-footer .jf-copy{font-size:14px}
+@media (prefers-reduced-motion:reduce){.jl-footer summary::after{transition:none}}

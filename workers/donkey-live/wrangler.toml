@@ -1,0 +1,30 @@
+# 속마음 칠판 — 실시간 칠판 중계소
+# 배포 방법은 README.md. 도메인 jaemilab.net(2026-11-14 연결), Pages 프로젝트 이름 jaemilab 기준.
+name = "donkey-live"
+main = "src/index.js"
+compatibility_date = "2025-09-01"
+workers_dev = true   # https://donkey-live.<계정>.workers.dev 주소도 켜 둠(같은 도메인 경로가 안 될 때 대신 씀)
+
+# 같은 도메인 아래 /donkey/live 로 받으려면 주석을 풀고 도메인을 넣습니다(도메인이 Cloudflare에 있어야 함).
+# routes = [
+#   { pattern = "jaemilab.net/donkey/live*", zone_name = "jaemilab.net" }
+# ]
+
+[[durable_objects.bindings]]
+name = "BOARD"
+class_name = "Board"
+
+# 무료 플랜은 SQLite형 Durable Object만 됩니다. 저장은 하지 않지만 등록은 이 형식으로.
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Board"]
+
+[vars]
+BOARD_OPEN = "true"          # 비상 정지: "false" 로 바꾸면 모두 「혼자 외치기」 모드
+ALLOWED_ORIGINS = "https://jaemilab.net,https://www.jaemilab.net,https://jaemilab.pages.dev"
+ROOM_MAX = "500"
+DEV_NO_TURNSTILE = "false"   # 내 컴퓨터 시험(wrangler dev)에서만 "true"
+
+# 비밀값은 여기에 적지 않습니다:
+#   npx wrangler secret put TURNSTILE_SECRET   (Turnstile 비밀 키)
+#   npx wrangler secret put IP_SALT            (아무 긴 글자)

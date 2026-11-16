@@ -1,0 +1,13 @@
+# 혹시나랩 https://jaemilab.net/
+User-agent: *
+Allow: /
+Disallow: /docs/
+Disallow: /tools/
+Disallow: /workers/
+Disallow: /.github/
+Disallow: /*/tests/
+Disallow: /*/test/
+Disallow: /donkey/live
+
+
+Sitemap: https://jaemilab.net/sitemap.xml
