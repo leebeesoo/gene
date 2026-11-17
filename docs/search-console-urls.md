@@ -16,41 +16,41 @@
 - [x] https://jaemilab.net/names/
 - [x] https://jaemilab.net/lifeclock/
 
-## 2일차 — 나머지 첫 화면과 사이트 소개
-- [ ] https://jaemilab.net/birthyear/
-- [ ] https://jaemilab.net/family/
-- [ ] https://jaemilab.net/roots/
-- [ ] https://jaemilab.net/sikdang/
-- [ ] https://jaemilab.net/market/
-- [ ] https://jaemilab.net/about
-- [ ] https://jaemilab.net/contact
-- [ ] https://jaemilab.net/silver/age/65/
-- [ ] https://jaemilab.net/silver/age/60/
-- [ ] https://jaemilab.net/silver/age/70/
+## 2일차 — 나머지 첫 화면과 사이트 소개 (2026-11-17 요청 완료)
+- [x] https://jaemilab.net/birthyear/
+- [x] https://jaemilab.net/family/
+- [x] https://jaemilab.net/roots/
+- [x] https://jaemilab.net/sikdang/
+- [x] https://jaemilab.net/market/
+- [x] https://jaemilab.net/about
+- [x] https://jaemilab.net/contact
+- [x] https://jaemilab.net/silver/age/65/
+- [x] https://jaemilab.net/silver/age/60/
+- [x] https://jaemilab.net/silver/age/70/
 
-## 3일차 — 검색이 많은 정보 페이지
-- [ ] https://jaemilab.net/silver/item/basic-pension/
-- [ ] https://jaemilab.net/silver/item/general-checkup/
-- [ ] https://jaemilab.net/silver/item/flu/
-- [ ] https://jaemilab.net/silver/item/shingles/
-- [ ] https://jaemilab.net/silver/item/dentures/
-- [ ] https://jaemilab.net/silver/item/implant/
-- [ ] https://jaemilab.net/money/scam/
-- [ ] https://jaemilab.net/money/scam/voice-phishing/
-- [ ] https://jaemilab.net/money/scam/smishing/
-- [ ] https://jaemilab.net/money/scam/messenger-phishing/
+## 3일차 — 검색이 많은 정보 페이지 (2026-11-17 요청 완료)
+- [x] https://jaemilab.net/silver/item/basic-pension/
+- [x] https://jaemilab.net/silver/item/general-checkup/
+- [x] https://jaemilab.net/silver/item/flu/
+- [x] https://jaemilab.net/silver/item/shingles/
+- [x] https://jaemilab.net/silver/item/dentures/
+- [x] https://jaemilab.net/silver/item/implant/
+- [x] https://jaemilab.net/money/scam/
+- [x] https://jaemilab.net/money/scam/voice-phishing/
+- [x] https://jaemilab.net/money/scam/smishing/
+- [x] https://jaemilab.net/money/scam/messenger-phishing/
 
-## 4일차 — 명언·소원 모음
-- [ ] https://jaemilab.net/quotes/s/graduation/
-- [ ] https://jaemilab.net/quotes/s/comfort/
-- [ ] https://jaemilab.net/quotes/s/newyear/
-- [ ] https://jaemilab.net/quotes/s/exam/
-- [ ] https://jaemilab.net/quotes/s/birthday/
-- [ ] https://jaemilab.net/quotes/s/wedding/
-- [ ] https://jaemilab.net/wish/type/exam/
-- [ ] https://jaemilab.net/wish/type/newyear/
-- [ ] https://jaemilab.net/wish/type/love/
-- [ ] https://jaemilab.net/wish/type/wealth/
+## 4일차 — 명언·소원 모음 (2026-11-17 요청 완료)
+- [x] https://jaemilab.net/quotes/s/graduation/
+- [x] https://jaemilab.net/quotes/s/comfort/
+- [x] https://jaemilab.net/quotes/s/newyear/
+- [x] https://jaemilab.net/quotes/s/exam/
+- [x] https://jaemilab.net/quotes/s/birthday/
+- [x] https://jaemilab.net/quotes/s/wedding/
+- [x] https://jaemilab.net/wish/type/exam/
+- [x] https://jaemilab.net/wish/type/newyear/
+- [x] https://jaemilab.net/wish/type/love/
+- [x] https://jaemilab.net/wish/type/wealth/
 
 ## 5일차 이후
 나머지(명언 인물·진위 확인, 소원명당 지역·장소, 혜택 항목 등 약 110쪽)는 사이트맵으로 구글이 알아서 찾아간다. 위 40개를 끝냈으면 요청은 그만해도 된다.
