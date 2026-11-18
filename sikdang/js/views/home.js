@@ -19,12 +19,12 @@ export async function homeView(ctx) {
   })();
 
   const el = ctx.el;
-  el.innerHTML = `<section class="hero wrap" aria-labelledby="feat-name">
+  el.innerHTML = `<div class="hero-band"><section class="hero wrap" aria-labelledby="feat-name">
       <p class="eyebrow"><span class="num">${m}월</span>의 제철 메뉴 · <span data-where>전국</span></p>
       <div class="feature" data-feature></div>
       <p class="phnote">${PHOTO_NOTE}. 식당의 실제 음식 사진이 아니에요.</p>
     </section>
-    <section class="wrap locbar" data-loc aria-live="polite"></section>
+    <section class="wrap locbar" data-loc aria-live="polite"></section></div>
     <section class="wrap" data-near hidden></section>
     <section class="wrap" data-popular>
       <div class="sec-head"><h2 class="sec" data-pop-title>${m}월, 전국에서 제철</h2><a class="more" href="#/regions">지역 전체</a></div>

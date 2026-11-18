@@ -1,16 +1,18 @@
 /* 속마음 칠판 — 실시간 칠판 (DESIGN.md: 그라데이션·블러·글로우 없음, 포인트 색 1개, 카드 12px, 1px 선) */
 :root {
-  --bg: #F6F5F1;
+  --bg: #FFFBF5;              /* 따뜻한 흰 바탕 */
   --surface: #FFFFFF;
   --ink: #1C1B19;
   --ink-2: #45423D;
-  --muted: #6E6A62;
-  --line: #E4E2DA;
-  --accent: #8F6200;          /* 겨자(당나귀 털빛) — 버튼 선택·핵심 숫자·내 글 테두리에만 */
-  --accent-soft: #F6EEDB;
+  --muted: #625E56;           /* 바탕·면·칠판·쪽지 모두 5:1 이상 */
+  --line: #E6E2D8;
+  --accent: #855B00;          /* 겨자(당나귀 털빛) — 버튼·선택·핵심 숫자·내 글 테두리 */
+  --accent-soft: #F3EFE6;
+  --tint: #F3EFE6;            /* 색 면: 포인트 색 10% + 흰색 (상단바·칠판) */
+  --tint-line: #DDD1B8;
   --note: #FCF8EE;            /* 쪽지 바탕: 포인트 색을 아주 옅게 */
-  --note-line: #E7DEC6;
-  --btn: #1C1B19;
+  --note-line: #DCCFB0;
+  --btn: #855B00;
   --on-btn: #FFFFFF;
   --sheet-shadow: 0 8px 24px -12px rgba(0, 0, 0, .12);
   --r: 12px;
@@ -20,14 +22,14 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #121211; --surface: #1A1917; --ink: #EDEBE6; --ink-2: #CFCBC3; --muted: #959188; --line: #2D2B27;
-    --accent: #D8AE52; --accent-soft: #2B261B; --note: #221F1A; --note-line: #39342A; --btn: #EDEBE6; --on-btn: #121211;
+    --bg: #17161A; --surface: #1E1D22; --ink: #EDEBE6; --ink-2: #CFCBC3; --muted: #A7A398; --line: #34333A;
+    --accent: #D8AE52; --accent-soft: #342E28; --tint: #342E28; --tint-line: #54482F; --note: #221F1A; --note-line: #4A4234; --btn: #D8AE52; --on-btn: #17161A;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #121211; --surface: #1A1917; --ink: #EDEBE6; --ink-2: #CFCBC3; --muted: #959188; --line: #2D2B27;
-  --accent: #D8AE52; --accent-soft: #2B261B; --note: #221F1A; --note-line: #39342A; --btn: #EDEBE6; --on-btn: #121211;
+  --bg: #17161A; --surface: #1E1D22; --ink: #EDEBE6; --ink-2: #CFCBC3; --muted: #A7A398; --line: #34333A;
+  --accent: #D8AE52; --accent-soft: #342E28; --tint: #342E28; --tint-line: #54482F; --note: #221F1A; --note-line: #4A4234; --btn: #D8AE52; --on-btn: #17161A;
   color-scheme: dark;
 }
 
@@ -47,17 +49,17 @@ a.sr-only:focus { position: fixed; top: 8px; left: 8px; width: auto; height: aut
 .wrap { max-width: 720px; margin: 0 auto; padding: 0 16px; }
 
 /* 상단바 */
-.top { background: var(--bg); border-bottom: 1px solid var(--line); }
+.top { background: var(--tint); border-bottom: 1px solid var(--tint-line); }
 .top-in { max-width: 1280px; margin: 0 auto; padding: 8px 16px; display: flex; align-items: center; gap: 10px; min-height: 56px; }
 .brand { margin: 0; font-size: 16px; font-weight: 700; letter-spacing: -.02em; display: flex; align-items: center; gap: 8px; }
 .brand a { text-decoration: none; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; }
 .brand svg { width: 24px; height: 24px; color: var(--accent); flex: none; }
 .top-sp { flex: 1; }
-.icon-btn { width: 40px; height: 40px; border-radius: var(--r-btn); border: 1px solid var(--line); background: var(--surface); display: grid; place-items: center; cursor: pointer; flex: none; }
+.icon-btn { width: 40px; height: 40px; border-radius: var(--r-btn); border: 1px solid var(--tint-line); background: var(--surface); display: grid; place-items: center; cursor: pointer; flex: none; }
 .icon-btn svg { width: 20px; height: 20px; }
 
 /* 「지금 N명」 */
-.live { display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font-size: 14px; font-weight: 500; color: var(--ink-2); white-space: nowrap; }
+.live { display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--tint-line); background: var(--surface); font-size: 14px; font-weight: 500; color: var(--ink-2); white-space: nowrap; }
 .live i { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); flex: none; }
 .live b { font-weight: 700; color: var(--ink); }
 .live[data-mode="live"] i { background: var(--accent); }
@@ -74,7 +76,7 @@ a.sr-only:focus { position: fixed; top: 8px; left: 8px; width: auto; height: aut
 
 /* 칠판 */
 .board-wrap { flex: 1; min-height: 0; max-width: 1280px; width: 100%; margin: 0 auto; padding: 0 16px; display: flex; }
-.board { position: relative; flex: 1; min-height: 260px; overflow: hidden; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); contain: layout paint; }
+.board { position: relative; flex: 1; min-height: 260px; overflow: hidden; background: var(--tint); border: 1px solid var(--tint-line); border-radius: var(--r); contain: layout paint; }
 
 /* 쪽지 */
 .note {
@@ -99,14 +101,14 @@ a.sr-only:focus { position: fixed; top: 8px; left: 8px; width: auto; height: aut
 .note:hover .note-meta.others, .note:focus-within .note-meta.others, .note.is-active .note-meta.others { display: flex; }
 .note-act { display: none; }
 .note:hover .note-act, .note:focus-within .note-act, .note.is-active .note-act { display: inline-flex; }
-.note-act { align-items: center; gap: 4px; height: 28px; margin: -6px -6px -6px 0; padding: 0 8px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); font-size: 12px; font-weight: 500; color: var(--ink-2); cursor: pointer; }
+.note-act { align-items: center; gap: 4px; height: 28px; margin: -6px -6px -6px 0; padding: 0 8px; border: 1px solid var(--note-line); border-radius: 999px; background: var(--surface); font-size: 12px; font-weight: 500; color: var(--ink-2); cursor: pointer; }
 .note-act svg { width: 14px; height: 14px; }
 .note-act:hover { border-color: var(--muted); }
 
 /* 예시 쪽지 (진짜 글처럼 보이지 않게: 점선, 바탕 없음, 회색) */
-.note.example { background: transparent; border: 1px dashed var(--line); color: var(--muted); }
-.note.example .chip { display: inline-block; height: 20px; padding: 0 8px; margin-right: 6px; border-radius: 999px; border: 1px solid var(--line); font-size: 12px; line-height: 18px; font-weight: 700; color: var(--muted); vertical-align: 1px; }
-.note.example:hover { border-color: var(--line); transform: translate(var(--x, 0), var(--y, 0)) rotate(var(--rot, 0deg)); }
+.note.example { background: transparent; border: 1px dashed var(--tint-line); color: var(--muted); }
+.note.example .chip { display: inline-block; height: 20px; padding: 0 8px; margin-right: 6px; border-radius: 999px; border: 1px solid var(--tint-line); font-size: 12px; line-height: 18px; font-weight: 700; color: var(--muted); vertical-align: 1px; }
+.note.example:hover { border-color: var(--tint-line); transform: translate(var(--x, 0), var(--y, 0)) rotate(var(--rot, 0deg)); }
 .board-empty-label { position: absolute; right: 12px; bottom: 10px; margin: 0; font-size: 12px; color: var(--muted); }
 
 /* 쓰기 칸 */

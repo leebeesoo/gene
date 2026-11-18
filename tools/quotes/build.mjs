@@ -117,8 +117,8 @@ ${GTM_HEAD}
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
-${noindex ? '<meta name="robots" content="noindex,follow">\n' : ''}<meta name="theme-color" content="#F7F6F3" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#121113" media="(prefers-color-scheme: dark)">
+${noindex ? '<meta name="robots" content="noindex,follow">\n' : ''}<meta name="theme-color" content="#F4EBF1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#3B303C" media="(prefers-color-scheme: dark)">
 <link rel="canonical" href="${canonical}">
 <meta property="og:type" content="${ogType}">
 <meta property="og:site_name" content="혹시나랩">

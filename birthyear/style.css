@@ -1,20 +1,23 @@
 /* 나때연감 — 시선 끌기, "그해 신문 1면" (docs/design-direction.md) */
 :root {
-  --bg: #F2EFE8;
-  --bg-2: #E9E5DC;
-  --card: #FBFAF6;
-  --card-2: #F2EFE8;
+  --bg: #FBF7F0;
+  --bg-2: #F3ECE1;
+  --card: #FFFFFF;
+  --card-2: #F7F1E8;
+  --tint: #F8E6DB;      /* red 9% + 크림: 1면·핵심 꼭지 */
+  --tint-2: #F4DBCF;    /* red 15%: 선택·강조 칩 (글자는 ink·muted만) */
+  --tint-line: #EDCDBE;
   --ink: #222020;
   --ink-2: #47433F;
-  --muted: #716C64;
-  --line: #DAD4C8;
-  --line-2: #C9C2B4;
-  --red: #B23A26;
+  --muted: #645E56;
+  --line: #E6DED1;
+  --line-2: #D3C9B9;
+  --red: #B5341F;
   --red-ink: #FFFFFF;
-  --red-soft: #F3E3DE;
+  --red-soft: #F8E6DB;
   --bar: #CFC8BA;
-  --btn: #222020;
-  --on-btn: #F2EFE8;
+  --btn: #B5341F;
+  --on-btn: #FFFFFF;
   --sheet-shadow: 0 8px 24px -12px rgba(0, 0, 0, .12);
   --radius: 12px;
   --radius-s: 10px;
@@ -25,16 +28,18 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #141312; --bg-2: #22201D; --card: #1D1B19; --card-2: #141312;
-    --ink: #EEE9E0; --ink-2: #CFC9BF; --muted: #9A948A; --line: #302D29; --line-2: #403C36;
-    --red: #CF7B66; --red-ink: #141312; --red-soft: #33231F; --bar: #45413A; --btn: #EEE9E0; --on-btn: #141312;
+    --bg: #17161A; --bg-2: #222026; --card: #1E1D22; --card-2: #17161A;
+    --tint: #3F2C2C; --tint-2: #4B3130; --tint-line: #5C3A36;
+    --ink: #F0EBE2; --ink-2: #D2CCC2; --muted: #A9A39A; --line: #302E33; --line-2: #45424A;
+    --red: #EC7A62; --red-ink: #17161A; --red-soft: #3F2C2C; --bar: #4A464E; --btn: #EC7A62; --on-btn: #17161A;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #141312; --bg-2: #22201D; --card: #1D1B19; --card-2: #141312;
-  --ink: #EEE9E0; --ink-2: #CFC9BF; --muted: #9A948A; --line: #302D29; --line-2: #403C36;
-  --red: #CF7B66; --red-ink: #141312; --red-soft: #33231F; --bar: #45413A; --btn: #EEE9E0; --on-btn: #141312;
+  --bg: #17161A; --bg-2: #222026; --card: #1E1D22; --card-2: #17161A;
+  --tint: #3F2C2C; --tint-2: #4B3130; --tint-line: #5C3A36;
+  --ink: #F0EBE2; --ink-2: #D2CCC2; --muted: #A9A39A; --line: #302E33; --line-2: #45424A;
+  --red: #EC7A62; --red-ink: #17161A; --red-soft: #3F2C2C; --bar: #4A464E; --btn: #EC7A62; --on-btn: #17161A;
   color-scheme: dark;
 }
 
@@ -369,3 +374,25 @@ button, input, select { font: inherit; color: inherit; }
 .svc-faq summary::after { content: ""; flex: none; width: 8px; height: 8px; margin-right: 4px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: translateY(-3px) rotate(45deg); transition: transform .15s; }
 .svc-faq details[open] summary::after { transform: translateY(2px) rotate(-135deg); }
 .svc-faq details p { margin: 0 0 16px; }
+
+/* 색 입히기 (2026-11): 1면을 붉은 틴트 지면으로, 핵심 꼭지·칩에 틴트, 단색 빨강은 주 버튼·선택 연도만 */
+.front { background: var(--tint); border-bottom-color: var(--tint-line); }
+.front .il-meta, .front .il-meta div, .fp-col, .front .fp-list li { border-color: var(--tint-line); }
+.front .il-meta { border-top-color: var(--ink); }
+.front .fp-list li { border-top-color: var(--tint-line); }
+.front .yn-btn { background: var(--card); border-color: var(--tint-line); }
+.front .reel button[aria-current="true"], .front .reel button.is-mine[aria-current="true"] { background: var(--red); color: var(--red-ink); }
+.ex-tag { background: var(--red); color: var(--red-ink); }
+.chip { background: var(--tint); border-color: var(--tint-line); color: var(--ink); }
+.chip:hover { background: var(--tint-2); border-color: var(--red); color: var(--ink); }
+.year-input { background: var(--card-2); }
+.machine { background: var(--tint); border-color: var(--tint-line); }
+.callout { background: var(--tint); border-radius: 0 var(--radius-s) var(--radius-s) 0; padding: 10px 12px; }
+.callout.plain { background: var(--card-2); }
+.name-chip { background: var(--tint); border-color: var(--tint-line); }
+.buy li { background: var(--tint); border-color: var(--tint-line); }
+.news .mo, .fp-list .mo { color: var(--muted); }
+.opt.ok { background: var(--tint-2); border-color: var(--red); color: var(--ink); box-shadow: inset 0 0 0 1px var(--red); }
+.sec-h h2 .ico { color: var(--red); }
+.icon-btn:hover, .btn-ghost:hover { background: var(--tint); }
+.machine .buy li { background: var(--card); }

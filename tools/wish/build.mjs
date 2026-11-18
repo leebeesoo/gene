@@ -118,8 +118,8 @@ ${GTM_HEAD}
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
-<meta name="theme-color" content="#F6F6F2" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#111210" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#EDF0E7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#36382E" media="(prefers-color-scheme: dark)">
 <link rel="canonical" href="${url}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="${SITE}">
@@ -282,10 +282,12 @@ function buildIndex() {
       itemListLd(`${SERVICE} 전체 장소`, sorted), faqLd] }
   }) + `
 <main id="main" class="wrap" tabindex="-1">
+  <div class="hero">
   <h1>소원 빌러 가는 곳, ${SERVICE}</h1>
   <div class="prose">
-    <p class="lead">합격·건강·사랑·재물·자녀·새해·무사안녕. 무슨 소원을 어디서 빌면 좋을지, 소원 이야기가 전하는 전국 <b class="num">${places.length}</b>곳을 지도와 목록으로 모았어요.</p>
+    <p class="lead">내 소원은 어디서 빌까요? 합격·건강·사랑·재물·자녀·새해·무사안녕, 소원 이야기가 전하는 전국 <b class="num">${places.length}</b>곳을 지도와 목록으로 모았어요.</p>
     <p>장소마다 왜 그런 이야기가 생겼는지, 무엇을 보면 되는지, 어떻게 가는지를 적었어요. 「사실」과 「전해지는 이야기」를 나눠 썼고, 이야기는 모두 「~로 알려진」, 「~라는 이야기가 전해요」로만 적었어요. 결과를 약속하는 곳은 없어요.</p>
+  </div>
   </div>
   ${NOTICE}
   <div class="filters" role="group" aria-label="소원 종류로 고르기">
@@ -335,9 +337,11 @@ function buildType(t) {
     jsonld: { '@context': 'https://schema.org', '@graph': [itemListLd(`${t.h1}`, list), crumbLd([[SERVICE, BASE], [t.h1, `${BASE}type/${t.slug}/`]])] }
   }) + `
 <main id="main" class="wrap" tabindex="-1">
+  <div class="hero">
   <p class="crumb"><a href="${up}">${SERVICE}</a> › 소원 종류 › ${esc(t.short)}</p>
   <h1>${esc(t.h1)} <span class="num">${list.length}</span>곳</h1>
   <div class="prose" style="margin-top:12px">${intro.map(p => `<p>${esc(p)}</p>`).join('')}</div>
+  </div>
   ${NOTICE}
   <div class="chips" style="margin:8px 0 0">${typeChips(up, t.key, false)}</div>
   <div class="board">
@@ -366,10 +370,12 @@ function buildRegion(k) {
     jsonld: { '@context': 'https://schema.org', '@graph': [itemListLd(h1, list), crumbLd([[SERVICE, BASE], [h1, `${BASE}region/${k}/`]])] }
   }) + `
 <main id="main" class="wrap" tabindex="-1">
+  <div class="hero">
   <p class="crumb"><a href="${up}">${SERVICE}</a> › 지역 › ${name}</p>
   <h1>${esc(name)}에서 소원 빌러 가는 곳 <span class="num">${list.length}</span>곳</h1>
   <div class="prose" style="margin-top:12px"><p>${esc(REGION_INTRO[k] || '')}</p>
   <p>${esc(name)}에 모은 곳의 소원 종류는 ${types.map(t => `${t.short} ${list.filter(p => p.wishTypes.includes(t.key)).length}곳`).join(', ')}이에요. 장소마다 사실과 전해지는 이야기를 나눠 적고, 출처와 길찾기 버튼을 달았어요.</p></div>
+  </div>
   ${NOTICE}
   <div class="chips" style="margin:8px 0 0">${regionLinks(up, k)}</div>
   <div class="board">
@@ -405,6 +411,7 @@ function buildPlace(p) {
       crumbLd([[SERVICE, BASE], ...(PAGE_REGIONS.includes(rk) ? [[`${RNAME[rk]} 소원 명소`, `${BASE}region/${rk}/`]] : []), [p.name, `${BASE}p/${p.id}/`]])] }
   }) + `
 <main id="main" class="wrap" tabindex="-1">
+  <div class="hero">
   <p class="crumb"><a href="${up}">${SERVICE}</a> › ${PAGE_REGIONS.includes(rk) ? `<a href="${up}region/${rk}/">${RNAME[rk]}</a>` : RNAME[rk]} › ${esc(p.name)}</p>
   <div class="place-head">
     <div>
@@ -415,6 +422,7 @@ function buildPlace(p) {
       ${directions(p)}
     </div>
     <div class="minimap">${mapSvg({ list: [p], up, sel: rk, hrefFor: () => kakao(p), label: `${p.name} 위치`, viewBox: vb, r: 3 })}<p class="small" style="margin:6px 4px 0">${p.approx ? '대략 위치(가까운 마을·다리·해변 기준)' : '위치: OpenStreetMap'} · 점을 누르면 카카오맵이 열려요</p></div>
+  </div>
   </div>
   ${p.photo ? photoFig(p, up, 'page') : ''}
   <section class="facts" aria-label="사실과 전해지는 이야기">

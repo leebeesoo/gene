@@ -1,15 +1,18 @@
 /* 구출장터 — 심플 모던, "오늘 남는 것 목록" (docs/design-direction.md) */
 :root {
-  --bg: #F3F3EC;
-  --surface: #FBFBF7;
+  --bg: #FCFBF5;
+  --surface: #FFFFFF;
+  --tint: #EAF1EB;      /* accent 10% + 흰색: 첫 화면 목록·알림·선택 */
+  --tint-2: #DEEADF;    /* accent 16%: 선택 칩 (글자는 ink·muted만) */
+  --tint-line: #C9DCCB;
   --ink: #1D211D;
   --ink-2: #3A403A;
-  --muted: #4E554C; /* 더 진하게: 어르신 가독성 (bg 대비 6.9:1) */
-  --line: #DCDDD3;
+  --muted: #4E554C; /* 더 진하게: 어르신 가독성 (bg 7.4:1 · tint 6.8:1) */
+  --line: #E0E0D6;
   --line-strong: #1D211D;
-  --accent: #3E6B3A;
+  --accent: #2D7638;
   --on-primary: #FFFFFF;
-  --primary: #3E6B3A;
+  --primary: #2D7638;
   --warn-bg: #F4EEDF;
   --warn-line: #D9C79A;
   --stop-bg: #F6E7E2;
@@ -34,16 +37,19 @@
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #121412;
-    --surface: #1A1D1A;
+    --bg: #17161A;
+    --surface: #1E1D22;
+    --tint: #2D3832;
+    --tint-2: #334238;
+    --tint-line: #415548;
     --ink: #E6EAE3;
     --ink-2: #C9CEC6;
     --muted: #A9B0A6;
-    --line: #2B2F2A;
+    --line: #302F34;
     --line-strong: #E6EAE3;
-    --accent: #8FB282;
-    --primary: #E6EAE3; /* 다크: 주 버튼은 밝은 잉크로 채우고 글자는 바탕색 */
-    --on-primary: #121412;
+    --accent: #7CC487;
+    --primary: #7CC487; /* 다크: 주 버튼은 밝힌 초록 + 바탕색 글자 (8.7:1) */
+    --on-primary: #17161A;
     --warn-bg: #221F17;
     --warn-line: #4A4230;
     --stop-bg: #261A17;
@@ -506,3 +512,18 @@ section .pr-card { border-top: 1px solid var(--line-strong); }
 .svc-faq summary::after { content: ""; flex: none; width: 8px; height: 8px; margin-right: 4px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: translateY(-3px) rotate(45deg); transition: transform .15s; }
 .svc-faq details[open] summary::after { transform: translateY(2px) rotate(-135deg); }
 .svc-faq details p { margin: 0 0 16px; }
+
+/* 색 입히기 (2026-11): 첫 화면 '오늘 남는 것'을 초록 틴트 면으로, 알림·선택·CTA 띠에 틴트, 단색 초록은 주 버튼·최선 표시만.
+   단계 색(지도·라벨)과 하락 빨강은 데이터라 그대로 */
+.today { background: var(--tint); border-bottom: 1px solid var(--tint-line); padding-bottom: 24px; }
+.today .head { border-bottom-color: var(--tint-line); }
+.today .btn:not(.primary) { background: var(--surface); }
+.nav a.active { border-bottom-color: var(--accent); }
+.notice { background: var(--tint); border-color: var(--tint-line); }
+.role.on { background: var(--tint); border-color: var(--accent); }
+.chip-radio input:checked + span { background: var(--tint-2); border-color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+.chip.on { background: var(--tint-2); border-color: var(--accent); color: var(--ink); box-shadow: inset 0 0 0 1px var(--accent); }
+.best-tag { background: var(--primary); color: var(--on-primary); }
+.step-no { border-color: var(--accent); color: var(--accent); }
+.band { background: var(--tint); border: 1px solid var(--tint-line); border-top: 2px solid var(--accent); border-radius: 0 0 var(--r) var(--r); padding: 20px; }
+.check:has(input:checked) { background: var(--tint); border-color: var(--tint-line); }

@@ -778,7 +778,7 @@
   function drawCard() {
     var W = 1080, H = 1350, c = document.createElement('canvas'); c.width = W; c.height = H;
     var ctx = c.getContext('2d'), F = '"Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif';
-    var BG = '#F6F6F4', SURF = '#FFFFFF', INK = '#16171A', MUTED = '#6B6E75', LINE = '#E4E4E1', ACC = '#D9381E';
+    var BG = '#F6F6F4', SURF = '#FFFFFF', INK = '#16171A', MUTED = '#6B6E75', LINE = '#E4E4E1', ACC = '#C42E16';
     ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
 
     // brand

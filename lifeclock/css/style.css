@@ -1,23 +1,27 @@
 /* 남은봄 — 시선 끌기, "인생 주 격자" (docs/design-direction.md) */
 :root {
-  --bg: #F7F5F2;
-  --bg-2: #EFECE8;
+  --bg: #FFFBF8;
+  --bg-2: #F6EFEC;
   --card: #FFFFFF;
+  --tint: #F8EBEF;      /* blossom 10% + 흰색: 첫 화면·핵심 결과 카드 */
+  --tint-2: #F4DFE5;    /* blossom 16%: 선택 상태 (글자는 ink만) */
+  --tint-line: #EBCFD8;
   --ink: #1E1B1F;
   --ink-2: #48434A;
-  --muted: #75707A;
-  --line: #E7E3DE;
-  --blossom: #C2456A;
-  --blossom-soft: #F8E9EE;
+  --muted: #67616C;
+  --line: #ECE4E1;
+  --blossom: #B9375F;
+  --blossom-soft: #F8EBEF;
   --on-accent: #FFFFFF;
+  /* 데이터 색(주 격자) — 그대로 */
   --dot-lived: #1E1B1F;
   --dot-now: #C2456A;
   --dot-left: #E7E3DE;
   --dot-bonus: #EFECE8;
   --spring: #C2456A;
   --spring-faint: #EBCBD5;
-  --btn: #1E1B1F;
-  --on-btn: #F7F5F2;
+  --btn: #B9375F;
+  --on-btn: #FFFFFF;
   --sheet-shadow: 0 8px 24px -12px rgba(0, 0, 0, .12);
   --r: 12px;
   --r-btn: 10px;
@@ -27,15 +31,17 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #121113; --bg-2: #1F1D21; --card: #1A191C; --ink: #EEEAEC; --ink-2: #CFCAD0; --muted: #948E97; --line: #2D2A30;
-    --blossom: #CC8296; --blossom-soft: #2E2328; --on-accent: #121113; --btn: #EEEAEC; --on-btn: #121113;
+    --bg: #17161A; --bg-2: #222026; --card: #1E1D22; --tint: #3F2D37; --tint-2: #4B333E; --tint-line: #5A3B49;
+    --ink: #F1EDF0; --ink-2: #D3CED4; --muted: #A8A2AB; --line: #2F2C33;
+    --blossom: #EB82A3; --blossom-soft: #3F2D37; --on-accent: #17161A; --btn: #EB82A3; --on-btn: #17161A;
     --dot-lived: #B9B3BB; --dot-now: #CC8296; --dot-left: #2D2A30; --dot-bonus: #1F1D21; --spring: #CC8296; --spring-faint: #4A3540;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #121113; --bg-2: #1F1D21; --card: #1A191C; --ink: #EEEAEC; --ink-2: #CFCAD0; --muted: #948E97; --line: #2D2A30;
-  --blossom: #CC8296; --blossom-soft: #2E2328; --on-accent: #121113; --btn: #EEEAEC; --on-btn: #121113;
+  --bg: #17161A; --bg-2: #222026; --card: #1E1D22; --tint: #3F2D37; --tint-2: #4B333E; --tint-line: #5A3B49;
+  --ink: #F1EDF0; --ink-2: #D3CED4; --muted: #A8A2AB; --line: #2F2C33;
+  --blossom: #EB82A3; --blossom-soft: #3F2D37; --on-accent: #17161A; --btn: #EB82A3; --on-btn: #17161A;
   --dot-lived: #B9B3BB; --dot-now: #CC8296; --dot-left: #2D2A30; --dot-bonus: #1F1D21; --spring: #CC8296; --spring-faint: #4A3540;
   color-scheme: dark;
 }
@@ -322,3 +328,22 @@ details.more .field { margin-top: 14px; }
 .svc-faq summary::after { content: ""; flex: none; width: 8px; height: 8px; margin-right: 4px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: translateY(-3px) rotate(45deg); transition: transform .15s; }
 .svc-faq details[open] summary::after { transform: translateY(2px) rotate(-135deg); }
 .svc-faq details p { margin: 0 0 16px; }
+
+/* 색 입히기 (2026-11): 첫 화면 띠·핵심 결과·선택 상태에 분홍 틴트, 단색 분홍은 주 버튼·핵심 숫자만 */
+.hero { padding-top: 0; }
+.hero-band { background: var(--tint); border-bottom: 1px solid var(--tint-line); padding: 28px 0 2px; margin-bottom: 20px; }
+@media (min-width: 720px) { .hero { padding-top: 0; } .hero-band { padding-top: 48px; } }
+.hero-foot .legend { padding: 0 2px; }
+.ex-tag { background: var(--blossom); color: var(--on-accent); }
+.seg input:checked + label { border-color: var(--blossom); background: var(--tint-2); color: var(--ink); box-shadow: inset 0 0 0 1px var(--blossom); }
+.opt[aria-pressed="true"] { background: var(--tint-2); color: var(--ink); box-shadow: inset 0 0 0 1px var(--blossom); }
+.today { background: var(--tint); border: 1px solid var(--tint-line); border-radius: var(--r); padding: 16px; }
+.trio .main { background: var(--tint); border-color: var(--blossom); }
+.tile.hl { background: var(--tint); }
+.ms.soon, .ms.next { background: var(--tint); border-color: var(--tint-line); }
+.ms.soon { border-color: var(--blossom); }
+.ms.next .ics, .ms.soon .ics { background: var(--card); }
+.mental-cta .ic { background: var(--tint); border-color: var(--tint-line); color: var(--blossom); }
+.ls .item.warn { background: var(--tint); border-color: var(--tint-line); }
+.pres { background: var(--tint); border: 1px solid var(--tint-line); border-radius: var(--r); padding: 14px 16px; }
+.icon-btn:hover, .txt-btn:hover { background: var(--tint); }

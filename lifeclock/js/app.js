@@ -381,7 +381,7 @@
     $('#heroSub').textContent = mine
       ? '지금까지 ' + fmt(s.lived.weeks) + '주를 살았어요. 평균대로라면 분홍 칸만큼의 봄이 남았어요.'
       : '한 칸이 1주, 한 줄이 1년이에요. 지나온 주는 잉크, 앞으로 남은 봄은 분홍으로 칠했어요.';
-    $('#btnFill').textContent = mine ? '다른 생일로 채우기' : '내 격자 채우기';
+    $('#btnFill').textContent = mine ? '다른 생일로 채우기' : '내 벚꽃 횟수 세기';
   }
   function drawWeeks() {
     var cv = $('#lifeGrid'); if (!cv) return;
