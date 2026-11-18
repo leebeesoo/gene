@@ -185,14 +185,14 @@
         <h3>결과 공유하기</h3>
         <p class="cap">친구에게 보내고 누가 더 흔한 이름인지 겨뤄 보세요.</p>
         <div class="actions">
-          <button type="button" class="btn btn-solid" id="btnShareImg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5M5 14v5h14v-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>이미지 공유</button>
+          <button type="button" class="btn btn-tint" id="btnShareImg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5M5 14v5h14v-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>이미지 공유</button>
           <button type="button" class="btn btn-ghost" id="btnCopy"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>링크 복사</button>
         </div>
         <div class="card-preview" id="cardPreview"></div>
       </div>
       <div class="card">
         <h3>친구 이름도 검색</h3>
-        <form class="friend-form" id="friendForm" autocomplete="off"><label class="sr" for="friendIn">친구 이름</label><input id="friendIn" type="text" maxlength="8" placeholder="친구 이름 (예: 이서연)" spellcheck="false"><button class="btn btn-solid" type="submit">검색</button></form>
+        <form class="friend-form" id="friendForm" autocomplete="off"><label class="sr" for="friendIn">친구 이름</label><input id="friendIn" type="text" maxlength="8" placeholder="친구 이름 (예: 이서연)" spellcheck="false"><button class="btn btn-tint" type="submit">검색</button></form>
         <div class="chips" id="friendChips">${FRIENDS.filter(f => f !== st.full).slice(0, 10).map(f => `<button type="button" class="chip" data-raw="${f}">${f}</button>`).join('')}</div>
       </div>
       ${howCard(st, res, sur, same)}

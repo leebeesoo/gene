@@ -98,7 +98,7 @@ p > .link:only-child, .sec-head .link { display: inline-flex; align-items: cente
 .tag { display: inline-block; font-size: var(--fs-min); font-weight: 700; padding: 1px 8px; border: 1px solid var(--line); border-radius: 4px; color: var(--muted); margin-left: 6px; }
 
 /* ── 머리 ── */
-.top { position: sticky; top: 0; z-index: 20; background: var(--bg); border-bottom: 1px solid var(--line); }
+.top, .doc-top { position: sticky; top: 0; z-index: 20; background: var(--tint); border-bottom: 1px solid var(--tint-line); }
 .top-in { display: flex; align-items: center; gap: 8px 24px; flex-wrap: wrap; min-height: 56px; padding-top: 10px; padding-bottom: 0; }
 .word { font: 800 23px/1 var(--f-head); letter-spacing: -0.04em; text-decoration: none; padding: 12px 0; min-height: var(--tap); display: inline-flex; align-items: center; }
 .nav { display: flex; justify-content: space-between; gap: 2px; overflow-x: auto; scrollbar-width: none; width: calc(100% + 12px); margin: 0 -6px; }
@@ -350,9 +350,9 @@ p > .link:only-child, .sec-head .link { display: inline-flex; align-items: cente
   width: 100%; min-height: 54px; padding: 0 14px; border-radius: var(--r);
   border: 1.5px solid var(--muted); background: var(--surface); font-size: 18px;
 }
-.field input:focus, .field select:focus { border-color: var(--ink); outline: none; box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent); }
+.field input:focus, .field select:focus { border-color: var(--ink); outline: none; box-shadow: 0 0 0 2px var(--accent); }
 .input-group { display: flex; align-items: center; border: 1.5px solid var(--muted); border-radius: var(--r); background: var(--surface); }
-.input-group:focus-within { border-color: var(--ink); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent); }
+.input-group:focus-within { border-color: var(--ink); box-shadow: 0 0 0 2px var(--accent); }
 .input-group input { border: 0; background: transparent; box-shadow: none !important; min-width: 0; }
 .suffix { padding: 0 14px; color: var(--ink-2); font-size: 17px; font-weight: 600; white-space: nowrap; }
 .hint { font-size: var(--fs-xs); color: var(--muted); line-height: 1.55; }

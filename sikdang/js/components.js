@@ -23,7 +23,7 @@ export function loadImgs() {
 /** 요리의 재료 키 → 사진 경로(없으면 '') */
 export const ingKey = (d) => d.k || d.ing?.[0] || '';
 export const imgFor = (d) => IMG[ingKey(d)] || '';
-export const PHOTO_NOTE = '사진은 재료 예시 이미지예요';
+export const PHOTO_NOTE = '사진은 AI로 만든 재료 예시 이미지예요';
 
 /** 사진 칸: 사진이 있으면 4:3 이미지, 없으면 같은 크기의 글자 칸 */
 export function photo(d, { eager = false, alt = '' } = {}) {
@@ -90,7 +90,7 @@ export function reportHref(r, reg, dish) {
 
 /** 사이트 공통 안내 한 줄 (식당 목록 위) */
 export const draftNote = () => (CONFIG.PUBLISH_DRAFTS
-  ? `<p class="note">${icon('info')}<span>검수 중인 정보예요, 틀린 곳은 <a href="contact.html">제보해 주세요</a>. 가기 전에 영업 여부를 한 번 더 확인해 주세요.</span></p>`
+  ? `<p class="note">${icon('info')}<span>공공 자료로 모은 정보예요, 틀린 곳은 <a href="contact.html">제보해 주세요</a>. 가기 전에 영업 여부를 한 번 더 확인해 주세요.</span></p>`
   : '');
 
 /** 식당 한 줄 (번호 · 이름 · 주소 · 내는 방식 · 근거 · 출처 · 길찾기) */

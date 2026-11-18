@@ -16,7 +16,7 @@
   /* 데이터 색(주 격자) — 그대로 */
   --dot-lived: #1E1B1F;
   --dot-now: #C2456A;
-  --dot-left: #E7E3DE;
+  --dot-left: #C2BBB3;  /* 남은 주: 바탕 대비 1.85:1 (지나온 주 잉크와는 9:1로 구분) */
   --dot-bonus: #EFECE8;
   --spring: #C2456A;
   --spring-faint: #EBCBD5;
@@ -34,7 +34,7 @@
     --bg: #17161A; --bg-2: #222026; --card: #1E1D22; --tint: #3F2D37; --tint-2: #4B333E; --tint-line: #5A3B49;
     --ink: #F1EDF0; --ink-2: #D3CED4; --muted: #A8A2AB; --line: #2F2C33;
     --blossom: #EB82A3; --blossom-soft: #3F2D37; --on-accent: #17161A; --btn: #EB82A3; --on-btn: #17161A;
-    --dot-lived: #B9B3BB; --dot-now: #CC8296; --dot-left: #2D2A30; --dot-bonus: #1F1D21; --spring: #CC8296; --spring-faint: #4A3540;
+    --dot-lived: #B9B3BB; --dot-now: #CC8296; --dot-left: #4E4A54; --dot-bonus: #1F1D21; --spring: #CC8296; --spring-faint: #4A3540;
     color-scheme: dark;
   }
 }
@@ -42,7 +42,7 @@
   --bg: #17161A; --bg-2: #222026; --card: #1E1D22; --tint: #3F2D37; --tint-2: #4B333E; --tint-line: #5A3B49;
   --ink: #F1EDF0; --ink-2: #D3CED4; --muted: #A8A2AB; --line: #2F2C33;
   --blossom: #EB82A3; --blossom-soft: #3F2D37; --on-accent: #17161A; --btn: #EB82A3; --on-btn: #17161A;
-  --dot-lived: #B9B3BB; --dot-now: #CC8296; --dot-left: #2D2A30; --dot-bonus: #1F1D21; --spring: #CC8296; --spring-faint: #4A3540;
+  --dot-lived: #B9B3BB; --dot-now: #CC8296; --dot-left: #4E4A54; --dot-bonus: #1F1D21; --spring: #CC8296; --spring-faint: #4A3540;
   color-scheme: dark;
 }
 
@@ -66,7 +66,7 @@ img, svg, canvas { display: block; max-width: 100%; }
 .wrap { max-width: 640px; margin: 0 auto; padding: 0 16px; }
 
 /* header */
-.top { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line); }
+.top { position: sticky; top: 0; z-index: 10; background: var(--tint); border-bottom: 1px solid var(--tint-line); }
 .top-in { max-width: 640px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 10px; }
 .brand { display: flex; align-items: center; gap: 8px; text-decoration: none; font-family: var(--serif); font-weight: 700; font-size: 20px; letter-spacing: -.02em; }
 .brand small { font-weight: 500; font-size: 12px; color: var(--muted); letter-spacing: 0; margin-left: 2px; }
@@ -105,6 +105,9 @@ details.more .field { margin-top: 14px; }
 .btn:active { transform: scale(.99); }
 .btn-primary { background: var(--btn); color: var(--on-btn); width: 100%; }
 .btn-ink { background: var(--ink); color: var(--bg); }
+/* 보조 버튼: 색 면 + 색 면 선 + 본문 글자 (꽉 찬 색은 화면마다 주 버튼 하나만) */
+.btn-tint { background: var(--tint); border: 1px solid var(--tint-line); color: var(--ink); }
+.btn-tint:hover { border-color: var(--blossom); }
 .btn-ghost { background: var(--card); border: 1px solid var(--line); color: var(--ink); }
 .btn-ghost:hover { border-color: var(--muted); }
 .btn-sm { height: 44px; font-size: 14px; padding: 0 14px; }
@@ -260,7 +263,7 @@ details.more .field { margin-top: 14px; }
 .jl-ad.ad-end { margin-bottom: 124px; }
 
 /* sources */
-.src { font-size: 14px; color: var(--ink-2); }
+.src { font-size: 14px; color: var(--ink-2); margin-top: 12px; } /* 위 입력 카드와 붙지 않게 */
 .src summary { cursor: pointer; font-weight: 700; }
 .src ul { padding-left: 18px; margin: 8px 0; }
 .src li { margin: 4px 0; }
@@ -295,7 +298,7 @@ details.more .field { margin-top: 14px; }
 .grid-box { max-width: 1008px; margin: 0 auto; display: flex; justify-content: flex-start; }
 #lifeGrid { display: block; max-width: 100%; }
 .hero-foot { margin-top: 12px; }
-.hero-btn { margin: 0 0 22px; }
+.hero-btn { margin: 0 0 22px; width: 100%; }
 .hero .legend { margin: 0; }
 .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--muted); }
 .legend span { display: inline-flex; align-items: center; gap: 6px; }

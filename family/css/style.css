@@ -134,6 +134,9 @@ select.input { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://ww
 .btn-primary:hover { filter: brightness(.94); }
 .btn-dark { background: var(--ink); color: var(--bg); }
 .btn-ghost { background: var(--surface); border-color: var(--line); flex: 0 0 auto; }
+/* 보조 버튼: 색 면 + 색 면 선 + 본문 글자 (꽉 찬 색은 「추가하기」 같은 주 버튼 하나만) */
+.btn-tint { background: var(--tint); border-color: var(--tint-line); color: var(--ink); }
+.btn-tint:hover { border-color: var(--accent); }
 .btn[disabled] { opacity: .45; pointer-events: none; }
 
 /* people list */
@@ -187,7 +190,7 @@ select.input { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://ww
 .pair-btn .sc { grid-row: 1 / span 2; grid-column: 2; font-weight: 700; font-size: 20px; font-variant-numeric: tabular-nums; }
 .sc.good { color: var(--good); } .sc.bad { color: var(--bad); } .sc.mid { color: var(--ink-2); }
 .rank-tag { display: inline-block; font-size: 12px; font-weight: 700; border-radius: 999px; padding: 0 7px; margin-right: 5px; vertical-align: 1px; }
-.rank-tag.best { background: var(--good-bg); color: var(--good); } .rank-tag.worst { background: var(--bad-bg); color: var(--bad); }
+.rank-tag.good { background: var(--good-bg); color: var(--good); } .rank-tag.bad { background: var(--bad-bg); color: var(--bad); } .rank-tag.mid { background: var(--sunken); color: var(--ink-2); }
 
 /* balance */
 .stack { display: flex; height: 32px; border-radius: var(--r-ctl); overflow: hidden; background: var(--sunken); gap: 2px; }

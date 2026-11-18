@@ -86,9 +86,10 @@ img, svg { display: block; max-width: 100%; }
 .form .field { margin: 0 0 16px; border: 0; padding: 0; min-width: 0; }
 .form .lbl { display: block; font-weight: 700; font-size: 14px; margin-bottom: 8px; padding: 0; }
 .form .lbl small { font-weight: 500; font-size: 12px; color: var(--muted); margin-left: 4px; }
-.input { width: 100%; height: 48px; border-radius: var(--r-btn); border: 1px solid var(--line); background: var(--bg); padding: 0 14px; font-size: 16px; font-weight: 500; min-width: 0; }
+.input { width: 100%; height: 48px; border-radius: var(--r-btn); border: 1px solid var(--line); background: var(--card); padding: 0 14px; font-size: 16px; font-weight: 500; min-width: 0; }
 select.input { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B6E74' stroke-width='1.5' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 20px; padding-right: 40px; }
 .input:focus { outline: none; border-color: var(--accent); }
+.input:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
 .input-unit { position: relative; }
 .input-unit .input { padding-right: 52px; text-align: right; }
 .input-unit span { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 14px; pointer-events: none; }
@@ -203,7 +204,7 @@ details.src { margin-bottom: 40px; }
 .urgent li { margin: 4px 0; }
 .call-row { display: flex; gap: 8px; margin-top: 12px; }
 .call-row .btn { flex: 1; }
-.scam-list { list-style: none; margin: 0 0 8px; padding: 0; border: 1px solid var(--line); border-radius: var(--r); background: var(--card); }
+.scam-list, .doc .scam-list { list-style: none; margin: 0 0 8px; padding: 0; border: 1px solid var(--line); border-radius: var(--r); background: var(--card); }
 .scam-list li + li { border-top: 1px solid var(--line); }
 .scam-list a { display: block; padding: 12px 40px 12px 14px; text-decoration: none; position: relative; }
 .scam-list a::after { content: ''; position: absolute; right: 16px; top: 50%; width: 8px; height: 8px; border-right: 1.5px solid var(--muted); border-top: 1.5px solid var(--muted); transform: translateY(-50%) rotate(45deg); }

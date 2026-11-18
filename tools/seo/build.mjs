@@ -65,6 +65,55 @@ const rewriteAbs = dir => {
 };
 rewriteAbs(DIST);
 
+// 사이트 안 링크(상대 주소·/로 시작하는 주소)의 href="….html" 도 확장자 없는 주소로 바꾼다(누를 때마다 307이 나지 않게).
+// 원본은 그대로 두고 dist만 바꾼다. 바꾸는 조건: 외부 주소가 아님, 템플릿 조각(${…}·+)이 아님,
+// 가리키는 .html 파일이 dist에 실제로 있음. index.html → 그 폴더(./, ../, /a/), google*.html 은 그대로.
+// 공용 꼬리말(common/footer.js)의 '…html' 문자열도 같은 규칙으로(사이트 루트 기준) 바꾼다.
+const HREF = /(\shref\s*=\s*)(["'])([^"'<>\s]*?)\2/gi;
+const isInside = p => p === DIST || p.startsWith(DIST + path.sep);
+const cleanRel = (v, fromDir) => {
+  if (!v || /^[a-z][a-z0-9+.-]*:|^\/\/|\$\{|\+|\\/i.test(v)) return null;
+  const cut = v.search(/[?#]/);
+  const p = cut < 0 ? v : v.slice(0, cut), tail = cut < 0 ? '' : v.slice(cut);
+  if (!p.endsWith('.html')) return null;
+  const name = p.slice(p.lastIndexOf('/') + 1);
+  if (/^google[0-9a-f]+\.html$/.test(name)) return null;
+  const target = p.startsWith('/') ? path.join(DIST, p) : path.resolve(fromDir, p);
+  if (!isInside(target) || !fs.existsSync(target) || !fs.statSync(target).isFile()) return null;
+  let out = name === 'index.html' ? p.slice(0, -'index.html'.length) : p.slice(0, -'.html'.length);
+  if (out === '') out = './';
+  return out + tail;
+};
+let linkRewrites = 0;
+const rewritten = [];   // [파일, 새 주소] — 아래 확인에서 다시 본다
+const rewriteLinks = dir => {
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    const p = path.join(dir, e.name);
+    if (e.isDirectory()) { rewriteLinks(p); continue; }
+    if (!e.name.endsWith('.html')) continue;
+    const s = fs.readFileSync(p, 'utf8');
+    const t = s.replace(HREF, (m, pre, q, v) => {
+      const c = cleanRel(v, path.dirname(p));
+      if (c == null) return m;
+      linkRewrites++; rewritten.push([p, c]);
+      return `${pre}${q}${c}${q}`;
+    });
+    if (t !== s) fs.writeFileSync(p, t);
+  }
+};
+rewriteLinks(DIST);
+const FOOTER_JS = path.join(DIST, 'common', 'footer.js');
+if (fs.existsSync(FOOTER_JS)) {
+  const s = fs.readFileSync(FOOTER_JS, 'utf8');
+  const t = s.replace(/(['"])([a-z0-9_-]+(?:\/[a-z0-9_-]+)*\.html)\1/gi, (m, q, v) => {
+    const c = cleanRel(v, DIST);
+    if (c == null) return m;
+    linkRewrites++; rewritten.push([path.join(DIST, 'index.html'), c]);
+    return `${q}${c}${q}`;
+  });
+  if (t !== s) fs.writeFileSync(FOOTER_JS, t);
+}
+
 // 확인: 꼭 있어야 할 파일, 있으면 안 되는 것, 사이트맵 주소가 실제 파일과 맞는지
 const errors = [];
 for (const f of ['index.html', 'robots.txt', 'sitemap.xml', '_headers', 'ads.txt']) if (!fs.existsSync(path.join(DIST, f))) errors.push(`없음: ${f}`);
@@ -90,6 +139,28 @@ const html = all.filter(p => p.endsWith('.html'));
 const noGtm = html.filter(p => !/^google[0-9a-f]+\.html$/.test(path.basename(p))).filter(p => !fs.readFileSync(p, 'utf8').includes('googletagmanager.com/gtm.js?id='));
 if (noGtm.length) errors.push(`GTM 없는 페이지 ${noGtm.length}개: ${noGtm.slice(0, 5).map(p => path.relative(DIST, p)).join(', ')}…`);
 
+// 링크 확인: 바꾼 주소가 실서버 규칙(auto-trailing-slash)으로 실제 파일에 닿는지.
+//   …/ → …/index.html, 확장자 없음 → ….html, 그 밖(이미지·xml 등) → 그 파일
+const resolves = (fromDir, v) => {
+  const p = v.replace(/[?#].*$/, '');
+  if (p === '') return true;   // #만 있는 주소
+  const t = p.startsWith('/') ? path.join(DIST, p) : path.resolve(fromDir, p);
+  if (!isInside(t)) return false;
+  if (p.endsWith('/')) return fs.existsSync(path.join(t, 'index.html'));
+  if (path.extname(p)) return fs.existsSync(t);
+  return fs.existsSync(t + '.html');
+};
+const badLinks = rewritten.filter(([f, v]) => !resolves(path.dirname(f), v));
+for (const [f, v] of badLinks.slice(0, 20)) errors.push(`바꾼 링크가 파일에 닿지 않음: ${path.relative(DIST, f)} → ${v}`);
+if (badLinks.length > 20) errors.push(`…바꾼 링크 오류 ${badLinks.length - 20}개 더`);
+// 남은 내부 .html 링크(바꾸지 못한 것: 대상 파일 없음 등)는 경고만
+let leftHtml = 0;
+for (const p of html) for (const [, , , v] of fs.readFileSync(p, 'utf8').matchAll(HREF)) {
+  if (/^[a-z][a-z0-9+.-]*:|^\/\//i.test(v) || /\$\{|\+/.test(v)) continue;
+  if (/\.html(?:[?#]|$)/.test(v) && !/(^|\/)google[0-9a-f]+\.html/.test(v)) leftHtml++;
+}
+
+console.log(`내부 링크 .html → 확장자 없는 주소: ${linkRewrites}개 바꿈${leftHtml ? `, 남은 .html 링크 ${leftHtml}개(대상 파일 없음 등)` : ''}`);
 console.log(`dist/: 파일 ${files}개, ${(bytes / 1048576).toFixed(1)}MB, HTML ${html.length}개, 사이트맵 ${maps.length}개(주소 ${urls}개)`);
 if (all.length > 20000) errors.push(`Cloudflare Pages 파일 한도(20,000) 초과: ${all.length}`);
 if (errors.length) { console.error('빌드 실패:\n- ' + errors.join('\n- ')); process.exit(1); }

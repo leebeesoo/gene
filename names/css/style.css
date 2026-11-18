@@ -7,6 +7,7 @@
   --ink: #15171C;
   --ink-2: #3F434C;
   --ink-3: #5F6470;
+  --muted: var(--ink-3);        /* 공용 꼬리말·광고 라벨이 읽는 보조 글자색 */
   --line: #E3E6EC;
   --brand: #2B50D8;
   --brand-ink: #2B50D8;
@@ -37,6 +38,7 @@
     --ink: #ECEEF2;
     --ink-2: #C6C9D1;
     --ink-3: #A0A4AE;
+    --muted: var(--ink-3);
     --line: #33323A;
     --brand: #8FA3F2;
     --brand-ink: #8FA3F2;
@@ -154,6 +156,10 @@ img, svg { max-width: 100%; }
 .btn-ghost:hover { border-color: var(--ink-3); }
 .btn-solid { height: 46px; padding: 0 18px; font-size: 14px; background: var(--btn); color: var(--on-btn); }
 .btn-solid:disabled { opacity: .6; }
+/* 보조 버튼: 색 면 + 색 면 선 + 본문 글자 (꽉 찬 포인트 색은 화면마다 주 버튼 하나만) */
+.btn-tint { height: 46px; padding: 0 18px; font-size: 14px; background: var(--tint); color: var(--ink); border: 1px solid var(--tint-line); }
+.btn-tint:hover { border-color: var(--brand); }
+.btn-tint:disabled { opacity: .6; }
 .link-btn { background: none; border: 0; padding: 4px; color: var(--ink-3); font-size: 12px; cursor: pointer; text-decoration: underline; }
 
 .recent { margin-top: 18px; }

@@ -1,6 +1,7 @@
 // 공유용 이미지 (1080×1350). 이름·일간·띠·점수만 그리고 생년월일은 절대 넣지 않습니다.
 import { STEMS, STEM_EL, EL_COLOR, EL_INK, EL_K, EL_H, ELS, ZODIAC } from './ganji.js';
 import { layout, edgeWidth } from './graph.js';
+import { rankLabel } from './relations.js';
 
 const W = 1080, H = 1350;
 // 한지 바탕 · 먹 글씨 · 청록 포인트 (그라데이션·그림자 없음)
@@ -105,7 +106,7 @@ export async function drawShareImage(model) {
   const best = pairs.reduce((m, p) => (p.score > m.score ? p : m), pairs[0]);
   const worst = pairs.reduce((m, p) => (p.score < m.score ? p : m), pairs[0]);
   const cardY = 1004;
-  const cards = pairs.length > 1 ? [['찰떡 1위', best], ['티격태격 1위', worst]] : [['우리 궁합', best]];
+  const cards = pairs.length > 1 ? [[rankLabel(best, 'best'), best], [rankLabel(worst, 'worst'), worst]] : [['우리 궁합', best]];
   const cw = cards.length === 2 ? (W - 56 * 2 - 24) / 2 : W - 112;
   cards.forEach(([label, p], k) => {
     const x = 56 + k * (cw + 24);

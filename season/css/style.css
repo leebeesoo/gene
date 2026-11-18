@@ -83,7 +83,7 @@ b, strong { font-weight: 700; }
 .lic [fill="rgba(255,255,255,.45)"] { display: none; }
 
 /* ── 상단바 ── */
-.topbar { position: sticky; top: 0; z-index: 40; background: var(--bg); border-bottom: 1px solid var(--line); }
+.topbar { position: sticky; top: 0; z-index: 40; background: var(--tint); border-bottom: 1px solid var(--tint-line); }
 .topbar-in { max-width: var(--max); margin: 0 auto; height: var(--top-h); display: flex; align-items: center; gap: 16px; padding: 0 16px; }
 .logo { font-family: var(--display); font-size: 20px; font-weight: 700; letter-spacing: -0.03em; color: var(--ink); }
 .topnav { display: none; gap: 2px; margin-left: 8px; }
@@ -168,7 +168,7 @@ b, strong { font-weight: 700; }
 @media (min-width: 720px) { .filters { flex-direction: row; align-items: center; justify-content: space-between; } }
 .search { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--line-2); border-radius: 10px; padding: 0 12px; min-height: 44px; color: var(--muted); }
 .search input { border: 0; outline: 0; background: none; flex: 1; min-width: 0; height: 42px; color: var(--ink); font-size: 16px; }
-.search:focus-within { border-color: var(--ink); }
+.search:focus-within { border-color: var(--focus); box-shadow: 0 0 0 1px var(--focus); }
 @media (min-width: 720px) { .search { width: 300px; } }
 
 /* 카드: 줄로 나눈 편집 그리드 */

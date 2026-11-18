@@ -17,6 +17,8 @@
   --on-btn: #FFFFFF;
   /* 로또 공 5색 — 데이터(번호)에만 */
   --b-y: #FBC400; --b-b: #69C8F2; --b-r: #FF7272; --b-k: #AAAAAA; --b-g: #B0D840;
+  /* 공 숫자: 다섯 색 모두 짙은 글자(흰 글자는 1.6~2.7:1이라 부족) — 노랑 10.7·하늘 9.1·연두 10.5·빨강 6.5·회색 7.4:1 */
+  --ball-ink: #1B1B1B;
   --r-card: 12px; --r-ctl: 10px;
   --sheet-shadow: 0 8px 24px -12px rgba(0, 0, 0, .12);
   --ease: cubic-bezier(.2, .8, .2, 1);
@@ -85,8 +87,8 @@ a { color: inherit; }
 /* 공 크기: 360px 폭에서도 6개(+보너스)가 줄 안에 들어오도록 화면 폭에 맞춰 줄어든다 */
 .balls { --bs: clamp(34px, calc((100vw - 2 * var(--gutter) - 5 * 8px) / 6), 56px); display: grid; grid-template-columns: repeat(6, minmax(0, var(--bs))); gap: 8px; align-items: center; max-width: 100%; }
 /* 공: 공식 5색 평면 원 */
-.ball { position: relative; width: 100%; aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; color: #fff; background: var(--c);
-  font-weight: 800; font-size: clamp(16px, 5vw, 22px); font-variant-numeric: tabular-nums; letter-spacing: -0.03em; text-shadow: 0 1px 0 rgba(0, 0, 0, .16); }
+.ball { position: relative; width: 100%; aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; color: var(--ball-ink); background: var(--c);
+  font-weight: 800; font-size: clamp(16px, 5vw, 22px); font-variant-numeric: tabular-nums; letter-spacing: -0.03em; }
 .ball.c-y { --c: var(--b-y); } .ball.c-b { --c: var(--b-b); } .ball.c-r { --c: var(--b-r); } .ball.c-k { --c: var(--b-k); } .ball.c-g { --c: var(--b-g); }
 .ball.q { --c: var(--surface); color: var(--ink-3); text-shadow: none; box-shadow: inset 0 0 0 1px var(--line); }
 .hero:not(.mine) .ball.star::after { display: none; }
@@ -133,7 +135,7 @@ a { color: inherit; }
 /* ---------- layout ---------- */
 .layout { display: grid; gap: 12px; margin-top: 20px; }
 .col-main, .col-side { display: grid; gap: 12px; align-content: start; min-width: 0; }
-.tools { display: grid; gap: 12px; }
+.tools { display: grid; gap: 12px; margin-top: 12px; } /* 사이 광고 칸이 접혀도 카드끼리 붙지 않게: 레이아웃 간격과 같게 */
 
 .card { background: var(--surface); border-radius: var(--r-card); border: 1px solid var(--line); padding: 20px 16px; }
 .sec-title { font-size: 20px; font-weight: 700; letter-spacing: -0.03em; display: flex; align-items: center; gap: 8px; }
@@ -149,6 +151,9 @@ a { color: inherit; }
 .btn-primary:hover { background: color-mix(in srgb, var(--btn) 88%, var(--bg)); }
 .btn-soft { background: var(--surface-2); color: var(--ink); }
 .btn-soft:hover { background: color-mix(in srgb, var(--surface-2) 90%, var(--ink)); }
+/* 첫 화면 색 면 위 보조 버튼: 흰 면 + 색 면 선 */
+.hero .btn-soft { background: var(--surface); border-color: var(--brand-line); }
+.hero .btn-soft:hover { background: color-mix(in srgb, var(--surface) 80%, var(--brand-soft)); }
 .btn-outline { background: var(--surface); color: var(--ink); border-color: var(--line); }
 .btn-outline:hover { border-color: var(--ink-3); }
 .btn-outline[aria-pressed="true"] { border-color: var(--ink); }
@@ -352,7 +357,7 @@ a { color: inherit; }
 .num-inputs input { width: 100%; height: 48px; padding: 0; text-align: center; border-radius: var(--r-ctl); border: 1px solid var(--line); background: var(--surface); font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink); }
 .num-inputs input:focus { outline: none; border-color: var(--ink); }
 .num-inputs input.bonus-in { border-style: dashed; }
-.num-inputs input.filled { border-color: transparent; color: #fff; background: var(--c); }
+.num-inputs input.filled { border-color: transparent; color: var(--ball-ink); background: var(--c); }
 .num-inputs input.c-y { --c: var(--b-y); } .num-inputs input.c-b { --c: var(--b-b); } .num-inputs input.c-r { --c: var(--b-r); } .num-inputs input.c-k { --c: var(--b-k); } .num-inputs input.c-g { --c: var(--b-g); }
 .ck-link { display: inline-block; margin-top: 8px; }
 .ck-result { margin-top: 14px; display: grid; gap: 8px; }
@@ -450,5 +455,8 @@ a { color: inherit; }
   .cd { margin-top: 0; padding-top: 0; border-top: 0; padding-left: 40px; border-left: 1px solid var(--brand-line); }
   .layout { grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); gap: 16px; margin-top: 32px; align-items: start; }
   .card, .lucky { padding: 24px; }
-  .tools { gap: 16px; }
+  .tools { gap: 16px; margin-top: 16px; }
 }
+
+/* 애드센스 심사 동안 구매를 권하는 것처럼 보일 수 있는 칸(행운 장소·판매점 지도·연속 출석)을 숨김. 승인 뒤 index.html의 review-hide 클래스를 지우면 다시 보인다(HANDOFF 참고) */
+.review-hide{display:none!important}

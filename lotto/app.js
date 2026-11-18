@@ -772,7 +772,7 @@
   function drawBall(ctx, x, y, r, n, F) {
     // 공식 5색 평면 원
     ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fillStyle = BALL_HEX[colorClass(n)]; ctx.fill();
-    ctx.fillStyle = '#fff'; ctx.font = '700 ' + Math.round(r * .9) + 'px ' + F; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#1B1B1B'; ctx.font = '700 ' + Math.round(r * .9) + 'px ' + F; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillText(String(n), x, y + r * .05);
   }
   function drawCard() {

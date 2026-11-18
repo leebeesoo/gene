@@ -133,20 +133,20 @@ a{color:inherit}
 
 /* 서비스별 바탕·잉크·포인트·제목 글꼴 (docs/design-direction.md) */
 .t-lotto{--tb:#F4F2EC;--ti:#16171A;--ta:#C42E16;--df:"Black Han Sans",var(--sans)}
-.t-map{--tb:#F5F5F2;--ti:#17181B;--ta:#B8452A;--df:"IBM Plex Sans KR",var(--sans)}
-.t-market{--tb:#F3F3EC;--ti:#1D211D;--ta:#3E6B3A;--df:"Gothic A1",var(--sans)}
-.t-season{--tb:#F7F6F1;--ti:#1F221E;--ta:#2F6B4F;--df:"Hahmlet",var(--serif)}
+.t-map{--tb:#F5F5F2;--ti:#17181B;--ta:#B03F25;--df:"IBM Plex Sans KR",var(--sans)}
+.t-market{--tb:#F3F3EC;--ti:#1D211D;--ta:#2D7638;--df:"Gothic A1",var(--sans)}
+.t-season{--tb:#F7F6F1;--ti:#1F221E;--ta:#1F7048;--df:"Hahmlet",var(--serif)}
 .t-sikdang{--tb:#F6F3EE;--ti:#1E1C1A;--ta:#A84A24;--df:"Gowun Batang",var(--serif)}
 .t-roots{--tb:#8E2B22;--ti:#F6EFE4;--ta:#F6EFE4;--df:"Nanum Myeongjo",var(--serif)}
 .t-family{--tb:#F5F1EA;--ti:#1F1D1A;--ta:#1F5F57;--df:"Gowun Batang",var(--serif)}
 .t-names{--tb:#F6F7F9;--ti:#15171C;--ta:#2B50D8;--df:"IBM Plex Sans KR",var(--sans)}
 .t-life{--tb:#F7F5F2;--ti:#1E1B1F;--ta:#B23C60;--df:"Gowun Batang",var(--serif)}
-.t-year{--tb:#F2EFE8;--ti:#222020;--ta:#B23A26;--df:"Noto Serif KR",var(--serif)}
-.t-donkey{--tb:#F6F5F1;--ti:#1C1B19;--ta:#8F6200;--nb:#FCF8EE;--nl:#E7DEC6}
-.t-silver{--tb:#F7F6F2;--ti:#141413;--ta:#2C6A8E}
-.t-money{--tb:#F6F6F3;--ti:#191A1C;--ta:#5A4AA8}
-.t-quotes{--tb:#F7F6F3;--ti:#1D1B1E;--ta:#7A3B69;--df:"Gowun Batang",var(--serif)}
-.t-wish{--tb:#F5F6F0;--ti:#1A1B17;--ta:#56661C}
+.t-year{--tb:#F2EFE8;--ti:#222020;--ta:#B5341F;--df:"Noto Serif KR",var(--serif)}
+.t-donkey{--tb:#F6F5F1;--ti:#1C1B19;--ta:#855B00;--nb:#FCF8EE;--nl:#E7DEC6}
+.t-silver{--tb:#F7F6F2;--ti:#141413;--ta:#1E5A80}
+.t-money{--tb:#F6F6F3;--ti:#191A1C;--ta:#5B45C2}
+.t-quotes{--tb:#F7F6F3;--ti:#1D1B1E;--ta:#8E3577;--df:"Gowun Batang",var(--serif)}
+.t-wish{--tb:#F5F6F0;--ti:#1A1B17;--ta:#4D6B12}
 @media (prefers-color-scheme:dark){
   .tile:not(.t-roots){--tb:color-mix(in srgb,var(--ta) 16%,#1E1D22)}
   .t-lotto{--tb:#121212;--ti:#F1EFE9;--ta:#EE8A74}
@@ -170,7 +170,7 @@ a{color:inherit}
 .t-lotto .nm{font-size:26px;font-weight:400;letter-spacing:0}
 .t-lotto .round{color:var(--ta);font-weight:700}
 .balls{display:flex;gap:6px;margin:8px 0 12px}
-.ball{flex:0 1 44px;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:var(--c);color:#fff;font-weight:800;font-size:17px;font-variant-numeric:tabular-nums;text-shadow:0 1px 0 rgba(0,0,0,.18)}
+.ball{flex:0 1 44px;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:var(--c);color:#1B1B1B;font-weight:800;font-size:17px;font-variant-numeric:tabular-nums}
 .ball.y{--c:#FBC400}.ball.b{--c:#69C8F2}.ball.r{--c:#FF7272}.ball.k{--c:#AAAAAA}.ball.g{--c:#B0D840}
 @media (prefers-color-scheme:dark){.balls{filter:saturate(.85)}}
 .cd{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
@@ -370,7 +370,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <h1 class="sr">혹시나랩, 혹시나 하고 열어 보는 무료 생활 도구 14가지</h1>
   <div class="board" id="board">
 
-    <a class="tile t-lotto w" data-cat="fun" href="lotto/" aria-label="오늘로또 — 사주로 뽑는 오늘의 로또 번호와 살 시간·방향">
+    <a class="tile t-lotto w" data-cat="fun" href="lotto/" aria-label="오늘로또 — 사주로 뽑는 오늘의 로또 번호와 행운 시간·방향">
       <div class="hd"><span>운세·재미 · <span class="round num" id="lRound">이번 주 추첨</span></span><svg aria-hidden="true"><use href="#go"/></svg></div>
       <div class="pv">
         <p class="small">오늘의 공 · 날짜로 뽑은 미리보기</p>
@@ -379,7 +379,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="ft">
         <p class="nm disp">오늘로또</p>
-        <p class="ol">미리보기: 오늘 날짜로 뽑은 공 6개예요. 내 사주로 뽑은 번호와 살 시간·방향은 안에서.</p>
+        <p class="ol">미리보기: 오늘 날짜로 뽑은 공 6개예요. 내 사주로 뽑은 번호와 행운 시간·방향은 안에서.</p>
       </div>
     </a>
 
@@ -524,8 +524,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <a class="tile t-map" data-cat="fun" href="lottomap/" aria-label="명당로드 — 로또 1등 명당 지도와 번호 통계">
       <div class="hd"><span>운세·재미</span><svg aria-hidden="true"><use href="#go"/></svg></div>
       <div class="pv">
-        <!-- lottomap/data/stores.js(스냅샷 2026-11-05, 262~1248회) 판매점 1등 합계·최다 판매점. 데이터 갱신 때 같이 고친다 -->
-        <p class="stat m"><span class="small">1등</span> 9,231<small>건</small></p>
+        <!-- lottomap/data/stores.js(스냅샷 2026-11-18, 262~1250회) 판매점 1등 합계·최다 판매점. 데이터 갱신 때 같이 고친다 -->
+        <p class="stat m"><span class="small">1등</span> 9,240<small>건</small></p>
         <p class="best m" style="--i:1">최다 명당 <b>노원 스파</b> 53회</p>
       </div>
       <div class="ft"><p class="nm disp">명당로드</p><p class="ol">우리 동네 1등은 몇 번?</p></div>
@@ -561,7 +561,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <footer class="jl-footer" data-site="" data-home="./" data-copy="입력한 정보는 내 기기에만 저장돼요(구출장터 신청 폼 제외)">
   <div data-notes><p>운세·궁합 결과는 재미로 보는 콘텐츠예요. 복권은 만 19세 미만은 살 수 없고, 도박 문제 상담은 국번 없이 1336이에요.</p></div>
   <div data-sources><ul>
-    <li>명당로드: <a href="https://dhlottery.co.kr/" rel="noopener">동행복권</a> 262~1248회 당첨 판매점</li>
+    <li>명당로드: <a href="https://dhlottery.co.kr/" rel="noopener">동행복권</a> 262~1250회 당첨 판매점</li>
     <li>구출장터: <a href="https://www.kamis.or.kr/" rel="noopener">KAMIS</a>·농림축산식품부·농업관측센터·언론 보도</li>
     <li>이름레이더: <a href="https://kosis.kr/" rel="noopener">통계청 KOSIS</a> 2015 인구주택총조사</li>
     <li>나때연감: <a href="https://kosis.kr/" rel="noopener">통계청 KOSIS</a> 출생통계</li>

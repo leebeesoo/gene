@@ -11,7 +11,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- End Google Tag Manager -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>로또 번호 추천 · 사주로 뽑는 오늘의 번호 | 오늘로또</title>
-<meta name="description" content="이름과 생일로 매일 바뀌는 로또 6/45 번호를 무료로 추천해요. 오늘 살 시간과 방향, 가까운 판매점, 이번 주 추첨까지 남은 시간, 내 번호 당첨 확인까지 한 번에.">
+<meta name="description" content="이름과 생일로 매일 바뀌는 로또 6/45 번호를 무료로 추천해요. 오늘의 행운 시간과 방향, 이번 주 추첨까지 남은 시간, 내 번호 당첨 확인까지 한 번에.">
 <meta name="keywords" content="로또 번호 추천, 로또 번호 생성기, 사주 로또, 오늘의 로또, 행운 번호, 로또 6/45, 로또 명당, 로또 추첨 시간">
 <meta name="theme-color" content="#F9EAE8" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#402C2C" media="(prefers-color-scheme: dark)">
@@ -22,7 +22,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta property="og:locale" content="ko_KR">
 <meta property="og:site_name" content="혹시나랩">
 <meta property="og:title" content="오늘 내 로또 번호는? — 오늘로또">
-<meta property="og:description" content="이름과 생일로 뽑은 이번 주 행운 번호, 살 시간과 방향까지.">
+<meta property="og:description" content="이름과 생일로 뽑은 이번 주 행운 번호, 행운 시간과 방향까지.">
 <meta property="og:url" content="https://jaemilab.net/lotto/">
 <meta property="og:image" content="https://jaemilab.net/lotto/og.png">
 <meta property="og:image:width" content="1200">
@@ -30,7 +30,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta property="og:image:alt" content="오늘로또 — 사주로 뽑는 오늘의 로또 번호">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="오늘 내 로또 번호는? — 오늘로또">
-<meta name="twitter:description" content="이름과 생일로 뽑은 이번 주 행운 번호, 살 시간과 방향까지.">
+<meta name="twitter:description" content="이름과 생일로 뽑은 이번 주 행운 번호, 행운 시간과 방향까지.">
 <meta name="twitter:image" content="https://jaemilab.net/lotto/og.png">
 
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23D23A1F'/%3E%3Ctext x='32' y='43' font-size='30' font-weight='700' text-anchor='middle' fill='%23fff' font-family='Arial,sans-serif'%3E7%3C/text%3E%3C/svg%3E">
@@ -99,7 +99,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <header class="topbar">
   <div class="wrap topbar-in">
     <a class="logo" href="./" aria-label="오늘로또 처음으로">오늘로또</a>
-    <button class="streak-pill" id="streakPill" type="button" aria-label="연속 출석 보기">
+    <button class="streak-pill review-hide" id="streakPill" type="button" aria-label="연속 출석 보기">
       <svg class="ic" aria-hidden="true"><use href="#i-flame"/></svg>
       <span><b id="streakNum">1</b>일 연속</span>
     </button>
@@ -128,7 +128,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         <div class="hero-actions" id="heroNew">
           <button class="btn btn-primary" id="heroCta" type="button">내 사주로 오늘의 공 뽑기<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
-          <p class="hero-note">이름과 생일을 넣으면 나만의 번호와 살 시간·방향이 나와요</p>
+          <p class="hero-note">이름과 생일을 넣으면 나만의 번호와 행운 시간·방향이 나와요</p>
         </div>
         <div class="hero-actions two" id="heroMine" hidden>
           <button class="btn btn-soft" id="redrawBtn" type="button"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>다시 뽑기<span class="count" id="redrawLeft">3</span></button>
@@ -202,7 +202,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
             <div class="step" data-step="3">
               <h2 class="step-title" id="stepTitle3">어디에서 사세요?</h2>
-              <p class="step-sub">가까운 행운 판매점 방향을 알려드려요</p>
+              <p class="step-sub">오늘의 행운 방향을 알려드려요</p>
               <div class="field-row">
                 <label class="field">
                   <span class="field-label">시/도</span>
@@ -267,7 +267,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <aside class="col-side" aria-label="오늘의 행운 정보">
         <section class="lucky locked" id="lucky" aria-labelledby="luckyTitle">
-          <h2 class="sec-title" id="luckyTitle">언제, 어디서 살까</h2>
+          <h2 class="sec-title" id="luckyTitle">오늘의 행운 시간과 방향</h2>
           <div class="lucky-grid">
             <article class="lk lk-time">
               <p class="lk-k"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg>행운 시간</p>
@@ -283,13 +283,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <p class="lk-v" id="lkDir"></p>
               <p class="lk-s" id="lkDirSub"></p>
             </article>
-            <article class="lk lk-place">
+            <article class="lk lk-place review-hide">
               <p class="lk-k"><svg class="ic" aria-hidden="true"><use href="#i-store"/></svg>행운 장소</p>
               <p class="lk-v" id="lkPlace"></p>
               <p class="lk-s" id="lkPlaceSub"></p>
             </article>
-            <article class="lk lk-where">
-              <p class="lk-k"><svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg>어디서 살까</p>
+            <article class="lk lk-where review-hide">
+              <p class="lk-k"><svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg>행운 방향 둘러보기</p>
               <p class="lk-v" id="lkWhere"></p>
               <div class="maps">
                 <a class="map-btn" id="mapNaver" href="https://map.naver.com/p/search/%EB%B3%B5%EA%B6%8C%ED%8C%90%EB%A7%A4%EC%A0%90" target="_blank" rel="noopener">네이버 지도</a>
@@ -301,7 +301,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <p class="lock-msg" id="lockMsg"><svg class="ic" aria-hidden="true"><use href="#i-lock"/></svg><span>정보를 입력하면 열려요</span></p>
         </section>
 
-        <section class="card streak" id="streak" aria-labelledby="streakTitle">
+        <section class="card streak review-hide" id="streak" aria-labelledby="streakTitle">
           <div class="streak-top">
             <div class="flame" aria-hidden="true"><svg class="ic"><use href="#i-flame"/></svg></div>
             <div>

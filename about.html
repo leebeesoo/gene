@@ -13,8 +13,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <title>혹시나랩 소개 — 누가, 어떻게 만드나요</title>
 <meta name="description" content="혹시나랩은 「혹시나」 하는 마음으로 열어 보는 무료 생활 도구 14가지 모음이에요. 운영자 한 사람이 만들어요. 서비스 목록, 데이터를 어디서 가져와 언제 확인했는지, 결과를 어떻게 봐야 하는지 적었어요.">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#FAF7F2" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#1B1917" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#FFFBF5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#17161A" media="(prefers-color-scheme: dark)">
 <link rel="canonical" href="https://jaemilab.net/about.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="혹시나랩">
@@ -28,12 +28,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="stylesheet" href="common/footer.css">
 <style>
 :root{
-  --bg:#FAF7F2;--ink:#1F1D1A;--muted:#736D64;--line:#E9E3D8;--chip:#F0EAE0;--soft:#F3EEE5;
+  --bg:#FFFBF5;--ink:#1F1D1A;--muted:#6B655C;--line:#EDE4D6;--chip:#F5EEE3;--soft:#F7F0E6;
   --sans:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root{
-  --bg:#1B1917;--ink:#EEEAE3;--muted:#A39C92;--line:#2E2B27;--chip:#26231F;--soft:#221F1C;
+  --bg:#17161A;--ink:#EEEAE3;--muted:#A39C92;--line:#2E2C31;--chip:#2A272D;--soft:#1E1D22;
   color-scheme:dark;
 }}
 *{box-sizing:border-box}
@@ -47,7 +47,7 @@ a{color:inherit}
 .brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
 .brand .dots{display:grid;grid-template-columns:repeat(2,9px);gap:3px;flex:none}
 .brand .dots i{width:9px;height:9px;border-radius:50%}
-.brand .dots i:nth-child(1){background:#D23A1F}.brand .dots i:nth-child(2){background:#FBC400}
+.brand .dots i:nth-child(1){background:#C42E16}.brand .dots i:nth-child(2){background:#FBC400}
 .brand .dots i:nth-child(3){background:#2F6B4F}.brand .dots i:nth-child(4){background:#2B50D8}
 .brand b{font-size:20px;font-weight:700;letter-spacing:-.04em}
 .top .back{font-size:14px;color:var(--muted);text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
@@ -74,6 +74,7 @@ a{color:inherit}
 .svc a{display:flex;align-items:baseline;gap:10px;padding:12px 0;text-decoration:none;min-height:44px}
 .svc a:hover b{text-decoration:underline}
 .svc i{flex:none;width:8px;height:8px;border-radius:50%;background:var(--c);transform:translateY(-1px)}
+@media (prefers-color-scheme:dark){.svc i{background:var(--cd,var(--c))}}
 .svc b{font-weight:700;flex:none}
 .svc span{color:var(--muted);font-size:15px}
 .svc .ref{margin-left:auto;font-size:13px;color:var(--muted);white-space:nowrap}
@@ -97,7 +98,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </header>
 <main class="doc" id="main">
   <h1>혹시나랩 소개</h1>
-  <p class="meta">마지막 수정 2026-11-14</p>
+  <p class="meta">마지막 수정 2026-11-18</p>
   <p class="lead">혹시나랩(jaemilab.net)은 운세·재미, 생활 데이터, 먹거리를 다루는 작은 웹 서비스 14가지를 한곳에 모은 사이트예요. 모두 무료이고, 가입 없이 바로 써요.</p>
 
   <h2>이름의 뜻</h2>
@@ -111,26 +112,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <p class="muted">이름을 누르면 그 서비스로 가요. 오른쪽 작은 글씨는 주로 쓰는 자료예요.</p>
 <h3>운세·재미</h3>
 <ul class="svc">
-  <li><a href="lotto/" style="--c:#D9381E"><i aria-hidden="true"></i><b>오늘로또</b><span>사주로 뽑는 오늘의 로또 번호와 살 시간·방향</span><small class="ref">동행복권 추첨 일정</small></a></li>
-  <li><a href="lottomap/" style="--c:#C8361F"><i aria-hidden="true"></i><b>명당로드</b><span>로또 1등 명당 지도와 번호 통계</span><small class="ref">동행복권 당첨 판매점</small></a></li>
-  <li><a href="roots/" style="--c:#8E2B22"><i aria-hidden="true"></i><b>근본 테스트</b><span>사주와 퀴즈로 찾는 나의 근본 코드</span><small class="ref">통계청·천문연구원</small></a></li>
-  <li><a href="family/" style="--c:#1F5F57"><i aria-hidden="true"></i><b>식구궁합</b><span>우리 가족 오행 궁합판</span><small class="ref">명리 고전의 표준 표</small></a></li>
-  <li><a href="quotes/" style="--c:#7A3B69"><i aria-hidden="true"></i><b>내 상황 명언</b><span>지금 필요한 한 줄, 원문과 출처까지</span><small class="ref">명언마다 원문 확인</small></a></li>
-  <li><a href="wish/" style="--c:#56661C"><i aria-hidden="true"></i><b>소원명당</b><span>소원 이야기가 전하는 전국 명소 지도</span><small class="ref">한국민족문화대백과사전·지자체</small></a></li>
+  <li><a href="lotto/" style="--c:#C42E16;--cd:#F07A62"><i aria-hidden="true"></i><b>오늘로또</b><span>사주로 뽑는 오늘의 로또 번호와 행운 시간·방향</span><small class="ref">동행복권 추첨 일정</small></a></li>
+  <li><a href="lottomap/" style="--c:#B03F25;--cd:#EE8064"><i aria-hidden="true"></i><b>명당로드</b><span>로또 1등 명당 지도와 번호 통계</span><small class="ref">동행복권 당첨 판매점</small></a></li>
+  <li><a href="roots/" style="--c:#8E2B22;--cd:#E5857A"><i aria-hidden="true"></i><b>근본 테스트</b><span>사주와 퀴즈로 찾는 나의 근본 코드</span><small class="ref">통계청·천문연구원</small></a></li>
+  <li><a href="family/" style="--c:#1F5F57;--cd:#7DBDB0"><i aria-hidden="true"></i><b>식구궁합</b><span>우리 가족 오행 궁합판</span><small class="ref">명리 고전의 표준 표</small></a></li>
+  <li><a href="quotes/" style="--c:#8E3577;--cd:#D695C6"><i aria-hidden="true"></i><b>내 상황 명언</b><span>지금 필요한 한 줄, 원문과 출처까지</span><small class="ref">명언마다 원문 확인</small></a></li>
+  <li><a href="wish/" style="--c:#4D6B12;--cd:#B5C46A"><i aria-hidden="true"></i><b>소원명당</b><span>소원 이야기가 전하는 전국 명소 지도</span><small class="ref">한국민족문화대백과사전·지자체</small></a></li>
 </ul>
 <h3>생활·데이터</h3>
 <ul class="svc">
-  <li><a href="names/" style="--c:#2B50D8"><i aria-hidden="true"></i><b>이름레이더</b><span>내 이름, 전국에 몇 명?</span><small class="ref">통계청·대법원</small></a></li>
-  <li><a href="lifeclock/" style="--c:#C2456A"><i aria-hidden="true"></i><b>남은봄</b><span>남은 주말·명절·벚꽃 세는 인생 시계</span><small class="ref">통계청 생명표</small></a></li>
-  <li><a href="birthyear/" style="--c:#B23A26"><i aria-hidden="true"></i><b>나때연감</b><span>내가 태어난 해 타임캡슐</span><small class="ref">통계청·World Bank</small></a></li>
-  <li><a href="silver/" style="--c:#2C6A8E"><i aria-hidden="true"></i><b>나이별 혜택·검진 달력</b><span>태어난 해로 보는 올해 받을 혜택·검진</span><small class="ref">보건복지부·건보공단</small></a></li>
-  <li><a href="money/" style="--c:#5A4AA8"><i aria-hidden="true"></i><b>내 미래 머니</b><span>청약 가점·이자·물가, 공식 기준으로 계산</span><small class="ref">법령·한국은행</small></a></li>
+  <li><a href="names/" style="--c:#2B50D8;--cd:#8FA3F2"><i aria-hidden="true"></i><b>이름레이더</b><span>내 이름, 전국에 몇 명?</span><small class="ref">통계청·대법원</small></a></li>
+  <li><a href="lifeclock/" style="--c:#B9375F;--cd:#EB82A3"><i aria-hidden="true"></i><b>남은봄</b><span>남은 주말·명절·벚꽃 세는 인생 시계</span><small class="ref">통계청 생명표</small></a></li>
+  <li><a href="birthyear/" style="--c:#B5341F;--cd:#EC7A62"><i aria-hidden="true"></i><b>나때연감</b><span>내가 태어난 해 타임캡슐</span><small class="ref">통계청·World Bank</small></a></li>
+  <li><a href="silver/" style="--c:#1E5A80;--cd:#7DB6DA"><i aria-hidden="true"></i><b>나이별 혜택·검진 달력</b><span>태어난 해로 보는 올해 받을 혜택·검진</span><small class="ref">보건복지부·건보공단</small></a></li>
+  <li><a href="money/" style="--c:#5B45C2;--cd:#A99CF0"><i aria-hidden="true"></i><b>내 미래 머니</b><span>청약 가점·이자·물가, 공식 기준으로 계산</span><small class="ref">법령·한국은행</small></a></li>
 </ul>
 <h3>먹거리</h3>
 <ul class="svc">
-  <li><a href="season/" style="--c:#2F6B4F"><i aria-hidden="true"></i><b>제철장보기</b><span>이달 제철 식재료와 지금 싼 품목</span><small class="ref">KAMIS 소매가격</small></a></li>
-  <li><a href="sikdang/" style="--c:#B4532A"><i aria-hidden="true"></i><b>제철식당</b><span>이달 이 지역 제철 음식을 잘하는 집</span><small class="ref">지자체·인허가 자료</small></a></li>
-  <li><a href="market/" style="--c:#3E6B3A"><i aria-hidden="true"></i><b>구출장터</b><span>버려질 농수산물이 어디서 남는지, 버려지기 전에</span><small class="ref">KAMIS·농업관측</small></a></li>
+  <li><a href="season/" style="--c:#1F7048;--cd:#6CC496"><i aria-hidden="true"></i><b>제철장보기</b><span>이달 제철 식재료와 지금 싼 품목</span><small class="ref">KAMIS 소매가격</small></a></li>
+  <li><a href="sikdang/" style="--c:#AA451C;--cd:#EE8E62"><i aria-hidden="true"></i><b>제철식당</b><span>이달 이 지역 제철 음식을 잘하는 집</span><small class="ref">지자체·인허가 자료</small></a></li>
+  <li><a href="market/" style="--c:#2D7638;--cd:#7CC487"><i aria-hidden="true"></i><b>구출장터</b><span>버려질 농수산물이 어디서 남는지, 버려지기 전에</span><small class="ref">KAMIS·농업관측</small></a></li>
 </ul>
 
   <h2>데이터는 어디서 가져오나요</h2>

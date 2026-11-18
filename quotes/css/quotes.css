@@ -140,7 +140,7 @@ h2 { font-size: 20px; line-height: 1.4; letter-spacing: -.03em; margin: 32px 0 1
 
 /* 검색 */
 .search { position: relative; display: flex; align-items: center; gap: 8px; margin: 24px 0 8px; padding: 0 14px; height: 48px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-btn); }
-.search:focus-within { border-color: var(--accent); }
+.search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
 .search .ico { color: var(--muted); }
 .search input { flex: 1; min-width: 0; border: 0; background: none; outline: none; height: 100%; font-size: 16px; }
 .search input::placeholder { color: var(--muted); }
