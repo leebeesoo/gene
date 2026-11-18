@@ -772,13 +772,13 @@
   function drawBall(ctx, x, y, r, n, F) {
     // 공식 5색 평면 원
     ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fillStyle = BALL_HEX[colorClass(n)]; ctx.fill();
-    ctx.fillStyle = '#fff'; ctx.font = '700 ' + Math.round(r * .9) + 'px ' + F; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#1B1B1B'; ctx.font = '700 ' + Math.round(r * .9) + 'px ' + F; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillText(String(n), x, y + r * .05);
   }
   function drawCard() {
     var W = 1080, H = 1350, c = document.createElement('canvas'); c.width = W; c.height = H;
     var ctx = c.getContext('2d'), F = '"Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif';
-    var BG = '#F6F6F4', SURF = '#FFFFFF', INK = '#16171A', MUTED = '#6B6E75', LINE = '#E4E4E1', ACC = '#D9381E';
+    var BG = '#F6F6F4', SURF = '#FFFFFF', INK = '#16171A', MUTED = '#6B6E75', LINE = '#E4E4E1', ACC = '#C42E16';
     ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
 
     // brand

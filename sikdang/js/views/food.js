@@ -92,7 +92,7 @@ export async function dishView(ctx) {
 
   ctx.el.innerHTML = `<section class="wrap page">
     <nav class="crumb" aria-label="위치"><a href="${regionHref(reg.id)}">${esc(reg.name)}</a>${icon('next', 'ic')}<span>${range && range !== '사철' ? `${esc(range)} 제철` : '메뉴'}</span></nav>
-    ${imgFor(d) ? `<figure class="dphoto">${photo(d, { eager: true, alt: `${ingKey(d)} 예시 이미지` })}<figcaption>사진은 재료(${esc(ingKey(d))}) 예시 이미지예요. 식당의 실제 음식 사진이 아니에요.</figcaption></figure>` : ''}
+    ${imgFor(d) ? `<figure class="dphoto">${photo(d, { eager: true, alt: `AI로 만든 ${ingKey(d)} 예시 이미지` })}<figcaption>사진은 AI로 만든 재료(${esc(ingKey(d))}) 예시 이미지예요. 식당의 실제 음식 사진이 아니에요.</figcaption></figure>` : ''}
     <header class="dish-head">
       <h1 class="display">${esc(d.n)}</h1>
       <p class="lede"><b>${esc(reg.name)}</b>${range ? `<span class="num">${esc(range === '사철' ? '사철' : `${range} 제철`)}</span>` : ''}<span class="num">식당 ${rest.length}곳</span></p>

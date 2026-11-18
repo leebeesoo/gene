@@ -556,7 +556,7 @@
     var k = $('#share-region').value;
     var F = '"Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif';
     var W = 1080, H = 1080;
-    var BG = '#F5F5F2', SURF = '#FFFFFF', INK = '#17181B', MUTED = '#6A6C70', LINE = '#E3E3DE', ACC = '#B8452A';
+    var BG = '#F5F5F2', SURF = '#FFFFFF', INK = '#17181B', MUTED = '#6A6C70', LINE = '#E3E3DE', ACC = '#B03F25';
     x.textAlign = 'left';
     x.fillStyle = BG; x.fillRect(0, 0, W, H);
     // map silhouette

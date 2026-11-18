@@ -1,14 +1,16 @@
 /* 내 상황 명언 — DESIGN.md 규칙: 그라데이션·블러·글로우 없음, 포인트 색 1개(자두색), 카드 12px, 1px 선.
    글꼴: Pretendard(본문·UI) + 고운바탕(명언 본문·제목, 명조 허용 사이트로 제안) */
 :root {
-  --bg: #F7F6F3;
+  --bg: #FFFBF5;              /* 따뜻한 흰 바탕 */
   --surface: #FFFFFF;
   --ink: #1D1B1E;
   --ink-2: #47434A;
-  --muted: #6F6A70;
-  --line: #E6E3E0;
-  --accent: #7A3B69;
-  --accent-soft: #F3E9F0;
+  --muted: #645F66;           /* 바탕·면·색 면 모두 5:1 이상 */
+  --line: #E8E3DF;
+  --accent: #8E3577;
+  --accent-soft: #EBDBE7;     /* 강조 표시(검색어) — 색 면보다 한 단계 진하게 */
+  --tint: #F4EBF1;            /* 색 면: 포인트 색 10% + 흰색 */
+  --tint-line: #DFC6D9;
   --on-accent: #FFFFFF;
   --ok: #2F6B4F;
   --warn: #8A5A12;
@@ -21,14 +23,14 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #121113; --surface: #1B1A1C; --ink: #EEEBEE; --ink-2: #CFCAD0; --muted: #959097; --line: #2C2A2E;
-    --accent: #CF8DBF; --accent-soft: #2C2129; --on-accent: #121113; --ok: #7FB89A; --warn: #D9A04A;
+    --bg: #17161A; --surface: #1E1D22; --ink: #EEEBEE; --ink-2: #D3CED4; --muted: #A9A3AB; --line: #34323A;
+    --accent: #D695C6; --accent-soft: #4E3C4D; --tint: #3B303C; --tint-line: #5A4558; --on-accent: #17161A; --ok: #7FB89A; --warn: #D9A04A;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #121113; --surface: #1B1A1C; --ink: #EEEBEE; --ink-2: #CFCAD0; --muted: #959097; --line: #2C2A2E;
-  --accent: #CF8DBF; --accent-soft: #2C2129; --on-accent: #121113; --ok: #7FB89A; --warn: #D9A04A;
+  --bg: #17161A; --surface: #1E1D22; --ink: #EEEBEE; --ink-2: #D3CED4; --muted: #A9A3AB; --line: #34323A;
+  --accent: #D695C6; --accent-soft: #4E3C4D; --tint: #3B303C; --tint-line: #5A4558; --on-accent: #17161A; --ok: #7FB89A; --warn: #D9A04A;
   color-scheme: dark;
 }
 
@@ -37,7 +39,7 @@ html { -webkit-text-size-adjust: 100%; scroll-padding-top: 72px; }
 body {
   margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans);
   font-size: 16px; line-height: 1.65; letter-spacing: -.01em; word-break: keep-all; overflow-wrap: anywhere;
-  -webkit-font-smoothing: antialiased;
+  -webkit-font-smoothing: antialiased; overflow-x: clip;
 }
 a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 button, input { font: inherit; color: inherit; }
@@ -52,30 +54,39 @@ button, input { font: inherit; color: inherit; }
 .wrap { max-width: 720px; margin: 0 auto; padding: 0 16px 24px; }
 
 /* 상단바 */
-.top { position: sticky; top: 0; z-index: 20; background: var(--bg); border-bottom: 1px solid var(--line); }
+.top { position: sticky; top: 0; z-index: 20; background: var(--tint); border-bottom: 1px solid var(--tint-line); }
 .top-in { max-width: 720px; margin: 0 auto; height: 56px; padding: 0 8px 0 16px; display: flex; align-items: center; gap: 4px; }
 .brand { font-family: var(--serif); font-weight: 700; font-size: 20px; text-decoration: none; letter-spacing: -.02em; display: flex; align-items: center; gap: 8px; }
 .brand-mark { width: 10px; height: 10px; border-radius: 999px; background: var(--accent); }
 .top-sp { flex: 1; }
 .icon-btn { width: 44px; height: 44px; display: grid; place-items: center; border: 0; background: none; border-radius: var(--r-btn); cursor: pointer; color: var(--ink); }
 .icon-btn:hover { background: var(--surface); }
+.top .icon-btn:hover { background: var(--accent-soft); }
 .icon-btn .ico { width: 22px; height: 22px; }
 
 /* 위치 */
 .crumbs { font-size: 13px; color: var(--muted); padding: 16px 0 0; }
+/* 첫 화면 색 띠: 상단바와 이어지게 화면 폭 전체(위치·머리·대표 명언·오늘의 명언) */
+.crumbs, .g-head, .home-head, .today { position: relative; }
+.crumbs::before, .g-head::before, .home-head::before, .today::before, .g-head + .hero::before {
+  content: ""; position: absolute; z-index: -1; top: 0; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%); background: var(--tint);
+}
+.g-head + .hero { margin-top: 0; margin-bottom: 32px; }
+.g-head + .hero::before { top: -1px; bottom: -25px; }
 .crumbs a { color: var(--muted); }
 
 /* 머리 */
 .eyebrow { font-size: 14px; font-weight: 500; color: var(--accent); margin: 0 0 6px; }
-.g-head { padding: 20px 0 8px; }
+.g-head { padding: 20px 0 24px; }
 .g-head h1, .home-head h1, .doc h1 { font-size: 28px; line-height: 1.3; letter-spacing: -.035em; margin: 0 0 8px; font-weight: 700; }
 .lead { color: var(--ink-2); margin: 0; font-size: 16px; }
 .home-head { padding: 32px 0 8px; }
+.home-head + .today { margin-top: 0; padding: 16px 0 28px; margin-bottom: 8px; }
 .home-head h1 { font-family: var(--serif); font-size: clamp(30px, 7vw, 44px); line-height: 1.25; letter-spacing: -.03em; }
 h2 { font-size: 20px; line-height: 1.4; letter-spacing: -.03em; margin: 32px 0 12px; font-weight: 700; }
 
 /* ── 대표 명언(틀 6종) ── */
-.hero { margin: 16px 0 8px; padding: 32px 24px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); position: relative; }
+.hero { margin: 16px 0 8px; padding: 32px 24px; background: var(--surface); border: 1px solid var(--tint-line); border-radius: var(--r); position: relative; }
 .hero blockquote { margin: 0; }
 .hero-text p { margin: 0; }
 .hero-cap { margin-top: 20px; font-size: 14px; color: var(--muted); }
@@ -129,7 +140,7 @@ h2 { font-size: 20px; line-height: 1.4; letter-spacing: -.03em; margin: 32px 0 1
 
 /* 검색 */
 .search { position: relative; display: flex; align-items: center; gap: 8px; margin: 24px 0 8px; padding: 0 14px; height: 48px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-btn); }
-.search:focus-within { border-color: var(--accent); }
+.search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
 .search .ico { color: var(--muted); }
 .search input { flex: 1; min-width: 0; border: 0; background: none; outline: none; height: 100%; font-size: 16px; }
 .search input::placeholder { color: var(--muted); }
@@ -155,7 +166,7 @@ h2 { font-size: 20px; line-height: 1.4; letter-spacing: -.03em; margin: 32px 0 1
 /* 명언 카드 */
 .qlist { display: grid; gap: 12px; margin-top: 16px; }
 .q { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 20px 20px 12px; scroll-margin-top: 72px; transition: border-color .2s; }
-.q.is-target { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.q.is-target { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); background: var(--tint); }
 .q-text { font-family: var(--serif); font-size: 20px; line-height: 1.7; font-weight: 700; letter-spacing: -.02em; margin: 0 0 10px; }
 .q-orig { font-family: var(--serif); color: var(--muted); font-size: 15px; line-height: 1.7; margin: 0 0 10px; }
 .q-orig[lang="zh-Hant"] { font-size: 17px; letter-spacing: .04em; }
@@ -187,14 +198,15 @@ h2 { font-size: 20px; line-height: 1.4; letter-spacing: -.03em; margin: 32px 0 1
 .chip { display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; text-decoration: none; font-size: 15px; }
 .chip .num { color: var(--muted); font-size: 13px; }
 .chip:hover { border-color: var(--ink); }
-.chip.is-on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.chip.is-on { background: var(--tint); color: var(--accent); border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); font-weight: 700; }
+.chip.is-on .num { color: var(--accent); }
 .more { margin-top: 8px; }
 
 /* 첫 화면 */
 .today { margin: 24px 0 0; }
 .today-h { font-size: 16px; font-weight: 700; margin: 0 0 10px; display: flex; gap: 8px; align-items: baseline; }
 .today-h .num { color: var(--muted); font-weight: 500; font-size: 14px; }
-.today-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 28px 24px 20px; }
+.today-card { background: var(--surface); border: 1px solid var(--tint-line); border-radius: var(--r); padding: 28px 24px 20px; }
 .today-text { font-family: var(--serif); font-size: clamp(22px, 5.2vw, 30px); line-height: 1.6; font-weight: 700; letter-spacing: -.025em; margin: 0 0 14px; }
 .today-cap { color: var(--muted); font-size: 14px; margin: 0 0 18px; }
 .today-acts { display: flex; gap: 8px; flex-wrap: wrap; }

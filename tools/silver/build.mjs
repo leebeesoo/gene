@@ -43,8 +43,8 @@ ${GTM_HEAD}
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
-${noindex ? '<meta name="robots" content="noindex,follow">\n' : ''}<meta name="theme-color" content="#F7F6F2" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#121211" media="(prefers-color-scheme: dark)">
+${noindex ? '<meta name="robots" content="noindex,follow">\n' : ''}<meta name="theme-color" content="#E8EEF2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#2D353F" media="(prefers-color-scheme: dark)">
 <link rel="canonical" href="${url}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="혹시나랩">
@@ -207,7 +207,7 @@ function buildIndex() {
           </div>
         </fieldset>
         <p class="form-err" id="formErr" role="alert"></p>
-        <button class="btn btn-primary" type="submit">받을 수 있는 것 보기</button>
+        <button class="btn btn-primary" type="submit">올해 내가 받을 혜택 보기</button>
         <div class="chips" aria-label="예시 나이로 바로 보기">
           ${[63, 65, 66, 70, 75, 80].map(a => `<button type="button" class="chip num" data-year="${Y - a}">${a}세</button>`).join('')}
         </div>

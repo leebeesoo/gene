@@ -158,6 +158,12 @@ export function headline(score) {
   return '불꽃 튀는 사이';
 }
 
+/** 순위 꼬리표: 1위·꼴찌라도 점수대(tone)가 맞을 때만 「찰떡」「티격태격」이라고 불러요 */
+export function rankLabel(p, kind) {
+  if (kind === 'best') return p.tone === 'good' ? '찰떡 1위' : '가장 잘 맞는 쌍';
+  return p.tone === 'bad' ? '티격태격 1위' : '가장 덜 맞는 쌍';
+}
+
 /** 모든 쌍 */
 export function allPairs(people) {
   const out = [];

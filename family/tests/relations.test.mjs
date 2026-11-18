@@ -1,7 +1,7 @@
 // node --test family/tests/relations.test.mjs
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { branchRelations, elRel, stemHap, scorePair, familyRoles, familyBalance, familySanhe, W } from '../js/relations.js';
+import { branchRelations, elRel, stemHap, scorePair, familyRoles, familyBalance, familySanhe, rankLabel, W } from '../js/relations.js';
 import { decodeBoard, encodeBoard } from '../js/codec.js';
 import { festivalNear } from '../js/festival.js';
 
@@ -82,4 +82,11 @@ test('명절', () => {
   assert.equal(festivalNear(new Date(2026, 8, 15)).name, '추석');
   assert.equal(festivalNear(new Date(2026, 1, 3)).dday, 14);
   assert.equal(festivalNear(new Date(2026, 10, 5)), null);
+});
+test('순위 꼬리표는 점수대와 맞아야 함', () => {
+  assert.equal(rankLabel({ tone: 'good' }, 'best'), '찰떡 1위');
+  assert.equal(rankLabel({ tone: 'bad' }, 'best'), '가장 잘 맞는 쌍');
+  assert.equal(rankLabel({ tone: 'mid' }, 'best'), '가장 잘 맞는 쌍');
+  assert.equal(rankLabel({ tone: 'bad' }, 'worst'), '티격태격 1위');
+  assert.equal(rankLabel({ tone: 'good' }, 'worst'), '가장 덜 맞는 쌍');
 });

@@ -2,16 +2,20 @@
    제목 Gowun Batang 700 · 본문 Pretendard · 포인트 색은 숫자·제철·선택 표시에만
    그라데이션·블러·그림자 장식 없음 */
 :root {
-  --bg: #F6F3EE; --surface: #FFFFFF; --ink: #1E1C1A; --muted: #6E6862; --line: #E3DED5; --line-strong: #CFC8BC;
-  --accent: #B4532A; --accent-soft: #F1E4DB; --chip: #EDE8E0;
+  --bg: #FFFBF5; --surface: #FFFFFF; --ink: #1E1C1A; --muted: #67615B; --line: #EAE3D9; --line-strong: #D3CABD;
+  --accent: #AA451C; --on-accent: #FFFFFF; --accent-soft: #F7E7DB; --chip: #F3EDE5;
+  --tint: #F7E7DB;      /* accent 10% + 크림: 첫 화면 띠·강조 카드 */
+  --tint-2: #F2DED0;    /* accent 15%: 선택 칩 */
+  --tint-line: #EBCDB8;
   --serif: 'Gowun Batang', 'Noto Serif KR', 'Nanum Myeongjo', 'AppleMyungjo', serif;
   --sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #131110; --surface: #1B1917; --ink: #ECE7E0; --muted: #9A938A; --line: #2D2925; --line-strong: #423C36;
-    --accent: #CF8A66; --accent-soft: #2E221B; --chip: #24201D;
+    --bg: #17161A; --surface: #1E1D22; --ink: #EFEAE3; --muted: #ADA79F; --line: #302E33; --line-strong: #47434A;
+    --accent: #EE8E62; --on-accent: #17161A; --accent-soft: #3F2F2C; --chip: #26242A;
+    --tint: #3F2F2C; --tint-2: #4C3630; --tint-line: #5C4036;
     color-scheme: dark;
   }
 }
@@ -33,12 +37,13 @@ ol, ul { list-style: none; }
 .wrap { max-width: 760px; margin: 0 auto; padding: 0 16px; }
 
 /* 상단바 */
-.topbar { position: sticky; top: 0; z-index: 20; background: var(--bg); border-bottom: 1px solid var(--line); }
+.topbar { position: sticky; top: 0; z-index: 20; background: var(--tint); border-bottom: 1px solid var(--tint-line); }
 .topbar-in { max-width: 760px; margin: 0 auto; height: 56px; padding: 0 6px 0 16px; display: flex; align-items: center; gap: 2px; }
 .logo { font-family: var(--serif); font-weight: 700; font-size: 22px; letter-spacing: -0.02em; margin-right: auto; }
 .topnav { display: none; }
 .icon-btn { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 10px; color: var(--ink); }
 .icon-btn:hover { background: var(--chip); }
+.topbar .icon-btn:hover { background: var(--tint-2); }
 @media (min-width: 768px) {
   .topnav { display: flex; gap: 4px; margin-right: 8px; }
   .topnav a { padding: 8px 10px; font-size: 14px; font-weight: 500; color: var(--muted); border-radius: 8px; }
@@ -264,7 +269,7 @@ a.more { text-decoration: underline; text-underline-offset: 3px; text-decoration
 .search .ic { color: var(--muted); }
 .search input { flex: 1; min-width: 0; height: 100%; border: 0; background: none; font: inherit; color: var(--ink); outline: none; }
 .search input::placeholder { color: var(--muted); }
-.search:focus-within { border-color: var(--ink); }
+.search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
 
 /* 광고: 공용 ../common/ads.css(.jl-ad)를 따르고, 목록 사이 칸만 간격을 더함 */
 .ad-li { padding: 104px 0 48px; border-bottom: 1px solid var(--line); }
@@ -311,3 +316,21 @@ a.more { text-decoration: underline; text-underline-offset: 3px; text-decoration
 .svc-faq details p { margin: 0 0 16px; }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+
+/* 색 입히기 (2026-11): 첫 화면 띠(이달 메뉴+위치)에 구이 불 색 틴트, 단색은 주 버튼만 */
+.hero-band { background: var(--tint); border-bottom: 1px solid var(--tint-line); padding-bottom: 4px; }
+.hero-band .locbar { border-top-color: var(--tint-line); border-bottom: 0; margin-top: 20px; }
+.hero-band .menu3 li { border-bottom-color: var(--tint-line); }
+.hero-band .select, .hero-band .btn { background-color: var(--surface); }
+.hero-band .ph.noimg { background: var(--surface); border-color: var(--tint-line); }
+.hero-band .icon-btn:hover { background: var(--tint-2); }
+.hero-band .btn.ink { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.dish-head, .rhead-page { background: var(--tint); border: 1px solid var(--tint-line); border-radius: 12px; padding: 16px; margin-top: 12px; }
+.dish-head .lede, .rhead-page .lede { color: var(--muted); }
+.chip[aria-pressed=true] { background: var(--tint-2); border-color: var(--accent); color: var(--ink); box-shadow: inset 0 0 0 1px var(--accent); }
+.chip[aria-pressed=true] .n { color: var(--ink); opacity: 1; }
+.rcard.focus { background: var(--tint); }
+.how li::before { color: var(--accent); }
+.empty { background: var(--tint); border-color: var(--tint-line); }
+.doc th { background: var(--tint); }
+.menu-panel a:hover, .menu-panel a[aria-current] { background: var(--tint); }

@@ -1,16 +1,21 @@
 /* 제철장보기 v3 — 심플 모던 "이달의 장바구니 메모"
    제목 Hahmlet 700 · 본문 Pretendard · 잉크색 버튼 · 포인트 숲 초록은 숫자·선택·데이터에만 */
 :root {
-  --bg: #F7F6F1;
+  --bg: #FCFAF4;
   --surface: #FFFFFF;
-  --surface-2: #EFEEE7;
+  --surface-2: #F2F0E8;
+  --tint: #E9EEE3;      /* accent 10% + 웜 화이트: 첫 화면 메모·핵심 패널 */
+  --tint-2: #DDE7DA;    /* accent 15%: 선택 칩 (글자는 ink·muted만) */
+  --tint-line: #CCD9C9;
   --ink: #1F221E;
   --ink-2: #3E423C;
-  --muted: #6B6F66;
-  --line: #E2E0D7;
+  --muted: #5F635A;
+  --line: #E4E2D9;
   --line-2: #CFCDC3;
-  --accent: #2F6B4F;
-  --accent-soft: #E3EDE6;
+  --accent: #1F7048;
+  --on-accent: #FFFFFF;
+  --accent-soft: #E0ECE5;
+  --mo-bar: #BAC4BC;
   --chart-norm: #A3A69C;
   --focus: #1F221E;
   --sheet-shadow: 0 8px 24px -12px rgba(0, 0, 0, .12);
@@ -21,18 +26,23 @@
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #111311;
-    --surface: #181A17;
-    --surface-2: #20221F;
-    --ink: #E8E8E2;
-    --ink-2: #C6C7C0;
-    --muted: #90958B;
-    --line: #2A2C28;
-    --line-2: #3A3D37;
-    --accent: #7FAF95;
-    --accent-soft: #1C2721;
-    --chart-norm: #62665E;
-    --focus: #E8E8E2;
+    --bg: #17161A;
+    --surface: #1E1D22;
+    --surface-2: #26252B;
+    --tint: #2A3835;
+    --tint-2: #2F423C;
+    --tint-line: #3B5249;
+    --ink: #ECECE6;
+    --ink-2: #CACBC4;
+    --muted: #A7ABA2;
+    --line: #2F2E33;
+    --line-2: #45444A;
+    --accent: #6CC496;
+    --on-accent: #17161A;
+    --accent-soft: #24342E;
+    --mo-bar: #4E5A53;
+    --chart-norm: #6A6E66;
+    --focus: #ECECE6;
     color-scheme: dark;
   }
 }
@@ -73,7 +83,7 @@ b, strong { font-weight: 700; }
 .lic [fill="rgba(255,255,255,.45)"] { display: none; }
 
 /* ── 상단바 ── */
-.topbar { position: sticky; top: 0; z-index: 40; background: var(--bg); border-bottom: 1px solid var(--line); }
+.topbar { position: sticky; top: 0; z-index: 40; background: var(--tint); border-bottom: 1px solid var(--tint-line); }
 .topbar-in { max-width: var(--max); margin: 0 auto; height: var(--top-h); display: flex; align-items: center; gap: 16px; padding: 0 16px; }
 .logo { font-family: var(--display); font-size: 20px; font-weight: 700; letter-spacing: -0.03em; color: var(--ink); }
 .topnav { display: none; gap: 2px; margin-left: 8px; }
@@ -158,7 +168,7 @@ b, strong { font-weight: 700; }
 @media (min-width: 720px) { .filters { flex-direction: row; align-items: center; justify-content: space-between; } }
 .search { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--line-2); border-radius: 10px; padding: 0 12px; min-height: 44px; color: var(--muted); }
 .search input { border: 0; outline: 0; background: none; flex: 1; min-width: 0; height: 42px; color: var(--ink); font-size: 16px; }
-.search:focus-within { border-color: var(--ink); }
+.search:focus-within { border-color: var(--focus); box-shadow: 0 0 0 1px var(--focus); }
 @media (min-width: 720px) { .search { width: 300px; } }
 
 /* 카드: 줄로 나눈 편집 그리드 */
@@ -401,3 +411,21 @@ b, strong { font-weight: 700; }
 .svc-faq summary::after { content: ""; flex: none; width: 8px; height: 8px; margin-right: 4px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: translateY(-3px) rotate(45deg); transition: transform .15s; }
 .svc-faq details[open] summary::after { transform: translateY(2px) rotate(-135deg); }
 .svc-faq details p { margin: 0 0 16px; }
+
+/* 색 입히기 (2026-11): 첫 화면 메모(+12개월 띠)를 초록 틴트로, 카드는 흰 면, 단색 초록은 주 버튼만 */
+.memo { background: var(--tint); border-bottom: 1px solid var(--tint-line); }
+.memo + .section { border-top: 0; }
+.memo .pick { border-bottom-color: var(--tint-line); }
+.memo .strip { border-top-color: var(--tint-line); }
+.memo .btn.ghost { background: var(--surface); }
+.mo-bar i { background: var(--mo-bar); }
+.btn.ink, .btn.primary { background: var(--accent); color: var(--on-accent); }
+.btn.ink:hover, .btn.primary:hover { background: var(--accent); filter: brightness(1.08); }
+.chip[aria-pressed="true"], .seg button[aria-selected="true"] { background: var(--tint-2); color: var(--ink); border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.grid { background: var(--surface); }
+.card:hover { background: var(--tint); }
+.cta-row:hover { background: var(--tint); border-color: var(--accent); }
+.town { background: var(--tint); border-color: var(--tint-line); }
+.item-head { background: var(--tint); border: 1px solid var(--tint-line); border-bottom: 2px solid var(--ink); border-radius: 12px 12px 0 0; padding: 16px; }
+.howto { background: var(--tint); border: 1px solid var(--tint-line); border-radius: 12px; padding: 12px 16px; }
+.cal td.cur { background: var(--tint); }

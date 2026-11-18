@@ -12,8 +12,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>혹시나랩 — 로또·운세·제철·생활 계산기 무료 모음</title>
 <meta name="description" content="혹시나 하고 열어 보는 무료 생활 도구 14가지. 오늘의 로또 번호와 1등 명당, 사주 궁합, 이달 제철 식재료와 맛집, 내 이름 통계, 나이별 혜택·검진, 상황별 명언까지 공공 데이터로 만들었어요.">
-<meta name="theme-color" content="#FAF7F2" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#1B1917" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#FFFBF5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#17161A" media="(prefers-color-scheme: dark)">
 <meta name="color-scheme" content="light dark">
 <link rel="canonical" href="https://jaemilab.net/">
 <meta name="naver-site-verification" content="75fd43f7bacbe1423aa88882c733339d84f09920">
@@ -45,13 +45,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </script>
 <style>
 :root{
-  --bg:#FAF7F2;--ink:#1F1D1A;--muted:#736D64;--line:#E9E3D8;--chip:#F0EAE0;--soft:#F3EEE5;
+  --bg:#FFFBF5;--ink:#1F1D1A;--muted:#6B655C;--line:#EDE4D6;--chip:#F5EEE3;--soft:#F7F0E6;
   --sans:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
   --serif:"Noto Serif KR","Nanum Myeongjo","AppleMyungjo","Batang",serif;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root{
-  --bg:#1B1917;--ink:#EEEAE3;--muted:#A39C92;--line:#2E2B27;--chip:#26231F;--soft:#221F1C;
+  --bg:#17161A;--ink:#EEEAE3;--muted:#A39C92;--line:#2E2C31;--chip:#2A272D;--soft:#1E1D22;
   color-scheme:dark;
 }}
 *{box-sizing:border-box}
@@ -70,7 +70,7 @@ a{color:inherit}
 .brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
 .brand .dots{display:grid;grid-template-columns:repeat(2,9px);gap:3px;flex:none}
 .brand .dots i{width:9px;height:9px;border-radius:50%}
-.brand .dots i:nth-child(1){background:#D23A1F}.brand .dots i:nth-child(2){background:#FBC400}
+.brand .dots i:nth-child(1){background:#C42E16}.brand .dots i:nth-child(2){background:#FBC400}
 .brand .dots i:nth-child(3){background:#2F6B4F}.brand .dots i:nth-child(4){background:#2B50D8}
 .brand b{display:block;font-size:21px;font-weight:800;letter-spacing:-.04em;line-height:1.15;color:var(--ink)}
 .brand span{display:block;font-size:13px;color:var(--muted);font-weight:500;line-height:1.3}
@@ -115,54 +115,54 @@ a{color:inherit}
 
 .tile{--tb:#F5F5F2;--ti:#17181B;--ta:#B8452A;--df:var(--sans);
   position:relative;display:flex;flex-direction:column;min-width:0;padding:16px 16px 18px;border-radius:18px;background:var(--tb);color:var(--ti);text-decoration:none;overflow:hidden;
-  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ti) 5%,transparent);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .18s}
-.tile:hover{transform:translateY(-2px);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ti) 14%,transparent)}
+  transition:transform .18s cubic-bezier(.2,.7,.2,1)}
+/* 색 면: 각 서비스 포인트 색을 흰 바탕에 10% 섞은 옅은 면(다크는 #1E1D22에 16%). 근본 테스트만 인주 단색 면 */
+.tile:not(.t-roots){--tb:color-mix(in srgb,var(--ta) 10%,#fff)}
+.tile:hover{transform:translateY(-2px)}
 .tile:active{transform:translateY(0)}
 .tile:focus-visible{outline-offset:3px;border-radius:18px}
-.t-roots{box-shadow:none}.t-roots:hover{box-shadow:none}
-.tile .hd{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;line-height:1.3;color:color-mix(in srgb,var(--ti) 64%,var(--tb))}
+.tile .hd{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;line-height:1.3;color:color-mix(in srgb,var(--ti) 68%,var(--tb))}
 .tile .hd svg{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s}
 .tile:hover .hd svg{transform:translateX(2px)}
 .tile .pv{flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0;padding:10px 0}
 .tile .ft{margin-top:auto}
 .tile .nm{font-family:var(--df);font-size:18px;line-height:1.2;letter-spacing:-.02em;font-weight:700}
-.tile .ol{margin-top:3px;font-size:12px;line-height:1.4;color:color-mix(in srgb,var(--ti) 64%,var(--tb));display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.small{font-size:12px;line-height:1.4;color:color-mix(in srgb,var(--ti) 64%,var(--tb))}
+.tile .ol{margin-top:3px;font-size:12px;line-height:1.4;color:color-mix(in srgb,var(--ti) 68%,var(--tb));display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.small{font-size:12px;line-height:1.4;color:color-mix(in srgb,var(--ti) 68%,var(--tb))}
 .disp{font-family:var(--df)}
 
 /* 서비스별 바탕·잉크·포인트·제목 글꼴 (docs/design-direction.md) */
-.t-lotto{--tb:#F4F2EC;--ti:#16171A;--ta:#D23A1F;--df:"Black Han Sans",var(--sans)}
-.t-map{--tb:#F5F5F2;--ti:#17181B;--ta:#B8452A;--df:"IBM Plex Sans KR",var(--sans)}
-.t-market{--tb:#F3F3EC;--ti:#1D211D;--ta:#3E6B3A;--df:"Gothic A1",var(--sans)}
-.t-season{--tb:#F7F6F1;--ti:#1F221E;--ta:#2F6B4F;--df:"Hahmlet",var(--serif)}
-.t-sikdang{--tb:#F6F3EE;--ti:#1E1C1A;--ta:#B4532A;--df:"Gowun Batang",var(--serif)}
+.t-lotto{--tb:#F4F2EC;--ti:#16171A;--ta:#C42E16;--df:"Black Han Sans",var(--sans)}
+.t-map{--tb:#F5F5F2;--ti:#17181B;--ta:#B03F25;--df:"IBM Plex Sans KR",var(--sans)}
+.t-market{--tb:#F3F3EC;--ti:#1D211D;--ta:#2D7638;--df:"Gothic A1",var(--sans)}
+.t-season{--tb:#F7F6F1;--ti:#1F221E;--ta:#1F7048;--df:"Hahmlet",var(--serif)}
+.t-sikdang{--tb:#F6F3EE;--ti:#1E1C1A;--ta:#A84A24;--df:"Gowun Batang",var(--serif)}
 .t-roots{--tb:#8E2B22;--ti:#F6EFE4;--ta:#F6EFE4;--df:"Nanum Myeongjo",var(--serif)}
 .t-family{--tb:#F5F1EA;--ti:#1F1D1A;--ta:#1F5F57;--df:"Gowun Batang",var(--serif)}
 .t-names{--tb:#F6F7F9;--ti:#15171C;--ta:#2B50D8;--df:"IBM Plex Sans KR",var(--sans)}
-.t-life{--tb:#F7F5F2;--ti:#1E1B1F;--ta:#C2456A;--df:"Gowun Batang",var(--serif)}
-.t-year{--tb:#F2EFE8;--ti:#222020;--ta:#B23A26;--df:"Noto Serif KR",var(--serif)}
-.t-donkey{--tb:#F6F5F1;--ti:#1C1B19;--ta:#8F6200;--nb:#FCF8EE;--nl:#E7DEC6}
-.t-silver{--tb:#F7F6F2;--ti:#141413;--ta:#2C6A8E}
-.t-money{--tb:#F6F6F3;--ti:#191A1C;--ta:#5A4AA8}
-.t-quotes{--tb:#F7F6F3;--ti:#1D1B1E;--ta:#7A3B69;--df:"Gowun Batang",var(--serif)}
-.t-wish{--tb:#F5F6F0;--ti:#1A1B17;--ta:#56661C}
+.t-life{--tb:#F7F5F2;--ti:#1E1B1F;--ta:#B23C60;--df:"Gowun Batang",var(--serif)}
+.t-year{--tb:#F2EFE8;--ti:#222020;--ta:#B5341F;--df:"Noto Serif KR",var(--serif)}
+.t-donkey{--tb:#F6F5F1;--ti:#1C1B19;--ta:#855B00;--nb:#FCF8EE;--nl:#E7DEC6}
+.t-silver{--tb:#F7F6F2;--ti:#141413;--ta:#1E5A80}
+.t-money{--tb:#F6F6F3;--ti:#191A1C;--ta:#5B45C2}
+.t-quotes{--tb:#F7F6F3;--ti:#1D1B1E;--ta:#8E3577;--df:"Gowun Batang",var(--serif)}
+.t-wish{--tb:#F5F6F0;--ti:#1A1B17;--ta:#4D6B12}
 @media (prefers-color-scheme:dark){
-  .tile{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ti) 7%,transparent)}
-  .tile:hover{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ti) 16%,transparent)}
-  .t-lotto{--tb:#121212;--ti:#ECEAE4;--ta:#D9705C}
-  .t-map{--tb:#121314;--ti:#E9E9E6;--ta:#CF7A63}
+  .tile:not(.t-roots){--tb:color-mix(in srgb,var(--ta) 16%,#1E1D22)}
+  .t-lotto{--tb:#121212;--ti:#F1EFE9;--ta:#EE8A74}
+  .t-map{--tb:#121314;--ti:#F1EFE9;--ta:#E58C74}
   .t-market{--tb:#121412;--ti:#E6EAE3;--ta:#8FB282}
   .t-season{--tb:#111311;--ti:#E8E8E2;--ta:#7FAF95}
-  .t-sikdang{--tb:#131110;--ti:#ECE7E0;--ta:#CF8A66}
+  .t-sikdang{--tb:#131110;--ti:#F1EFE9;--ta:#E09A76}
   .t-roots{--tb:#3A1A17;--ti:#ECE8E0;--ta:#D9A49E}
-  .t-family{--tb:#151412;--ti:#ECE7DF;--ta:#6FA59B}
-  .t-names{--tb:#101114;--ti:#E9EBEF;--ta:#8A9BD8}
-  .t-life{--tb:#121113;--ti:#EEEAEC;--ta:#CC8296}
-  .t-year{--tb:#141312;--ti:#EEE9E0;--ta:#CF7B66}
+  .t-family{--tb:#151412;--ti:#F1EFE9;--ta:#80B8AD}
+  .t-names{--tb:#101114;--ti:#F1EFE9;--ta:#97A8EA}
+  .t-life{--tb:#121113;--ti:#F1EFE9;--ta:#DE90A5}
+  .t-year{--tb:#141312;--ti:#F1EFE9;--ta:#E58C76}
   .t-donkey{--tb:#121211;--ti:#EDEBE6;--ta:#D8AE52;--nb:#221F1A;--nl:#39342A}
   .t-silver{--tb:#121211;--ti:#F3F1EC;--ta:#7DB6DA}
   .t-money{--tb:#111213;--ti:#ECECEA;--ta:#A99CF0}
-  .t-quotes{--tb:#121113;--ti:#EEEBEE;--ta:#CF8DBF}
+  .t-quotes{--tb:#121113;--ti:#F1EFE9;--ta:#D99BCB}
   .t-wish{--tb:#121310;--ti:#ECECE6;--ta:#B5C46A}
 }
 
@@ -170,12 +170,12 @@ a{color:inherit}
 .t-lotto .nm{font-size:26px;font-weight:400;letter-spacing:0}
 .t-lotto .round{color:var(--ta);font-weight:700}
 .balls{display:flex;gap:6px;margin:8px 0 12px}
-.ball{flex:0 1 44px;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:var(--c);color:#fff;font-weight:800;font-size:17px;font-variant-numeric:tabular-nums;text-shadow:0 1px 0 rgba(0,0,0,.18)}
+.ball{flex:0 1 44px;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:var(--c);color:#1B1B1B;font-weight:800;font-size:17px;font-variant-numeric:tabular-nums}
 .ball.y{--c:#FBC400}.ball.b{--c:#69C8F2}.ball.r{--c:#FF7272}.ball.k{--c:#AAAAAA}.ball.g{--c:#B0D840}
 @media (prefers-color-scheme:dark){.balls{filter:saturate(.85)}}
 .cd{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
 .cd b{font-size:clamp(28px,8vw,44px);line-height:1;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
-.cd span{font-size:12px;color:color-mix(in srgb,var(--ti) 64%,var(--tb))}
+.cd span{font-size:12px;color:color-mix(in srgb,var(--ti) 68%,var(--tb))}
 
 /* 근본 테스트: 인주 면 + 도장 */
 .stamp{display:flex;align-items:center;gap:12px}
@@ -188,10 +188,10 @@ a{color:inherit}
 .t-market .big small{font-size:16px;color:var(--ti);margin-left:4px;letter-spacing:-.01em}
 .heads{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:2px}
 .heads li{display:flex;justify-content:space-between;align-items:baseline;gap:6px;font-family:var(--df);font-weight:800;font-size:15px;line-height:1.35}
-.heads li i{font-style:normal;font-family:var(--sans);font-weight:600;font-size:11px;color:color-mix(in srgb,var(--ti) 64%,var(--tb))}
+.heads li i{font-style:normal;font-family:var(--sans);font-weight:600;font-size:11px;color:color-mix(in srgb,var(--ti) 68%,var(--tb))}
 
 /* 나때연감 */
-.t-year .mast{font-size:11px;letter-spacing:.12em;border-bottom:1px solid currentColor;padding-bottom:6px;color:color-mix(in srgb,var(--ti) 64%,var(--tb));display:flex;justify-content:space-between}
+.t-year .mast{font-size:11px;letter-spacing:.12em;border-bottom:1px solid currentColor;padding-bottom:6px;color:color-mix(in srgb,var(--ti) 68%,var(--tb));display:flex;justify-content:space-between}
 .t-year .yr{font-family:var(--df);font-weight:900;font-size:clamp(52px,15vw,96px);line-height:.95;letter-spacing:-.04em;margin:10px 0 8px}
 .t-year .hl{font-family:var(--df);font-weight:900;font-size:16px;line-height:1.35;border-top:1px solid color-mix(in srgb,var(--ti) 30%,transparent);padding-top:8px}
 .t-year .cols{display:none}
@@ -248,7 +248,7 @@ a{color:inherit}
 .perks{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:7px}
 .perks li{font-size:14px;font-weight:700;line-height:1.3;padding-left:12px;position:relative}
 .perks li::before{content:"";position:absolute;left:0;top:.5em;width:5px;height:5px;border-radius:50%;background:var(--ta)}
-.perks li i{display:block;font-style:normal;font-weight:500;font-size:12px;color:color-mix(in srgb,var(--ti) 64%,var(--tb))}
+.perks li i{display:block;font-style:normal;font-weight:500;font-size:12px;color:color-mix(in srgb,var(--ti) 68%,var(--tb))}
 .perks li:nth-child(n+4){display:none}
 
 /* 내 미래 머니: 그해 1만 원을 지금 물가로 */
@@ -257,14 +257,14 @@ a{color:inherit}
 .t-money .now{font-size:clamp(30px,8vw,40px);line-height:1.05;font-weight:700;letter-spacing:-.03em;color:var(--ta);font-variant-numeric:tabular-nums}
 .t-money .now small{font-size:16px;color:var(--ti);margin-left:2px}
 .bars{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;align-items:end;height:84px;max-width:360px}
-.bars span{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;font-size:11px;line-height:1.2;color:color-mix(in srgb,var(--ti) 64%,var(--tb));font-variant-numeric:tabular-nums}
+.bars span{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;font-size:11px;line-height:1.2;color:color-mix(in srgb,var(--ti) 68%,var(--tb));font-variant-numeric:tabular-nums}
 .bars i{display:block;width:100%;height:calc(var(--h,0) * 62px);border-radius:3px 3px 0 0;background:color-mix(in srgb,var(--ti) 16%,var(--tb));margin-bottom:4px;min-height:3px}
 .bars .on i{background:var(--ta)}
 .bars .on{color:var(--ti);font-weight:700}
 
 /* 내 상황 명언: 날짜로 고른 한 줄(명조) */
 .t-quotes .qt{font-family:var(--df);font-weight:700;font-size:21px;line-height:1.5;letter-spacing:-.02em;margin-top:6px}
-.t-quotes .qs{margin-top:8px;font-size:12px;line-height:1.4;color:color-mix(in srgb,var(--ti) 64%,var(--tb))}
+.t-quotes .qs{margin-top:8px;font-size:12px;line-height:1.4;color:color-mix(in srgb,var(--ti) 68%,var(--tb))}
 .t-quotes .qs b{color:var(--ta);font-weight:700}
 
 /* 광고 타일: 그리드 사이 한 줄(모바일은 늘 꽉 찬 한 줄 — 타일 옆에 붙지 않음), 링크 타일과 24px 넘게 띄움(격자 간격 14 + 여백 10).
@@ -370,7 +370,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <h1 class="sr">혹시나랩, 혹시나 하고 열어 보는 무료 생활 도구 14가지</h1>
   <div class="board" id="board">
 
-    <a class="tile t-lotto w" data-cat="fun" href="lotto/" aria-label="오늘로또 — 사주로 뽑는 오늘의 로또 번호와 살 시간·방향">
+    <a class="tile t-lotto w" data-cat="fun" href="lotto/" aria-label="오늘로또 — 사주로 뽑는 오늘의 로또 번호와 행운 시간·방향">
       <div class="hd"><span>운세·재미 · <span class="round num" id="lRound">이번 주 추첨</span></span><svg aria-hidden="true"><use href="#go"/></svg></div>
       <div class="pv">
         <p class="small">오늘의 공 · 날짜로 뽑은 미리보기</p>
@@ -379,7 +379,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="ft">
         <p class="nm disp">오늘로또</p>
-        <p class="ol">미리보기: 오늘 날짜로 뽑은 공 6개예요. 내 사주로 뽑은 번호와 살 시간·방향은 안에서.</p>
+        <p class="ol">미리보기: 오늘 날짜로 뽑은 공 6개예요. 내 사주로 뽑은 번호와 행운 시간·방향은 안에서.</p>
       </div>
     </a>
 
@@ -391,7 +391,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div class="m" style="--i:2"><p class="code" id="rCode">思守理獨</p><p class="small" id="rType">오늘의 코드</p></div>
         </div>
       </div>
-      <div class="ft"><p class="nm disp">근본 테스트</p><p class="ol">16가지 근본 코드 중 나는?</p></div>
+      <div class="ft"><p class="nm disp">근본 테스트</p><p class="ol">내 성씨에 숨은 근본 코드, 16개 중 하나예요</p></div>
     </a>
 
     <a class="tile t-market" data-cat="food" href="market/" aria-label="구출장터 — 버려질 농수산물이 어디서 남는지, 버려지기 전에">
@@ -401,7 +401,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p class="big m num" id="mN">—<small>개</small></p>
         <ul class="heads m" style="--i:2" id="mList"><li>버려지기 전에 확인</li></ul>
       </div>
-      <div class="ft"><p class="nm disp">구출장터</p><p class="ol">버려질 농수산물이 어디서 남는지, 버려지기 전에</p></div>
+      <div class="ft"><p class="nm disp">구출장터</p><p class="ol">오늘 버려질 뻔한 농산물, 어디서 남을까?</p></div>
     </a>
 
     <a class="tile t-year" data-cat="life" href="birthyear/" aria-label="나때연감 — 내가 태어난 해 타임캡슐">
@@ -412,7 +412,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p class="hl m" style="--i:2" id="yHead">기록적 폭염</p>
         <div class="cols m" style="--i:3"><p><b>그해 노래</b><span id="ySong">「칵테일 사랑」 마로니에</span></p><p><b>태어난 아기</b><span id="yBirth" class="num">721,185명</span></p></div>
       </div>
-      <div class="ft"><p class="nm disp">나때연감</p><p class="ol">내가 태어난 해 타임캡슐</p></div>
+      <div class="ft"><p class="nm disp">나때연감</p><p class="ol">내가 태어난 해, 짜장면은 얼마였을까?</p></div>
     </a>
 
     <a class="tile t-names" data-cat="life" href="names/" aria-label="이름레이더 — 내 이름, 전국에 몇 명?">
@@ -432,7 +432,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p class="small m" style="--i:1" id="wSub">올해 52주</p>
         <div class="weeks" id="wGrid" aria-hidden="true"></div>
       </div>
-      <div class="ft"><p class="nm disp">남은봄</p><p class="ol">남은 주말·명절·벚꽃 세는 인생 시계</p></div>
+      <div class="ft"><p class="nm disp">남은봄</p><p class="ol">나는 벚꽃 몇 번 더 볼까?</p></div>
     </a>
 
     <a class="tile t-quotes w" data-cat="fun" href="quotes/" aria-label="내 상황 명언 — 지금 필요한 한 줄, 원문과 출처까지">
@@ -500,7 +500,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <circle cx="15" cy="45" r="10" fill="#466A86"/><text x="15" y="48.5" text-anchor="middle">水</text>
         </svg>
       </div>
-      <div class="ft"><p class="nm disp">식구궁합</p><p class="ol">우리 가족 오행 궁합판</p></div>
+      <div class="ft"><p class="nm disp">식구궁합</p><p class="ol">우리 집에서 누가 누굴 살릴까?</p></div>
     </a>
 
     <a class="tile t-season w" data-cat="food" href="season/" aria-label="제철장보기 — 이달 제철 식재료와 지금 싼 품목">
@@ -509,7 +509,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p class="mon m num" id="sMon">이달</p>
         <p class="items m" style="--i:1" id="sItems">제철 품목</p>
       </div>
-      <div class="ft"><p class="nm disp">제철장보기</p><p class="ol">이달 제철 식재료와 지금 싼 품목</p></div>
+      <div class="ft"><p class="nm disp">제철장보기</p><p class="ol">이달 제철, 지금 뭐가 쌀까?</p></div>
     </a>
 
     <a class="tile t-sikdang" data-cat="food" href="sikdang/" aria-label="제철식당 — 이달 이 지역 제철 음식을 잘하는 집">
@@ -518,17 +518,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p class="small" id="dLab">이달의 음식</p>
         <p class="dish m" id="dDish">제철 음식</p>
       </div>
-      <div class="ft"><p class="nm disp">제철식당</p><p class="ol">이달 이 지역 제철 음식을 잘하는 집</p></div>
+      <div class="ft"><p class="nm disp">제철식당</p><p class="ol">이달 우리 동네 제철 음식, 어디가 잘할까?</p></div>
     </a>
 
     <a class="tile t-map" data-cat="fun" href="lottomap/" aria-label="명당로드 — 로또 1등 명당 지도와 번호 통계">
       <div class="hd"><span>운세·재미</span><svg aria-hidden="true"><use href="#go"/></svg></div>
       <div class="pv">
-        <!-- lottomap/data/stores.js(스냅샷 2026-11-05, 262~1248회) 판매점 1등 합계·최다 판매점. 데이터 갱신 때 같이 고친다 -->
-        <p class="stat m"><span class="small">1등</span> 9,231<small>건</small></p>
+        <!-- lottomap/data/stores.js(스냅샷 2026-11-18, 262~1250회) 판매점 1등 합계·최다 판매점. 데이터 갱신 때 같이 고친다 -->
+        <p class="stat m"><span class="small">1등</span> 9,240<small>건</small></p>
         <p class="best m" style="--i:1">최다 명당 <b>노원 스파</b> 53회</p>
       </div>
-      <div class="ft"><p class="nm disp">명당로드</p><p class="ol">로또 1등 명당 지도와 번호 통계</p></div>
+      <div class="ft"><p class="nm disp">명당로드</p><p class="ol">우리 동네 1등은 몇 번?</p></div>
     </a>
     <a class="tile t-wish" data-cat="fun" href="wish/" aria-label="소원명당 — 소원 이야기가 전하는 전국 명소 지도">
       <div class="hd"><span>운세·재미</span><svg aria-hidden="true"><use href="#go"/></svg></div>
@@ -538,7 +538,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p class="stat m">전국 87<small>곳</small></p>
         <p class="best m" style="--i:1">합격 <b>9</b> · 새해 해맞이 <b>19</b> · 재물 <b>6</b></p>
       </div>
-      <div class="ft"><p class="nm disp">소원명당</p><p class="ol">소원 이야기가 전하는 전국 명소 지도</p></div>
+      <div class="ft"><p class="nm disp">소원명당</p><p class="ol">우리 동네에도 소원 빌던 바위가 있을까?</p></div>
     </a>
   </div>
 
@@ -561,7 +561,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <footer class="jl-footer" data-site="" data-home="./" data-copy="입력한 정보는 내 기기에만 저장돼요(구출장터 신청 폼 제외)">
   <div data-notes><p>운세·궁합 결과는 재미로 보는 콘텐츠예요. 복권은 만 19세 미만은 살 수 없고, 도박 문제 상담은 국번 없이 1336이에요.</p></div>
   <div data-sources><ul>
-    <li>명당로드: <a href="https://dhlottery.co.kr/" rel="noopener">동행복권</a> 262~1248회 당첨 판매점</li>
+    <li>명당로드: <a href="https://dhlottery.co.kr/" rel="noopener">동행복권</a> 262~1250회 당첨 판매점</li>
     <li>구출장터: <a href="https://www.kamis.or.kr/" rel="noopener">KAMIS</a>·농림축산식품부·농업관측센터·언론 보도</li>
     <li>이름레이더: <a href="https://kosis.kr/" rel="noopener">통계청 KOSIS</a> 2015 인구주택총조사</li>
     <li>나때연감: <a href="https://kosis.kr/" rel="noopener">통계청 KOSIS</a> 출생통계</li>

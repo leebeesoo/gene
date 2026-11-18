@@ -224,7 +224,7 @@
       '<div class="field"><label class="lbl" for="pMom">어머니 만 나이</label><input class="input num" id="pMom" type="number" inputmode="numeric" min="15" max="110" placeholder="예: 62" value="' + esc(P.mom || '') + '"></div>' +
       '<div class="field"><label class="lbl" for="pDad">아버지 만 나이</label><input class="input num" id="pDad" type="number" inputmode="numeric" min="15" max="110" placeholder="예: 65" value="' + esc(P.dad || '') + '"></div>' +
       '</div><div class="field"><label class="lbl" for="pPer">1년에 만나는 날</label><input class="input num" id="pPer" type="number" inputmode="numeric" min="1" max="365" value="' + esc(P.per || 4) + '"></div>' +
-      '<button class="btn btn-ink btn-sm" type="submit" style="width:100%">계산하기</button><div id="parRes"></div></form></section>';
+      '<button class="btn btn-tint btn-sm" type="submit" style="width:100%">계산하기</button><div id="parRes"></div></form></section>';
   }
 
   function renderParents() {
@@ -243,7 +243,7 @@
   function mentalHtml(s) {
     var q = state.quiz && state.quiz.done ? C.mentalAge(D.QUIZ, state.quiz.answers) : null;
     if (!q) {
-      return '<div class="card mental-cta"><div class="ic" aria-hidden="true">' + svgIc('mind') + '</div><div><h3>내 정신 나이는 몇 살?</h3><p>상황 질문 12개, 1분이면 끝나요.</p><button class="btn btn-ink btn-sm" type="button" data-action="quiz">정신 나이 테스트 시작</button></div></div>';
+      return '<div class="card mental-cta"><div class="ic" aria-hidden="true">' + svgIc('mind') + '</div><div><h3>내 정신 나이는 몇 살?</h3><p>상황 질문 12개, 1분이면 끝나요.</p><button class="btn btn-tint btn-sm" type="button" data-action="quiz">정신 나이 테스트 시작</button></div></div>';
     }
     var t = C.mentalType(D.MENTAL_TYPES, q.age);
     var diff = q.age - s.ages.man;
@@ -257,7 +257,7 @@
 
   function familyHtml() {
     return '<section class="sec" aria-labelledby="famT"><h2 class="sec-h" id="famT">가족 인생 시계</h2><p class="sec-sub">가족도 추가해 두면 다음 기념일을 한눈에 볼 수 있어요.</p><div id="famBox"></div>' +
-      '<form class="card fam-form" id="famForm" novalidate><input class="input full" id="fName" maxlength="12" placeholder="이름 (예: 엄마)" aria-label="가족 이름"><input class="input num" id="fBirth" type="date" min="1900-01-01" max="' + today + '" aria-label="가족 생년월일"><div class="seg" role="radiogroup" aria-label="가족 성별"><input type="radio" name="fsex" id="fsF" value="f" checked><label for="fsF">여</label><input type="radio" name="fsex" id="fsM" value="m"><label for="fsM">남</label></div><button class="btn btn-ink btn-sm full" type="submit">가족 추가</button></form></section>';
+      '<form class="card fam-form" id="famForm" novalidate><input class="input full" id="fName" maxlength="12" placeholder="이름 (예: 엄마)" aria-label="가족 이름"><input class="input num" id="fBirth" type="date" min="1900-01-01" max="' + today + '" aria-label="가족 생년월일"><div class="seg" role="radiogroup" aria-label="가족 성별"><input type="radio" name="fsex" id="fsF" value="f" checked><label for="fsF">여</label><input type="radio" name="fsex" id="fsM" value="m"><label for="fsM">남</label></div><button class="btn btn-tint btn-sm full" type="submit">가족 추가</button></form></section>';
   }
 
   function renderFamily() {
@@ -381,7 +381,9 @@
     $('#heroSub').textContent = mine
       ? '지금까지 ' + fmt(s.lived.weeks) + '주를 살았어요. 평균대로라면 분홍 칸만큼의 봄이 남았어요.'
       : '한 칸이 1주, 한 줄이 1년이에요. 지나온 주는 잉크, 앞으로 남은 봄은 분홍으로 칠했어요.';
-    $('#btnFill').textContent = mine ? '다른 생일로 채우기' : '내 격자 채우기';
+    $('#btnFill').textContent = mine ? '다른 생일로 채우기' : '내 벚꽃 횟수 세기';
+    // 결과가 나오면 주 버튼(꽉 찬 색)은 아래 「공유하기」 하나만: 첫 화면 버튼은 보조 모양으로
+    $('#btnFill').classList.toggle('btn-primary', !mine); $('#btnFill').classList.toggle('btn-tint', mine);
   }
   function drawWeeks() {
     var cv = $('#lifeGrid'); if (!cv) return;

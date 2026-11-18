@@ -1,7 +1,7 @@
 // 식구궁합 — UI
 import { computeSaju, engine } from './saju-adapter.js';
 import { STEMS, STEMS_K, BRANCHES, STEM_EL, BRANCH_EL, EL_COLOR, EL_INK, EL_K, EL_H, ELS, ZODIAC, pillarH, josa } from './ganji.js';
-import { allPairs, familyBalance, familyRoles, familySanhe, EL_TRAITS, ROLE_RULES, W, LACK_RATIO, REL_NAME, LIUHE, SANHE, XING, PO, HAI, SELF_XING, STEM_HAP } from './relations.js';
+import { allPairs, rankLabel, familyBalance, familyRoles, familySanhe, EL_TRAITS, ROLE_RULES, W, LACK_RATIO, REL_NAME, LIUHE, SANHE, XING, PO, HAI, SELF_XING, STEM_HAP } from './relations.js';
 import { renderGraph } from './graph.js';
 import { RELS, encodeBoard, decodeBoard } from './codec.js';
 import * as store from './store.js';
@@ -112,7 +112,8 @@ function renderBoard() {
   order.forEach((k, rank) => {
     const p = pairs[k];
     const li = document.createElement('li');
-    const tag = pairs.length > 2 && rank === 0 ? '<span class="rank-tag best">찰떡 1위</span>' : pairs.length > 2 && rank === order.length - 1 ? '<span class="rank-tag worst">티격태격 1위</span>' : '';
+    const kind = pairs.length > 2 && rank === 0 ? 'best' : pairs.length > 2 && rank === order.length - 1 ? 'worst' : '';
+    const tag = kind ? `<span class="rank-tag ${p.tone}">${rankLabel(p, kind)}</span>` : '';
     li.innerHTML = `<button class="pair-btn" type="button"><span class="names">${tag}${esc(people[p.i].name)} × ${esc(people[p.j].name)}</span><span class="hl">${p.headline} · ${elPair(people[p.i], people[p.j])}</span><span class="sc ${p.tone}">${p.score}</span></button>`;
     li.querySelector('button').addEventListener('click', () => openPair(k));
     list.appendChild(li);
@@ -125,7 +126,7 @@ function renderBalance() {
   if (!b || model.people.length < 2) return;
   const seg = (counts, total, labels) => ELS.map(e => {
     const w = total ? (counts[e] / total) * 100 : 0;
-    return w ? `<div class="e-${e}" style="width:${w.toFixed(2)}%" title="${EL_K[e]} ${counts[e]}">${labels && w >= 9 ? `${EL_H[e]} ${Math.round(w)}%` : ''}</div>` : '';
+    return w ? `<div class="e-${e}" style="width:${w.toFixed(2)}%" title="${EL_K[e]} ${counts[e]}">${labels && w >= 15 ? `${EL_H[e]} ${Math.round(w)}%` : ''}</div>` : '';
   }).join('');
   const rows = model.people.map((p, i) => {
     const c = b.per[i]; const t = ELS.reduce((s, e) => s + c[e], 0);
@@ -134,7 +135,7 @@ function renderBalance() {
   const desc = ELS.map(e => `${EL_K[e]} ${b.total[e]}자(${Math.round(b.ratio[e] * 100)}%)`).join(', ');
   $('#balance').innerHTML = `
     <div class="stack" role="img" aria-label="가족 오행 합계: ${desc}">${seg(b.total, b.sum, true)}</div>
-    <ul class="bal-legend">${ELS.map(e => `<li><i class="e-${e}"></i>${EL_K[e]}(${EL_H[e]}) <b>${b.total[e]}</b></li>`).join('')}</ul>
+    <ul class="bal-legend">${ELS.map(e => `<li><i class="e-${e}"></i>${EL_K[e]}(${EL_H[e]}) <b>${b.total[e]}</b> · ${Math.round(b.ratio[e] * 100)}%</li>`).join('')}</ul>
     <div class="bal-rows" aria-label="사람별 오행">${rows}</div>`;
   const lack = b.lack;
   const T = EL_TRAITS;

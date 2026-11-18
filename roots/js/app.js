@@ -139,7 +139,7 @@ function renderLanding() {
         ${inv ? `<div class="invite-banner"><b>${esc(inv.n)}</b>님(${codeOf(inv.t)} · ${TYPES[inv.t].name}형)이 궁합을 신청했어요. 테스트를 마치면 두 사람의 궁합이 바로 나와요.</div>` : ''}
         <p class="stage-kicker">근본 테스트 · 16가지 근본 코드</p>
         <h1 class="stage-title">너, 근본이<br>어디야?</h1>
-        <p class="stage-lead">질문 10개와 만세력 사주로 찾는 4글자 근본 코드. 조상들이 겪은 역사, 나와 같은 본관이 몇 명인지까지 한 장에 담아요.</p>
+        <p class="stage-lead">내 근본 코드는 16개 중 뭘까요? 질문 10개와 만세력 사주로 찾고, 나와 같은 본관이 몇 명인지까지 한 장에 담아요.</p>
       </div>
       <div class="stage-card">${codeCardHTML({ id: 0, pct: [72, 64, 58, 81], title: '홍길동님의 근본 코드', example: true })}</div>
       <div class="stage-cta">
