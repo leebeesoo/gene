@@ -20,8 +20,8 @@ async function main() {
   const items = [];
   if (fixture) items.push(...parseDataGo(JSON.parse(readFileSync(join(HERE, 'fixtures', 'boats.json'), 'utf8'))).items);
   else {
-    for (let page = 1; page <= 40; page++) {
-      const r = parseDataGo(await (await fetch(boatUrl(KEY, { page, rows: 500 }))).text());
+    for (let page = 1; page <= 80; page++) { // 2026-11-20: numOfRows 500은 빈 응답이라 100씩(4,824척 → 약 49쪽)
+      const r = parseDataGo(await (await fetch(boatUrl(KEY, { page, rows: 100 }))).text());
       if (!r.ok) throw new Error(`낚시어선 ${page}쪽: ${r.error}`);
       items.push(...r.items);
       if (!r.items.length || items.length >= r.total) break;
