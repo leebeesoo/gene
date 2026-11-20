@@ -673,6 +673,36 @@
     mountAds(ul);
   }
 
+  /* ================= 지역 주소: #r=gyeongbuk&sgg=안동시 (허브 「내 동네」 카드 등에서 들어올 때) =================
+     r = 시·도 키(REGIONS), sgg = 시·군·구 이름(판매점 데이터 표기). 없거나 틀린 값이면 지금처럼 전국으로 */
+  function fromHash() {
+    var h = location.hash.replace(/^#/, '');
+    if (h.indexOf('r=') < 0) return false;
+    var q = {};
+    h.split('&').forEach(function (kv) {
+      var i = kv.indexOf('=');
+      if (i > 0) { try { q[kv.slice(0, i)] = decodeURIComponent(kv.slice(i + 1).replace(/\+/g, ' ')); } catch (e) { /* 깨진 주소 */ } }
+    });
+    if (!q.r || !RFULL[q.r]) return false;
+    var sg = q.sgg && stores.some(function (s) { return s.rk === q.r && s.sgg === q.sgg; }) ? q.sgg : '';
+    mapState.region = q.r; mapState.sgg = sg; mapState.page = 1;
+    renderMap();
+    // 「내 주변 명당」 고르기 칸도 같은 지역으로
+    var ns = $('#near-sido'), ng = $('#near-sgg');
+    if (ns && ns.querySelector('option[value="' + q.r + '"]')) {
+      ns.value = q.r; ns.dispatchEvent(new Event('change'));
+      if (sg && ng.querySelector('option[value="' + sg.replace(/"/g, '') + '"]')) { ng.value = sg; ng.dispatchEvent(new Event('change')); }
+    }
+    var chip = $('#rp-chips [aria-pressed="true"]'), row = chip && chip.parentNode;
+    if (chip && row.scrollWidth > row.clientWidth) row.scrollLeft = chip.offsetLeft - row.offsetLeft - 16; // 고른 시·군·구 칩이 보이게
+    if (window.matchMedia('(max-width: 899px)').matches) {
+      var el = $('#region-panel');
+      window.scrollTo(0, el.getBoundingClientRect().top + window.pageYOffset - 70);
+    }
+    return true;
+  }
+  window.addEventListener('hashchange', fromHash);
+
   /* ================= init ================= */
   heroStats();
   tick(); setInterval(tick, 1000);
@@ -684,5 +714,6 @@
   initStats();
   initShare();
   notes();
+  fromHash();
   mountAds(document);
 })();
