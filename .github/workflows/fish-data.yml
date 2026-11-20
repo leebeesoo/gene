@@ -59,6 +59,6 @@ jobs:
             echo "변경 없음"
           else
             git commit -m "data(fish): 물때명당 $(TZ=Asia/Seoul date +%F) 갱신"
-            git pull --rebase origin "${DEPLOY_BRANCH}"
+            git pull --rebase --autostash origin "${DEPLOY_BRANCH}"
             git push origin "HEAD:${DEPLOY_BRANCH}"
           fi
