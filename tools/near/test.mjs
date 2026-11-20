@@ -2,10 +2,14 @@
 // 지역표·내 동네 데이터 확인: node tools/near/test.mjs
 // - common/regions.json: slug·code 중복 없음, code 형식(시·도 2자리, 시·군·구 5자리 + 시·도 코드로 시작), 부모 있음, 좌표 범위
 // - 서비스 4개(명당로드·소원명당·제철식당·구출장터)의 모든 지역 이름이 지역표 하나로 맞춰짐 + 주산지 표 코드가 있음
+// - 카드 지도: 시·도 수(c) 17곳, 표시(lp·wp)와 동네 가운데 좌표가 그 시·도 경계 상자(lottomap/data/geo.js) 안
 // - 알려진 표기(경북/경상북도/gyeongbuk, 전남광주통합특별시, 세종, 군위군 등)가 맞는 곳으로 감
 import assert from 'node:assert/strict';
-import { loadRegions, resolve, sidoCandidates } from './regions.mjs';
-import { buildNear, months } from './build.mjs';
+import fs from 'node:fs';
+import vm from 'node:vm';
+import path from 'node:path';
+import { ROOT, loadRegions, resolve, sidoCandidates } from './regions.mjs';
+import { buildNear, months, buildMap, relPath } from './build.mjs';
 
 let ok = 0;
 const t = (name, fn) => { try { fn(); ok++; } catch (e) { console.error(`✗ ${name}\n  ${e.message}`); process.exitCode = 1; } };
@@ -87,6 +91,57 @@ if (data) {
       if (x.k) assert.match(x.k[2], /^\/market\/#\/(region|signal)\//, slug);
       if (x.f) for (const id of x.f) assert.ok(data.items[id], id);
     }
+  });
+  // 카드 지도: near.js와 같은 투영(lottomap/data/geo.js proj)으로 바꿔 시·도 경계 상자(여유 4단위 ≈ 5km) 안인지
+  const sb = { window: {} };
+  vm.runInNewContext(fs.readFileSync(path.join(ROOT, 'lottomap/data/geo.js'), 'utf8'), sb);
+  const G = sb.window.LM_GEO;
+  const xy = (lat, lng) => [(lng - G.proj.lonMin) * G.proj.k * G.proj.s, (G.proj.latMax - lat) * G.proj.s];
+  const box = {};
+  for (const [k, g] of Object.entries(G.regions)) {
+    const n = g.d.match(/-?\d+(\.\d+)?/g).map(Number), xs = n.filter((_, i) => i % 2 === 0), ys = n.filter((_, i) => i % 2 === 1);
+    box[k] = [Math.min(...xs) - 4, Math.min(...ys) - 4, Math.max(...xs) + 4, Math.max(...ys) + 4];
+  }
+  // 울릉도는 geo.js(단순화본)에 섬 모양이 없어 위경도 상자로 따로 본다(near.js는 확대 상자를 표시까지 넓혀 바다 위에 점만 그림)
+  const ULLEUNG = [37.4, 130.75, 37.6, 131.0];
+  const inBox = (sido, lat, lng, what) => {
+    if (what.startsWith('gyeongbuk-ulleung')) {
+      assert.ok(lat >= ULLEUNG[0] && lat <= ULLEUNG[2] && lng >= ULLEUNG[1] && lng <= ULLEUNG[3], `${what} (${lat},${lng})가 울릉도 밖`);
+      return;
+    }
+    const b = box[sido], [x, y] = xy(lat, lng);
+    assert.ok(b, `${sido} 경계 없음`);
+    assert.ok(x >= b[0] && x <= b[2] && y >= b[1] && y <= b[3], `${what} (${lat},${lng}) → (${x.toFixed(1)},${y.toFixed(1)})가 ${sido} 상자 ${b.map(v => v.toFixed(0))} 밖`);
+  };
+  // geo.js는 2013 경계라 2023-07 대구로 옮긴 군위군은 그림에서 아직 경북 땅(near.js가 확대 상자를 표시까지 넓혀 그린다)
+  const OLD = { 'daegu-gunwi': 'gyeongbuk' };
+  t('카드 지도: map.json 경로가 geo.js와 같은 점(상대 좌표로만 바꿈)', () => {
+    const M = buildMap(data.c);
+    assert.equal(JSON.stringify(M.proj), JSON.stringify(G.proj));
+    for (const [k, g] of Object.entries(G.regions)) {
+      const abs = [], rel = M.d[k];
+      let x = 0, y = 0;
+      rel.replace(/([Ml])(-?[\d.]+),?(-?[\d.]+)/g, (m, c, a, b) => { if (c === 'M') { x = +a; y = +b; } else { x += +a; y += +b; } abs.push(x.toFixed(1), y.toFixed(1)); });
+      assert.deepEqual(abs, g.d.match(/-?\d+(\.\d+)?/g).map(v => (+v).toFixed(1)), k);
+      assert.equal(relPath(g.d), rel);
+    }
+  });
+  const parentOf = new Map(data.regions.map(r => [r[0], OLD[r[0]] || r[2]]));
+  t('카드 지도: 시·도 17곳 모두 경계·수 있음', () => {
+    const sidos = data.regions.filter(r => !r[2]).map(r => r[0]);
+    assert.equal(sidos.length, 17);
+    for (const s of sidos) { assert.ok(G.regions[s], `geo.js에 ${s} 없음`); assert.ok(data.c[s] > 0, `c.${s}`); }
+  });
+  t('카드 지도: 표시 좌표가 그 시·도 상자 안', () => {
+    let n = 0;
+    for (const [slug, x] of Object.entries(data.d)) {
+      const sido = parentOf.get(slug);
+      if (x.lp || x.wp) assert.ok(sido, `${slug}: 표시는 시·군·구에만`);
+      if (x.lp) { assert.ok(x.l, slug); inBox(sido, x.lp[0], x.lp[1], `${slug} 명당로드 ${x.l[2]}`); n++; }
+      for (const w of x.wp || []) { assert.match(w[3], /^\/wish\//, slug); inBox(sido, w[0], w[1], `${slug} 소원명당 ${w[2]}`); n++; }
+    }
+    assert.ok(n > 250, `표시 ${n}개`);
+    for (const r of data.regions) if (r[2]) inBox(parentOf.get(r[0]), r[3], r[4], `${r[0]} 가운데`);
   });
 }
 console.log(process.exitCode ? `실패 (통과 ${ok}개)` : `통과 ${ok}개`);

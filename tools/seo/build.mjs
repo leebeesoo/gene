@@ -7,7 +7,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildNear } from '../near/build.mjs';
+import { buildNear, writeNear } from '../near/build.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const DIST = path.join(ROOT, 'dist');
@@ -51,14 +51,12 @@ fs.rmSync(DIST, { recursive: true, force: true });
 fs.mkdirSync(DIST, { recursive: true });
 copyDir(ROOT);
 
-// 허브 「내 동네」 카드 데이터(dist/near/index.json): 서비스 데이터를 지역표(common/regions.json)로 묶는다.
+// 허브 「내 동네」 카드 데이터(dist/near/index.json + 카드 지도 dist/near/map.json): 서비스 데이터를 지역표(common/regions.json)로 묶는다.
 // 서비스 데이터의 지역이 지역표에 없으면 여기서 빌드를 멈춘다(tools/near/build.mjs).
 try {
-  const near = JSON.stringify(await buildNear());
-  fs.mkdirSync(path.join(DIST, 'near'), { recursive: true });
-  fs.writeFileSync(path.join(DIST, 'near', 'index.json'), near);
-  files++; bytes += near.length;
-  console.log(`near/index.json: ${(Buffer.byteLength(near) / 1024).toFixed(1)}KB`);
+  const b = writeNear(await buildNear(), path.join(DIST, 'near'));
+  files += 2; bytes += b.index + b.map;
+  console.log(`near/index.json: ${(b.index / 1024).toFixed(1)}KB · near/map.json: ${(b.map / 1024).toFixed(1)}KB`);
 } catch (e) {
   console.error('빌드 실패:\n' + e.message);
   process.exit(1);
@@ -132,8 +130,10 @@ if (fs.existsSync(FOOTER_JS)) {
 
 // 확인: 꼭 있어야 할 파일, 있으면 안 되는 것, 사이트맵 주소가 실제 파일과 맞는지
 const errors = [];
-for (const f of ['index.html', 'robots.txt', 'sitemap.xml', '_headers', 'ads.txt', 'near/index.json', 'near/near.js']) if (!fs.existsSync(path.join(DIST, f))) errors.push(`없음: ${f}`);
-for (const d of ['docs', 'tools', 'workers', '.git', '.github', 'fish']) if (fs.existsSync(path.join(DIST, d))) errors.push(`복사되면 안 됨: ${d}/`);
+for (const f of ['index.html', 'robots.txt', 'sitemap.xml', '_headers', 'ads.txt', 'near/index.json', 'near/map.json', 'near/near.js']) if (!fs.existsSync(path.join(DIST, f))) errors.push(`없음: ${f}`);
+for (const d of ['docs', 'tools', 'workers', '.git', '.github']) if (fs.existsSync(path.join(DIST, d))) errors.push(`복사되면 안 됨: ${d}/`);
+// 물때명당 초안: 공개 전까지 배포 제외(따로 한 줄로 두어 기본 브랜치와 충돌을 피함)
+if (fs.existsSync(path.join(DIST, 'fish'))) errors.push('복사되면 안 됨: fish/ (물때명당 초안)');
 const walk = (dir, out = []) => { for (const e of fs.readdirSync(dir, { withFileTypes: true })) { const p = path.join(dir, e.name); e.isDirectory() ? walk(p, out) : out.push(p); } return out; };
 const all = walk(DIST);
 for (const p of all) { const n = path.basename(p); if (n.endsWith('.md') || /^package/.test(n) || p.includes(`${path.sep}tests${path.sep}`)) errors.push(`복사되면 안 됨: ${path.relative(DIST, p)}`); }

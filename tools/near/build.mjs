@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // 허브 「내 동네」 카드 데이터: 서비스 데이터 4개 + 제철 주산지 표를 지역(common/regions.json)별로 묶어 near/index.json 하나로.
-//   node tools/near/build.mjs [출력 파일]   (기본: dist/near/index.json)
+//   node tools/near/build.mjs [출력 폴더]   (기본: dist/near → index.json, map.json)
 // tools/seo/build.mjs가 배포 때마다 dist/near/index.json으로 만든다 → 서비스 데이터가 바뀌면 다음 배포에 저절로 반영.
 // 서비스 데이터의 지역 이름이 지역표에 없으면 빌드를 멈춘다(어느 서비스·어느 항목인지 알려 줌).
 // 의존성 없음(Node 18+).
@@ -13,7 +13,14 @@
 //     w: [장소 수, 대표 장소, 주소],                                          소원명당
 //     s: [이름, 식당 수, [[요리, '제철 달']…], 주소],                         제철식당(이달·다음 달 후보, 화면이 이달 것만. 이달 것이 없으면 사철 요리 '1~12')
 //     k: [신호 수, [[품목, 단계]…], 주소],                                    구출장터
-//     f: [제철장보기 id…] } }                                                  주산지로 적힌 품목
+//     f: [제철장보기 id…],                                                     주산지로 적힌 품목
+//     lp: [위도, 경도],                                                         카드 지도 표시: l의 최다 판매점 위치(시·군·구만)
+//     wp: [[위도, 경도, 장소, 주소]…] } }                                       카드 지도 표시: 소원 명소 3곳까지(시·군·구만)
+//   c: { 시·도 slug: 그 시·도에서 볼 수 있는 것 수 }   (= 판매점 + 소원 명소 + 제철식당 지역 + 남는 신호 + 주산지 품목. 카드 지도 음영)
+//   → c는 near/map.json으로 따로 나간다(카드 지도가 index.json 없이 먼저 그려지게). writeNear() 참고.
+//
+// near/map.json (카드 시·도 지도, 카드가 화면에 들어올 때 받음):
+//   { v, proj: lottomap/data/geo.js의 투영, d: { 시·도 slug: SVG 경로(상대 좌표 l로 바꿔 줄임, 점은 그대로) }, c }
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
@@ -49,6 +56,7 @@ export async function buildNear({ now = new Date() } = {}) {
   vm.runInNewContext(fs.readFileSync(P('lottomap/data/stores.js'), 'utf8'), sandbox);
   const ST = sandbox.window.LM_STORES;
   const lot = {};                                  // slug → { n, w, top:[name,w] }
+  const ll = v => Math.round(v * 1000) / 1000;     // 좌표는 소수 셋째 자리(약 100m)면 카드 지도에 충분
   for (const row of ST.rows) {
     const [id, name, , rk, sgg, open, , , wins] = row;
     const r = resolve(R, { service: 'lottomap', id, sido: rk, sigungu: sgg });
@@ -57,13 +65,14 @@ export async function buildNear({ now = new Date() } = {}) {
     for (const slug of new Set([r.slug, sidoOf(r).slug])) {
       const a = (lot[slug] ??= { n: 0, w: 0, top: null });
       a.n++; a.w += wins.length;
-      if (!a.top || wins.length > a.top[1]) a.top = [name, wins.length];
+      if (!a.top || wins.length > a.top[1]) a.top = [name, wins.length, row[6], row[7]];
     }
   }
   for (const [slug, a] of Object.entries(lot)) {
     const r = R.bySlug.get(slug), s = sidoOf(r);
     const hash = r.parent && R.kids.get(s.slug).length > 1 ? `#r=${s.slug}&sgg=${r.name}` : `#r=${s.slug}`;
     at(slug).l = [a.n, a.w, a.top[0], a.top[1], `/lottomap/${hash}`];
+    if (r.parent && a.top[2] && a.top[3]) at(slug).lp = [ll(a.top[2]), ll(a.top[3])];
   }
 
   // ── 소원명당: 장소 수, 대표 장소. 「동구·북구」처럼 둘이면 둘 다 ──
@@ -86,6 +95,11 @@ export async function buildNear({ now = new Date() } = {}) {
     const r = R.bySlug.get(slug), s = sidoOf(r);
     list.sort((a, b) => (b.detail ? 1 : 0) - (a.detail ? 1 : 0));
     at(slug).w = [list.length, list[0].name, list.length === 1 ? wishOneUrl(list[0], s) : wishSidoUrl(s)];
+    // 카드 지도 표시: 시·군·구의 소원 명소 3곳까지(좌표 있는 것), 각 장소 주소로
+    if (r.parent) {
+      const pts = list.filter(p => p.lat && p.lng).slice(0, 3).map(p => [ll(p.lat), ll(p.lng), p.name, wishOneUrl(p, s)]);
+      if (pts.length) at(slug).wp = pts;
+    }
   }
 
   // ── 제철식당: 지역마다 이달·다음 달 제철 요리(식당 있는 것). 화면이 이달 것만 고른다 ──
@@ -156,6 +170,14 @@ export async function buildNear({ now = new Date() } = {}) {
   }
 
   const regions = R.list.map(r => [r.slug, r.parent ? r.name : r.short, r.parent || '', r.lat, r.lng]);
+  // 시·도별 볼 수 있는 것 수(카드 지도 음영): 시·도 합계 + 제철식당 지역 수 + 주산지 품목(시·도·시·군·구 합쳐 중복 없이)
+  const c = {};
+  for (const s of R.sidos) {
+    const x = D[s.slug] || {}, kids = R.kids.get(s.slug), f = new Set(x.f || []);
+    let sik = x.s ? 1 : 0;
+    for (const k of kids) { const y = D[k.slug] || {}; if (y.s) sik++; (y.f || []).forEach(id => f.add(id)); }
+    c[s.slug] = (x.l ? x.l[0] : 0) + (x.w ? x.w[0] : 0) + sik + (x.k ? x.k[0] : 0) + f.size;
+  }
   return {
     v: 1,
     built: now.toISOString().slice(0, 10),
@@ -163,17 +185,48 @@ export async function buildNear({ now = new Date() } = {}) {
     regions,
     items: F,
     d: D,
+    c,
   };
+}
+
+/** 「M x,y L x,y … Z」(절대 좌표, 소수 한 자리) → 「M x,y l dx,dy … z」. 점은 그대로(소수 한 자리 차이라 손실 없음) */
+export function relPath(d) {
+  let out = '', px = 0, py = 0;
+  for (const seg of d.match(/[MLZ][^MLZ]*/g)) {
+    if (seg[0] === 'Z') { out += 'z'; continue; }
+    const [x, y] = seg.slice(1).split(',').map(Number);
+    if (seg[0] === 'M') out += `M${x},${y}`;
+    else { const dx = Math.round((x - px) * 10) / 10, dy = Math.round((y - py) * 10) / 10; out += `l${dx}${dy < 0 ? '' : ','}${dy}`; }
+    px = x; py = y;
+  }
+  return out;
+}
+
+/** 카드 지도 자료: 명당로드·소원명당과 같은 시·도 경계(lottomap/data/geo.js, 통계청 2013 단순화본 southkorea-maps) + 시·도 수 */
+export function buildMap(c) {
+  const sb = { window: {} };
+  vm.runInNewContext(fs.readFileSync(P('lottomap/data/geo.js'), 'utf8'), sb);
+  const G = sb.window.LM_GEO, d = {};
+  for (const [k, g] of Object.entries(G.regions)) d[k] = relPath(g.d);
+  return { v: 1, proj: G.proj, d, c };
+}
+
+/** near/index.json(c 뺀 것)과 near/map.json(경계 + c) 두 파일로 쓴다. 바이트 수 돌려줌 */
+export function writeNear(data, dir) {
+  const { c, ...rest } = data;
+  const index = JSON.stringify(rest), map = JSON.stringify(buildMap(c));
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, 'index.json'), index);
+  fs.writeFileSync(path.join(dir, 'map.json'), map);
+  return { index: Buffer.byteLength(index), map: Buffer.byteLength(map) };
 }
 
 // 명령줄
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const out = path.resolve(process.argv[2] || P('dist/near/index.json'));
+  const out = path.resolve(process.argv[2] || P('dist/near'));
   try {
     const data = await buildNear();
-    fs.mkdirSync(path.dirname(out), { recursive: true });
-    const s = JSON.stringify(data);
-    fs.writeFileSync(out, s);
-    console.log(`near/index.json: 지역 ${data.regions.length}개, 데이터 있는 곳 ${Object.keys(data.d).length}개, ${(s.length / 1024).toFixed(1)}KB → ${path.relative(process.cwd(), out)}`);
+    const b = writeNear(data, out);
+    console.log(`near/index.json: 지역 ${data.regions.length}개, 데이터 있는 곳 ${Object.keys(data.d).length}개, ${(b.index / 1024).toFixed(1)}KB · map.json ${(b.map / 1024).toFixed(1)}KB → ${path.relative(process.cwd(), out)}`);
   } catch (e) { console.error(e.message); process.exit(1); }
 }
