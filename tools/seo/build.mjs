@@ -53,8 +53,8 @@ copyDir(ROOT);
 // 서비스 데이터의 지역이 지역표에 없으면 여기서 빌드를 멈춘다(tools/near/build.mjs).
 try {
   const b = writeNear(await buildNear(), path.join(DIST, 'near'));
-  files += 2; bytes += b.index + b.map;
-  console.log(`near/index.json: ${(b.index / 1024).toFixed(1)}KB · near/map.json: ${(b.map / 1024).toFixed(1)}KB`);
+  files += 2 + b.listFiles; bytes += b.index + b.map + b.lists;
+  console.log(`near/index.json: ${(b.index / 1024).toFixed(1)}KB · near/map.json: ${(b.map / 1024).toFixed(1)}KB · 목록(near/markets·good) ${b.listFiles}개 ${(b.lists / 1024).toFixed(0)}KB`);
 } catch (e) {
   console.error('빌드 실패:\n' + e.message);
   process.exit(1);
@@ -128,7 +128,7 @@ if (fs.existsSync(FOOTER_JS)) {
 
 // 확인: 꼭 있어야 할 파일, 있으면 안 되는 것, 사이트맵 주소가 실제 파일과 맞는지
 const errors = [];
-for (const f of ['index.html', 'robots.txt', 'sitemap.xml', '_headers', 'ads.txt', 'near/index.json', 'near/map.json', 'near/near.js']) if (!fs.existsSync(path.join(DIST, f))) errors.push(`없음: ${f}`);
+for (const f of ['index.html', 'robots.txt', 'sitemap.xml', '_headers', 'ads.txt', 'near/index.json', 'near/map.json', 'near/near.js', 'near/markets/seoul.json', 'near/good/seoul.json']) if (!fs.existsSync(path.join(DIST, f))) errors.push(`없음: ${f}`);
 for (const d of ['docs', 'tools', 'workers', '.git', '.github']) if (fs.existsSync(path.join(DIST, d))) errors.push(`복사되면 안 됨: ${d}/`);
 const walk = (dir, out = []) => { for (const e of fs.readdirSync(dir, { withFileTypes: true })) { const p = path.join(dir, e.name); e.isDirectory() ? walk(p, out) : out.push(p); } return out; };
 const all = walk(DIST);

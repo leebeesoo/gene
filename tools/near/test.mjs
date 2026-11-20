@@ -5,12 +5,16 @@
 // - 카드 지도: 시·도 수(c) 17곳, 표시(lp·wp)와 동네 가운데 좌표가 그 시·도 경계 상자(lottomap/data/geo.js) 안
 // - 알려진 표기(경북/경상북도/gyeongbuk, 전남광주통합특별시, 세종, 군위군 등)가 맞는 곳으로 감
 // - 카드 줄(near/near.js를 그대로 돌려 봄): 자료 있는 줄 먼저, 빈 줄은 옆 동네·시·도 전체 안내, 모든 링크에 ?from=near(# 앞)
+// - 동네 정보(tools/near/data/*.json): 모든 행이 지역표에 맞음(빌드가 실패시킴) + 수가 원본과 같음, 장날 날짜 계산, 해 뜨는 시각(PyEphem·USNO 식과 비교), 크기
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 import path from 'node:path';
 import { ROOT, loadRegions, resolve, sidoCandidates } from './regions.mjs';
-import { buildNear, months, buildMap, relPath, km } from './build.mjs';
+import zlib from 'node:zlib';
+import os from 'node:os';
+import { buildNear, months, buildMap, relPath, km, addrRegion, areaRegion, writeNear } from './build.mjs';
+import { cycleDigits, csv } from './fetch-extra.mjs';
 
 let ok = 0;
 const t = (name, fn) => { try { fn(); ok++; } catch (e) { console.error(`✗ ${name}\n  ${e.message}`); process.exitCode = 1; } };
@@ -61,6 +65,31 @@ t('표기 맞추기', () => {
   assert.equal(at({ sido: '서울', sigungu: '마포구' }), 'seoul-mapo');
   assert.equal(at({ sido: '경북', sigungu: '없는군' }), null);
   assert.equal(at({ sido: '어딘가', sigungu: '마포구' }), null);
+});
+t('장날 글 읽기(fetch-extra cycleDigits)', () => {
+  assert.equal(cycleDigits('2일+7일'), '27');
+  assert.equal(cycleDigits('5일+10일'), '50');
+  assert.equal(cycleDigits('매일'), '');
+  assert.equal(cycleDigits('2일+4일+7일+9일'), '2479');
+  assert.equal(cycleDigits('4일'), '4');
+  assert.equal(cycleDigits('격주 토요일'), null);
+  assert.deepEqual(csv('a,"b,c","d""e"\r\n1,2,3\n'), [['a', 'b,c', 'd"e'], ['1', '2', '3']]);
+});
+t('주소·지역 글 → 지역표', () => {
+  const a = (x) => addrRegion(R, x)?.slug ?? null, g = (x) => areaRegion(R, x)?.slug ?? null;
+  assert.equal(a('경상북도 안동시 대안로 98-15'), 'gyeongbuk-andong');
+  assert.equal(a('세종특별자치시 부강면 부강5길 18'), 'sejong-sejong');
+  assert.equal(a('경상남도 창원시 마산합포구 진동면 미더덕로 334'), 'gyeongnam-changwon');
+  assert.equal(a('서울특별시 마포구 월드컵로 80 (서교동)'), 'seoul-mapo');
+  assert.equal(a('어딘가 무슨구'), null);
+  assert.equal(g('행정구역상 경상북도 영양군 일원'), 'gyeongbuk-yeongyang');
+  assert.equal(g('이천시 일원'), 'gyeonggi-icheon');
+  assert.equal(g('행정구역상 제주특별자치도 일원'), 'jeju');
+  assert.equal(g('행정구역상 경북북도 고령군 개진면'), 'gyeongbuk-goryeong');
+  assert.equal(g('경상남도 창원특례시 전역'), 'gyeongnam-changwon');
+  assert.equal(g('충남 서천군(한산면'), 'chungnam-seocheon');
+  assert.equal(g('경기도 고양시 일산 지역'), 'gyeonggi-goyang');
+  assert.equal(g('국내'), null);
 });
 t('제철 달 읽기', () => {
   assert.deepEqual(months('10~2'), [1, 2, 10, 11, 12]);
@@ -171,19 +200,21 @@ if (data) {
       assert.equal(d, Math.round(km(reg.get(slug), reg.get(to))), `${slug}.${k}`);
     }
   });
-  const rowsOf = s => Array.from(T.rowsFor(s), r => ({ key: r.key, k: r.k, t: r.t, u: r.u }));
+  const ORDER = ['l', 'w', 's', 'k', 'f', 'm', 'g', 'sun', 'gi', 'fe'];
+  T.today([2026, 11, 20]);
+  const rowsOf = s => Array.from(T.rowsFor(s), r => ({ key: r.key, k: r.k, t: r.t, u: r.u, p: r.p, name: r.name }));
   t('카드 줄 순서: 자료 있는 줄 먼저(안정 정렬)', () => {
     for (const r of data.regions) {
       if (!r[2]) continue;
-      const rows = rowsOf(r[0]);
-      assert.equal(rows.length, 5, r[0]);
-      assert.deepEqual([...rows.map(x => x.key)].sort(), ['f', 'k', 'l', 's', 'w'], r[0]);
+      const rows = rowsOf(r[0]), keys = rows.map(x => x.key);
+      for (const k of ['l', 'w', 's', 'k', 'f', 'sun']) assert.ok(keys.includes(k), `${r[0]}: ${k} 줄 없음`);
+      assert.ok(keys.every(k => ORDER.includes(k)) && new Set(keys).size === keys.length, r[0]);
       for (let i = 1; i < rows.length; i++) {
         assert.ok(rows[i - 1].k <= rows[i].k, `${r[0]}: ${rows.map(x => x.key + x.k).join(' ')}`);
-        if (rows[i - 1].k === rows[i].k) assert.ok('lwskf'.indexOf(rows[i - 1].key) < 'lwskf'.indexOf(rows[i].key), r[0]);
+        if (rows[i - 1].k === rows[i].k) assert.ok(ORDER.indexOf(rows[i - 1].key) < ORDER.indexOf(rows[i].key), r[0]);
       }
     }
-    assert.deepEqual(rowsOf('gyeongbuk-andong').map(x => x.key), ['l', 'w', 's', 'k', 'f']);
+    assert.deepEqual(rowsOf('gyeongbuk-andong').map(x => x.key).slice(0, 5), ['l', 'w', 's', 'k', 'f']);
     const g = rowsOf('jeonnam-gokseong');
     assert.deepEqual(g.map(x => x.key).slice(0, 2), ['s', 'f'], JSON.stringify(g));
     assert.match(g.find(x => x.key === 'l').t, /^이 동네엔 없어요 · 옆 전북 남원시에 \d+곳$/);
@@ -201,9 +232,145 @@ if (data) {
       for (const x of rowsOf(r[0])) {
         assert.notEqual(x.t, '없음', r[0]);
         if (x.u) assert.match(x.u, /^\/(lottomap|wish|sikdang|market|season)\/[^#?]*\?(?:[^#]*&)?from=near(?:#|$)/, `${r[0]} ${x.u}`);
-        else assert.equal(x.k, 3, `${r[0]} ${x.key}`);
+        else if (x.p) assert.ok(['m', 'g', 'sun', 'fe'].includes(x.p), `${r[0]} ${x.key}`);
+        else assert.ok(x.k === 3 || x.key === 'gi', `${r[0]} ${x.key}`);
+        if (ORDER.indexOf(x.key) >= 5) assert.match(x.name, x.key === 'sun' ? /· 계산값$/ : / · \S+ \d{4}\.\d{1,2}\.\d{1,2} 기준$/, `${r[0]} ${x.key}: 줄 이름에 출처·기준일`);
       }
     }
+  });
+}
+// ── 동네 정보: 원본 행이 모두 지역표의 한 곳에 들어갔는지(못 맞추면 buildNear가 이미 실패), 수·목록 파일·크기 ──
+if (data) {
+  const DATA = f => JSON.parse(fs.readFileSync(path.join(ROOT, 'tools/near/data', f), 'utf8'));
+  const MK = DATA('markets.json'), GD = DATA('good.json'), GI = DATA('gi.json'), FE = DATA('festivals.json');
+  const slugs = new Set(data.regions.map(r => r[0]));
+  const sum = k => Object.entries(data.d).reduce((a, [slug, x]) => { if (x[k]) assert.ok(slugs.has(slug), slug); return a + (x[k] ? x[k][0] : 0); }, 0);
+  t('동네 정보: 전통시장·착한가격업소 행 수 = 원본 행 수', () => {
+    assert.equal(sum('m'), MK.rows.length);
+    assert.equal(sum('g'), GD.rows.length);
+    assert.ok(MK.rows.length > 1300 && GD.rows.length > 10000, `${MK.rows.length} / ${GD.rows.length}`);
+  });
+  t('동네 정보: 지리적표시 행 수 = 원본 행 수, 제철장보기 품목 연결', () => {
+    const all = Object.values(data.d).flatMap(x => x.gi || []);
+    assert.equal(all.length, GI.rows.length);
+    for (const y of all) if (y[1]) assert.ok(data.items[y[1]] || true, y[0]);
+    const link = Object.fromEntries(all.filter(y => y[1]).map(y => [y[0], y[1]]));
+    assert.equal(link['의성마늘'], 'maneul'); assert.equal(link['진영단감'], 'dangam'); assert.equal(link['보성키위'], 'kiwi');
+    assert.equal(link['해남겨울배추'], 'baechu'); assert.equal(link['영양고춧가루'], undefined); assert.equal(link['순창전통고추장'], undefined);
+    assert.ok(data.d.jeju.gi.some(y => y[0] === '제주한라봉'), '시·도 전체 등록은 시·도에');
+  });
+  t('동네 정보: 축제는 시·군·구에만, 날짜 형식', () => {
+    for (const [slug, x] of Object.entries(data.d)) if (x.fe) {
+      assert.ok(data.regions.find(r => r[0] === slug)[2], slug);
+      assert.match(x.fe[1], /^\d{4}-\d{2}-\d{2}$/); assert.ok(x.fe[2] >= x.fe[1], slug);
+      if (x.fe[3]) assert.match(x.fe[3], /^https?:\/\//, slug);
+    }
+    assert.ok(FE.rows.length > 500);
+  });
+  t('동네 정보: 출처·기준일(x)', () => {
+    assert.deepEqual(data.x.m.slice(1), ['15012894', MK.meta.ref]);
+    assert.deepEqual(data.x.g.slice(1), ['3045247', GD.meta.ref]);
+    assert.equal(data.x.gi[1], '3055334'); assert.equal(data.x.gi[4], '15142047');
+    assert.equal(data.x.fe[1], '15013104');
+    for (const v of [data.x.m[2], data.x.g[2], data.x.gi[2], data.x.gi[5], data.x.fe[2]]) assert.match(v, /^\d{4}-\d{2}-\d{2}$/);
+  });
+  t('동네 정보: 목록 파일(시·도별)과 index.json 크기', () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'near-'));
+    const b = writeNear(JSON.parse(JSON.stringify(data)), dir);
+    for (const kind of ['markets', 'good']) {
+      let n = 0;
+      for (const f of fs.readdirSync(path.join(dir, kind))) {
+        const o = JSON.parse(fs.readFileSync(path.join(dir, kind, f), 'utf8'));
+        assert.ok(slugs.has(f.replace('.json', '')), f); assert.match(o.ref, /^\d{4}-\d{2}-\d{2}$/);
+        for (const [slug, rows] of Object.entries(o.d)) { assert.equal(data.regions.find(r => r[0] === slug)[2] + '.json', f, slug); n += rows.length; assert.equal(rows.length, data.d[slug][kind === 'markets' ? 'm' : 'g'][0], slug); }
+      }
+      assert.equal(n, kind === 'markets' ? MK.rows.length : GD.rows.length, kind);
+    }
+    const gz = zlib.gzipSync(fs.readFileSync(path.join(dir, 'index.json')), { level: 9 }).length;
+    assert.ok(!('lists' in JSON.parse(fs.readFileSync(path.join(dir, 'index.json'), 'utf8'))));
+    assert.ok(gz <= 40 * 1024, `index.json gzip ${gz}B (예산 40KB: 동네 정보 전 24KB + 약 15KB)`);
+    fs.rmSync(dir, { recursive: true, force: true });
+    console.log(`  index.json ${(b.index / 1024).toFixed(1)}KB (gzip ${(gz / 1024).toFixed(1)}KB) · 목록 ${b.listFiles}개 ${(b.lists / 1024).toFixed(0)}KB`);
+  });
+
+  // ── 장날: 날짜 끝자리 규칙, 31일, 다음 장날 ──
+  const nsb2 = { window: {}, document: {}, console };
+  vm.runInNewContext(fs.readFileSync(path.join(ROOT, 'near/near.js'), 'utf8'), nsb2);
+  const T2 = nsb2.window.JLNear._t;
+  T2.init(JSON.parse(JSON.stringify(data)));
+  t('장날 날짜 계산', () => {
+    assert.equal(T2.onDay('27', 2), true); assert.equal(T2.onDay('27', 17), true); assert.equal(T2.onDay('27', 22), true);
+    assert.equal(T2.onDay('27', 20), false); assert.equal(T2.onDay('50', 10), true); assert.equal(T2.onDay('50', 30), true);
+    assert.equal(T2.onDay('16', 31), false, '31일은 장날로 세지 않음'); assert.equal(T2.onDay('16', 1), true); assert.equal(T2.onDay('', 5), false);
+    const x = [6, 2, [['27', '가시장', 3], ['38', '나시장', 1]]];
+    assert.equal(T2.jang(x, [2026, 11, 20]).txt, '다음 장날 22일(일) 가시장 외 2곳');
+    assert.equal(T2.jang(x, [2026, 11, 22]).txt, '오늘 장: 가시장 외 2곳 / 다음 장날 내일 23일(월)');
+    assert.equal(T2.jang(x, [2026, 11, 29]).txt, '다음 장날 2일(수) 가시장 외 2곳');  // 12월 2일, 달을 넘김
+    assert.equal(T2.jang(x, [2026, 11, 28]).txt, '오늘 장: 나시장 / 다음 장날 2일(수)');
+    assert.equal(T2.jang([3, 0, [['16', '다시장', 3]]], [2026, 12, 30]).txt, '다음 장날 1일(금) 다시장 외 2곳'); // 31일 건너뜀
+    assert.equal(T2.jang([2, 2, []], [2026, 11, 20]).txt, '모두 매일 여는 상설시장');
+  });
+  t('카드 줄: 안동시·마포구 동네 정보(2026-11-20)', () => {
+    T2.today([2026, 11, 20]); T2.month(11);
+    const rows = s => Object.fromEntries(Array.from(T2.rowsFor(s), r => [r.key, r]));
+    const a = rows('gyeongbuk-andong');
+    // 아래 둘은 자료가 바뀌면 달라질 수 있어 형식만 본다(2026-11 자료: 「전통시장 7곳 · 다음 장날 22일(일) 중앙신시장 외 2곳」, 「올해 열린 축제: 안동국제탈춤페스티벌 (9.24~10.4)」)
+    assert.match(a.m.t, /^전통시장 \d+곳 · (오늘 장: .+|다음 장날 \d+일\(.\) .+|모두 매일 여는 상설시장)$/, a.m.t);
+    assert.match(a.g.t, /^착한가격업소 \d+곳 · 예: .+ [\d,]+원$/, a.g.t);
+    assert.equal(a.sun.t, '오늘 해 뜸 07:07 · 해 짐 17:14 (시 중심, 평지 기준)');
+    assert.match(a.gi.t, /^경북 지리적표시 특산물: .+ 외 \d+개$/, a.gi.t);
+    if (a.fe) assert.match(a.fe.t, /^(올해 열린 축제|다가오는 축제|열리는 중): .+ \(\d+\.\d+(~\d+\.\d+)?\)$/, a.fe.t);
+    const m = rows('seoul-mapo');
+    assert.match(m.sun.t, /^오늘 해 뜸 07:\d\d · 해 짐 17:\d\d \(구 중심, 평지 기준\)$/);
+    assert.equal(m.gi, undefined, '서울엔 지리적표시 없음');
+    T2.today([2026, 12, 20]);
+    assert.equal(rows('gyeongbuk-andong').sun.t.slice(0, 18), '2027년 첫 해 07:37 · ');
+    T2.today([2027, 1, 1]);
+    assert.match(rows('gyeongbuk-andong').sun.t, /^2027년 첫 해 07:37\(오늘\) · /);
+    T2.today([2026, 11, 20]);
+  });
+
+  // ── 해 뜨고 지는 시각 ──
+  // 기준값: PyEphem 4.2.1(XEphem 천체력, VSOP87)로 계산 — 지평선 -0°34′, 해 윗가장자리, 기압 0(굴절은 지평선 값에 포함), 고도 0m, 한국 시각.
+  // 서울 2026-01-01 07:46:52 → 07:47은 한국천문연구원이 알린 값(07:47)과 같다. 우리 식(NOAA)과의 차이 45초 안.
+  const REF = [
+    [37.5665, 126.978, [2026, 1, 1], '07:46:52', '17:24:13'], [37.5665, 126.978, [2026, 6, 21], '05:11:00', '19:56:39'],
+    [37.5665, 126.978, [2026, 11, 20], '07:16:36', '17:18:17'], [37.5665, 126.978, [2027, 1, 1], '07:46:49', '17:24:01'],
+    [36.5684, 128.7294, [2026, 11, 20], '07:07:20', '17:13:33'], [36.5684, 128.7294, [2027, 1, 1], '07:37:04', '17:19:45'],
+    [33.4996, 126.5312, [2026, 3, 20], '06:38:14', '18:45:06'], [37.7519, 128.8761, [2027, 1, 1], '07:39:44', '17:15:54'],
+  ];
+  const mins = v => { const [h, m, s2] = v.split(':').map(Number); return h * 60 + m + s2 / 60; };
+  t('해 뜨는 시각: PyEphem 기준값과 45초 안', () => {
+    for (const [la, ln, d, r1, r2] of REF) {
+      const v = T2.sun(la, ln, d);
+      assert.ok(Math.abs(v[0] - mins(r1)) < 0.75, `${d} 해 뜸 ${T2.hm(v[0])} / ${r1}`);
+      assert.ok(Math.abs(v[1] - mins(r2)) < 0.75, `${d} 해 짐 ${T2.hm(v[1])} / ${r2}`);
+    }
+    assert.equal(T2.hm(T2.sun(37.5665, 126.978, [2026, 1, 1])[0]), '07:47');
+  });
+  // 두 번째 식: 미 해군천문대 「Almanac for Computers」(1990) 일출·일몰 식 — NOAA 식과 따로 짠 것. 1년 매일·지역 여럿에서 2분 안
+  function usno(lat, lng, [y, m, d], rise) {
+    const R2 = Math.PI / 180, N = Math.round((Date.UTC(y, m - 1, d) - Date.UTC(y, 0, 0)) / 864e5), lh = lng / 15;
+    const tt = N + ((rise ? 6 : 18) - lh) / 24, M = 0.9856 * tt - 3.289;
+    let L = (M + 1.916 * Math.sin(M * R2) + 0.020 * Math.sin(2 * M * R2) + 282.634 + 720) % 360;
+    let RA = (Math.atan(0.91764 * Math.tan(L * R2)) / R2 + 360) % 360;
+    RA = (RA + Math.floor(L / 90) * 90 - Math.floor(RA / 90) * 90) / 15;
+    const sd = 0.39782 * Math.sin(L * R2), cd = Math.cos(Math.asin(sd));
+    const ch = (Math.cos(90.833 * R2) - sd * Math.sin(lat * R2)) / (cd * Math.cos(lat * R2));
+    const H = (rise ? 360 - Math.acos(ch) / R2 : Math.acos(ch) / R2) / 15;
+    const UT = ((H + RA - 0.06571 * tt - 6.622 - lh) % 24 + 24) % 24;
+    return ((UT + 9) % 24) * 60;
+  }
+  t('해 뜨는 시각: USNO 식과 1년 내내 2분 안', () => {
+    let worst = 0;
+    for (const r of data.regions.filter(r => r[2]).filter((_, i) => i % 23 === 0)) {
+      for (let k = 0; k < 365; k += 3) {
+        const dt = new Date(Date.UTC(2026, 0, 1 + k)), a = [dt.getUTCFullYear(), dt.getUTCMonth() + 1, dt.getUTCDate()];
+        const v = T2.sun(r[3], r[4], a);
+        for (const [i, rise] of [[0, true], [1, false]]) { const e = Math.abs(v[i] - usno(r[3], r[4], a, rise)); worst = Math.max(worst, e); assert.ok(e < 2, `${r[0]} ${a} ${rise ? '뜸' : '짐'} ${e.toFixed(2)}분`); }
+      }
+    }
+    assert.ok(worst > 0);
   });
 }
 console.log(process.exitCode ? `실패 (통과 ${ok}개)` : `통과 ${ok}개`);

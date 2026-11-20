@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// 허브 「내 동네」 카드 데이터: 서비스 데이터 4개 + 제철 주산지 표를 지역(common/regions.json)별로 묶어 near/index.json 하나로.
+// 허브 「내 동네」 카드 데이터: 서비스 데이터 4개 + 제철 주산지 표 + 공공데이터 4종(전통시장·착한가격업소·지리적표시·축제)을
+// 지역(common/regions.json)별로 묶어 near/index.json 하나로(+ 누를 때 받는 시·도별 목록).
 //   node tools/near/build.mjs [출력 폴더]   (기본: dist/near → index.json, map.json)
 // tools/seo/build.mjs가 배포 때마다 dist/near/index.json으로 만든다 → 서비스 데이터가 바뀌면 다음 배포에 저절로 반영.
 // 서비스 데이터의 지역 이름이 지역표에 없으면 빌드를 멈춘다(어느 서비스·어느 항목인지 알려 줌).
@@ -16,10 +17,20 @@
 //     f: [제철장보기 id…],                                                     주산지로 적힌 품목
 //     lp: [위도, 경도],                                                         카드 지도 표시: l의 최다 판매점 위치(시·군·구만)
 //     wp: [[위도, 경도, 장소, 주소]…] } }                                       카드 지도 표시: 소원 명소 3곳까지(시·군·구만)
+//     ── 동네 정보(공공데이터, tools/near/data/*.json → buildExtra()) ──
+//     m: [시장 수, 매일 여는 곳 수, [[장날 숫자('27'=2·7일장), 대표 시장, 그 장날 시장 수]…]],           전통시장·장날(화면이 오늘 날짜로 오늘 장·다음 장날 계산)
+//     g: [업소 수, 예시 업소, 메뉴, 가격],                                                         착한가격업소
+//     gi: [[등록명칭, 제철장보기 id|0, 등록번호, 수산물이면 's']…],                                  지리적표시(시·도 전체 등록은 시·도 slug)
+//     fe: [축제명, 시작일, 끝일, 누리집|''] }                                                      축제 하나(앞으로 열릴 것, 없으면 올해 열린 것)
+//   x: { m|g|fe: [자료 이름, 공공데이터포털 번호, 기준일], gi: [농산물 이름, 번호, 기준일, 수산물 이름, 번호, 기준일] }   줄 이름·출처 창
+//   해 뜨고 지는 시각은 자료 없이 화면이 지역 가운데 좌표로 계산한다(near.js sunTimes).
 //   nb: { 시·군·구 slug: { l|w|s|k|f: [가장 가까운 자료 있는 곳 slug, km] } }   빈 줄 안내(「이 동네엔 없어요 · 옆 ○○에 3곳」). nearestWithData() 참고
 //   ※ 주소(…[4], …[2] 등)는 깨끗한 주소로 둔다. 카드가 링크를 만들 때 ?from=near를 붙인다(near.js fromNear).
 //   c: { 시·도 slug: 그 시·도에서 볼 수 있는 것 수 }   (= 판매점 + 소원 명소 + 제철식당 지역 + 남는 신호 + 주산지 품목. 카드 지도 음영)
 //   → c는 near/map.json으로 따로 나간다(카드 지도가 index.json 없이 먼저 그려지게). writeNear() 참고.
+//
+// near/markets/{시·도}.json, near/good/{시·도}.json (줄을 누를 때만 받는 목록): { ref: 기준일, d: { 시·군·구 slug: [
+//     [시장명, 장날 숫자, 짧은 주소, 주차장 1|0]…  /  [업종, 업소명, 짧은 주소, [메뉴, 가격, 메뉴, 가격]]… ] } }
 //
 // near/map.json (카드 시·도 지도, 카드가 화면에 들어올 때 받음):
 //   { v, proj: lottomap/data/geo.js의 투영, d: { 시·도 slug: SVG 경로(상대 좌표 l로 바꿔 줄임, 점은 그대로) }, c }
@@ -27,7 +38,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 import { pathToFileURL } from 'node:url';
-import { ROOT, loadRegions, resolve } from './regions.mjs';
+import { ROOT, loadRegions, resolve, sidoCandidates } from './regions.mjs';
 
 const P = (...a) => path.join(ROOT, ...a);
 const readJSON = f => JSON.parse(fs.readFileSync(P(f), 'utf8'));
@@ -164,6 +175,9 @@ export async function buildNear({ now = new Date() } = {}) {
   }
   for (const id of Object.keys(so)) if (!ITEMS.some(i => i.id === id)) errors.push(`제철장보기: season-origins.json의 ${id}는 items.js에 없음`);
 
+  // ── 공공데이터 4종(tools/near/data/*.json, tools/near/fetch-extra.mjs가 받음). 주소·지역 글로 시·군·구에 맞추고, 못 맞추면 빌드 실패 ──
+  const X = buildExtra(R, errors, at, ITEMS, now);
+
   if (errors.length) {
     const e = new Error(`내 동네 데이터: 지역표(common/regions.json)에 맞출 수 없는 항목 ${errors.length}개\n- ` + errors.slice(0, 30).join('\n- ') +
       (errors.length > 30 ? `\n- …${errors.length - 30}개 더` : '') + '\n→ common/regions.json에 이름(aliases)을 더하거나 서비스 데이터를 고쳐 주세요.');
@@ -184,13 +198,137 @@ export async function buildNear({ now = new Date() } = {}) {
   return {
     v: 1,
     built: now.toISOString().slice(0, 10),
+    x: X.meta,
     src: { lottomap: ST.updated, market: String(mk.generated_at || '').slice(0, 10), sikdang: readJSON('sikdang/data/meta.json').generated },
     regions,
     items: F,
     d: D,
     nb,
     c,
+    lists: X.lists,
   };
+}
+
+/** 주소(「경상북도 안동시 대안로 98-15」) → 시·군·구. 세종처럼 시·군·구가 하나뿐인 시·도는 그 하나. 못 찾으면 null */
+export function addrRegion(R, addr) {
+  const t = String(addr || '').replace(/[(),]/g, ' ').replace(/특례시/g, '시').trim().split(/\s+/);
+  if (!t[0]) return null;
+  for (const n of [2, 3]) { const r = resolve(R, { sido: t[0], sigungu: t.slice(1, n).join(' ') }); if (r?.parent) return r; }
+  const r = resolve(R, { sido: t[0], sigungu: '' });
+  return r?.parent ? r : null;
+}
+/** 지리적표시 「대상 지역」 글 → 시·군·구, 시·도 전체(「제주특별자치도 일원」)면 시·도. 「이천시 일원」처럼 시·도가 없으면 이름이 하나뿐인 시·군·구 */
+export function areaRegion(R, text) {
+  const t = String(text || '').replace(/^행정구역상의?\s*/, '').replace(/[(),]/g, ' ').replace(/특례시/g, '시').trim().split(/\s+/);
+  if (!t[0]) return null;
+  if (sidoCandidates(R, t[0]).length) {
+    if (!t[1] || /^(일원|일대|전역|지역)$/.test(t[1])) return resolve(R, { sido: t[0], sigungu: '' });
+    return addrRegion(R, t.join(' '));
+  }
+  const hit = R.list.filter(r => r.parent && (r.name === t[0] || (r.aliases || []).includes(t[0])));
+  return hit.length === 1 ? hit[0] : null;
+}
+/** 주소에서 앞의 시·도·시·군·구를 뺀 짧은 주소(목록 화면용) */
+function shortAddr(addr, r) {
+  const t = String(addr || '').trim().split(/\s+/);
+  let i = 1;
+  if (t[i] === r.name || t[i]?.replace(/특례시$/, '시') === r.name) i++;
+  return t.slice(i).join(' ');
+}
+const FOOD = ['한식', '중식', '일식', '양식', '기타요식업', '베이커리'];
+const MEAL = /국수|칼국수|백반|찌개|짜장|자장|짬뽕|국밥|비빔밥|우동|김밥|냉면|정식|해장국|순대|수제비|칼제비|덮밥|돈까스|돈가스|라면|만두|곰탕|떡국/;
+
+/** 공공데이터 4종 → 카드 줄 자료(d[slug].m·g·gi·fe) + 시·도별 목록 파일(lists) + 출처·기준일(meta) */
+export function buildExtra(R, errors, at, ITEMS, now = new Date()) {
+  const DATA = f => readJSON(`tools/near/data/${f}`);
+  const sidoOf = r => (r.parent ? R.bySlug.get(r.parent) : r);
+  const lists = { markets: {}, good: {} };
+  const put = (kind, r, ref, row) => (((lists[kind][sidoOf(r).slug] ??= { ref, d: {} }).d[r.slug] ??= []).push(row));
+
+  // 전통시장·장날: 시·군·구마다 [시장 수, 매일 여는 곳 수, [[장날 숫자, 대표 시장(점포 많은 곳), 그 장날 시장 수]…]]
+  const MK = DATA('markets.json');
+  const mk = {};
+  for (const row of MK.rows) {
+    const [name, addr, cyc] = row;
+    if (!/^\d*$/.test(cyc)) { errors.push(`전통시장 markets.json: ${name}의 장날 「${cyc}」`); continue; }
+    const r = addrRegion(R, addr);
+    if (!r) { errors.push(`전통시장 markets.json: ${name} (${addr})`); continue; }
+    (mk[r.slug] ??= []).push(row);
+  }
+  for (const [slug, rows] of Object.entries(mk)) {
+    const r = R.bySlug.get(slug), g = {};
+    rows.sort((a, b) => b[4] - a[4] || a[0].localeCompare(b[0], 'ko'));          // 점포 많은 순
+    for (const x of rows) if (x[2]) (g[x[2]] ??= []).push(x[0]);
+    at(slug).m = [rows.length, rows.filter(x => !x[2]).length, Object.keys(g).sort().map(k => [k, g[k][0], g[k].length])];
+    for (const [name, addr, cyc, park] of rows) put('markets', r, MK.meta.ref, [name, cyc, shortAddr(addr, r), park]);
+  }
+
+  // 착한가격업소: [업소 수, 예시 업소, 메뉴, 가격] — 예시는 식당의 끼니 메뉴(3천~1만5천 원) 중 가장 싼 것
+  const GD = DATA('good.json');
+  const gd = {};
+  for (const row of GD.rows) {
+    const [sd, sg, , name, ad] = row;
+    let r = resolve(R, { sido: sd, sigungu: sg });
+    if (!r?.parent) r = addrRegion(R, ad.startsWith('~') ? `${sd} ${sg} ${ad.slice(1)}` : ad);
+    if (!r?.parent) { errors.push(`착한가격업소 good.json: ${name} (${sd} ${sg} / ${ad})`); continue; }
+    (gd[r.slug] ??= []).push(row);
+  }
+  const rank = ind => { const i = FOOD.indexOf(ind); return i < 0 ? FOOD.length : i; };
+  for (const [slug, rows] of Object.entries(gd)) {
+    const r = R.bySlug.get(slug);
+    const ok = (x, meal) => FOOD.slice(0, 4).includes(x[2]) && x[5][1] >= 3000 && x[5][1] <= 15000 && (!meal || MEAL.test(x[5][0]));
+    const ex = [...rows].sort((a, b) => (a[5][1] || 1e9) - (b[5][1] || 1e9)).find(x => ok(x, true)) ||
+      [...rows].sort((a, b) => (a[5][1] || 1e9) - (b[5][1] || 1e9)).find(x => ok(x, false)) || rows.find(x => x[5][0]) || rows[0];
+    at(slug).g = [rows.length, ex[3], ex[5][0] || '', ex[5][1] || 0];
+    rows.sort((a, b) => rank(a[2]) - rank(b[2]) || a[2].localeCompare(b[2], 'ko') || a[3].localeCompare(b[3], 'ko'));
+    for (const [, , ind, name, ad, menus] of rows) put('good', r, GD.meta.ref, [ind, name, ad.startsWith('~') ? ad.slice(1).trim() : shortAddr(ad, r), menus]);
+  }
+
+  // 지리적표시: [[등록명칭, 제철장보기 id|0, 등록번호, 수산물이면 's']…] — 시·도 전체로 등록된 것(제주 일원)은 시·도 slug에
+  const names = ITEMS.flatMap(it => {
+    const m = it.n.match(/\((.*)\)/), ns = [it.n.replace(/\(.*\)/, '').trim(), ...(m ? m[1].split('·') : [])];
+    return ns.filter(Boolean).map(n => [n, it.id]);
+  }).sort((a, b) => b[0].length - a[0].length);
+  const seasonOf = nm => { const k = nm.replace(/\(.*?\)/g, '').replace(/\s/g, ''); return (names.find(([n]) => k.endsWith(n)) || [])[1] || 0; };
+  const GI = DATA('gi.json');
+  for (const [kind, no, nm, , area] of GI.rows) {
+    const r = kind === 's' ? addrRegion(R, area) : areaRegion(R, area);
+    if (!r) { errors.push(`지리적표시 gi.json: ${kind === 's' ? '수산물' : '농산물'} ${no} ${nm} (${area})`); continue; }
+    const e = [nm.replace(/\s*\(.*\)$/, '').replace(/\s+/g, ' '), seasonOf(nm), +no.replace(/\D/g, '')];
+    if (kind === 's') e.push('s');
+    (at(r.slug).gi ??= []).push(e);
+  }
+
+  // 축제: 시·군·구마다 하나 [축제명, 시작일, 끝일, 누리집] — 앞으로 열릴 것 중 가장 이른 것, 없으면 올해 이미 열린 것 중 마지막.
+  //   빌드(배포)는 거의 매일 돌지만, 화면도 오늘 날짜로 「다가오는」/「올해 열린」을 다시 가린다
+  const FE = DATA('festivals.json');
+  const today = new Date(now.getTime() + 9 * 3600e3).toISOString().slice(0, 10), y0 = `${today.slice(0, 4)}-01-01`;
+  const fe = {};
+  let feSido = 0;
+  for (const row of FE.rows) {
+    const [nm, , , addr, inst] = row;
+    const r = addrRegion(R, addr) || addrRegion(R, inst);
+    if (!r) {
+      // 시·도가 연 축제(장소 주소 없음)는 시·도까지만 맞으면 된다 — 카드는 시·군·구 것만 보여 준다
+      if (resolve(R, { sido: (addr || inst).split(/\s+/)[0], sigungu: '' })) { feSido++; continue; }
+      errors.push(`축제 festivals.json: ${nm} (${addr || '주소 없음'} / ${inst})`); continue;
+    }
+    (fe[r.slug] ??= []).push(row);
+  }
+  for (const [slug, rows] of Object.entries(fe)) {
+    const up = rows.filter(x => x[2] >= today).sort((a, b) => a[1].localeCompare(b[1]));
+    const past = rows.filter(x => x[2] < today && x[2] >= y0).sort((a, b) => b[2].localeCompare(a[2]));
+    const x = up[0] || past[0];
+    if (x) at(slug).fe = [x[0], x[1], x[2], x[5]];
+  }
+
+  const meta = {
+    m: [MK.meta.title, MK.meta.dataset, MK.meta.ref],
+    g: [GD.meta.title, GD.meta.dataset, GD.meta.ref],
+    gi: [GI.meta.agri.title, GI.meta.agri.dataset, GI.meta.agri.ref, GI.meta.sea.title, GI.meta.sea.dataset, GI.meta.sea.ref],
+    fe: [FE.meta.title, FE.meta.dataset, FE.meta.ref],
+  };
+  return { meta, lists, feSido };
 }
 
 /** 두 좌표 사이 거리(km, 대원 거리) */
@@ -245,12 +383,19 @@ export function buildMap(c) {
 
 /** near/index.json(c 뺀 것)과 near/map.json(경계 + c) 두 파일로 쓴다. 바이트 수 돌려줌 */
 export function writeNear(data, dir) {
-  const { c, ...rest } = data;
+  const { c, lists, ...rest } = data;
   const index = JSON.stringify(rest), map = JSON.stringify(buildMap(c));
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(path.join(dir, 'index.json'), index);
   fs.writeFileSync(path.join(dir, 'map.json'), map);
-  return { index: Buffer.byteLength(index), map: Buffer.byteLength(map) };
+  // 줄을 누를 때만 받는 시·도별 목록: near/markets/{시·도}.json, near/good/{시·도}.json
+  let lb = 0, ln = 0;
+  for (const [kind, bySido] of Object.entries(lists || {})) {
+    fs.rmSync(path.join(dir, kind), { recursive: true, force: true });
+    fs.mkdirSync(path.join(dir, kind), { recursive: true });
+    for (const [sido, o] of Object.entries(bySido)) { const t = JSON.stringify(o); fs.writeFileSync(path.join(dir, kind, `${sido}.json`), t); lb += Buffer.byteLength(t); ln++; }
+  }
+  return { index: Buffer.byteLength(index), map: Buffer.byteLength(map), lists: lb, listFiles: ln };
 }
 
 // 명령줄
@@ -259,6 +404,6 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   try {
     const data = await buildNear();
     const b = writeNear(data, out);
-    console.log(`near/index.json: 지역 ${data.regions.length}개, 데이터 있는 곳 ${Object.keys(data.d).length}개, ${(b.index / 1024).toFixed(1)}KB · map.json ${(b.map / 1024).toFixed(1)}KB → ${path.relative(process.cwd(), out)}`);
+    console.log(`near/index.json: 지역 ${data.regions.length}개, 데이터 있는 곳 ${Object.keys(data.d).length}개, ${(b.index / 1024).toFixed(1)}KB · map.json ${(b.map / 1024).toFixed(1)}KB · 목록 ${b.listFiles}개 ${(b.lists / 1024).toFixed(0)}KB → ${path.relative(process.cwd(), out)}`);
   } catch (e) { console.error(e.message); process.exit(1); }
 }

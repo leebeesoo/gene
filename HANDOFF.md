@@ -53,6 +53,7 @@
 
 ## 정해진 날 할 일 (Claude)
 - 매주 일요일 09:17 KST: 명당로드 데이터 자동 갱신(`.github/workflows/lottomap-data.yml`). 허브 `index.html`의 「9,240건 · 262~1250회」는 손으로 같이 고칠 것
+- 매달 3일 05:41 KST: 「내 동네」 카드 공공데이터(전통시장·착한가격·지리적표시·축제) 자동 갱신(`.github/workflows/near-extra-data.yml`)
 - 2026-12 초: 통계청 2025년 생명표 발표 → 남은봄(lifeclock) 반영
 - 2027-01 첫 주: 혜택 달력(silver) 「2026년 기준」→2027로, 금액·기준 다시 확인
 - 구출장터 구글 폼: 사장님이 만들면(`docs/google-forms.md`) 주소를 `market/js/config.js`에. 이메일 신청은 계속 둔다

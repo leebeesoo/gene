@@ -7,6 +7,8 @@
   var KEY = 'jl.near', D = null, P = null, R = {}, KIDS = {}, SIDO = [], cur = null, dlg = null, ret = null;
   var LV = { disposal: '폐기', crash: '폭락', surplus: '과잉', watch: '주의' };
   var NOW = new Date().getMonth() + 1;
+  var TODAY = null; // [연, 월, 일] 한국 시각 오늘 (테스트가 정할 수 있음)
+  var WD = '일월화수목금토';
   function $(id) { return document.getElementById(id); }
   function esc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) { return '&#' + c.charCodeAt(0) + ';'; }); }
   function n(v) { return Number(v).toLocaleString('ko-KR'); }
@@ -59,10 +61,61 @@
     return best && { r: best, d: bd };
   }
 
-  /* ── 줄 5개 ──
-     줄마다 tier: 0 이 동네 자료 · 1 시·도(광역시) 전체 자료나 이달 가까운 제철 · 2 비어서 옆 동네·시·도 전체로 안내 · 3 안내도 없음.
-     tier 작은 것 먼저(같으면 원래 순서). 좁은 화면은 위 3줄만 보이고 「나머지 2개 더 보기」로 편다. */
-  var ORDER = ['l', 'w', 's', 'k', 'f'];
+  /* ── 날짜·장날·해 뜨는 시각 (기기 안에서 계산) ── */
+  function today() { if (TODAY) return TODAY; var t = new Date(Date.now() + 324e5); return [t.getUTCFullYear(), t.getUTCMonth() + 1, t.getUTCDate()]; }
+  function addDays(a, k) { var t = new Date(Date.UTC(a[0], a[1] - 1, a[2] + k)); return [t.getUTCFullYear(), t.getUTCMonth() + 1, t.getUTCDate()]; }
+  function dow(a) { return WD[new Date(Date.UTC(a[0], a[1] - 1, a[2])).getUTCDay()]; }
+  function ymdS(a) { return a[0] + '-' + (a[1] < 10 ? '0' : '') + a[1] + '-' + (a[2] < 10 ? '0' : '') + a[2]; }
+  function dot(v) { var p = String(v || '').split('-'); return p.length === 3 ? +p[0] + '.' + +p[1] + '.' + +p[2] : ''; } // 2026-11-09 → 2026.11.9
+  function md(v) { var p = String(v).split('-'); return +p[1] + '.' + +p[2]; }
+  // 5일장: 날짜 끝자리가 장날 숫자('27' = 2·7·12·17·22·27일, 10·20·30일은 0)에 들면 장이 선다.
+  // 31일은 시장마다 서기도 하고 쉬기도 해서 장날로 세지 않는다(목록 창에 안내)
+  function onDay(dg, d) { return !!dg && d !== 31 && dg.indexOf(String(d % 10)) >= 0; }
+  function nextOn(dg, from, k0) { for (var k = k0; k <= 12; k++) { var x = addDays(from, k); if (onDay(dg, x[2])) return { a: x, k: k }; } return null; }
+  function dgTxt(dg) { return dg ? dg.split('').map(function (c) { return c === '0' ? '10' : c; }).join('·') + '일장' : '매일'; }
+  function dayTxt(n, a) { return n === 0 ? '오늘' : n === 1 ? '내일 ' + a[2] + '일(' + dow(a) + ')' : a[2] + '일(' + dow(a) + ')'; }
+  // 장날 요약: x = [시장 수, 매일 여는 곳, [[장날 숫자, 대표 시장, 시장 수]…]]
+  function jang(x, t) {
+    var on = x[2].filter(function (g) { return onDay(g[0], t[2]); }), nx = null;
+    x[2].forEach(function (g) { var q = nextOn(g[0], t, 1); if (q && (!nx || q.k < nx.k)) nx = { a: q.a, k: q.k, g: [] }; });
+    if (nx) x[2].forEach(function (g) { if (onDay(g[0], nx.a[2])) nx.g.push(g); });
+    var cnt = function (gs) { return gs.reduce(function (s, g) { return s + g[2]; }, 0); };
+    var who = function (gs) { var c = cnt(gs); return gs[0][1] + (c > 1 ? ' 외 ' + (c - 1) + '곳' : ''); };
+    return { on: on, nx: nx, txt: on.length ? '오늘 장: ' + who(on) + (nx ? ' / 다음 장날 ' + dayTxt(nx.k, nx.a) : '') :
+      nx ? '다음 장날 ' + dayTxt(nx.k, nx.a) + ' ' + who(nx.g) : '모두 매일 여는 상설시장' };
+  }
+  // 해 뜨고 지는 시각: NOAA 태양 위치 계산식(General Solar Position, Meeus 바탕), 대기 굴절·해 반지름 0.833도, 평지, 한국 시각.
+  // 해 뜨는 때의 태양 위치로 한 번 더 고쳐 계산한다. 돌려주는 값: [해 뜸, 해 짐] 자정부터 분(반올림 전)
+  function sunTimes(lat, lng, a) {
+    var rad = Math.PI / 180, y = a[0], m = a[1], d = a[2];
+    if (m <= 2) { y--; m += 12; }
+    var A = Math.floor(y / 100), jd = Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1)) + d + 2 - A + Math.floor(A / 4) - 1524.5;
+    function at(rise, t0) {
+      var t = (jd + t0 / 1440 - 2451545) / 36525;
+      var L0 = (280.46646 + t * (36000.76983 + 0.0003032 * t)) % 360, M = 357.52911 + t * (35999.05029 - 0.0001537 * t), e = 0.016708634 - t * (0.000042037 + 0.0000001267 * t);
+      var C = Math.sin(M * rad) * (1.914602 - t * (0.004817 + 0.000014 * t)) + Math.sin(2 * M * rad) * (0.019993 - 0.000101 * t) + Math.sin(3 * M * rad) * 0.000289;
+      var om = 125.04 - 1934.136 * t, lam = L0 + C - 0.00569 - 0.00478 * Math.sin(om * rad);
+      var eps = 23 + (26 + (21.448 - t * (46.815 + t * (0.00059 - t * 0.001813))) / 60) / 60 + 0.00256 * Math.cos(om * rad);
+      var dec = Math.asin(Math.sin(eps * rad) * Math.sin(lam * rad)), yy = Math.pow(Math.tan(eps * rad / 2), 2);
+      var eq = 4 / rad * (yy * Math.sin(2 * L0 * rad) - 2 * e * Math.sin(M * rad) + 4 * e * yy * Math.sin(M * rad) * Math.cos(2 * L0 * rad) -
+        0.5 * yy * yy * Math.sin(4 * L0 * rad) - 1.25 * e * e * Math.sin(2 * M * rad));
+      var c = (Math.cos(90.833 * rad) - Math.sin(lat * rad) * Math.sin(dec)) / (Math.cos(lat * rad) * Math.cos(dec));
+      if (c < -1 || c > 1) return null;
+      var ha = Math.acos(c) / rad;
+      return 720 - 4 * (lng + (rise ? ha : -ha)) - eq;  // UTC 분
+    }
+    function ev(rise) { var u = at(rise, rise ? 360 - 4 * lng : 1080 - 4 * lng); if (u == null) return null; u = at(rise, u); return u == null ? null : u + 540; }
+    return [ev(true), ev(false)];
+  }
+  function hm(v) { var r = Math.round(v), h = Math.floor(r / 60) % 24, mi = r % 60; return (h < 10 ? '0' : '') + h + ':' + (mi < 10 ? '0' : '') + mi; }
+  // 12월 15일 ~ 1월 1일: 새해 첫 해
+  function firstSun(t) { return (t[1] === 12 && t[2] >= 15) ? t[0] + 1 : (t[1] === 1 && t[2] === 1) ? t[0] : 0; }
+  function center(r) { return r.n.slice(-1) === '군' ? '군' : r.n.slice(-1) === '구' ? '구' : '시'; }
+
+  /* ── 줄: 서비스 5개 + 동네 정보(전통시장·장날, 착한가격업소, 해 뜨고 지는 시각, 지리적표시, 축제) ──
+     줄마다 tier: 0 이 동네 자료 · 1 시·도(광역시) 전체 자료나 이달 가까운 제철, 동네 정보 · 2 비어서 옆 동네·시·도 전체로 안내 · 3 안내도 없음.
+     tier 작은 것 먼저(같으면 ORDER 순서). 좁은 화면은 위 3줄, 넓은 화면은 위 5줄만 보이고 「나머지 n개 더 보기」로 편다(높이는 그대로). */
+  var ORDER = ['l', 'w', 's', 'k', 'f', 'm', 'g', 'sun', 'gi', 'fe'];
   function nm2(r, from) { return r.p && r.p === from.p ? r.n : label0(r); }  // 같은 시·도면 시·군·구 이름만
   function label0(r) { return r.p ? label(r) : r.n; }
   // 이 동네에 없는 서비스의 가장 가까운 자료 있는 곳(빌드가 지역 가운데 좌표로 계산: near/index.json nb)
@@ -118,15 +171,52 @@
       t = (d.f ? '' : s.n + ' ') + '주산지 ' + f.slice(0, 2).map(function (y) { return y.n; }).join('·') + (on.length ? ' · 지금 제철' : ' · 제철 ' + span(f[0].m));
       out.f = { t: t, u: '/season/#/item/' + f[0].id, k: d.f ? 0 : 1 };
     } else out.f = empty(r, 'f', '주산지 품목 없음', function (y) { return ' 주산지 ' + D.items[y[0]][0]; }, function (y) { return '/season/#/item/' + y[0]; });
+    extra(r, s, d, out);
     var META = { l: ['c-map', '명당로드'], w: ['c-wish', '소원명당'], s: ['c-sik', '제철식당'], k: ['c-mkt', '구출장터'], f: ['c-sea', '제철장보기'] };
-    return ORDER.map(function (key, i) { var o = out[key]; o.key = key; o.c = META[key][0]; o.name = META[key][1]; o.u = fromNear(o.u); o.i = i; return o; })
-      .sort(function (a, b) { return a.k - b.k || a.i - b.i; });
+    return ORDER.filter(function (key) { return out[key]; }).map(function (key, i) {
+      var o = out[key]; o.key = key; o.c = META[key] ? META[key][0] : 'c-info'; o.name = META[key] ? META[key][1] : o.name; if (!o.ext) o.u = fromNear(o.u); o.i = i; return o;
+    }).sort(function (a, b) { return a.k - b.k || a.i - b.i; });
+  }
+  /* 동네 정보 줄(공공데이터·계산): 자료가 없으면 줄을 만들지 않는다. 줄 이름(b)에 출처와 기준일을 붙인다.
+     tier: 이 동네 자료 1(서비스 줄의 「이 동네 자료」 다음), 시·도 전체·지난 것 2. p = 누르면 여는 목록 창 */
+  var SRC = { m: '소진공', g: '행안부', gia: '농관원', gis: '수품원', fe: '지자체' };
+  function srcName(key, nm, ref) { return nm + ' · ' + SRC[key] + ' ' + dot(ref) + ' 기준'; }
+  function extra(r, s, d, out) {
+    var X = D.x || {}, t = today(), x, z;
+    // 전통시장·장날
+    if ((x = d.m)) out.m = { name: srcName('m', '전통시장·장날', X.m && X.m[2]), t: '전통시장 ' + n(x[0]) + '곳 · ' + jang(x, t).txt, p: 'm', k: 1 };
+    // 착한가격업소
+    if ((x = d.g)) out.g = { name: srcName('g', '착한가격업소', X.g && X.g[2]), t: '착한가격업소 ' + n(x[0]) + '곳' + (x[2] ? ' · 예: ' + x[1] + ' ' + x[2] + (x[3] ? ' ' + n(x[3]) + '원' : '') : ''), p: 'g', k: 1 };
+    // 해 뜨고 지는 시각 (자료 파일 없이 동네 가운데 좌표로)
+    if (r.lat != null) {
+      var st = sunTimes(r.lat, r.lng, t), fy = firstSun(t), w = '(' + center(r) + ' 중심, 평지 기준)';
+      if (st[0] != null) out.sun = { name: '해 뜨고 지는 시각 · 계산값', p: 'sun', k: 1,
+        t: fy ? fy + '년 첫 해 ' + hm(sunTimes(r.lat, r.lng, [fy, 1, 1])[0]) + (fy === t[0] ? '(오늘)' : '') + ' · 오늘 해 짐 ' + hm(st[1]) + ' ' + w
+          : '오늘 해 뜸 ' + hm(st[0]) + ' · 해 짐 ' + hm(st[1]) + ' ' + w };
+    }
+    // 지리적표시 특산물: 이 동네 것, 없으면 시·도 전체(시·도로 등록된 것 + 시·군·구 것). 제철장보기 품목이 있으면 그리로
+    var gi = d.gi, wide = false;
+    if (!gi) { gi = (D.d[s.s] && D.d[s.s].gi || []).slice(); KIDS[s.s].forEach(function (k) { (D.d[k.s] && D.d[k.s].gi || []).forEach(function (y) { gi.push(y); }); }); wide = true; }
+    if (gi && gi.length) {
+      // 제철장보기 품목이 있는 것 먼저(그 품목으로 링크), 그다음 농산물·수산물 등록번호 순
+      gi = gi.slice().sort(function (a, b) { return !a[1] - !b[1] || (a[3] ? 1 : 0) - (b[3] ? 1 : 0) || a[2] - b[2]; });
+      var lk = gi[0][1] ? gi[0] : null, sea = gi[0][3] === 's';
+      out.gi = { name: srcName(sea ? 'gis' : 'gia', '지리적표시', X.gi && X.gi[sea ? 5 : 2]), k: wide ? 2 : 1,
+        t: (wide ? s.n + ' ' : '') + '지리적표시 특산물: ' + gi.slice(0, 2).map(function (y) { return y[0]; }).join('·') + (gi.length > 2 ? ' 외 ' + (gi.length - 2) + '개' : ''),
+        u: lk ? '/season/#/item/' + lk[1] : null };
+    }
+    // 축제: 앞으로 열릴 것, 없으면 올해 열린 것. 누르면 날짜·주최 측 누리집을 창으로(주최 측 공지 확인 안내)
+    if ((z = d.fe)) {
+      var ts = ymdS(t), up = z[2] >= ts, dd = z[1] === z[2] ? md(z[1]) : md(z[1]) + '~' + md(z[2]);
+      if (up || z[2].slice(0, 4) === ts.slice(0, 4)) out.fe = { name: srcName('fe', '축제', X.fe && X.fe[2]), p: 'fe', k: up ? 1 : 2,
+        t: (up ? (z[1] <= ts ? '열리는 중: ' : '다가오는 축제: ') : '올해 열린 축제: ') + z[0] + ' (' + dd + ')' };
+    }
   }
   function row(o) {
-    var url = o.u;
-    return '<li>' + (url ? '<a class="nr-row ' + o.c + '" href="' + esc(url) + '">' : '<span class="nr-row no ' + o.c + '">') +
-      '<i></i><b>' + o.name + '</b><span>' + (o.sr ? '<em class="sr">' + esc(o.sr) + '</em>' : '') + esc(o.t) + '</span>' +
-      (url ? '<svg aria-hidden="true"><use href="#go"/></svg></a>' : '</span>') + '</li>';
+    var url = o.u, tag = o.p ? 'button' : url ? 'a' : 'span';
+    return '<li><' + tag + ' class="nr-row ' + (tag === 'span' ? 'no ' : '') + o.c + '"' + (o.p ? ' type="button" data-p="' + o.p + '" aria-haspopup="dialog"' : url ? ' href="' + esc(url) + '"' : '') + '>' +
+      '<i></i><b>' + esc(o.name) + '</b><span>' + (o.sr ? '<em class="sr">' + esc(o.sr) + '</em>' : '') + esc(o.t) + '</span>' +
+      (tag !== 'span' ? '<svg aria-hidden="true"><use href="#go"/></svg>' : '') + '</' + tag + '></li>';
   }
   function render(slug) {
     var r = R[slug]; if (!r || !r.p) return false;
@@ -135,7 +225,8 @@
     $('nearRows').innerHTML = rows.map(row).join('');
     card.classList.add('on'); card.classList.remove('ex');
     document.documentElement.classList.remove('nr-saved');
-    if (more) { more.setAttribute('aria-expanded', 'false'); more.firstChild.textContent = '나머지 ' + (rows.length - 3) + '개 더 보기'; }
+    if (more) { more.setAttribute('aria-expanded', 'false'); moreLabel(); }
+    $('nearRows').onclick = function (e) { var b = e.target.closest('button[data-p]'); if (b) panel(b.getAttribute('data-p'), b); };
     $('nearH').textContent = label(r);
     $('nearSub').textContent = '우리 동네에서 할 수 있는 것 · 줄을 누르면 그 서비스가 이 동네로 열려요';
     var b = $('nearPick'); b.textContent = '바꾸기'; b.className = 'nr-btn re'; b.setAttribute('aria-label', '동네 바꾸기, 지금 ' + label(r));
@@ -150,9 +241,18 @@
         return true;
       }
     }
-    ft.textContent = '각 서비스 최신 자료 기준이에요. 자료는 바뀔 수 있어요.';
+    ft.innerHTML = '<span>각 서비스·공공데이터 최신 자료 기준이에요.</span><button type="button" aria-haspopup="dialog" aria-label="공공데이터 출처 보기">출처</button>';
+    ft.querySelector('button').onclick = function () { panel('src', this); };
     return true;
   }
+  // 「나머지 n개 더 보기」: 좁은 화면은 3줄, 넓은 화면(880px~)은 5줄이 보인다(넓은 화면은 설명 두 줄 자리를 이 단추가 써서 높이가 그대로)
+  var WIDE = window.matchMedia ? matchMedia('(min-width:880px)') : null;
+  function moreLabel() {
+    var more = $('nearMore'), c = $('nearCard'); if (!more || !cur) return;
+    var k = $('nearRows').children.length - (WIDE && WIDE.matches ? 5 : 3);
+    more.firstChild.textContent = c.classList.contains('ex') ? '접기' : '나머지 ' + k + '개 더 보기';
+  }
+  if (WIDE) { if (WIDE.addEventListener) WIDE.addEventListener('change', moreLabel); else if (WIDE.addListener) WIDE.addListener(moreLabel); }
   function pick(slug) { if (render(slug)) { save(slug); dl({ event: 'near_pick', near_region: slug }); } }
 
   /* ── 동네 고르기 창: 시·도 17 → 시·군·구(가나다순, 찾기) ── */
@@ -168,7 +268,13 @@
     '.nr-g button{font:inherit;font-size:16px;font-weight:600;min-height:52px;padding:0 10px;border-radius:10px;border:1px solid var(--line);background:var(--soft);color:var(--ink);cursor:pointer}' +
     '.nr-g button[aria-current]{background:color-mix(in srgb,var(--na) 12%,var(--bg));border-color:var(--na);font-weight:700}.nr-g button:hover{border-color:var(--na)}' +
     '.nr-q{display:block;width:100%;font:inherit;font-size:16px;min-height:48px;padding:0 14px;margin-bottom:12px;border-radius:10px;border:1px solid var(--line);background:var(--soft);color:var(--ink)}' +
-    '.nr-none{color:var(--muted);font-size:14px;padding:8px 0}';
+    '.nr-none{color:var(--muted);font-size:14px;padding:8px 0}' +
+    '.nr-pn{font-size:14px;line-height:1.5;margin:0 0 12px;padding:10px 12px;border-radius:10px;background:color-mix(in srgb,var(--na) 10%,var(--bg))}' +
+    '.nr-ps{font-size:12px;line-height:1.5;color:var(--muted);margin:14px 0 0}' +
+    '.nr-pl{list-style:none;margin:0;padding:0}.nr-pl li{display:grid;gap:2px;padding:10px 0;border-bottom:1px solid var(--line)}' +
+    '.nr-pl b{font-size:16px;font-weight:700}.nr-pl span{font-size:14px;line-height:1.45;color:var(--muted);overflow-wrap:anywhere}.nr-pl span+span{font-size:13px}' +
+    '.nr-pt{width:100%;border-collapse:collapse;font-size:15px;font-variant-numeric:tabular-nums;margin-bottom:12px}.nr-pt th,.nr-pt td{text-align:left;padding:8px 4px;border-bottom:1px solid var(--line)}.nr-pt thead th{font-size:13px;color:var(--muted);font-weight:600}' +
+    '.nr-pa{display:inline-flex;align-items:center;min-height:44px;font-weight:700;color:var(--ink);text-decoration:underline;text-underline-offset:3px}';
   function sheet() {
     if (dlg) return dlg;
     var st = document.createElement('style'); st.textContent = CSS; document.head.appendChild(st);
@@ -228,6 +334,77 @@
     if (!dlg.open) { dlg.showModal(); dl({ event: 'near_open' }); }
     if (ss && KIDS[ss]) step2(ss); else step1();
   }
+  /* ── 동네 정보 창(같은 창): 전통시장·착한가격업소 목록은 누를 때 시·도 파일(near/markets|good/{시·도}.json)을 받는다 ── */
+  var LISTS = {};
+  function list(kind, ss) {
+    var k = kind + '/' + ss;
+    if (!LISTS[k]) LISTS[k] = fetch('near/' + k + '.json').then(function (r) { if (!r.ok) throw 0; return r.json(); }, function (e) { throw e; })
+      .catch(function (e) { delete LISTS[k]; throw e; });
+    return LISTS[k];
+  }
+  function srcLine(t, no, ref, extra) { return '출처: ' + esc(t) + '(공공데이터포털 ' + esc(no) + ')' + (ref ? ', ' + esc(ref) + ' 기준' : '') + (extra ? ' · ' + esc(extra) : ''); }
+  function panel(kind, from) {
+    if (!cur) return;
+    sheet(); ret = from || null;
+    var r = cur, X = D.x || {}, d = D.d[r.s] || {}, t = today(), body = dlg.querySelector('.nr-db'), h = dlg.querySelector('h2'), L = label(r);
+    dlg.querySelector('.bk').hidden = true;
+    if (!dlg.open) dlg.showModal();
+    dl({ event: 'near_panel', near_panel: kind, near_region: r.s });
+    var note = function (txt) { return '<p class="nr-pn">' + txt + '</p>'; }, src = function (txt) { return '<p class="nr-ps">' + txt + '</p>'; };
+    function lazy(k, fn) {
+      body.innerHTML = '<p class="nr-none">불러오는 중…</p>';
+      list(k, r.p).then(function (o) { if (dlg.open && cur === r) { body.innerHTML = fn((o.d || {})[r.s] || [], o); body.scrollTop = 0; } },
+        function () { body.innerHTML = '<p class="nr-none">불러오지 못했어요. 창을 닫고 잠시 뒤 다시 눌러 주세요.</p>'; });
+    }
+    if (kind === 'm') {
+      h.textContent = L + ' 전통시장 ' + n(d.m[0]) + '곳';
+      lazy('markets', function (rows) {
+        var it = rows.map(function (x) { var q = x[1] ? nextOn(x[1], t, 0) : null; return { x: x, q: q, o: !x[1] ? 99 : q ? q.k : 50 }; })
+          .sort(function (a, b) { return a.o - b.o; });
+        var has31 = rows.some(function (x) { return x[1].indexOf('1') >= 0; });
+        return note('오늘은 ' + t[1] + '월 ' + t[2] + '일(' + dow(t) + ')이에요. 장날은 시장 사정에 따라 바뀔 수 있어요.' + (has31 ? ' 1·6일장은 31일에 서기도 하고 쉬기도 해서 장날로 세지 않았어요.' : '')) +
+          '<ul class="nr-pl">' + it.map(function (y) {
+            var x = y.x;
+            return '<li><b>' + esc(x[0]) + '</b><span>' + dgTxt(x[1]) + (x[1] ? ' · ' + (y.q ? (y.q.k === 0 ? '오늘 장날' : '다음 장날 ' + dayTxt(y.q.k, y.q.a)) : '') : ' 여는 시장') +
+              ' · 주차장 ' + (x[3] ? '있음' : '없음') + '</span><span>' + esc(x[2]) + '</span></li>';
+          }).join('') + '</ul>' + src(srcLine(X.m[0], X.m[1], X.m[2]));
+      });
+    } else if (kind === 'g') {
+      h.textContent = L + ' 착한가격업소 ' + n(d.g[0]) + '곳';
+      lazy('good', function (rows) {
+        return note(esc(X.g[2]) + ' 기준이라 가격은 바뀔 수 있어요. 행정안전부·지자체가 지정한 목록이고, 맛이나 서비스를 보증하지 않아요.') +
+          '<ul class="nr-pl">' + rows.map(function (x) {
+            var m = [];
+            for (var i = 0; i < x[3].length; i += 2) m.push(esc(x[3][i]) + (x[3][i + 1] ? ' ' + n(x[3][i + 1]) + '원' : ''));
+            return '<li><b>' + esc(x[1]) + '</b><span>' + esc(x[0]) + (m.length ? ' · ' + m.join(' · ') : '') + '</span><span>' + esc(x[2]) + '</span></li>';
+          }).join('') + '</ul>' + src(srcLine(X.g[0], X.g[1], X.g[2], '전화번호는 원본에 없어요'));
+      });
+    } else if (kind === 'sun') {
+      h.textContent = L + ' 해 뜨고 지는 시각';
+      var fy = firstSun(t), rs = [];
+      for (var i = 0; i < 7; i++) { var a = addDays(t, i), v = sunTimes(r.lat, r.lng, a); rs.push('<tr><th scope="row">' + (i ? a[1] + '.' + a[2] + '(' + dow(a) + ')' : '오늘') + '</th><td>' + hm(v[0]) + '</td><td>' + hm(v[1]) + '</td></tr>'); }
+      body.innerHTML = (fy ? note('<b>' + fy + '년 첫 해: 1월 1일 ' + hm(sunTimes(r.lat, r.lng, [fy, 1, 1])[0]) + '</b>') : '') +
+        '<table class="nr-pt"><caption class="sr">' + esc(L) + ' 7일 동안 해 뜨고 지는 시각</caption><thead><tr><th scope="col">날짜</th><th scope="col">해 뜸</th><th scope="col">해 짐</th></tr></thead><tbody>' + rs.join('') + '</tbody></table>' +
+        note('평지 기준 계산값이에요. 산이나 건물에 가려 늦게 보일 수 있어요.') +
+        src('계산: NOAA 태양 위치 계산식, ' + esc(r.n) + ' 가운데(북위 ' + r.lat.toFixed(2) + '°, 동경 ' + r.lng.toFixed(2) + '°), 한국 시각. 한국천문연구원 발표값과 1분쯤 다를 수 있어요.');
+    } else if (kind === 'fe') {
+      var z = d.fe, ts = ymdS(t);
+      h.textContent = L + ' 축제';
+      body.innerHTML = '<ul class="nr-pl"><li><b>' + esc(z[0]) + '</b><span>' + esc(z[1] === z[2] ? z[1] : z[1] + ' ~ ' + z[2]) + (z[2] < ts ? ' · 이미 끝났어요' : z[1] <= ts ? ' · 열리는 중' : '') + '</span></li></ul>' +
+        note('주최 측 공지를 꼭 확인하세요. 날짜·장소가 바뀌거나 취소될 수 있어요.') +
+        (z[3] ? '<p><a class="nr-pa" href="' + esc(z[3]) + '" target="_blank" rel="noopener">주최 측 누리집 열기 (새 창)</a></p>' : '') +
+        src(srcLine(X.fe[0], X.fe[1], X.fe[2], '지자체가 올린 자료'));
+    } else {
+      h.textContent = '공공데이터 출처';
+      body.innerHTML = '<ul class="nr-pl">' + [
+        ['전통시장·장날', X.m], ['착한가격업소', X.g], ['지리적표시(농산물)', X.gi], ['지리적표시(수산물)', X.gi && X.gi.slice(3)], ['축제', X.fe]
+      ].map(function (y) { return y[1] ? '<li><b>' + y[0] + '</b><span>' + esc(y[1][0]) + ' · 공공데이터포털 ' + esc(y[1][1]) + ' · ' + esc(y[1][2]) + ' 기준</span></li>' : ''; }).join('') +
+        '<li><b>해 뜨고 지는 시각</b><span>NOAA 태양 위치 계산식으로 기기 안에서 계산(평지 기준)</span></li></ul>' +
+        note('공공데이터는 매달 새로 받아요. 수산물 지리적표시는 국립수산물품질관리원 누리집 목록을 받은 날 기준이에요. 개인정보(전화번호 등)는 싣지 않아요.');
+    }
+    var x = dlg.querySelector('.x'); if (x) x.focus();
+  }
+
   // 지도에서 시·도를 누름: 시·군·구가 하나뿐(세종)이면 바로 고르고, 아니면 고르기 창을 그 시·도 목록으로
   function openAt(ss, el) {
     var k = KIDS[ss]; if (!k) return;
@@ -427,7 +604,8 @@
   }
 
   window.JLNear = {
-    _t: { init: init, rowsFor: rowsFor, fromNear: fromNear, month: function (m) { NOW = m; } }, // tools/near/test.mjs가 씀
+    _t: { init: init, rowsFor: rowsFor, fromNear: fromNear, month: function (m) { NOW = m; }, today: function (a) { TODAY = a; }, sun: sunTimes, hm: hm, onDay: onDay, jang: jang },  // tools/near/test.mjs가 씀
+    more: function () { moreLabel(); },
     run: function (acts) {
       mapLoad();
       if (acts.length === 1 && acts[0] === 'map') return;

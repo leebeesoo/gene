@@ -15,6 +15,7 @@
 # 허브 「내 동네」 카드 데이터(배포 때 생성)
 /near/*
   Cache-Control: public, max-age=600
+  X-Robots-Tag: noindex
 
 # 이미지는 길게 (파일을 바꿀 때는 이름을 바꿉니다)
 /*.png
