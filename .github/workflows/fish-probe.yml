@@ -1,0 +1,35 @@
+name: Fish probe (draft test)
+# 초안 시험용: 실제 API가 오는지만 확인하고 결과 요약을 로그에 남김. 커밋·배포 없음. 확인 뒤 지운다.
+on:
+  push:
+    branches: [claude/fish-draft]
+    paths: ['.github/workflows/fish-probe.yml']
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Fetch real data
+        env:
+          DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
+        run: |
+          set +e
+          node tools/fish/fetch-index.mjs; echo "index exit $?"
+          node tools/fish/fetch-tide.mjs --days=2; echo "tide exit $?"
+          node tools/fish/fetch-boats.mjs; echo "boats exit $?"
+      - name: Summary
+        run: |
+          node -e '
+          const fs=require("fs");
+          for (const f of ["index","tide","boats"]) {
+            try { const d=JSON.parse(fs.readFileSync("fish/data/"+f+".json","utf8"));
+              const keys=Object.keys(d); console.log("== "+f, "keys:", keys.join(","), "fixture:", d.meta&&d.meta.fixture);
+              for (const k of keys) { const v=d[k]; if (Array.isArray(v)) { console.log("  "+k+": "+v.length+" rows"); console.log("  sample: "+JSON.stringify(v.slice(0,2)).slice(0,1500)); } }
+            } catch(e) { console.log("== "+f+" error "+e.message); }
+          }'
