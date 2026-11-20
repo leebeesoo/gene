@@ -1,11 +1,11 @@
 name: Fish probe (draft test)
-# 초안 시험용: 실제 API가 오는지만 확인하고 결과 요약을 로그에 남김(4차: 한 번에 받는 줄 수 확인). 커밋·배포 없음. 확인 뒤 지운다.
+# 초안 시험용: 실제 API가 오는지만 확인하고 결과 요약을 로그에 남김(5차: 실제 자료를 초안 브랜치에 커밋, 사이트 배포 없음). 커밋·배포 없음. 확인 뒤 지운다.
 on:
   push:
     branches: [claude/fish-draft]
     paths: ['.github/workflows/fish-probe.yml']
 permissions:
-  contents: read
+  contents: write
 jobs:
   probe:
     runs-on: ubuntu-latest
@@ -40,3 +40,13 @@ jobs:
               for (const k of keys) { const v=d[k]; if (Array.isArray(v)) { console.log("  "+k+": "+v.length+" rows"); console.log("  sample: "+JSON.stringify(v.slice(0,2)).slice(0,1500)); } }
             } catch(e) { console.log("== "+f+" error "+e.message); }
           }'
+      - name: Commit real data to draft branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add fish/data/index.json fish/data/tide.json fish/data/boats.json
+          if git diff --cached --quiet; then echo "변경 없음"; else
+            git commit -m "data(fish 초안): 실제 바다낚시지수·조석·낚시어선 $(TZ=Asia/Seoul date +%F)"
+            git pull --rebase origin claude/fish-draft
+            git push origin HEAD:claude/fish-draft
+          fi
