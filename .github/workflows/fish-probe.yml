@@ -1,5 +1,5 @@
 name: Fish probe (draft test)
-# 초안 시험용: 실제 API가 오는지만 확인하고 결과 요약을 로그에 남김. 커밋·배포 없음. 확인 뒤 지운다.
+# 초안 시험용: 실제 API가 오는지만 확인하고 결과 요약을 로그에 남김(2차: 낚시어선 원본 응답 앞부분). 커밋·배포 없음. 확인 뒤 지운다.
 on:
   push:
     branches: [claude/fish-draft]
@@ -23,6 +23,13 @@ jobs:
           node tools/fish/fetch-index.mjs; echo "index exit $?"
           node tools/fish/fetch-tide.mjs --days=2; echo "tide exit $?"
           node tools/fish/fetch-boats.mjs; echo "boats exit $?"
+          node --input-type=module -e '
+            import { boatUrl } from "./tools/fish/lib.mjs";
+            for (const t of ["json","xml"]) {
+              const u = boatUrl(process.env.DATA_GO_KR_KEY, { page: 1, rows: 3 }).replace(/type=[a-z]+/, "type="+t);
+              const r = await fetch(u); const b = await r.text();
+              console.log("== boats raw", t, r.status, b.length); console.log(b.slice(0, 1500));
+            }'
       - name: Summary
         run: |
           node -e '
