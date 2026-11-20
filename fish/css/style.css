@@ -112,8 +112,12 @@ a:hover .rg.lk,a:focus .rg.lk{fill:var(--map-sel)}
 .plist a{flex:1;text-decoration:none;display:flex;flex-direction:column}
 .plist a span{font-size:12px;color:var(--muted)}
 .idx{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:2px 10px;border:1px solid var(--line);white-space:nowrap}
-.idx-좋음,.idx-매우좋음{background:var(--tint);border-color:var(--accent);color:var(--accent)}
-.idx-나쁨,.idx-매우나쁨{color:var(--muted)}
+/* 바다낚시지수 다섯 단계(실제 응답 낱말: 매우좋음·좋음·보통·나쁨·매우나쁨) — 색 하나(청록)의 진하기로만 */
+.idx-l5{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.idx-l4{background:var(--tint);border-color:var(--accent);color:var(--accent)}
+.idx-l3{background:var(--surface)}
+.idx-l2{color:var(--muted)}
+.idx-l1{color:var(--muted);border-style:dashed}
 .chip{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;min-height:36px;padding:0 14px;font:inherit;font-size:14px;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
 .chip small{color:var(--muted);font-size:12px}
 .chip[aria-current="page"]{background:var(--tint);border-color:var(--accent);color:var(--accent);font-weight:700}
@@ -129,7 +133,20 @@ tbody th{font-weight:700;white-space:nowrap}
 tbody th small{display:block;font-weight:500;color:var(--muted);font-size:12px}
 tbody th a{color:var(--accent)}
 table.rules td:nth-child(2){min-width:240px}
-table.fc td,table.fc th{white-space:nowrap}
+table.fc td,table.fc th{white-space:nowrap;padding:8px 8px;text-align:center}
+table.fc tbody th{text-align:left;position:sticky;left:0;background:var(--surface);z-index:1;border-right:1px solid var(--line)}
+table.fc thead th:first-child{position:sticky;left:0;z-index:2;border-right:1px solid var(--tint-line)}
+table.fc thead th[colspan]{border-left:1px solid var(--tint-line);color:var(--ink);font-weight:700}
+table.fc tr.cond th,table.fc tr.cond td{font-size:12px;color:var(--muted);background:var(--bg)}
+table.fc tr.cond th{background:var(--bg)}
+table.fc tr.cond:first-of-type th,table.fc tbody tr:not(.cond) + tr.cond th,table.fc tbody tr:not(.cond) + tr.cond td{border-top:2px solid var(--tint-line)}
+.h-sido{margin:16px 0 8px;font-size:14px}
+.h-sido a{text-decoration:none;color:var(--accent)}
+.nowline{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:14px;font-weight:700;margin:4px 0 0}
+.nowline small{font-weight:500;color:var(--muted)}
+.datameta{margin-top:16px}
+details.more{margin:0 0 12px}
+details.more summary{cursor:pointer;font-size:14px;color:var(--accent);padding:6px 0}
 table.fw td:nth-child(4){min-width:220px}
 
 /* 어종 */
