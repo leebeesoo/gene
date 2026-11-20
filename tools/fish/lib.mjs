@@ -79,7 +79,8 @@ const txt = v => (v == null || v === '-' ? '' : String(v).trim());
 /* ---------- 바다낚시지수(15142486) ---------- */
 // 명세(활용가이드 261022): seafsPstnNm 위치, lat, lot, predcYmd(YYYY-MM-DD), predcNoonSeCd(오전/오후), seafsTgfshNm 대상어('-' 가능),
 // tdlvHrCn 물때, tdlvHrScr 물때점수, min/maxWvhgt 파고(m), min/maxWtem 수온(℃), min/maxArtmp 기온, min/maxCrsp 유속(kn), min/maxWspd 풍속(m/s), totalIndex 지수, lastScr 점수
-export const INDEX_LEVELS = ['매우좋음', '좋음', '보통', '나쁨', '매우나쁨']; // ← 실제 응답 문자열 확인 필요(명세 예시는 「나쁨」「보통」만)
+export const INDEX_LEVELS = ['매우좋음', '좋음', '보통', '나쁨', '매우나쁨']; // 2026-11-20 실제 응답에서 확인: 이 다섯 낱말(띄어쓰기 없음)만 나옴
+export const INDEX_CLASS = { '매우좋음': 'l5', '좋음': 'l4', '보통': 'l3', '나쁨': 'l2', '매우나쁨': 'l1' };
 export function normIndex(items, gubun) {
   const by = new Map();
   for (const it of items) {
@@ -120,26 +121,108 @@ export function parseValidity(s) {
   const d = (y, mo, da) => `${y}-${mo.padStart(2, '0')}-${da.padStart(2, '0')}`;
   return { from: d(m[1], m[2], m[3]), to: d(m[4], m[5], m[6]) };
 }
-/** 선적항 문자열 → { sido, sigungu, port } (예: 부산광역시 서구 암남항) */
+/** 선적항 문자열 → { sido, sigungu, port }. 낱말을 위치로만 나누는 옛 방식(시·도가 없는 「가력항」은 sido가 「가력항」이 됨) — parsePort를 쓰세요 */
 export function splitPort(s) {
   const parts = txt(s).split(/\s+/).filter(Boolean);
   if (!parts.length) return { sido: '', sigungu: '', port: '' };
   return { sido: parts[0], sigungu: parts.slice(1, -1).join(' '), port: parts[parts.length - 1] };
 }
-/** 신고 유효기간이 끝난 배는 뺀다. 전화번호는 응답에 없고, 있더라도 싣지 않는다 */
-export function normBoats(items, today) {
+// 2026-11-20 실제 선적항(shpmHangNm) 모양: 「인천광역시 옹진군 진두항」, 「여수시 국동항」, 「고성군 토성면(아야진항)」, 「가력항」, 「강진군」, 「경기도 시흥시」, 「군산시옥도면」 …
+// 시·도가 빠진 문자열이 대부분(4,651척 중 4,300여 척)이라 시·군·구 이름(common/regions.json)과 다른 배의 같은 항구 이름으로 시·도를 짐작한다.
+const isEup = t => /(읍|면|동)$/.test(t) && !/항$/.test(t);
+/**
+ * 선적항 문자열 하나 → { sido(줄임 이름, 모르면 ''), sigungu, area(읍·면), port(모르면 ''), sidoBy }
+ * gaz: { sidoOf(token) → 시·도 키|null, sigunguOf(token, key?) → [{key,name}] }  (tools/fish/geo.mjs 의 GAZ)
+ * sidoBy: '주소'(문자열에 시·도) · '시군구'(시·군·구 이름이 한 시·도에만 있음) · ''(모름 → resolvePorts가 다시 봄)
+ */
+export function parsePort(raw, gaz, shortOf = k => k) {
+  const s = txt(raw).replace(/[/,]/g, ' ').replace(/\s+/g, ' '); // 「양양군/낙산항」「가의도항,신진도항」
+  const toks = [];
+  for (const t0 of s.split(' ').filter(Boolean)) {
+    const m = t0.match(/^(.*?)\((.+?)\)$/);
+    const parts = m ? [m[1], m[2]] : [t0];
+    for (const t of parts.filter(Boolean)) {
+      const g = t.match(/^(.+?(?:시|군|구))(.+(?:읍|면|동|항))$/); // 「군산시옥도면」「사천시삼천포항」처럼 붙여 쓴 것
+      if (g && gaz.sigunguOf(g[1]).length) toks.push(g[1], g[2]); else toks.push(t);
+    }
+  }
+  let sidoKey = null, sigungu = '', sidoBy = '';
+  const area = [], place = [];
+  for (const t of toks) {
+    if (!sidoKey && !sigungu && gaz.sidoOf(t)) { sidoKey = gaz.sidoOf(t); sidoBy = '주소'; continue; }
+    if (!sigungu && gaz.sigunguOf(t, sidoKey).length) { sigungu = t; continue; }
+    if (!sigungu && t.length >= 2 && !/(항|포구|도)$/.test(t) && gaz.sigunguOf(t + '군', sidoKey).length) { sigungu = t + '군'; continue; } // 「옹진 덕적」
+    if (isEup(t) || (sigungu && /구$/.test(t))) { area.push(t); continue; } // 「포항시 남구 구룡포읍」의 일반구는 읍·면처럼
+    if (sidoKey && !sigungu && place.length === 0 && /구$/.test(t)) { sigungu = t; continue; } // 지역표에 없는 옛 구(인천 중구 등)
+    place.push(t);
+  }
+  if (!sidoKey && sigungu) {
+    const keys = [...new Set(gaz.sigunguOf(sigungu).map(g => g.key))];
+    if (keys.length === 1) { sidoKey = keys[0]; sidoBy = '시군구'; }
+  }
+  const port = [...place].reverse().find(t => /(항|포구)$/.test(t)) || place[place.length - 1] || '';
+  return { sido: sidoKey ? shortOf(sidoKey) : '', sigungu, area: area.join(' '), port, sidoBy };
+}
+/** 항구 이름 비교용: 끝의 「항」「포구」를 뗀다(가거도항 = 가거도) */
+export const portBase = s => { const t = txt(s), b = t.replace(/(항|포구)$/, ''); return b.length >= 2 ? b : t; }; // 「포항」은 그대로
+/**
+ * 시·도를 모르는 배를 채운다(배 객체를 고침). 순서: ① 같은 항구 이름의 다른 배(시·도가 적힌 것)가 한 시·도뿐이면 그 시·도(시·군·구도 하나면 함께)
+ * ② 같은 읍·면 이름의 다른 배 ③ hints(바다낚시지수 지점·조석 예보지점 이름 → 좌표로 구한 시·도)에 같은 이름이 한 시·도뿐이면 그 시·도.
+ * 그래도 모르면 ''로 둔다. hints: Map(portBase → Set(시·도 줄임 이름)). 돌려주는 값: 방법별 수와 unknown(끝내 모르는 배 수)
+ */
+export function resolvePorts(boats, hints = new Map()) {
+  // 근거는 시·도가 문자열에서 바로 나온 배(sidoBy '주소'·'시군구')만 쓴다. 짐작한 배를 다시 근거로 쓰면
+  // 「화도면 후포항」(인천 강화)이 울진 후포항으로 잡힌 뒤 화도면 전체가 경북이 되는 식으로 틀림이 번진다.
+  const idx = new Map();
+  const add = (k, b) => { if (!idx.has(k)) idx.set(k, new Map()); const v = `${b.sido}|${b.sigungu}`; idx.get(k).set(v, (idx.get(k).get(v) || 0) + 1); };
+  for (const b of boats) if (b.sido && (b.sidoBy === '주소' || b.sidoBy === '시군구')) { if (b.port) add('p:' + portBase(b.port), b); if (b.area) add('a:' + b.area, b); }
+  const stat = { port: 0, area: 0, hint: 0, unknown: 0, ambiguous: 0 };
+  const tryIdx = (b, k) => {
+    const m = idx.get(k);
+    if (!m) return null;
+    const keys = [...m.keys()].filter(x => !b.sigungu || x.endsWith('|' + b.sigungu));
+    const sidos = [...new Set(keys.map(x => x.split('|')[0]))];
+    if (sidos.length !== 1) return sidos.length > 1 ? 'ambiguous' : null;
+    b.sido = sidos[0];
+    const sggs = [...new Set(keys.map(x => x.split('|')[1]).filter(Boolean))];
+    if (!b.sigungu && sggs.length === 1) b.sigungu = sggs[0];
+    return 'ok';
+  };
+  for (const b of boats) {
+    if (b.sido) continue;
+    // 읍·면이 적힌 배는 읍·면으로만 가린다(항구 이름은 겹치는 곳이 많음: 후포항 울진·강화, 대진항 고성·삼척·영덕)
+    if (b.area) {
+      const r = tryIdx(b, 'a:' + b.area);
+      if (r === 'ok') { b.sidoBy = '같은 읍·면'; stat.area++; continue; }
+      if (r === 'ambiguous') stat.ambiguous++;
+      stat.unknown++; continue;
+    }
+    const r = b.port ? tryIdx(b, 'p:' + portBase(b.port)) : null;
+    if (r === 'ok') { b.sidoBy = '같은 항구'; stat.port++; continue; }
+    const h = b.port ? hints.get(portBase(b.port)) : null;
+    if (r !== 'ambiguous' && h && h.size === 1) { b.sido = [...h][0]; b.sidoBy = '지점 이름'; stat.hint++; continue; }
+    if (r === 'ambiguous') stat.ambiguous++;
+    stat.unknown++;
+  }
+  return stat;
+}
+/** 신고 유효기간이 끝난 배는 뺀다. 전화번호는 응답에 없고, 있더라도 싣지 않는다. gaz를 주면 parsePort로 시·도를 가린다 */
+export function normBoats(items, today, gaz = null, shortOf = k => k) {
   const out = [];
   let expired = 0, unknown = 0;
   for (const it of items) {
     const v = parseValidity(it.bsnStEndDt);
     if (!v) { unknown++; continue; }
     if (v.to < today) { expired++; continue; }
-    const p = splitPort(it.shpmHangNm);
-    out.push({ name: txt(it.fsboNm), port: p.port, sido: p.sido, sigungu: p.sigungu, tons: num(it.fsboTotTons), maxPassengers: num(String(it.maxPsrNum ?? '').replace(/[^0-9.]/g, '')), validTo: v.to });
+    const raw = txt(it.shpmHangNm).replace(/\s+/g, ' ');
+    const p = gaz ? parsePort(raw, gaz, shortOf) : { ...splitPort(raw), area: '', sidoBy: '' };
+    out.push({ name: txt(it.fsboNm), raw, port: p.port, sido: p.sido, sigungu: p.sigungu, area: p.area, sidoBy: p.sidoBy, tons: num(it.fsboTotTons), maxPassengers: num(String(it.maxPsrNum ?? '').replace(/[^0-9.]/g, '')), validTo: v.to });
   }
   out.sort((a, b) => (a.sido + a.port + a.name).localeCompare(b.sido + b.port + b.name, 'ko'));
   return { boats: out, expired, unknown };
 }
+/** 2026-11-20 첫 boats.json(옛 splitPort로 나눈 것)에서 원래 문자열을 되살린다 */
+export const rawFromSplit = b => b.raw ?? (b.sigungu ? `${b.sido} ${b.sigungu} ${b.port}` : b.sido === b.port ? b.port : `${b.sido} ${b.port}`);
 
 /* ---------- ZIP(공공데이터포털 파일) ---------- */
 /** 중앙 디렉터리를 읽어 [{name, data}] 반환. 파일 이름은 UTF-8 표시가 없으면 cp949로 읽는다 */

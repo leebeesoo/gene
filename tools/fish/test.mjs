@@ -6,7 +6,9 @@ import { fileURLToPath } from 'node:url';
 import { deflateRawSync } from 'node:zlib';
 import * as L from './lib.mjs';
 import { utmkToWgs84, readDbf } from './shp.mjs';
-import { PLACES } from './places.mjs';
+import { PLACES, gubunOf } from './places.mjs';
+import { GAZ, SIDO_BY_KEY, regionInfo } from './geo.mjs';
+import { preparePoints, prepareBoats, boatsForPoint, nearestTide, shortOf } from './resolve.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..');
@@ -67,12 +69,12 @@ test('낚시어선: XML 예제 모양(body 바로 아래 item)과 JSON 모양 �
   assert.equal(j.items.length, 7);
 });
 test('낚시어선: 유효기간 끝난 배·기간 모르는 배 제외, 연락처 칸 없음', () => {
-  const { boats, expired, unknown } = L.normBoats(L.parseDataGo(fxj('boats.json')).items, '2026-11-20');
+  const { boats, expired, unknown } = L.normBoats(L.parseDataGo(fxj('boats.json')).items, '2026-11-20', GAZ, shortOf);
   assert.equal(boats.length, 4); assert.equal(expired, 2); assert.equal(unknown, 1);
   const g = boats.filter(b => b.port === '가거도항');
   assert.deepEqual(g.map(b => b.name), ['예시바다1호']);
-  assert.equal(g[0].maxPassengers, 17); assert.equal(g[0].sido, '전라남도'); assert.equal(g[0].sigungu, '신안군');
-  for (const b of boats) assert.deepEqual(Object.keys(b).sort(), ['maxPassengers', 'name', 'port', 'sido', 'sigungu', 'tons', 'validTo']);
+  assert.equal(g[0].maxPassengers, 17); assert.equal(g[0].sido, '전남'); assert.equal(g[0].sigungu, '신안군'); assert.equal(g[0].sidoBy, '주소');
+  for (const b of boats) assert.deepEqual(Object.keys(b).sort(), ['area', 'maxPassengers', 'name', 'port', 'raw', 'sido', 'sidoBy', 'sigungu', 'tons', 'validTo']);
   assert.deepEqual(L.parseValidity('2022.06.09 ~ 2023.06.09'), { from: '2022-06-09', to: '2023-06-09' });
   assert.equal(L.parseValidity(''), null);
   // 마지막 날까지는 유효
@@ -188,6 +190,91 @@ test('저장된 자료에 전화번호가 없다', () => {
     const s = readFileSync(join(ROOT, 'fish', 'data', f), 'utf8');
     assert.ok(!/0\d{1,2}-\d{3,4}-\d{4}/.test(s), `${f}에 전화번호 모양`);
   }
+});
+
+/* ---------- 2026-11-20 실제 자료 ---------- */
+const real = n => JSON.parse(readFileSync(join(ROOT, 'fish', 'data', n), 'utf8'));
+const P = (raw) => L.parsePort(raw, GAZ, shortOf);
+test('선적항 파싱: 실제 문자열 모양(시·도 있음/없음, 괄호, 붙여 씀, 빗금)', () => {
+  const pick = o => [o.sido, o.sigungu, o.area, o.port, o.sidoBy];
+  assert.deepEqual(pick(P('부산광역시 서구 암남항')), ['부산', '서구', '', '암남항', '주소']);
+  assert.deepEqual(pick(P('인천광역시 옹진군 영흥면')), ['인천', '옹진군', '영흥면', '', '주소']);
+  assert.deepEqual(pick(P('여수시 국동항')), ['전남', '여수시', '', '국동항', '시군구']);   // 시·도 없이 시·군만
+  assert.deepEqual(pick(P('가력항')), ['', '', '', '가력항', '']);                          // 항구 이름뿐 → 시·도를 「가력항」으로 두지 않는다
+  assert.deepEqual(pick(P('고성군 토성면(아야진항)')), ['', '고성군', '토성면', '아야진항', '']); // 고성군은 강원·경남 둘 다 → 모름
+  assert.deepEqual(pick(P('고성군 죽왕면 (공현진항)')), ['', '고성군', '죽왕면', '공현진항', '']);
+  assert.deepEqual(pick(P('군산시옥도면')), ['전북', '군산시', '옥도면', '', '시군구']);
+  assert.deepEqual(pick(P('사천시삼천포항')), ['경남', '사천시', '', '삼천포항', '시군구']);
+  assert.deepEqual(pick(P('양양군/낙산항')), ['강원', '양양군', '', '낙산항', '시군구']);
+  assert.deepEqual(pick(P('경기도 시흥시')), ['경기', '시흥시', '', '', '주소']);
+  assert.deepEqual(pick(P('포항시 남구 구룡포읍')), ['경북', '포항시', '남구 구룡포읍', '', '시군구']);
+  assert.deepEqual(pick(P('창원시 진해구')), ['경남', '창원시', '진해구', '', '시군구']);
+  assert.deepEqual(pick(P('인천 중구 연안부두항')), ['인천', '중구', '', '연안부두항', '주소']);
+  assert.deepEqual(pick(P('제주시 추자면')), ['제주', '제주시', '추자면', '', '시군구']);
+  assert.equal(P('전라남도 신안군 가거도항').sido, '전남');
+  assert.equal(P('강원특별자치도 고성군 거진항').sido, '강원');
+  // 옛 splitPort는 시·도가 없는 문자열에서 항구 이름을 시·도로 넣었다(고친 이유)
+  assert.equal(L.splitPort('가력항').sido, '가력항');
+  assert.equal(L.rawFromSplit({ sido: '가력항', sigungu: '', port: '가력항' }), '가력항');
+  assert.equal(L.rawFromSplit({ sido: '여수시', sigungu: '', port: '국동항' }), '여수시 국동항');
+  assert.equal(L.rawFromSplit({ sido: '인천광역시', sigungu: '옹진군', port: '영흥면' }), '인천광역시 옹진군 영흥면');
+});
+test('선적항 시·도 짐작: 같은 항구·같은 읍·면·지점 이름, 짐작이 번지지 않음', () => {
+  const mk = raw => ({ raw, ...P(raw) });
+  const bs = ['전라남도 신안군 가거도항', '가거도항', '부안군 변산면', '변산면', '강원도 고성군 토성면(아야진항)', '고성군 토성면(교암항)', '경상북도 울진군 후포항', '화도면 후포항', '대진항', '경상북도 영덕군 대진항', '강원도 고성군 대진항', '모항항'].map(mk);
+  const hints = new Map([['모항', new Set(['충남'])], ['대진', new Set(['강원'])]]);
+  const st = L.resolvePorts(bs, hints);
+  const by = r => bs.find(b => b.raw === r);
+  assert.equal(by('가거도항').sido, '전남'); assert.equal(by('가거도항').sigungu, '신안군'); assert.equal(by('가거도항').sidoBy, '같은 항구');
+  assert.equal(by('변산면').sido, '전북'); assert.equal(by('변산면').sidoBy, '같은 읍·면');
+  assert.equal(by('고성군 토성면(교암항)').sido, '강원');   // 같은 「고성군 토성면」이 강원으로 적힌 배가 있음
+  assert.equal(by('화도면 후포항').sido, '');               // 읍·면을 모르면 항구 이름(울진 후포항)으로 짐작하지 않음
+  assert.equal(by('대진항').sido, '');                      // 경북·강원 둘 다 → 모름(지점 이름 힌트도 쓰지 않음)
+  assert.equal(by('모항항').sido, '충남'); assert.equal(by('모항항').sidoBy, '지점 이름');
+  assert.equal(st.unknown, 2);
+});
+test('실제 바다낚시지수: 지수 낱말 다섯 개, 지점 49곳(98행 = 갯바위·선상 같은 값), 모든 지점이 시·도로', () => {
+  const idx = real('index.json');
+  assert.equal(idx.meta.fixture, false);
+  const levels = new Set(idx.points.flatMap(p => p.days.map(d => d.index)));
+  assert.deepEqual([...levels].sort(), [...L.INDEX_LEVELS].sort());
+  for (const v of L.INDEX_LEVELS) assert.ok(L.INDEX_CLASS[v]);
+  const { points, dup, dupSame } = preparePoints(idx.points);
+  assert.equal(points.length, 49); assert.equal(dup, dupSame);
+  assert.equal(points.filter(p => p.gubun === '갯바위').length, 34); assert.equal(points.filter(p => p.gubun === '선상').length, 15);
+  for (const p of points) {
+    assert.ok(p.rk && SIDO_BY_KEY[p.rk], `${p.name}: 시·도 없음`);
+    assert.ok(PLACES[p.name], `${p.name}: 장소표에 없음`);
+    assert.equal(shortOf(p.rk), PLACES[p.name].sido, `${p.name}: 좌표 ${shortOf(p.rk)} / 장소표 ${PLACES[p.name].sido}`);
+    assert.equal(p.gubun, gubunOf(p.name));
+  }
+  const at = n => points.find(p => p.name === n);
+  assert.equal(at('대진항').rk, 'gangwon'); assert.equal(at('모항항').rk, 'chungnam'); assert.equal(at('연도').rk, 'jeonnam'); assert.equal(at('하리항남서(14km)').rk, 'busan');
+  assert.equal(at('추자도').rk, 'jeju'); assert.equal(at('어청도').rk, 'jeonbuk'); assert.equal(at('국화도').rk, 'gyeonggi'); // 경계 밖 섬 → 장소표
+  assert.equal(regionInfo(33.24, 126.56).key, 'jeju');
+});
+test('실제 조석: 가장 가까운 예보지점(삼척 대진항은 고성 대진항 SO_0731이 아니라 임원항)', () => {
+  const { points } = preparePoints(real('index.json').points);
+  const st = real('tide.json').stations;
+  assert.equal(nearestTide(points.find(p => p.name === '가거도'), st).code, 'SO_0577');
+  const dj = nearestTide(points.find(p => p.name === '대진항'), st);
+  assert.equal(dj.code, 'SO_1281'); assert.ok(dj.km < 20);
+});
+test('실제 낚시어선: 시·도를 「가력항」 같은 항구 이름으로 두지 않음, 지점과 잇기', () => {
+  const { points } = preparePoints(real('index.json').points);
+  const { boats, stat } = prepareBoats(real('boats.json').boats, points, real('tide.json').stations);
+  assert.equal(boats.length, 4651);
+  const shorts = new Set(Object.values(SIDO_BY_KEY).map(s => s.short));
+  for (const b of boats) assert.ok(b.sido === '' || shorts.has(b.sido), `시·도 아님: ${b.sido} (${b.raw})`);
+  assert.equal(stat.noSido, boats.filter(b => !b.sido).length);
+  assert.ok(stat.withSido > 3500, `시·도 앎 ${stat.withSido}`);
+  const f = n => boatsForPoint(points.find(p => p.name === n), boats);
+  assert.equal(f('가거도').how, 'port'); assert.ok(f('가거도').boats.every(b => b.port === '가거도항'));
+  assert.ok(f('안흥항북측(30km)').boats.some(b => b.port === '안흥외항'));
+  assert.equal(f('포항').how, 'sigungu');
+  const dj = f('대진항'); // 삼척 대진항: 고성 대진항 배를 붙이지 않음
+  assert.ok(!dj.boats.some(b => b.sigungu === '고성군'), JSON.stringify(dj.places));
+  assert.ok(!JSON.stringify(boats).match(/0\d{1,2}-\d{3,4}-\d{4}/));
 });
 
 console.log(`\n${passed}개 통과${process.exitCode ? ' (실패 있음)' : ''}`);

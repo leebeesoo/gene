@@ -1,15 +1,16 @@
 #!/usr/bin/env node
 // 물때명당(/fish/) 정적 페이지 생성기. 의존성 없음(Node 18+). ※ 초안: 공개 전이라 모든 쪽에 noindex, 허브·사이트맵·배포에서 빠져 있음.
 // 사용: node tools/fish/build.mjs
-// 입력: fish/data/rules.json(법령 표) · species.json(어종 글) · zones.json·freshwater.json(파일 자료) · index.json·tide.json·boats.json(API 수집, 지금은 예시)
-//       wish/data/geo.js(시·도 경계, 명당로드·소원명당과 같은 파일)
+// 입력: fish/data/rules.json(법령 표) · species.json(어종 글) · zones.json·freshwater.json(파일 자료) · index.json·tide.json·boats.json(API 수집, 2026-11-20 첫 실제 자료)
+//       lottomap/data/geo.js(시·도 경계, 명당로드·소원명당과 같은 파일) · common/regions.json(시·군·구 이름·중심) — tools/fish/geo.mjs
 // 출력: fish/index.html, species/<slug>/, region/<key>/, point/<slug>/, freshwater/, sources.html, privacy.html, SOURCES.md
 import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { GTM_HEAD, GTM_BODY } from '../seo/gtm.mjs';
-import { closedOn, fmtMd, sizeSentence, kstDate, distKm, sidoOfAddress, inPeriod } from './lib.mjs';
-import { PLACES } from './places.mjs';
+import { closedOn, fmtMd, sizeSentence, kstDate, distKm, sidoOfAddress, inPeriod, INDEX_LEVELS, INDEX_CLASS } from './lib.mjs';
+import { GEO, proj, POLY, regionAt } from './geo.mjs';
+import { preparePoints, prepareBoats, boatsForPoint, nearestTide, boatPlace } from './resolve.mjs';
 
 const SERVICE = '물때명당';            // ← 서비스 이름(한 곳에서만 바꾼다)
 const SITE = '혹시나랩';
@@ -23,7 +24,6 @@ const FISH = join(ROOT, 'fish');
 const J = f => JSON.parse(readFileSync(join(FISH, 'data', f), 'utf8'));
 const RULES = J('rules.json'), SPECIES = J('species.json'), ZONES = J('zones.json'), FW = J('freshwater.json');
 const INDEX = J('index.json'), TIDE = J('tide.json'), BOATS = J('boats.json'), STATIONS = J('tide-stations.json');
-const GEO = JSON.parse(readFileSync(join(ROOT, 'wish', 'data', 'geo.js'), 'utf8').replace(/^[\s\S]*?window\.LM_GEO\s*=\s*/, '').replace(/;\s*$/, ''));
 const CHECKED = RULES.meta.checked;
 const BUILD_DAY = kstDate();
 const RULE = Object.fromEntries(RULES.rules.map(r => [r.id, r]));
@@ -52,17 +52,6 @@ const REGION_INTRO = {
 };
 
 /* ---------- 지도 ---------- */
-const proj = (lat, lng) => { const g = GEO.proj; return [(lng - g.lonMin) * g.k * g.s, (g.latMax - lat) * g.s]; };
-const POLY = Object.fromEntries(Object.entries(GEO.regions).map(([k, v]) => [k, v.d.split(/Z/).filter(s => s.trim()).map(s => s.replace(/^M/, '').split('L').map(p => p.split(',').map(Number)))]));
-const inside = ([x, y], ring) => { let c = false; for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) { const [xi, yi] = ring[i], [xj, yj] = ring[j]; if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) c = !c; } return c; };
-/** 좌표 → 시·도 키. 바다 위 점은 가장 가까운 시·도 경계 꼭짓점으로 */
-function regionAt(lat, lng) {
-  const p = proj(lat, lng);
-  for (const [k, rings] of Object.entries(POLY)) if (rings.some(r => inside(p, r))) return k;
-  let best = null, bd = Infinity;
-  for (const [k, rings] of Object.entries(POLY)) for (const r of rings) for (const [x, y] of r) { const d = (x - p[0]) ** 2 + (y - p[1]) ** 2; if (d < bd) { bd = d; best = k; } }
-  return best;
-}
 const ORDER = Object.keys(GEO.regions).sort((a, b) => GEO.regions[b].d.length - GEO.regions[a].d.length);
 function mapSvg({ points = [], zones = [], up, sel = null, linkRegions = false, label, viewBox = '72 -2 252 428', r = 4.2, x = 3.2 }) {
   const regs = ORDER.map(k => {
@@ -78,20 +67,16 @@ function mapSvg({ points = [], zones = [], up, sel = null, linkRegions = false, 
 const LEGEND = (pts = true) => `<p class="maplegend">${pts ? `<span><i class="lg-dot"></i>바다낚시지수 지점${FIXTURE ? '(예시)' : ''}</span>` : ''}<span><svg class="lg-x" viewBox="0 0 10 10" aria-hidden="true"><path d="M2,2L8,8M8,2L2,8"/></svg>들어가지 마세요(금지·통제구역)</span></p>`;
 
 /* ---------- 자료 정리 ---------- */
-const points = INDEX.points.map(p => {
-  const rk = RKEY[p.sido] || (p.lat != null ? regionAt(p.lat, p.lng) : null); // 장소표의 시·도가 우선(바다 위 점은 좌표로 가까운 도가 틀릴 수 있음)
-  return { ...p, rk };
-});
+// 지점: 실제 응답은 구분(갯바위/선상)과 상관없이 같은 49곳이 와서 이름으로 묶는다(resolve.mjs preparePoints)
+const PREP = preparePoints(INDEX.points);
+const points = PREP.points;
+const BP = prepareBoats(BOATS.boats, points, TIDE.stations);
+const boatsAll = BP.boats;
+const ZONE_KM = 5;
 const allZones = [...ZONES.ban.map(z => ({ ...z, rk: regionAt(z.lat, z.lng) })), ...ZONES.control.map(z => ({ ...z, rk: RKEY[sidoOfAddress(z.address.replace(/^인천시/, '인천광역시'))] || regionAt(z.lat, z.lng) }))];
 const fwSpots = FW.spots.map(s => ({ ...s, sido: sidoOfAddress(s.address) || (s.lat ? RNAME[regionAt(s.lat, s.lng)] : null) }));
-// 조석 예보지점: places.mjs의 obs, 없으면 좌표 아는 예보지점 중 가장 가까운 곳
-function tideFor(p) {
-  if (p.obs && TIDE.stations[p.obs]) return TIDE.stations[p.obs];
-  const known = Object.values(TIDE.stations).filter(s => s.lat != null);
-  if (p.lat == null || !known.length) return null;
-  const s = known.map(s => [distKm([p.lat, p.lng], [s.lat, s.lng]), s]).sort((a, b) => a[0] - b[0])[0];
-  return s[0] < 40 ? { ...s[1], far: Math.round(s[0]) } : null;
-}
+// 조석 예보지점: 받아 둔 예보지점 중 좌표가 가장 가까운 곳(거리와 함께 보여 줌)
+const tideFor = p => nearestTide(p, TIDE.stations);
 const speciesByRule = {};
 for (const s of SPECIES.species) for (const id of s.rules) speciesByRule[id] = s;
 const speciesByName = name => SPECIES.species.find(s => s.name === name || s.also.split('·').includes(name) || s.rules.some(id => RULE[id].name === name || (RULE[id].alias || []).includes(name)));
@@ -184,6 +169,21 @@ const kakaoSearch = q => `https://map.kakao.com/link/search/${encodeURIComponent
 const naverSearch = q => `https://map.naver.com/p/search/${encodeURIComponent(q)}`;
 const shopLinks = port => `<div class="acts"><a class="btn" href="${kakaoSearch(`${port} 낚시`)}" target="_blank" rel="noopener">${I.search}카카오맵에서 「${esc(port)} 낚시」</a><a class="btn" href="${naverSearch(`${port} 낚시`)}" target="_blank" rel="noopener">${I.search}네이버 지도에서 「${esc(port)} 낚시」</a></div>`;
 
+/* ---------- 실제 자료 표시 ---------- */
+const IDX = v => `<span class="idx idx-${INDEX_CLASS[v] || 'l0'}">${esc(v || '—')}</span>`;
+const lvl = v => { const i = INDEX_LEVELS.indexOf(v); return i < 0 ? 99 : i; }; // 0 = 매우좋음
+/** 지점의 첫 예보 때(날짜·오전오후)와 그때 어종별 지수 가운데 가장 높은 값·가장 낮은 값 */
+function firstSlot(p) {
+  const d0 = p.days[0];
+  if (!d0) return null;
+  const rows = p.days.filter(d => d.date === d0.date && d.ampm === d0.ampm);
+  const sorted = rows.map(d => d.index).filter(Boolean).sort((a, b) => lvl(a) - lvl(b));
+  return { date: d0.date, ampm: d0.ampm, best: sorted[0] || '', worst: sorted[sorted.length - 1] || '', n: rows.length };
+}
+const slotLabel = (date, ampm) => `${Number(date.slice(5, 7))}.${Number(date.slice(8, 10))} ${ampm === '일' ? '하루' : ampm}`;
+const DATA_META = `<p class="small datameta">자료: 바다낚시지수 ${fmtDate(INDEX.meta.fetched)} 받음(공공데이터포털 ${INDEX.meta.dataset}) · 조석예보 ${fmtDate(TIDE.meta.fetched)}(${TIDE.meta.dataset}) · 낚시어선 신고정보 ${fmtDate(BOATS.meta.fetched)}(${BOATS.meta.dataset}) · <a href="${'{UP}'}sources.html">출처</a></p>`;
+const dataMeta = up => DATA_META.replace('{UP}', up);
+
 /* ---------- 규칙 표시 ---------- */
 function ruleClosed(r) {
   if (r.notice) return `<b>고시로 정해요</b> · ${esc(r.notice.text)}`;
@@ -244,10 +244,12 @@ const FAQ = [
   ['낚싯배 연락처는 왜 없나요?', '해양수산부 낚시어선업 신고정보에는 배 이름·선적항·승객 수·신고 유효기간이 있어요. 신고 유효기간이 끝난 배는 빼고 보여 주지만, 실제 영업 여부와 연락처는 알 수 없어서 싣지 않아요. 영업·연락처는 직접 확인하세요.'],
   ['틀린 내용을 알려 주고 싶어요.', `이메일 ${CONTACT} 로 보내 주세요. 법령 원문과 공공 자료로 확인해 고치고 확인일을 새로 적어요.`]
 ];
+const pointItem = up => p => { const f = firstSlot(p); return `<li><a href="${up}point/${p.slug}/"><b>${esc(p.name)}</b><span>${esc(p.gubun)}${f && f.n > 1 ? ` · 어종 ${f.n}가지` : ''}</span></a>${IDX(f?.best)}</li>`; };
 function buildIndex() {
   const up = '';
   const today = closedOn(RULES.rules, BUILD_DAY.slice(5));
   const sea = points.slice().sort((a, b) => a.name.localeCompare(b.name, 'ko'));
+
   const rulesForJs = RULES.rules.map(r => ({ id: r.id, n: r.name, c: (r.closed || []).map(p => [p.from, p.to, p.where || '']), x: r.notice ? [r.notice.from, r.notice.to] : null, s: speciesByRule[r.id]?.slug || null }));
   const bandItem = x => { const sp = speciesByRule[x.id]; const nm = sp ? `<a href="species/${sp.slug}/">${esc(x.name)}</a>` : esc(x.name); return `<li class="${x.kind === 'notice' ? 'is-notice' : x.partial ? 'is-part' : ''}">${nm}${x.kind === 'notice' ? '<small>고시 확인</small>' : x.where.length ? `<small>${esc(x.where.join(', '))}</small>` : ''}</li>`; };
   const html = head({
@@ -276,8 +278,9 @@ function buildIndex() {
     </div>
     <div>
       <h2 class="h-tight">바다낚시지수 지점 <small class="num">${sea.length}곳</small></h2>
-      <ul class="plist">${sea.map(p => { const d = p.days[0] || {}; return `<li><a href="point/${p.slug}/"><b>${esc(p.name)}</b><span>${esc(p.gubun)} · ${esc(RNAME[p.rk] || p.sido || '')}</span></a><span class="idx idx-${esc(d.index)}">${esc(d.index || '—')}</span></li>`; }).join('')}</ul>
-      <p class="small">국립해양조사원이 예보하는 지점만 보여 줘요(갯바위 34곳·선상 15곳). 지수는 ${esc((sea[0]?.days[0]?.date) || '')} ${esc(sea[0]?.days[0]?.ampm || '')} 예보예요.</p>
+      ${COASTAL.map(k => { const l = sea.filter(p => p.rk === k); return l.length ? `<h3 class="h-sido"><a href="region/${k}/">${RNAME[k]}</a> <small class="num">${l.length}곳</small></h3><ul class="plist">${l.map(pointItem('')).join('')}</ul>` : ''; }).join('')}
+      <p class="small">국립해양조사원이 예보하는 지점만 보여 줘요(갯바위 ${sea.filter(p => p.gubun === '갯바위').length}곳·선상 ${sea.filter(p => p.gubun === '선상').length}곳). 칩은 ${esc(slotLabel(sea[0].days[0].date, sea[0].days[0].ampm))} 예보에서 어종별 지수 가운데 가장 높은 값이에요. 예보이며 조과를 보장하지 않아요.</p>
+      ${dataMeta(up)}
       <h2 class="h-tight">바다 낀 시·도</h2>
       <div class="linkgrid">${COASTAL.map(k => `<a class="chip" href="region/${k}/">${RNAME[k]}</a>`).join('')}</div>
       <h2 class="h-tight">어종별 금어기·금지체장</h2>
@@ -366,15 +369,19 @@ function zoneList(zs) {
 function buildRegion(k) {
   const up = '../../';
   const name = RNAME[k];
-  const pts = points.filter(p => p.rk === k);
+  const pts = points.filter(p => p.rk === k).sort((a, b) => a.name.localeCompare(b.name, 'ko'));
   const zs = allZones.filter(z => z.rk === k);
+  const rb = boatsAll.filter(b => b.sido === name);
+  const portRows = [...rb.reduce((m, b) => { const key = `${b.sigungu}|${boatPlace(b)}`; if (!m.has(key)) m.set(key, { sigungu: b.sigungu, place: boatPlace(b), isPort: !!b.port, n: 0, pax: 0 }); const r = m.get(key); r.n++; r.pax = Math.max(r.pax, b.maxPassengers || 0); return m; }, new Map()).values()].sort((a, b) => b.n - a.n || a.place.localeCompare(b.place, 'ko'));
+  const sggCount = [...new Set(rb.map(b => b.sigungu).filter(Boolean))].length;
+  const portTable = list => `<div class="tbl"><table class="boats"><thead><tr><th scope="col">선적지</th><th scope="col">시·군·구</th><th scope="col">신고된 배</th><th scope="col">가장 큰 최대 승객</th></tr></thead><tbody>${list.map(r => `<tr><th scope="row">${esc(r.place)}${r.isPort ? '' : '<small>항구 이름 없이 신고</small>'}</th><td>${esc(r.sigungu || '—')}</td><td class="num">${r.n}척</td><td class="num">${r.pax || '—'}명</td></tr>`).join('')}</tbody></table></div>`;
   const local = RULES.rules.filter(r => (LAW_NAMES[k] || []).some(n => (r.closedText + ' ' + (r.sizeText || '')).includes(n)));
   const fw = fwSpots.filter(s => s.sido === name);
   const ports = [...new Set(pts.map(p => p.port).filter(Boolean))];
   const g = GEO.regions[k];
   const html = head({
     title: `${name} 바다낚시 — 물때·금어기·들어가면 안 되는 곳 | ${SERVICE}`,
-    desc: `${name} 바다의 바다낚시지수 지점, 지역에만 적용되는 금어기·금지체장, 해경 출입통제구역과 낚시금지구역. 예보이며 조과를 보장하지 않아요.`,
+    desc: `${name} 바다의 바다낚시지수 지점 ${pts.length}곳, 선적지별 낚시어선 수, 지역에만 적용되는 금어기·금지체장, 해경 출입통제구역과 낚시금지구역. 예보이며 조과를 보장하지 않아요.`,
     path: `region/${k}/`, up,
     jsonld: { '@context': 'https://schema.org', '@graph': [crumbLd([[SERVICE, BASE], [name, `${BASE}region/${k}/`]])] }
   }) + `
@@ -390,7 +397,7 @@ function buildRegion(k) {
     <div class="mapbox">${mapSvg({ points: pts, zones: zs, up, sel: k, label: `${name} 지점과 금지·통제구역`, viewBox: regionBox(k, pts), r: 2.6, x: 2 })}${LEGEND(pts.length > 0)}</div>
     <div>
       <h2 class="h-tight">바다낚시지수 지점 <small class="num">${pts.length}곳</small></h2>
-      ${pts.length ? `<ul class="plist">${pts.map(p => { const d = p.days[0] || {}; return `<li><a href="${up}point/${p.slug}/"><b>${esc(p.name)}</b><span>${esc(p.gubun)}</span></a><span class="idx idx-${esc(d.index)}">${esc(d.index || '—')}</span></li>`; }).join('')}</ul>` : `<p class="small">${FIXTURE ? '예시 자료에는 이 지역 지점이 없어요. 실제 예보가 연결되면 국립해양조사원 지점이 여기에 나와요.' : '국립해양조사원 바다낚시지수 지점이 이 지역에는 없어요.'}</p>`}
+      ${pts.length ? `<ul class="plist">${pts.map(pointItem(up)).join('')}</ul><p class="small">칩: ${esc(slotLabel(pts[0].days[0].date, pts[0].days[0].ampm))} 예보에서 어종별 지수 가운데 가장 높은 값. 예보이며 조과를 보장하지 않아요.</p>` : `<p class="small">${FIXTURE ? '예시 자료에는 이 지역 지점이 없어요. 실제 예보가 연결되면 국립해양조사원 지점이 여기에 나와요.' : '국립해양조사원 바다낚시지수 지점이 이 지역에는 없어요.'}</p>`}
       <h2 class="h-tight">${name}에만 따로 정한 기준</h2>
       ${local.length ? `<ul class="llist">${local.map(r => `<li><b>${speciesByRule[r.id] ? `<a href="${up}species/${speciesByRule[r.id].slug}/">${esc(r.name)}</a>` : esc(r.name)}</b> — ${esc(r.closedText || '')}${r.sizeText && (LAW_NAMES[k] || []).some(n => r.sizeText.includes(n)) ? ` / ${esc(r.sizeText)}` : ''}</li>`).join('')}</ul>` : '<p class="small">별표에 이 지역 이름이 따로 나오는 기준은 없어요. 전국 기준을 따르고, 시·도 고시와 조례를 확인하세요.</p>'}
       <p class="small">낙지·참문어는 시·도가 금어기를 따로 고시할 수 있어요. ${LAW_NAMES[k][0]} 고시·공고 게시판을 확인하세요. <a href="${up}#rules">전국 표 보기</a></p>
@@ -400,7 +407,13 @@ function buildRegion(k) {
     <p>아래는 낚시 장소가 아니에요. 공공 자료에 금지·통제구역으로 올라 있는 곳이니 들어가지 마세요. 해경 출입통제구역 자료는 2023년 5월 기준이라, 새로 지정되거나 풀린 곳은 관할 해양경찰서 공고를 확인하세요.</p>
     ${zoneList(zs)}
   </section>
+  <section aria-labelledby="b-h"><h2 id="b-h">${name} 선적 낚시어선 <small class="num">${rb.length}척 · 선적지 ${portRows.length}곳</small></h2>
+    <p class="note-strong">해양수산부 신고 기준이에요. 영업 여부와 연락처는 직접 확인하세요.</p>
+    ${rb.length ? portTable(portRows.slice(0, 30)) + (portRows.length > 30 ? `<details class="more"><summary>나머지 선적지 ${portRows.length - 30}곳 보기</summary>${portTable(portRows.slice(30))}</details>` : '') : '<p class="small">이 지역으로 가려진 낚시어선이 없어요.</p>'}
+    <p class="small">선적항 문자열에 시·도가 없는 배가 많아서, 시·군·구 이름(${sggCount}곳)과 같은 항구·읍·면 이름의 다른 배로 시·도를 짐작했어요. 끝내 시·도를 모르는 배 ${BP.stat.noSido}척(전국)은 어느 지역에도 넣지 않았어요. 신고 유효기간이 끝난 배 ${BOATS.meta.expired}척은 뺐어요.</p>
+  </section>
   ${ports.length ? `<section aria-labelledby="s-h"><h2 id="s-h">낚시방 찾기</h2><p>공식 전국 낚시방 목록이 없어서 지도 검색으로만 연결해요. 검색 결과는 각 지도 서비스의 것이고, 영업 여부는 직접 확인하세요.</p>${ports.map(p => `<h3>${esc(p)}</h3>${shopLinks(p)}`).join('')}</section>` : ''}
+  ${dataMeta(up)}
   <section aria-labelledby="f-h"><h2 id="f-h">${name} 민물 허가 낚시터 <small class="num">${fw.length}곳</small></h2><p class="small">${fw.length ? `지자체가 허가한 낚시터 목록(행정안전부 표준데이터)이에요. <a href="${up}freshwater/#${k}">${name} 목록 보기</a>` : '표준데이터에 이 지역 낚시터가 없어요.'}</p></section>
   <section aria-labelledby="o-h"><h2 id="o-h">다른 지역</h2><div class="linkgrid">${COASTAL.filter(x => x !== k).map(x => `<a class="chip" href="${up}region/${x}/">${RNAME[x]}</a>`).join('')}</div></section>
 </main>
@@ -410,19 +423,54 @@ function buildRegion(k) {
 
 /* ---------- 지점(포인트) ---------- */
 const v2 = (a, u) => (a?.[0] == null ? '—' : a[0] === a[1] || a[1] == null ? `${a[0]}${u}` : `${a[0]}~${a[1]}${u}`);
+const BOAT_ROWS = 40;
+/** 어종 × 때(날짜·오전/오후/하루) 지수 표 + 그때의 물때·파고·수온·풍속 */
+function forecastTable(p) {
+  const slots = [];
+  for (const d of p.days) if (!slots.some(s => s.date === d.date && s.ampm === d.ampm)) slots.push({ date: d.date, ampm: d.ampm, d });
+  const species = [...new Set(p.days.map(d => d.species))];
+  const sp = species.filter(x => x && x !== '기타어종').concat(species.filter(x => x === '기타어종')).concat(species.filter(x => !x));
+  const cell = (s, sp) => { const d = p.days.find(x => x.date === s.date && x.ampm === s.ampm && x.species === sp); return `<td>${d ? IDX(d.index) : '—'}</td>`; };
+  const dates = [...new Set(slots.map(s => s.date))];
+  const h1 = dates.map(dt => { const n = slots.filter(s => s.date === dt).length; return `<th scope="colgroup" colspan="${n}" class="num">${Number(dt.slice(5, 7))}.${Number(dt.slice(8, 10))}</th>`; }).join('');
+  const h2 = slots.map(s => `<th scope="col">${s.ampm === '일' ? '하루' : esc(s.ampm)}</th>`).join('');
+  const rowsSp = sp.map(x => `<tr><th scope="row">${x ? esc(x) : '지수'}</th>${slots.map(s => cell(s, x)).join('')}</tr>`).join('');
+  const cond = [['물때', s => esc(s.d.tide || '—')], ['파고', s => v2(s.d.wave, 'm')], ['수온', s => v2(s.d.wtemp, '℃')], ['풍속', s => v2(s.d.wind, 'm/s')], ['유속', s => v2(s.d.current, 'kn')]]
+    .map(([n, f]) => `<tr class="cond"><th scope="row">${n}</th>${slots.map(s => `<td class="num">${f(s)}</td>`).join('')}</tr>`).join('');
+  return `<div class="tbl tbl-fc"><table class="fc"><thead><tr><th scope="col" rowspan="2">${p.gubun === '선상' ? '' : '대상어'}</th>${h1}</tr><tr>${h2}</tr></thead><tbody>${rowsSp}${cond}</tbody></table></div>`;
+}
+function boatSection(p) {
+  const r = boatsForPoint(p, boatsAll);
+  const title = r.how === 'port' ? `${esc(r.places.map(x => x.name).filter((v, i, a) => a.indexOf(v) === i).slice(0, 3).join('·'))} 선적 낚시어선`
+    : r.how === 'sigungu' ? `${esc(r.sigungu)} 선적 낚시어선 <small>가까운 항구 기준</small>`
+    : r.how === 'near' ? `가까운 항구의 낚시어선 <small>가까운 항구 기준</small>` : '낚시어선';
+  const note = r.how === 'port' ? `지점의 항구 이름(${esc(p.port)})과 같은 이름으로 신고된 배예요.`
+    : r.how === 'sigungu' ? `지점 이름(${esc(p.port)})과 같은 이름의 시·군에 신고된 배예요. 지점에서 가장 가까운 항구라는 뜻은 아니에요.`
+    : r.how === 'near' ? `이 지점 이름과 같은 항구로 신고된 배가 없어서, 선적지가 가까운 곳(${esc(r.places.map(x => x.name).join(', '))})의 배를 보여 줘요. 거리는 항구나 시·군·구 중심으로 잰 대략값이라, 실제로 가장 가까운 항구가 아닐 수 있어요.` : '';
+  const rows = r.boats.slice().sort((a, b) => boatPlace(a).localeCompare(boatPlace(b), 'ko') || a.name.localeCompare(b.name, 'ko'));
+  const chips = r.places.length ? `<div class="related">${r.places.map(x => `<span class="chip">${esc(x.name)}${x.sigungu ? ` <small>${esc(x.sigungu)}</small>` : ''} <small class="num">${x.count}척${x.km != null && r.how !== 'port' ? ` · 약 ${Math.round(x.km)}km` : ''}</small></span>`).join('')}</div>` : '';
+  const table = rows.length ? `<div class="tbl"><table class="boats"><thead><tr><th scope="col">배 이름</th><th scope="col">선적지</th><th scope="col">총톤수</th><th scope="col">최대 승객</th><th scope="col">신고 유효기간</th></tr></thead><tbody>${rows.slice(0, BOAT_ROWS).map(b => `<tr><th scope="row">${esc(b.name)}</th><td>${esc([b.sigungu, b.area, b.port].filter(Boolean).join(' ') || b.raw)}</td><td class="num">${b.tons ?? '—'}t</td><td class="num">${b.maxPassengers ?? '—'}명</td><td class="num">${esc(fmtDate(b.validTo))}까지</td></tr>`).join('')}</tbody></table></div>${rows.length > BOAT_ROWS ? `<p class="small">${rows.length}척 가운데 ${BOAT_ROWS}척만 보여 줘요. ${p.rk ? `<a href="../../region/${p.rk}/#b-h">${RNAME[p.rk]} 선적지별 수 보기</a>` : ''}</p>` : ''}` : '';
+  return { r, html: `<section aria-labelledby="b-h"><h2 id="b-h">${title} ${rows.length ? `<small class="num">${rows.length}척</small>` : ''}</h2>
+    <p class="note-strong">해양수산부 신고 기준이에요. 영업 여부와 연락처는 직접 확인하세요.</p>
+    ${r.how === 'none' ? `<p class="small">이 지점 이름과 같은 항구로 신고된 배가 없고, 40km 안에 위치를 짐작할 수 있는 선적지도 없어요. ${p.rk ? `<a href="../../region/${p.rk}/#b-h">${RNAME[p.rk]} 선적지별 낚시어선 수</a>를 보세요.` : ''}</p>` : `<p class="small">${note}</p>${chips}${table}`}
+    <p class="small">신고 유효기간이 끝난 배는 뺐어요(이번 자료에서 ${BOATS.meta.expired}척). 연락처는 싣지 않아요.</p>
+  </section>` };
+}
 function buildPoint(p) {
   const up = '../../';
-  const near = allZones.map(z => ({ z, d: distKm([p.lat, p.lng], [z.lat, z.lng]) })).filter(x => x.d <= 15).sort((a, b) => a.d - b.d);
+  const near = allZones.map(z => ({ z, d: distKm([p.lat, p.lng], [z.lat, z.lng]) })).filter(x => x.d <= ZONE_KM).sort((a, b) => a.d - b.d);
+  const nearest = allZones.map(z => distKm([p.lat, p.lng], [z.lat, z.lng])).sort((a, b) => a - b)[0];
   const tide = tideFor(p);
-  const boats = BOATS.boats.filter(b => b.port === p.port || (p.port && b.port.replace(/항$/, '') === p.port.replace(/항$/, '')));
-  const species = [...new Set(p.days.map(d => d.species).filter(Boolean))];
+  const bs = boatSection(p);
+  const species = [...new Set(p.days.map(d => d.species).filter(x => x && x !== '기타어종'))];
   const [x, y] = proj(p.lat, p.lng);
   const days = [...new Set(p.days.map(d => d.date))];
-  const rows = p.days.map(d => `<tr><th scope="row">${esc(fmtDate(d.date).slice(5))} ${esc(d.ampm)}</th><td><span class="idx idx-${esc(d.index)}">${esc(d.index || '—')}</span></td><td>${esc(d.species || '—')}</td><td>${esc(d.tide || '—')}</td><td class="num">${v2(d.wave, 'm')}</td><td class="num">${v2(d.wtemp, '℃')}</td><td class="num">${v2(d.wind, 'm/s')}</td></tr>`).join('');
-  const sp = species.map(n => { const s = speciesByName(n); const rs = s ? s.rules.map(id => RULE[id]) : RULES.rules.filter(r => r.name === n); return `<li><b>${s ? `<a href="${up}species/${s.slug}/">${esc(n)}</a>` : esc(n)}</b>${rs.length ? rs.map(r => ` — 금어기: ${r.closed || r.notice ? ruleClosed(r) : '없음'} · 금지체장: ${r.size ? esc(r.sizeText) : '없음'}`).join('') : ' — 별표에 기준 없음'}</li>`; }).join('');
+  const sp = species.map(n => { const s = speciesByName(n); const rs = s ? s.rules.map(id => RULE[id]) : RULES.rules.filter(r => r.name === n || (r.alias || []).includes(n)); return `<li><b>${s ? `<a href="${up}species/${s.slug}/">${esc(n)}</a>` : esc(n)}</b>${rs.length ? rs.map(r => ` — 금어기: ${r.closed || r.notice ? ruleClosed(r) : '없음'} · 금지체장: ${r.size ? esc(r.sizeText) : '없음'}`).join('') : ' — 별표에 따로 정한 기준 없음'}</li>`; }).join('');
+  const f = firstSlot(p);
+  const tideDays = tide ? [...new Set(tide.events.map(e => e.time.slice(0, 10)))] : [];
   const html = head({
     title: `${p.name} 물때·바다낚시지수(${p.gubun}) | ${SERVICE}`,
-    desc: `${p.name}(${p.gubun}) 바다낚시지수와 고·저조 시각, 대상어의 금어기·금지체장, 근처 금지·통제구역. 예보이며 조과를 보장하지 않아요.`,
+    desc: `${p.name}(${p.gubun}, ${RNAME[p.rk]}) 바다낚시지수 ${days.length}일 예보, 가까운 조석 예보지점의 고·저조 시각, 대상어의 금어기·금지체장, 근처 금지·통제구역, 신고된 낚시어선. 예보이며 조과를 보장하지 않아요.`,
     path: `point/${p.slug}/`, up,
     jsonld: { '@context': 'https://schema.org', '@graph': [crumbLd([[SERVICE, BASE], ...(p.rk ? [[RNAME[p.rk], `${BASE}region/${p.rk}/`]] : []), [p.name, `${BASE}point/${p.slug}/`]])] }
   }) + `
@@ -433,36 +481,35 @@ function buildPoint(p) {
     <div class="place-head">
       <div>
         <h1>${esc(p.name)} <span class="h1-sub">${esc(p.gubun)}</span></h1>
-        <p class="lead">국립해양조사원 바다낚시지수 예보 지점이에요. ${p.gubun === '선상' ? '배를 타고 나가는 바다 위 지점이라 걸어서 갈 수 없어요.' : '지점 이름은 넓은 해역을 가리켜요. 특정 갯바위를 뜻하지 않아요.'}</p>
+        <p class="lead">국립해양조사원 바다낚시지수 예보 지점이에요(북위 ${p.lat.toFixed(3)}°, 동경 ${p.lng.toFixed(3)}°, ${RNAME[p.rk]}). ${p.gubun === '선상' ? '배를 타고 나가는 바다 위 지점이라 걸어서 갈 수 없어요.' : '지점 이름은 넓은 해역을 가리켜요. 특정 갯바위를 뜻하지 않아요.'}</p>
+        ${f ? `<p class="nowline">${esc(slotLabel(f.date, f.ampm))} 지수 ${f.best === f.worst ? IDX(f.best) : `${IDX(f.worst)}~${IDX(f.best)}`} <small>${f.n > 1 ? `어종 ${f.n}가지` : ''}</small></p>` : ''}
       </div>
       <div class="minimap">${mapSvg({ points: [p], zones: near.map(n => n.z), up, sel: p.rk, label: `${p.name} 위치`, viewBox: `${(x - 70).toFixed(0)} ${(y - 70).toFixed(0)} 140 140`, r: 3, x: 2 })}<p class="small">점: 예보 지점(대략) · ✕: 들어가지 마세요</p></div>
     </div>
   </div>
   ${FIX_BANNER}
-  <section aria-labelledby="i-h"><h2 id="i-h">바다낚시지수 ${days.length ? `<small>${esc(fmtDate(days[0]))}${days.length > 1 ? ` ~ ${esc(fmtDate(days[days.length - 1]).slice(5))}` : ''}</small>` : ''}</h2>
-    <p class="small">예보이며 조과를 보장하지 않아요. 지수는 물때·파고·수온·유속·풍속을 묶은 다섯 단계 예보예요.</p>
-    <div class="tbl"><table class="fc"><thead><tr><th scope="col">때</th><th scope="col">지수</th><th scope="col">대상어</th><th scope="col">물때</th><th scope="col">파고</th><th scope="col">수온</th><th scope="col">풍속</th></tr></thead><tbody>${rows}</tbody></table></div>
+  <section aria-labelledby="i-h"><h2 id="i-h">바다낚시지수 ${days.length ? `<small>${esc(fmtDate(days[0]))}${days.length > 1 ? ` ~ ${esc(fmtDate(days[days.length - 1]).slice(5))}` : ''} · ${days.length}일</small>` : ''}</h2>
+    <p class="small">예보이며 조과를 보장하지 않아요. 지수는 물때·파고·수온·유속·풍속을 묶은 다섯 단계(매우나쁨·나쁨·보통·좋음·매우좋음) 예보예요. 앞 3일은 오전·오후, 그 뒤는 하루 단위로 나와요. 표가 넓으면 옆으로 밀어 보세요.</p>
+    ${forecastTable(p)}
   </section>
   <section aria-labelledby="t-h"><h2 id="t-h">고조·저조 시각</h2>
-    ${tide ? `<p class="small">조석 예보지점: ${esc(tide.station)}${tide.far ? `(가장 가까운 예보지점, 약 ${tide.far}km)` : ''} · 국립해양조사원 조석예보</p><ul class="tide">${tide.events.map(e => `<li class="${e.type === '고조' ? 'hi' : 'lo'}"><b>${esc(e.type)}</b><span class="num">${esc(e.time.slice(5).replace('-', '.'))}</span><small class="num">${e.level ?? '—'}cm</small></li>`).join('')}</ul><p class="small">갯바위·갯벌은 고조 전에 미리 나오세요. 물이 들어오기 시작하면 길이 끊길 수 있어요.</p>` : '<p class="small">가까운 조석 예보지점을 찾지 못했어요.</p>'}
+    ${tide ? `<p class="small">가장 가까운 조석 예보지점: <b>${esc(tide.station)}</b>(약 ${Math.max(1, Math.round(tide.km))}km) · 국립해양조사원 조석예보 ${tideDays.length}일치</p>${tide.km > 20 ? `<p class="fixture" role="note">이 지점에서 약 ${Math.round(tide.km)}km 떨어진 예보지점이라 실제 물때 시각과 높이가 다를 수 있어요.</p>` : ''}${tideDays.map(dt => `<h3 class="num">${Number(dt.slice(5, 7))}월 ${Number(dt.slice(8, 10))}일</h3><ul class="tide">${tide.events.filter(e => e.time.startsWith(dt)).map(e => `<li class="${e.type === '고조' ? 'hi' : 'lo'}"><b>${esc(e.type)}</b><span class="num">${esc(e.time.slice(11))}</span><small class="num">${e.level ?? '—'}cm</small></li>`).join('')}</ul>`).join('')}<p class="small">갯바위·갯벌은 고조 전에 미리 나오세요. 물이 들어오기 시작하면 길이 끊길 수 있어요.</p>` : '<p class="small">받아 둔 조석 예보지점이 없어요.</p>'}
   </section>
   <section aria-labelledby="s-h"><h2 id="s-h">대상어의 금어기·금지체장</h2>
     ${sp ? `<ul class="llist">${sp}</ul>` : '<p class="small">선상 지점은 대상어가 따로 나오지 않아요. <a href="' + up + '#rules">전체 표</a>를 보세요.</p>'}
     ${LAW_NOTE}
   </section>
-  <section aria-labelledby="z-h"><h2 id="z-h">근처 들어가면 안 되는 곳 <small class="num">${near.length}곳(15km 안)</small></h2>
-    ${zoneList(near.map(n => n.z))}
+  <section aria-labelledby="z-h"><h2 id="z-h">근처 들어가면 안 되는 곳 <small class="num">${near.length}곳(${ZONE_KM}km 안)</small></h2>
+    ${near.length ? zoneList(near.map(n => n.z)) : `<p class="small">공공 자료(국립해양조사원 낚시금지구역, 해경 연안 출입통제구역 2023. 5.)에 ${ZONE_KM}km 안으로 올라 있는 곳이 없어요${nearest != null ? `(가장 가까운 곳 약 ${Math.round(nearest)}km)` : ''}. 자료에 없어도 막힌 곳이 있으니 현장 안내판과 관할 해양경찰서 공고를 확인하세요.</p>`}
   </section>
-  <section aria-labelledby="b-h"><h2 id="b-h">${esc(p.port)} 선적 낚시어선</h2>
-    <p class="note-strong">해양수산부 신고 기준이에요. 영업 여부와 연락처는 직접 확인하세요.</p>
-    ${boats.length ? `<div class="tbl"><table class="boats"><thead><tr><th scope="col">배 이름</th><th scope="col">선적항</th><th scope="col">총톤수</th><th scope="col">최대 승객</th><th scope="col">신고 유효기간</th></tr></thead><tbody>${boats.map(b => `<tr><th scope="row">${esc(b.name)}</th><td>${esc(b.sigungu)} ${esc(b.port)}</td><td class="num">${b.tons ?? '—'}t</td><td class="num">${b.maxPassengers ?? '—'}명</td><td class="num">${esc(fmtDate(b.validTo))}까지</td></tr>`).join('')}</tbody></table></div>` : '<p class="small">이 항구로 신고된 낚시어선이 자료에 없어요.</p>'}
-    <p class="small">신고 유효기간이 끝난 배는 뺐어요(이번 자료에서 ${BOATS.meta.expired}척). ${BOATS.meta.fixture ? '지금은 예시 자료라 배 이름은 모두 지어낸 것이에요.' : ''}</p>
-  </section>
+  ${bs.html}
   <section aria-labelledby="sh-h"><h2 id="sh-h">낚시방 찾기</h2><p class="small">공식 낚시방 목록이 없어 지도 검색으로만 연결해요.</p>${shopLinks(p.port)}</section>
+  ${dataMeta(up)}
   <p class="small">출처: 해양수산부 국립해양조사원 바다낚시지수·조석예보(공공누리 제1유형), 해양수산부 낚시어선업 신고정보, 해양경찰청 연안 출입통제구역, 국립해양조사원 낚시금지구역 — 공공데이터포털. <a href="${up}sources.html">출처 자세히</a></p>
 </main>
 ` + foot(up);
   write(`point/${p.slug}/index.html`, html);
+  return { tide, boats: bs.r, zones: near.length };
 }
 
 /* ---------- 민물 허가 낚시터 ---------- */
@@ -495,13 +542,14 @@ const SOURCES = [
   ['법령', RULES.meta.laws.inland1.name, RULES.meta.laws.inland1.url, `${RULES.meta.laws.inland1.version}. 민물 금어기·금지체장`],
   ['법령', '수산자원관리법 제14조·제18조제5항·제65조제2호', RULES.meta.laws.act.url, `${RULES.meta.laws.act.version}. 비어업인 처벌(1천만 원 이하 벌금)`],
   ['법령', '낚시 관리 및 육성법 제5조·제6조·제7조', 'https://www.law.go.kr/법령/낚시관리및육성법', '시행 2025. 6. 21., 법률 제20597호. 조례로 더 엄격한 낚시제한기준, 낚시통제구역'],
-  ['오픈API(연결 전)', '해양수산부 국립해양조사원_바다낚시지수 조회 (15142486)', 'https://www.data.go.kr/data/15142486/openapi.do', '공공누리 제1유형(출처표시). 활용신청 필요. 지금은 예시 자료'],
-  ['오픈API(연결 전)', '해양수산부 국립해양조사원_조석예보(고, 저조) (15156018)', 'https://www.data.go.kr/data/15156018/openapi.do', '공공누리 제1유형(출처표시). 활용신청 필요. 예보지점 코드 166곳은 활용가이드에서 옮김'],
-  ['오픈API(연결 전)', '해양수산부_낚시 어선업 신고정보 (15074088)', 'https://www.data.go.kr/data/15074088/openapi.do', '활용신청 필요. 신고 유효기간이 끝난 배는 싣지 않음, 연락처 없음'],
+  ['오픈API', `해양수산부 국립해양조사원_바다낚시지수 조회 (${INDEX.meta.dataset})`, INDEX.meta.source, `${INDEX.meta.license}. ${fmtDate(INDEX.meta.fetched)} 받은 ${PREP.points.length}곳(갯바위·선상 두 번 불러도 같은 ${PREP.points.length}곳이 와서 하나로 묶음, 구분은 활용가이드 장소 코드표), ${[...new Set(points.flatMap(p => p.days.map(d => d.date)))].length}일 예보`],
+  ['오픈API', `해양수산부 국립해양조사원_조석예보(고, 저조) (${TIDE.meta.dataset})`, TIDE.meta.source, `${TIDE.meta.license}. ${fmtDate(TIDE.meta.fetched)} 받은 예보지점 ${Object.keys(TIDE.stations).length}곳. 지점마다 좌표가 가장 가까운 예보지점을 거리와 함께 보여 줌. 예보지점 코드 166곳은 활용가이드에서 옮김`],
+  ['오픈API', `해양수산부_낚시 어선업 신고정보 (${BOATS.meta.dataset})`, BOATS.meta.source, `${fmtDate(BOATS.meta.fetched)} 받은 ${BOATS.meta.received}척 중 신고 유효기간이 남은 ${BOATS.boats.length}척(끝난 ${BOATS.meta.expired}척 제외). 연락처 없음. 선적항에 시·도가 없는 배는 시·군·구 이름·같은 항구 이름으로 짐작, 모르는 ${BP.stat.noSido}척은 지역에 넣지 않음`],
+  ['지역표', '혹시나랩 공통 지역표 (common/regions.json)', 'https://jaemilab.net/', '시·군·구 이름과 대략의 중심 좌표. 낚시어선 선적지의 시·도 짐작과 대략 거리에만 씀'],
   ['파일', `해양수산부 국립해양조사원_낚시금지구역 (15130115)`, 'https://www.data.go.kr/data/15130115/fileData.do', `${ZONES.meta.ban.file}. SHP(EPSG:5179)를 경위도로 변환, 남한 관할 밖 ${ZONES.meta.ban.droppedOutsideSouthKorea}곳 제외, ${ZONES.meta.ban.count}곳. 공공누리 제1유형`],
   ['파일', `해양경찰청_연안 출입통제구역 현황 (15110667)`, 'https://www.data.go.kr/data/15110667/fileData.do', `${ZONES.meta.control.file}. 2023. 5. 1. 기준 ${ZONES.meta.control.count}곳(낡은 자료 — 해경 공고 확인)`],
   ['파일', '전국낚시터정보표준데이터 (15021144, 행정안전부)', 'https://www.data.go.kr/data/15021144/standard.do', `${FW.meta.count}곳, ${FW.meta.fetched} 내려받음. 이용허락범위 제한 없음. 전화번호 칸은 싣지 않음`],
-  ['지도', '시·도 경계: southkorea-maps (KOSTAT 2013 행정경계 단순화본)', 'https://github.com/southkorea/southkorea-maps', '명당로드·소원명당과 같은 파일(wish/data/geo.js)'],
+  ['지도', '시·도 경계: southkorea-maps (KOSTAT 2013 행정경계 단순화본)', 'https://github.com/southkorea/southkorea-maps', '명당로드·소원명당과 같은 파일(lottomap/data/geo.js). 지점의 시·도를 좌표로 정할 때도 씀(바다 위 섬은 장소표 행정구역)'],
   ['보도', '세계일보, 「해수부, 광어 금지체장 21→35㎝로」(2020. 10. 8.)', 'https://www.segye.com/newsView/20201008527767', '광어 쪽의 개정 시기 언급에만 사용']
 ];
 function buildSources() {
@@ -556,12 +604,21 @@ for (const d of ['species', 'region', 'point', 'freshwater']) if (existsSync(joi
 buildIndex();
 SPECIES.species.forEach(buildSpecies);
 COASTAL.forEach(buildRegion);
-const pagePoints = points.filter(p => p.slug && p.lat != null);
-pagePoints.forEach(buildPoint);
+const pagePoints = points.filter(p => p.slug && p.lat != null && p.rk);
+if (new Set(pagePoints.map(p => p.slug)).size !== pagePoints.length) throw new Error('지점 쪽 주소가 겹쳐요');
+const pstat = pagePoints.map(p => ({ p, ...buildPoint(p) }));
 buildFreshwater();
 buildSources();
 buildPrivacy();
 for (const n of INDEX.meta.unknownPlaces || []) console.warn(`장소표에 없는 지점(쪽 안 만듦): ${n}`);
-for (const p of points) if (p.sido && p.lat != null && regionAt(p.lat, p.lng) !== RKEY[p.sido]) console.warn(`참고: ${p.name} 장소표 ${p.sido} / 좌표상 가장 가까운 도 ${RNAME[regionAt(p.lat, p.lng)]}`);
-console.log(`fish: ${SERVICE}(초안${FIXTURE ? ', 예시 자료' : ''}) — 페이지 ${report.length}개 = 첫 화면 1 + 어종 ${SPECIES.species.length} + 지역 ${COASTAL.length} + 지점 ${pagePoints.length} + 민물 1 + 출처 1 + 개인정보 1 · 규칙 ${RULES.rules.length}행 · 금지·통제구역 ${allZones.length}곳`);
+for (const p of points) if (!p.rk) console.warn(`시·도를 못 정한 지점: ${p.name}`);
+for (const p of points) if (p.rkHow === '장소표(섬)') console.warn(`참고: ${p.name} 좌표상 가장 가까운 경계 ${RNAME[p.coordKey]} → 장소표 행정구역 ${RNAME[p.rk]}`);
+const by = k => pagePoints.filter(p => p.rk === k).length;
+console.log(`fish: ${SERVICE}(초안${FIXTURE ? ', 예시 자료' : ', 실제 자료 ' + INDEX.meta.fetched}) — 페이지 ${report.length}개 = 첫 화면 1 + 어종 ${SPECIES.species.length} + 지역 ${COASTAL.length} + 지점 ${pagePoints.length} + 민물 1 + 출처 1 + 개인정보 1 · 규칙 ${RULES.rules.length}행 · 금지·통제구역 ${allZones.length}곳`);
+console.log(`  지점: index.json ${INDEX.points.length}행 → ${points.length}곳(겹침 ${PREP.dup}, 그중 값이 같은 것 ${PREP.dupSame}) · 시·도별 ${COASTAL.map(k => `${RNAME[k]} ${by(k)}`).join(', ')}`);
+console.log(`  낚시어선: ${BP.stat.total}척 · 시·도 앎 ${BP.stat.withSido}(주소·시군구 ${boatsAll.filter(b => b.sidoBy === '주소' || b.sidoBy === '시군구').length}, 같은 항구 ${BP.stat.port}, 같은 읍·면 ${BP.stat.area}, 지점 이름 ${BP.stat.hint}) · 모름 ${BP.stat.noSido}(겹치는 이름 ${BP.stat.ambiguous}) · 대략 좌표 ${BP.stat.withCoord}`);
+const hw = h => pstat.filter(x => x.boats.how === h).length;
+console.log(`  지점별 낚시어선: 같은 항구 이름 ${hw('port')}곳 · 같은 시·군 ${hw('sigungu')}곳 · 가까운 항구 ${hw('near')}곳 · 없음 ${hw('none')}곳(${pstat.filter(x => x.boats.how === 'none').map(x => x.p.name).join(', ')})`);
+console.log(`  조석: 가장 가까운 예보지점 20km 넘는 지점 ${pstat.filter(x => x.tide && x.tide.km > 20).map(x => `${x.p.name}→${x.tide.station} ${Math.round(x.tide.km)}km`).join(', ')}`);
+console.log(`  금지·통제구역 ${ZONE_KM}km 안: ${pstat.filter(x => x.zones).map(x => `${x.p.name} ${x.zones}`).join(', ') || '없음'}`);
 for (const r of report) console.log(`  ${String(r.chars).padStart(5)}자${r.unique != null ? ` (고유 ${r.unique})` : ''}  ${r.rel}`);

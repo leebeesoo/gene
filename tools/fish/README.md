@@ -8,6 +8,7 @@ node tools/fish/build.mjs                # fish/ 아래 정적 페이지 생성(
 node tools/fish/fetch-index.mjs --fixture   # 예시 응답으로 fish/data/index.json
 node tools/fish/fetch-tide.mjs --fixture    # 예시 응답으로 fish/data/tide.json
 node tools/fish/fetch-boats.mjs --fixture   # 예시 응답으로 fish/data/boats.json
+node tools/fish/fetch-boats.mjs --renorm    # 받아 둔 boats.json을 키 없이 다시 정리(선적항 → 시·도 짐작)
 node tools/fish/fetch-files.mjs          # 공공데이터포털 파일 3종 → zones.json·freshwater.json(키 필요 없음)
 node tools/fish/og.mjs                   # fish/og.png (playwright)
 ```
@@ -19,10 +20,22 @@ node tools/fish/og.mjs                   # fish/og.png (playwright)
 | `fish/data/species.json` | 실제(직접 쓴 글 19종) | 위 법령 + 수산자원관리법 제14·18·65조, 낚시 관리 및 육성법 제5~7조 |
 | `fish/data/zones.json` | **실제** | 15130115 낚시금지구역(파일 20250813, SHP EPSG:5179 → 경위도, 22곳; 북한 해역 3곳 뺌), 15110667 해경 연안 출입통제구역(2023-05-01, 43곳) |
 | `fish/data/freshwater.json` | **실제** | 15021144 전국낚시터정보표준데이터 672곳(전화번호 칸 제외) |
-| `fish/data/tide-stations.json` | 실제(코드·이름만) | 조석예보 활용가이드(261106)의 예보지점 166곳. 좌표는 첫 실제 호출 때 채움 |
-| `fish/data/index.json`·`tide.json`·`boats.json` | **예시**(`meta.fixture: true`) | `tools/fish/fixtures/` — 활용가이드 예제와 같은 모양, 값과 배 이름은 지어낸 것 |
+| `fish/data/tide-stations.json` | 실제(코드·이름만) | 조석예보 활용가이드(261106)의 예보지점 166곳. 좌표는 tide.json의 실제 응답에 있음 |
+| `fish/data/index.json` | **실제**(2026-11-20) | 15142486 바다낚시지수. 98행 = 같은 49곳이 갯바위·선상 두 번(값도 같음) → 빌드가 이름으로 묶고 구분은 장소 코드표(갯바위 34·선상 15). 7일(앞 3일 오전·오후, 뒤 4일 「일」) |
+| `fish/data/tide.json` | **실제**(2026-11-20) | 15156018 조석 고·저조, 예보지점 32곳 × 2일 |
+| `fish/data/boats.json` | **실제**(2026-11-20) | 15074088 낚시어선 4,824척 → 유효 4,651척. `raw`(선적항 원문)·`sidoBy`(시·도를 어떻게 정했는지) 포함 |
 
-화면은 `meta.fixture`가 참이면 모든 지점·지역 쪽에 「초안 화면이에요… 예시 자료」 띠를 보여 줘요.
+`meta.fixture`가 참이면(예시 자료로 돌렸을 때) 모든 지점·지역 쪽에 「예시 자료」 띠를 보여 줘요. 지금은 실제 자료라 띠가 없고, 상단 「초안」 표시만 있어요.
+
+## 초안 자료 새로 받기(키는 GitHub Actions 비밀값에만 있음)
+`.github/workflows/fish-probe.yml`은 **그 파일 자체가 바뀔 때만** 돌아요(`claude/fish-draft` 브랜치, `paths`가 그 파일 하나). 자료를 새로 받으려면 파일 둘째 줄 주석(「# 초안 시험용 … (6차: …)」)의 차수를 바꿔(예: 7차) `claude/fish-draft`에 푸시하세요. 수집 → 요약 로그 → `fish/data/index.json·tide.json·boats.json`을 같은 브랜치에 커밋해요. 받은 뒤 `node tools/fish/build.mjs && node tools/fish/test.mjs`. 배포 브랜치에는 아무것도 안 가요.
+
+## 실제 자료를 화면에 잇는 규칙(`tools/fish/resolve.mjs`, `geo.mjs`)
+- **지점의 시·도**: 좌표가 시·도 경계(lottomap/data/geo.js) 안이면 그 시·도. 바다 위라 경계 밖이면 장소표(`places.mjs`)의 행정구역 — 국화도(경기)·어청도(전북)·추자도(제주)는 단순화 경계로는 옆 도로 잡혀서 장소표가 필요. 49곳 모두 장소표와 같음(테스트).
+- **조석**: 받아 둔 예보지점 중 좌표가 가장 가까운 곳, 거리 표시. 20km 넘으면 「실제 물때와 다를 수 있어요」. (삼척 대진항은 예전 장소표의 SO_0731(고성 대진항)이 아니라 임원항.) 먼 곳 몇 군데는 `places.mjs` obs에 더 가까운 예보지점(제주·완도·여수·군산·통영·흑산도)을 넣어 다음 수집부터 받게 했어요.
+- **금지·통제구역**: 지점에서 5km 안만 「들어가지 마세요」. 없으면 가장 가까운 거리만 적음.
+- **낚시어선 선적항**: 실제 문자열은 「인천광역시 옹진군 영흥면」, 「여수시 국동항」, 「고성군 토성면(아야진항)」, 「가력항」, 「군산시옥도면」, 「양양군/낙산항」처럼 제각각이고 시·도가 빠진 것이 대부분. `parsePort`가 시·도·시·군·구(common/regions.json)·읍·면·항구로 나누고, 시·도가 없으면 ① 시·군·구 이름이 한 시·도에만 있으면 그 시·도 ② 같은 항구 이름(읍·면이 없는 배만)·같은 읍·면 이름으로 시·도가 적힌 배 ③ 지점·조석 예보지점 이름. 짐작한 배는 다시 근거로 쓰지 않아요(「화도면 후포항」이 울진으로 번지는 것 방지). 끝내 모르면 시·도를 비워 두고 지역 쪽에 넣지 않아요(2026-11-20: 994척).
+- **지점 ↔ 낚시어선**: ① 지점 항구·섬 이름과 같은 선적항(안흥 → 안흥내항·안흥외항) ② 같은 이름의 시·군(포항 → 포항시) ③ 시·군·구 중심·예보지점 좌표로 40km 안 가까운 선적지(「가까운 항구 기준」 표시). 없으면 지역 쪽으로 안내.
 
 ## 사장님 할 일
 1. data.go.kr 활용신청(기존 `DATA_GO_KR_KEY`에 붙음):
@@ -52,7 +65,8 @@ node tools/fish/og.mjs                   # fish/og.png (playwright)
 
 ## 실제 응답이 오면 확인할 것
 - [ ] **성공 코드**: 명세 예제는 `"00"`, 활용가이드 표는 `0`. `parseDataGo`는 둘 다 받음 — 실제 값 기록.
-- [ ] **바다낚시지수 `totalIndex` 문자열**: 예시는 「나쁨」「보통」뿐. 「매우좋음/좋음/보통/나쁨/매우나쁨」인지 띄어쓰기 포함 확인 → `lib.mjs INDEX_LEVELS`, CSS `.idx-…` 이름.
+- [x] **바다낚시지수 `totalIndex` 문자열**: 2026-11-20 확인 — 매우나쁨·나쁨·보통·좋음·매우좋음(띄어쓰기 없음). CSS는 `.idx-l1`~`.idx-l5`.
+- [ ] (옛 메모) **바다낚시지수 `totalIndex` 문자열**: 예시는 「나쁨」「보통」뿐. 「매우좋음/좋음/보통/나쁨/매우나쁨」인지 띄어쓰기 포함 확인 → `lib.mjs INDEX_LEVELS`, CSS `.idx-…` 이름.
 - [ ] **한 지점이 하루에 몇 행인지**(오전·오후 2행? 대상어별로 여러 행?). 갯바위는 대상어마다 행이 나뉠 수 있음 → 지금은 날짜·오전오후별로 행을 다 보여 줌.
 - [ ] `predcYmd` 형식(YYYY-MM-DD vs YYYYMMDD), `tdlvHrCn` 물때 용어(예시 「소조기」).
 - [ ] `numOfRows=300`으로 7일 × 49곳이 몇 쪽인지, `totalCount`가 전체 수인지.

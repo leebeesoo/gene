@@ -7,7 +7,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { GUBUN, indexUrl, parseDataGo, normIndex, kstDate } from './lib.mjs';
-import { placeOf } from './places.mjs';
+import { placeOf, gubunOf } from './places.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const OUT = join(HERE, '..', '..', 'fish', 'data', 'index.json');
@@ -37,16 +37,20 @@ async function main() {
   if (!fixture && !KEY) { console.error('DATA_GO_KR_KEY 가 없어요(--fixture 로 예시 자료를 쓸 수 있어요)'); process.exit(1); }
   const today = kstDate();
   const points = [], unknown = [];
+  let same = 0, differ = 0;
   for (const g of GUBUN) {
     for (const p of normIndex(await getAll(g, today), g)) {
       const meta = placeOf(p.name);
-      if (!meta) { unknown.push(p.name); continue; }
-      points.push({ ...p, slug: meta.slug, sido: meta.sido, port: meta.port, obs: meta.obs });
+      if (!meta) { if (!unknown.includes(p.name)) unknown.push(p.name); continue; }
+      // 2026-11-20: gubun을 바꿔 불러도 같은 49곳·같은 값이 옴 → 이름으로 하나만 두고 구분은 장소 코드표를 따른다
+      const prev = points.find(x => x.name === p.name);
+      if (prev) { if (JSON.stringify(prev.days) === JSON.stringify(p.days)) same++; else { differ++; console.warn(`구분마다 값이 다름: ${p.name}(${prev.gubun}/${g}) — 첫 것을 씀`); } continue; }
+      points.push({ ...p, gubun: gubunOf(p.name), slug: meta.slug, sido: meta.sido, port: meta.port, obs: meta.obs });
     }
   }
   if (!points.length) throw new Error('지점이 하나도 없어요. 응답 모양을 확인하세요(README 「확인할 것」).');
   const out = {
-    meta: { fetched: today, fixture, dataset: '15142486', source: 'https://www.data.go.kr/data/15142486/openapi.do', provider: '해양수산부 국립해양조사원', license: '공공누리 제1유형(출처표시)', unknownPlaces: unknown },
+    meta: { fetched: today, fixture, dataset: '15142486', source: 'https://www.data.go.kr/data/15142486/openapi.do', provider: '해양수산부 국립해양조사원', license: '공공누리 제1유형(출처표시)', unknownPlaces: unknown, gubunDuplicates: { same, differ } },
     points
   };
   writeFileSync(OUT, JSON.stringify(out) + '\n');
