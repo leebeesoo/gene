@@ -191,3 +191,14 @@ test('저장된 자료에 전화번호가 없다', () => {
 });
 
 console.log(`\n${passed}개 통과${process.exitCode ? ' (실패 있음)' : ''}`);
+
+// 2026-11-20 실제 응답 모양: 낚시어선 API는 responseJson > body.item[] 로 옴
+{
+  const { parseDataGo, normBoats } = await import('./lib.mjs');
+  const real = { responseJson: { header: { resultCode: '00', resultMsg: '정상', pageNo: 1, numOfRows: 1, totalCount: 4824 }, body: { item: [{ fsboNo: '20110016261409', fsboNm: '매니아1호', fsboTotTons: '3', shpmHangNm: '부산광역시 서구 남항', maxPsrNum: '8명', bsnStEndDt: '2026.11.08 ~ 2027.11.08' }] } } };
+  const r = parseDataGo(JSON.stringify(real));
+  if (!r.ok || r.items.length !== 1 || r.total !== 4824) throw new Error('responseJson 감싸기를 못 읽음');
+  const b = normBoats(r.items, '2026-11-20');
+  if (b.boats.length !== 1 || b.boats[0].maxPassengers !== 8 || b.boats[0].port !== '남항') throw new Error('낚시어선 정리 결과가 다름: ' + JSON.stringify(b.boats[0]));
+  console.log('ok   낚시어선 실제 응답(responseJson) 읽기');
+}

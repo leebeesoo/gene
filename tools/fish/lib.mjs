@@ -62,7 +62,7 @@ export function parseDataGo(input) {
   const json = typeof input === 'string' ? (input.trim().startsWith('<') ? parseXmlItems(input) : JSON.parse(input)) : input;
   const err = json?.OpenAPI_ServiceResponse?.cmmMsgHeader;
   if (err) return { ok: false, error: `${err.returnReasonCode} ${err.returnAuthMsg || err.errMsg}`, items: [], total: 0 };
-  const res = json?.response ?? json?.responseXml ?? json;
+  const res = json?.response ?? json?.responseJson ?? json?.responseXml ?? json; // 낚시어선(15074088)은 responseJson으로 감싸 옴(2026-11-20 실제 응답)
   const head = res?.header ?? {};
   const code = String(head.resultCode ?? '');
   if (code === '03' || code === '3') return { ok: true, items: [], total: 0, nodata: true };
