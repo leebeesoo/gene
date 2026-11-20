@@ -4,12 +4,13 @@
 // - 서비스 4개(명당로드·소원명당·제철식당·구출장터)의 모든 지역 이름이 지역표 하나로 맞춰짐 + 주산지 표 코드가 있음
 // - 카드 지도: 시·도 수(c) 17곳, 표시(lp·wp)와 동네 가운데 좌표가 그 시·도 경계 상자(lottomap/data/geo.js) 안
 // - 알려진 표기(경북/경상북도/gyeongbuk, 전남광주통합특별시, 세종, 군위군 등)가 맞는 곳으로 감
+// - 카드 줄(near/near.js를 그대로 돌려 봄): 자료 있는 줄 먼저, 빈 줄은 옆 동네·시·도 전체 안내, 모든 링크에 ?from=near(# 앞)
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 import path from 'node:path';
 import { ROOT, loadRegions, resolve, sidoCandidates } from './regions.mjs';
-import { buildNear, months, buildMap, relPath } from './build.mjs';
+import { buildNear, months, buildMap, relPath, km } from './build.mjs';
 
 let ok = 0;
 const t = (name, fn) => { try { fn(); ok++; } catch (e) { console.error(`✗ ${name}\n  ${e.message}`); process.exitCode = 1; } };
@@ -142,6 +143,67 @@ if (data) {
     }
     assert.ok(n > 250, `표시 ${n}개`);
     for (const r of data.regions) if (r[2]) inBox(parentOf.get(r[0]), r[3], r[4], `${r[0]} 가운데`);
+  });
+
+  // ── 카드 줄: near/near.js를 vm에서 그대로 돌려 같은 데이터로 줄을 만들어 본다 ──
+  const nsb = { window: {}, document: {}, console };
+  vm.runInNewContext(fs.readFileSync(path.join(ROOT, 'near/near.js'), 'utf8'), nsb);
+  const T = nsb.window.JLNear._t;
+  T.init(JSON.parse(JSON.stringify(data))); T.month(11);
+  t('from=near 링크 형식', () => {
+    const f = T.fromNear;
+    assert.equal(f('/lottomap/#r=seoul&sgg=마포구'), '/lottomap/?from=near#r=seoul&sgg=마포구');
+    assert.equal(f('/wish/region/seoul/'), '/wish/region/seoul/?from=near');
+    assert.equal(f('/wish/region/gyeongbuk/#andong-hahoe-samsindang'), '/wish/region/gyeongbuk/?from=near#andong-hahoe-samsindang');
+    assert.equal(f('/market/?x=1#/region/경북'), '/market/?x=1&from=near#/region/경북');
+    assert.equal(f('/season/?from=near#/item/sagwa'), '/season/?from=near#/item/sagwa'); // 두 번 붙이지 않음
+    assert.equal(f('/market/#/signal/a?b=1'), '/market/?from=near#/signal/a?b=1');      // 해시 안의 ?는 그대로
+    assert.equal(f(null), null);
+  });
+  t('nb: 빈 줄마다 가장 가까운 자료 있는 곳', () => {
+    const reg = new Map(data.regions.map(r => [r[0], { lat: r[3], lng: r[4], p: r[2] }]));
+    assert.deepEqual(data.nb['seoul-mapo'].w, ['seoul-seodaemun', 2]);
+    assert.equal(data.nb['jeonnam-gokseong'].l[0], 'jeonbuk-namwon');
+    assert.equal(data.nb['gyeongbuk-andong'], undefined);
+    for (const [slug, v] of Object.entries(data.nb)) for (const [k, [to, d]] of Object.entries(v)) {
+      assert.ok(!data.d[slug]?.[k], `${slug}.${k}는 자료가 있는데 nb가 있음`);
+      assert.ok(data.d[to]?.[k], `${slug}.${k} → ${to}에 자료 없음`);
+      assert.equal(d, Math.round(km(reg.get(slug), reg.get(to))), `${slug}.${k}`);
+    }
+  });
+  const rowsOf = s => Array.from(T.rowsFor(s), r => ({ key: r.key, k: r.k, t: r.t, u: r.u }));
+  t('카드 줄 순서: 자료 있는 줄 먼저(안정 정렬)', () => {
+    for (const r of data.regions) {
+      if (!r[2]) continue;
+      const rows = rowsOf(r[0]);
+      assert.equal(rows.length, 5, r[0]);
+      assert.deepEqual([...rows.map(x => x.key)].sort(), ['f', 'k', 'l', 's', 'w'], r[0]);
+      for (let i = 1; i < rows.length; i++) {
+        assert.ok(rows[i - 1].k <= rows[i].k, `${r[0]}: ${rows.map(x => x.key + x.k).join(' ')}`);
+        if (rows[i - 1].k === rows[i].k) assert.ok('lwskf'.indexOf(rows[i - 1].key) < 'lwskf'.indexOf(rows[i].key), r[0]);
+      }
+    }
+    assert.deepEqual(rowsOf('gyeongbuk-andong').map(x => x.key), ['l', 'w', 's', 'k', 'f']);
+    const g = rowsOf('jeonnam-gokseong');
+    assert.deepEqual(g.map(x => x.key).slice(0, 2), ['s', 'f'], JSON.stringify(g));
+    assert.match(g.find(x => x.key === 'l').t, /^이 동네엔 없어요 · 옆 전북 남원시에 \d+곳$/);
+    const m = rowsOf('seoul-mapo');
+    assert.equal(m[0].key, 'l');
+    assert.match(m.find(x => x.key === 'w').t, /^이 동네엔 없어요 · 옆 서대문구에 \d+곳$/);
+    // 서울 제철식당: 이달 제철 메뉴가 없어 가까운 이달 제철 지역을 앞세움(그 지역으로 링크)
+    const s = m.find(x => x.key === 's');
+    assert.match(s.t, /^이달 가까운 제철: .+ .+/, s.t);
+    assert.match(s.u, /^\/sikdang\/\?from=near#\/region\/(?!seoul$)/, s.u);
+  });
+  t('카드 링크: 모두 ?from=near(# 앞), 빈 줄 문구에 「없음」 단독 없음', () => {
+    for (const r of data.regions) {
+      if (!r[2]) continue;
+      for (const x of rowsOf(r[0])) {
+        assert.notEqual(x.t, '없음', r[0]);
+        if (x.u) assert.match(x.u, /^\/(lottomap|wish|sikdang|market|season)\/[^#?]*\?(?:[^#]*&)?from=near(?:#|$)/, `${r[0]} ${x.u}`);
+        else assert.equal(x.k, 3, `${r[0]} ${x.key}`);
+      }
+    }
   });
 }
 console.log(process.exitCode ? `실패 (통과 ${ok}개)` : `통과 ${ok}개`);

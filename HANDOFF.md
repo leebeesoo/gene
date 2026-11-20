@@ -64,7 +64,7 @@
 |---|---|---|
 | **KAMIS 키** | 주말 지나 발급되면 | kamis.or.kr 회원가입 → 고객센터 → Open-API → 이용신청(https://www.kamis.or.kr/customer/reference/openapi_write.do). 받은 인증키는 `KAMIS_CERT_KEY`, KAMIS 로그인 아이디는 `KAMIS_CERT_ID`로 https://github.com/leebeesoo/gene/settings/secrets/actions 에 넣기 |
 | **www 주소 연결 (내일)** | 2026-11-16 | 2026-11-15 Custom Domain 추가했으나 Cloudflare DNS에 www가 없음(NXDOMAIN, 저장 안 된 듯). ① Worker `gene` → Settings → Domains & Routes 목록에 www.jaemilab.net 있는지 확인 ② 없으면 DNS 화면(https://dash.cloudflare.com/6e6ac3f9c62283f3adece9cbc19a5b6e/jaemilab.net/dns/records)에서 직접 추가: 유형 AAAA, 이름 www, 주소 100::, 프록시 켜짐(주황 구름) ③ Rules → 템플릿 「Redirect from WWW to Root」로 www→jaemilab.net 301. GA4·검색 노출에는 영향 없음(전부 jaemilab.net) |
-| **애드센스 검토 요청** | Claude가 「지금」이라고 할 때만 (구글 색인 뒤, 보통 1~3주) | 그 전에는 애드센스 화면에서 아무것도 누르지 않기. 「Ads.txt 찾을 수 없음」은 배포 뒤 며칠 안에 저절로 바뀜 |
+| ~~애드센스 검토 요청~~ | 2026-11-20 사장님 신청 완료 | 결과 메일 기다림(보통 며칠~4주). 승인되면 `docs/after-adsense.md` 순서대로 |
 | (선택) 소원명당 TourAPI | 아무 때나 | data.go.kr에서 15101578 활용신청만. 키는 이미 넣은 `DATA_GO_KR_KEY`와 같아서 더 넣을 것 없음 |
 | (선택) 구글 폼 2개 | 미뤄도 됨 | 없으면 신청·제보가 문의 메일로 열림. 만들 때는 `docs/google-forms.md` (이 클라우드 대화는 사장님 크롬을 조작할 수 없음) |
 | (선택) 제철식당 시트 CSV 게시 | 미뤄도 됨 | 시트 탭 5개 「파일 → 공유 → 웹에 게시 → CSV」 주소 5개를 Claude에게 |

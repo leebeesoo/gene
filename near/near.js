@@ -14,18 +14,29 @@
   function saved() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
   function say(t) { $('nearFt').textContent = t; }
 
+  function init(d) {
+    D = d; R = {}; KIDS = {}; SIDO = [];
+    d.regions.forEach(function (x) {
+      var r = { s: x[0], n: x[1], p: x[2], lat: x[3], lng: x[4] };
+      R[r.s] = r;
+      if (r.p) (KIDS[r.p] = KIDS[r.p] || []).push(r); else SIDO.push(r);
+    });
+    for (var k in KIDS) KIDS[k].sort(function (a, b) { return a.n.localeCompare(b.n, 'ko'); });
+  }
   function load() {
-    if (!P) P = fetch('near/index.json').then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (d) {
-      D = d;
-      d.regions.forEach(function (x) {
-        var r = { s: x[0], n: x[1], p: x[2], lat: x[3], lng: x[4] };
-        R[r.s] = r;
-        if (r.p) (KIDS[r.p] = KIDS[r.p] || []).push(r); else SIDO.push(r);
-      });
-      for (var k in KIDS) KIDS[k].sort(function (a, b) { return a.n.localeCompare(b.n, 'ko'); });
-    }, function (e) { P = null; say('불러오지 못했어요. 잠시 뒤 다시 눌러 주세요.'); throw e; });
+    if (!P) P = fetch('near/index.json').then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(init,
+      function (e) { P = null; say('불러오지 못했어요. 잠시 뒤 다시 눌러 주세요.'); throw e; });
     return P;
   }
+  // 사용량 재기: 카드가 만드는 모든 링크에 ?from=near (# 앞, 이미 ?가 있으면 &from=near). GA4 page_view의 page_location에 남는다
+  function fromNear(u) {
+    if (!u) return u;
+    var i = u.indexOf('#'), h = i < 0 ? '' : u.slice(i), b = i < 0 ? u : u.slice(0, i);
+    if (/[?&]from=near(&|$)/.test(b)) return u;
+    return b + (b.indexOf('?') < 0 ? '?' : '&') + 'from=near' + h;
+  }
+  // GTM 데이터 레이어로 알림만(GTM에 트리거가 없으면 아무 일 없음)
+  function dl(o) { try { (window.dataLayer = window.dataLayer || []).push(o); } catch (e) {} }
   function label(r) { var s = R[r.p]; return KIDS[r.p].length === 1 ? s.n : s.n + ' ' + r.n; }
   function months(v) { // "10~2,5" → [10,11,12,1,2,5]
     var out = [];
@@ -42,51 +53,89 @@
     var t = Math.PI / 180, x = Math.sin((b.lat - a.lat) * t / 2), y = Math.sin((b.lng - a.lng) * t / 2);
     return 12742 * Math.asin(Math.sqrt(x * x + Math.cos(a.lat * t) * Math.cos(b.lat * t) * y * y));
   }
-  function nearest(from, ok) {
+  function nearest(from, ok, sido) { // sido: 시·도(광역시 전체 자료)도 후보로
     var best = null, bd = 1e9;
-    for (var s in R) { var r = R[s]; if (!r.p || r.lat == null || !ok(r)) continue; var d = km(from, r); if (d < bd) { bd = d; best = r; } }
+    for (var s in R) { var r = R[s]; if ((!r.p && !sido) || r.lat == null || !ok(r)) continue; var d = km(from, r); if (d < bd) { bd = d; best = r; } }
     return best && { r: best, d: bd };
   }
 
-  /* ── 줄 5개 ── */
-  function row(c, name, text, url) {
-    return '<li>' + (url ? '<a class="nr-row ' + c + '" href="' + esc(url) + '">' : '<span class="nr-row no ' + c + '">') +
-      '<i></i><b>' + name + '</b><span>' + esc(text) + '</span>' +
+  /* ── 줄 5개 ──
+     줄마다 tier: 0 이 동네 자료 · 1 시·도(광역시) 전체 자료나 이달 가까운 제철 · 2 비어서 옆 동네·시·도 전체로 안내 · 3 안내도 없음.
+     tier 작은 것 먼저(같으면 원래 순서). 좁은 화면은 위 3줄만 보이고 「나머지 2개 더 보기」로 편다. */
+  var ORDER = ['l', 'w', 's', 'k', 'f'];
+  function nm2(r, from) { return r.p && r.p === from.p ? r.n : label0(r); }  // 같은 시·도면 시·군·구 이름만
+  function label0(r) { return r.p ? label(r) : r.n; }
+  // 이 동네에 없는 서비스의 가장 가까운 자료 있는 곳(빌드가 지역 가운데 좌표로 계산: near/index.json nb)
+  function away(r, key) {
+    var a = D.nb && D.nb[r.s] && D.nb[r.s][key], t = a && R[a[0]];
+    return t && D.d[t.s] && D.d[t.s][key] ? { r: t, km: a[1], x: D.d[t.s][key], name: nm2(t, r) } : null;
+  }
+  // 빈 줄 문구: 옆(25km 안) 동네 → 시·도 전체 → 가까운(60km 안) 동네 → 안내 없음
+  function empty(r, key, lead, cnt, url, sidoTxt, last) {
+    var a = away(r, key), sx = D.d[r.p] && D.d[r.p][key];
+    if (a && a.km <= 25) return { t: lead + ' · 옆 ' + a.name + cnt(a.x), u: url(a.x), k: 2 };
+    if (sx && sidoTxt) return { t: lead + ' · ' + sidoTxt(sx), u: url(sx), k: 2 };
+    if (a && a.km <= 60) return { t: lead + ' · 가까운 ' + a.name + cnt(a.x), u: url(a.x), k: 2 };
+    if (last) return { t: lead + ' · ' + last[0], u: last[1], k: 2 };
+    return { t: lead, u: null, k: 3 };
+  }
+  function nowDishes(x) { return x[2].filter(function (z) { var ms = months(z[1]); return ms.length < 12 && ms.indexOf(NOW) >= 0; }).map(function (z) { return z[0]; }); }
+  function rowsFor(slug) {
+    var r = R[slug], s = R[r.p], d = D.d[r.s] || {}, sd = D.d[s.s] || {}, out = {}, x, t, z;
+    // 명당로드
+    if ((x = d.l)) out.l = { t: '영업 중 1등 판매점 ' + n(x[0]) + '곳 · 최다 ' + x[2] + ' ' + x[3] + '회', u: x[4], k: 0 };
+    else out.l = empty(r, 'l', '이 동네엔 없어요', function (y) { return '에 ' + n(y[0]) + '곳'; }, function (y) { return y[4]; },
+      function (y) { return s.n + ' 전체 ' + n(y[0]) + '곳 보기'; });
+    // 소원명당
+    if ((x = d.w)) out.w = { t: x[0] > 1 ? x[1] + ' 외 ' + (x[0] - 1) + '곳' : x[1], u: x[2], k: 0 };
+    else out.w = empty(r, 'w', '이 동네엔 없어요', function (y) { return '에 ' + n(y[0]) + '곳'; }, function (y) { return y[2]; },
+      function (y) { return s.n + ' 소원 명소 ' + n(y[0]) + '곳 보기'; });
+    // 제철식당 (광역시는 시 전체 한 곳)
+    x = d.s || sd.s;
+    if (x) {
+      var now = nowDishes(x).slice(0, 2), all = x[2].filter(function (y) { return y[1] === '1~12'; }).map(function (y) { return y[0]; });
+      if (now.length) out.s = { t: (d.s ? '' : s.n + ' 전체 · ') + '이달 ' + now.join('·') + ' · 식당 ' + n(x[1]) + '곳', u: x[3], k: d.s ? 0 : 1 };
+      else {
+        // 이달 제철 메뉴가 없는 곳(서울처럼 사철 메뉴뿐): 가까운(60km 안) 이달 제철 지역을 앞세운다. 링크도 그 지역으로
+        var own = d.s ? r : s, nb = nearest(r, function (y) { var q = D.d[y.s] && D.d[y.s].s; return y.s !== own.s && q && nowDishes(q).length; }, true);
+        if (nb && nb.d <= 60) {
+          z = D.d[nb.r.s].s;
+          out.s = { t: '이달 가까운 제철: ' + nm2(nb.r, r) + ' ' + nowDishes(z).slice(0, 2).join('·'), u: z[3], k: 1,
+            sr: (d.s ? r.n : s.n) + ' 제철식당엔 이달 제철 메뉴가 없어 가까운 곳을 보여 드려요. ' };
+        } else out.s = { t: (d.s ? '' : s.n + ' 전체 · ') + (all.length ? '사철 메뉴 ' + all.join('·') : '이달 제철 메뉴는 없어요') + ' · 식당 ' + n(x[1]) + '곳', u: x[3], k: 1 };
+      }
+    } else out.s = empty(r, 's', '이 동네엔 없어요', function (y) { var q = nowDishes(y); return q.length ? ' 이달 ' + q.slice(0, 2).join('·') : ' 식당 ' + n(y[1]) + '곳'; },
+      function (y) { return y[3]; });
+    // 구출장터
+    if ((x = d.k)) out.k = { t: x[1][0][0] + ' ' + (LV[x[1][0][1]] || '신호') + (x[0] > 1 ? ' 외 ' + (x[0] - 1) + '건' : ''), u: x[2], k: 0 };
+    else out.k = empty(r, 'k', '지금은 없어요', function (y) { return '에 신호 ' + n(y[0]) + '건'; }, function (y) { return y[2]; },
+      function (y) { return s.n + ' 신호 ' + n(y[0]) + '건 보기'; }, ['전국 신호 보기', '/market/']);
+    // 제철장보기 주산지
+    x = d.f || sd.f;
+    if (x) {
+      var it = x.map(function (id) { return { id: id, n: D.items[id][0], m: D.items[id][1].split(',').map(Number) }; });
+      var on = it.filter(function (y) { return y.m.indexOf(NOW) >= 0; }), f = (on.length ? on : it);
+      t = (d.f ? '' : s.n + ' ') + '주산지 ' + f.slice(0, 2).map(function (y) { return y.n; }).join('·') + (on.length ? ' · 지금 제철' : ' · 제철 ' + span(f[0].m));
+      out.f = { t: t, u: '/season/#/item/' + f[0].id, k: d.f ? 0 : 1 };
+    } else out.f = empty(r, 'f', '주산지 품목 없음', function (y) { return ' 주산지 ' + D.items[y[0]][0]; }, function (y) { return '/season/#/item/' + y[0]; });
+    var META = { l: ['c-map', '명당로드'], w: ['c-wish', '소원명당'], s: ['c-sik', '제철식당'], k: ['c-mkt', '구출장터'], f: ['c-sea', '제철장보기'] };
+    return ORDER.map(function (key, i) { var o = out[key]; o.key = key; o.c = META[key][0]; o.name = META[key][1]; o.u = fromNear(o.u); o.i = i; return o; })
+      .sort(function (a, b) { return a.k - b.k || a.i - b.i; });
+  }
+  function row(o) {
+    var url = o.u;
+    return '<li>' + (url ? '<a class="nr-row ' + o.c + '" href="' + esc(url) + '">' : '<span class="nr-row no ' + o.c + '">') +
+      '<i></i><b>' + o.name + '</b><span>' + (o.sr ? '<em class="sr">' + esc(o.sr) + '</em>' : '') + esc(o.t) + '</span>' +
       (url ? '<svg aria-hidden="true"><use href="#go"/></svg></a>' : '</span>') + '</li>';
   }
   function render(slug) {
     var r = R[slug]; if (!r || !r.p) return false;
     cur = r;
-    var s = R[r.p], d = D.d[r.s] || {}, sd = D.d[s.s] || {}, h = '', x, t;
-    // 명당로드
-    if ((x = d.l)) h += row('c-map', '명당로드', '영업 중 1등 판매점 ' + n(x[0]) + '곳 · 최다 ' + x[2] + ' ' + x[3] + '회', x[4]);
-    else h += row('c-map', '명당로드', sd.l ? '없음 · ' + s.n + ' 전체 ' + n(sd.l[0]) + '곳 보기' : '없음', sd.l && sd.l[4]);
-    // 소원명당
-    if ((x = d.w)) h += row('c-wish', '소원명당', x[0] > 1 ? x[1] + ' 외 ' + (x[0] - 1) + '곳' : x[1], x[2]);
-    else h += row('c-wish', '소원명당', sd.w ? '없음 · ' + s.n + ' 소원 명소 ' + sd.w[0] + '곳 보기' : '없음', sd.w && sd.w[2]);
-    // 제철식당 (광역시는 시 전체 한 곳)
-    x = d.s || sd.s;
-    if (x) {
-      var nm = function (z) { return z[0]; }, now = x[2].filter(function (z) { var ms = months(z[1]); return ms.length < 12 && ms.indexOf(NOW) >= 0; }).slice(0, 2).map(nm);
-      var all = x[2].filter(function (z) { return z[1] === '1~12'; }).map(nm);
-      t = (d.s ? '' : s.n + ' 전체 · ') + (now.length ? '이달 ' + now.join('·') : all.length ? '사철 메뉴 ' + all.join('·') : '이달 제철 메뉴는 없어요') + ' · 식당 ' + n(x[1]) + '곳';
-      h += row('c-sik', '제철식당', t, x[3]);
-    } else {
-      var nb = nearest(r, function (z) { return D.d[z.s] && D.d[z.s].s; });
-      h += row('c-sik', '제철식당', nb ? '이 동네 자료 없음 · 가까운 ' + nb.r.n + ' 보기' : '없음', nb && D.d[nb.r.s].s[3]);
-    }
-    // 구출장터
-    if ((x = d.k)) h += row('c-mkt', '구출장터', x[1][0][0] + ' ' + (LV[x[1][0][1]] || '신호') + (x[0] > 1 ? ' 외 ' + (x[0] - 1) + '건' : ''), x[2]);
-    else h += row('c-mkt', '구출장터', sd.k ? '지금은 없음 · ' + s.n + ' 신호 ' + sd.k[0] + '건 보기' : '지금은 없음', sd.k && sd.k[2]);
-    // 제철장보기 주산지
-    x = d.f || sd.f;
-    if (x) {
-      var it = x.map(function (id) { return { id: id, n: D.items[id][0], m: D.items[id][1].split(',').map(Number) }; });
-      var on = it.filter(function (z) { return z.m.indexOf(NOW) >= 0; }), f = (on.length ? on : it);
-      t = (d.f ? '' : s.n + ' ') + '주산지 ' + f.slice(0, 2).map(function (z) { return z.n; }).join('·') + (on.length ? ' · 지금 제철' : ' · 제철 ' + span(f[0].m));
-      h += row('c-sea', '제철장보기', t, '/season/#/item/' + f[0].id);
-    } else h += row('c-sea', '제철장보기', '주산지로 적힌 품목 없음', null);
-    $('nearRows').innerHTML = h;
+    var rows = rowsFor(slug), card = $('nearCard'), more = $('nearMore');
+    $('nearRows').innerHTML = rows.map(row).join('');
+    card.classList.add('on'); card.classList.remove('ex');
+    document.documentElement.classList.remove('nr-saved');
+    if (more) { more.setAttribute('aria-expanded', 'false'); more.firstChild.textContent = '나머지 ' + (rows.length - 3) + '개 더 보기'; }
     $('nearH').textContent = label(r);
     $('nearSub').textContent = '우리 동네에서 할 수 있는 것 · 줄을 누르면 그 서비스가 이 동네로 열려요';
     var b = $('nearPick'); b.textContent = '바꾸기'; b.className = 'nr-btn re'; b.setAttribute('aria-label', '동네 바꾸기, 지금 ' + label(r));
@@ -104,7 +153,7 @@
     ft.textContent = '각 서비스 최신 자료 기준이에요. 자료는 바뀔 수 있어요.';
     return true;
   }
-  function pick(slug) { if (render(slug)) save(slug); }
+  function pick(slug) { if (render(slug)) { save(slug); dl({ event: 'near_pick', near_region: slug }); } }
 
   /* ── 동네 고르기 창: 시·도 17 → 시·군·구(가나다순, 찾기) ── */
   var CSS = '.nr-dlg{border:0;padding:0;margin:auto auto 0;width:100%;max-width:100%;max-height:88vh;border-radius:16px 16px 0 0;background:var(--bg);color:var(--ink);box-shadow:0 8px 24px -12px rgba(0,0,0,.12);display:flex;flex-direction:column;--na:#4A5A70}' +
@@ -176,7 +225,7 @@
   }
   function open(ss) {
     sheet();
-    if (!dlg.open) dlg.showModal();
+    if (!dlg.open) { dlg.showModal(); dl({ event: 'near_open' }); }
     if (ss && KIDS[ss]) step2(ss); else step1();
   }
   // 지도에서 시·도를 누름: 시·군·구가 하나뿐(세종)이면 바로 고르고, 아니면 고르기 창을 그 시·도 목록으로
@@ -294,7 +343,7 @@
     if (!cur || cur.lat == null) return '';
     var d = D.d[cur.s] || {}, o = '', c = xy(cur.lat, cur.lng), u = 1 / ppu;
     function mk(cls, p, url, lab, r) {
-      return '<a class="mk ' + cls + '" href="' + esc(url) + '" aria-label="' + esc(lab) + '"><circle class="hit" cx="' + f1(p[0]) + '" cy="' + f1(p[1]) + '" r="' + (16 * u).toFixed(2) + '"/>' +
+      return '<a class="mk ' + cls + '" href="' + esc(fromNear(url)) + '" aria-label="' + esc(lab) + '"><circle class="hit" cx="' + f1(p[0]) + '" cy="' + f1(p[1]) + '" r="' + (16 * u).toFixed(2) + '"/>' +
         '<circle cx="' + f1(p[0]) + '" cy="' + f1(p[1]) + '" r="' + (r * u).toFixed(2) + '"/></a>';
     }
     (d.wp || []).forEach(function (w) { o += mk('c-wish', xy(w[0], w[1]), w[3], '소원명당 ' + w[2], 5.5); });
@@ -378,16 +427,24 @@
   }
 
   window.JLNear = {
+    _t: { init: init, rowsFor: rowsFor, fromNear: fromNear, month: function (m) { NOW = m; } }, // tools/near/test.mjs가 씀
     run: function (acts) {
       mapLoad();
       if (acts.length === 1 && acts[0] === 'map') return;
       load().then(function () {
         acts.forEach(function (a) {
-          if (a === 'show') { var s = saved(); if (s && !render(s)) try { localStorage.removeItem(KEY); } catch (e) {} }
+          if (a === 'show') { var s = saved(); if (s && !render(s)) { unsaved(); try { localStorage.removeItem(KEY); } catch (e) {} } }
           else if (a === 'open') open();
           else if (a === 'locate') locate();
         });
-      }, function () {});
+      }, function () { if (acts.indexOf('show') >= 0) unsaved(); });
     }
   };
+  // 전에 고른 동네가 있어 「고른 뒤」 높이로 자리를 잡아 뒀는데(index.html 머리 nr-saved) 못 보여 줄 때: 처음 모양으로
+  function unsaved() {
+    if (cur) return;
+    document.documentElement.classList.remove('nr-saved');
+    $('nearH').textContent = '우리 동네에서 할 수 있는 것';
+    var b = $('nearPick'); b.textContent = '동네 고르기'; b.className = 'nr-btn';
+  }
 })();

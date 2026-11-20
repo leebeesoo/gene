@@ -9,6 +9,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-MLZPXGS7');</script>
 <!-- End Google Tag Manager -->
+<script>/* 내 동네 카드: 전에 고른 동네가 있으면 처음부터 「고른 뒤」 높이로 자리를 잡는다(자리 이동 없음) */try{localStorage.getItem('jl.near')&&document.documentElement.classList.add('nr-saved')}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>혹시나랩 — 로또·운세·제철·생활 계산기 무료 모음</title>
 <meta name="description" content="혹시나 하고 열어 보는 무료 생활 도구 14가지. 오늘의 로또 번호와 1등 명당, 사주 궁합, 이달 제철 식재료와 맛집, 내 이름 통계, 나이별 혜택·검진, 상황별 명언까지 공공 데이터로 만들었어요.">
@@ -171,6 +172,7 @@ a{color:inherit}
 .t-lotto .nm{font-size:26px;font-weight:400;letter-spacing:0}
 .t-lotto .round{color:var(--ta);font-weight:700}
 .balls{display:flex;gap:6px;margin:8px 0 12px}
+.t-lotto .balls{min-height:44px} /* 공은 스크립트가 채운다: 자리를 미리 잡아 아래 타일(내 동네 등)이 밀리지 않게 */
 .ball{flex:0 1 44px;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:var(--c);color:#1B1B1B;font-weight:800;font-size:17px;font-variant-numeric:tabular-nums}
 .ball.y{--c:#FBC400}.ball.b{--c:#69C8F2}.ball.r{--c:#FF7272}.ball.k{--c:#AAAAAA}.ball.g{--c:#B0D840}
 @media (prefers-color-scheme:dark){.balls{filter:saturate(.85)}}
@@ -314,7 +316,7 @@ main>.jl-ad.end{margin:48px auto 128px}
   .tile .nm{font-size:20px}
   .t-lotto .nm{font-size:34px}
   .code{font-size:24px}
-  .t-lotto .balls{gap:10px;margin:8px 0 20px}
+  .t-lotto .balls{gap:10px;margin:8px 0 20px;min-height:64px}
   .t-lotto .ball{flex-basis:64px;font-size:24px}
   .t-lotto .cd b{font-size:56px}
   .t-year .cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;font-size:12px;line-height:1.45;color:color-mix(in srgb,var(--ti) 72%,var(--tb))}
@@ -337,7 +339,8 @@ main>.jl-ad.end{margin:48px auto 128px}
 }
 
 /* 내 동네: 고른 시·군·구의 서비스 5개를 한 장에. 포인트 색은 슬레이트(#4A5A70, 다크 #A9B8CC) — 서비스 색(빨강·초록·갈색)과 겹치지 않는 중립 색.
-   카드 높이는 처음부터 고정(위 영역·지도·줄 5개·아래 한 줄) → 동네를 골라도 글자만 바뀌어 자리 이동 없음(CLS 0).
+   넓은 화면: 카드 높이는 처음부터 고정(위 영역·지도·줄 5개·아래 한 줄) → 동네를 골라도 글자만 바뀜. 좁은 화면은 아래 @media 참고(상태마다 고정 높이).
+   줄 순서·문구·?from=near 링크는 near/near.js rowsFor().
    지도(near/near.js + near/map.json)는 페이지가 다 뜬 뒤 카드가 보일 때, 동네 자료(near/index.json)는 누를 때만 */
 .t-near{--ti:#1A1D22;--ta:#4A5A70;display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"hd" "top" "map" "rows" "ft";align-content:start;gap:0;padding-bottom:14px}
 .t-near:hover{transform:none}
@@ -367,6 +370,27 @@ a.nr-row:hover span{text-decoration:underline;text-underline-offset:3px}
 a.nr-row:focus-visible{outline-offset:-2px;border-radius:8px}
 .nr-ft{display:flex;align-items:center;gap:6px;min-height:36px;margin-top:8px;font-size:12px;line-height:1.4;color:color-mix(in srgb,var(--ti) 68%,var(--tb))}
 .nr-ft button{font:inherit;font-weight:700;color:var(--ti);background:none;border:0;padding:6px 2px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;min-height:36px}
+/* 「나머지 더 보기」: 좁은 화면에서 고른 뒤에만 */
+.nr-more{grid-area:more;display:none;align-items:center;justify-content:center;gap:6px;width:100%;height:44px;font:inherit;font-size:13px;font-weight:700;color:var(--ti);background:none;border:0;border-bottom:1px solid color-mix(in srgb,var(--ta) 14%,var(--tb));cursor:pointer}
+.nr-more svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s}
+.nr-more[aria-expanded="true"] svg{transform:rotate(180deg)}
+.nr-more:focus-visible{outline-offset:-2px;border-radius:8px}
+/* 좁은 화면(880px 아래): 고르기 전엔 제목·지도·버튼만. 고른 뒤엔 제목 옆 「바꾸기」 + 쓸모 있는 줄 3개 + 「나머지 2개 더 보기」.
+   상태마다 높이가 정해져 있다(전에 고른 동네가 있으면 머리 스크립트가 html.nr-saved로 처음부터 「고른 뒤」 높이) → CLS 0 */
+@media (max-width:879.98px){
+  .t-near{grid-template-areas:"hd" "top" "map" "rows" "more" "ft"}
+  .t-near .nr-top .ol{display:none}
+  .nr-top{gap:10px;padding:6px 0 12px}
+  .nr-map svg{height:160px}
+  html:not(.nr-saved) .t-near:not(.on) .nr-rows{display:none}
+  html:not(.nr-saved) .t-near:not(.on) .nr-map{margin-bottom:4px}
+  html:not(.nr-saved) .t-near:not(.on) .nr-ft{min-height:0;margin-top:6px}
+  .t-near.on .nr-top,.nr-saved .t-near .nr-top{grid-template-columns:minmax(0,1fr) auto;align-items:center;padding-bottom:10px}
+  .t-near.on .nr-act,.nr-saved .t-near .nr-act{gap:6px}
+  .t-near.on .nr-btn,.nr-saved .t-near .nr-btn{min-height:44px;padding:0 14px;font-size:14px}
+  .t-near.on .nr-more,.nr-saved .t-near .nr-more{display:flex}
+  .t-near.on:not(.ex) .nr-rows li:nth-child(n+4),.nr-saved .t-near:not(.ex) .nr-rows li:nth-child(n+4){display:none}
+}
 .c-map{--c:#B03F25}.c-wish{--c:#4D6B12}.c-sik{--c:#A84A24}.c-mkt{--c:#2D7638}.c-sea{--c:#1F7048}
 @media (prefers-color-scheme:dark){
   .t-near{--ti:#ECECEA;--ta:#A9B8CC}
@@ -455,7 +479,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <li><span class="nr-row no c-mkt"><i></i><b>구출장터</b><span>지금 남는 농수산물</span></span></li>
         <li><span class="nr-row no c-sea"><i></i><b>제철장보기</b><span>이 동네가 주산지인 제철 품목</span></span></li>
       </ul>
-      <p class="nr-ft" id="nearFt" aria-live="polite">위치는 누를 때만 이 기기 안에서 쓰고, 고른 동네 이름만 이 브라우저에 기억해요.</p>
+      <button type="button" class="nr-more" id="nearMore" aria-expanded="false" aria-controls="nearRows"><span>나머지 2개 더 보기</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6.5 8 10.5 12 6.5"/></svg></button>
+      <p class="nr-ft" id="nearFt" aria-live="polite">위치는 누를 때만 기기 안에서 쓰고, 고른 동네만 기억해요.</p>
     </section>
 
     <a class="tile t-roots" data-cat="fun" href="roots/" aria-label="근본 테스트 — 사주와 퀴즈로 찾는 나의 근본 코드">
@@ -907,7 +932,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }
   document.getElementById('nearPick').addEventListener('click', function () { load('open'); });
   document.getElementById('nearLoc').addEventListener('click', function () { load('locate'); });
-  if (saved) load('show');
+  // 좁은 화면 「나머지 2개 더 보기」(누를 때만 높이가 바뀐다)
+  var more = document.getElementById('nearMore');
+  more.addEventListener('click', function () {
+    var c = document.getElementById('nearCard'), ex = !c.classList.contains('ex'), n = document.getElementById('nearRows').children.length - 3;
+    c.classList.toggle('ex', ex);
+    more.setAttribute('aria-expanded', String(ex));
+    more.firstChild.textContent = ex ? '접기' : '나머지 ' + n + '개 더 보기';
+  });
+  if (saved) { // 「고른 뒤」 모양으로 미리(버튼 너비까지 같게): near.js가 동네 이름으로 바꾼다
+    document.getElementById('nearH').textContent = '내 동네 불러오는 중…';
+    var pk = document.getElementById('nearPick'); pk.textContent = '바꾸기'; pk.className = 'nr-btn re';
+    load('show');
+  }
   // 시·도 지도: 페이지가 다 뜬 뒤, 카드가 화면 가까이 오면 그린다(near.js + 시·도 경계·수 near/map.json)
   function map() {
     var el = document.getElementById('nearMap');

@@ -16,6 +16,8 @@
 //     f: [제철장보기 id…],                                                     주산지로 적힌 품목
 //     lp: [위도, 경도],                                                         카드 지도 표시: l의 최다 판매점 위치(시·군·구만)
 //     wp: [[위도, 경도, 장소, 주소]…] } }                                       카드 지도 표시: 소원 명소 3곳까지(시·군·구만)
+//   nb: { 시·군·구 slug: { l|w|s|k|f: [가장 가까운 자료 있는 곳 slug, km] } }   빈 줄 안내(「이 동네엔 없어요 · 옆 ○○에 3곳」). nearestWithData() 참고
+//   ※ 주소(…[4], …[2] 등)는 깨끗한 주소로 둔다. 카드가 링크를 만들 때 ?from=near를 붙인다(near.js fromNear).
 //   c: { 시·도 slug: 그 시·도에서 볼 수 있는 것 수 }   (= 판매점 + 소원 명소 + 제철식당 지역 + 남는 신호 + 주산지 품목. 카드 지도 음영)
 //   → c는 near/map.json으로 따로 나간다(카드 지도가 index.json 없이 먼저 그려지게). writeNear() 참고.
 //
@@ -170,6 +172,7 @@ export async function buildNear({ now = new Date() } = {}) {
   }
 
   const regions = R.list.map(r => [r.slug, r.parent ? r.name : r.short, r.parent || '', r.lat, r.lng]);
+  const nb = nearestWithData(R, D);
   // 시·도별 볼 수 있는 것 수(카드 지도 음영): 시·도 합계 + 제철식당 지역 수 + 주산지 품목(시·도·시·군·구 합쳐 중복 없이)
   const c = {};
   for (const s of R.sidos) {
@@ -185,8 +188,37 @@ export async function buildNear({ now = new Date() } = {}) {
     regions,
     items: F,
     d: D,
+    nb,
     c,
   };
+}
+
+/** 두 좌표 사이 거리(km, 대원 거리) */
+export function km(a, b) {
+  const t = Math.PI / 180, x = Math.sin((b.lat - a.lat) * t / 2), y = Math.sin((b.lng - a.lng) * t / 2);
+  return 12742 * Math.asin(Math.sqrt(x * x + Math.cos(a.lat * t) * Math.cos(b.lat * t) * y * y));
+}
+
+/** 빈 줄 안내: 시·군·구마다, 그 동네에 자료가 없는 서비스(l·w·s·k·f)의 가장 가까운 「자료 있는」 곳 [slug, km(정수)].
+ *  지역 가운데 좌표끼리 잰다. 시·도 자료를 그대로 쓰는 줄(광역시 제철식당 s, 시·도 주산지 f)은 비어 있지 않으니 뺀다.
+ *  후보: 시·군·구(시·도 합계는 아님). 제철식당만 광역시 전체 자료(시·도 slug)도 후보. */
+export function nearestWithData(R, D) {
+  const out = {};
+  const cand = {};
+  for (const key of ['l', 'w', 's', 'k', 'f']) {
+    cand[key] = R.list.filter(r => D[r.slug]?.[key] && r.lat != null && (r.parent || key === 's'));
+  }
+  for (const r of R.list) {
+    if (!r.parent || r.lat == null) continue;
+    const x = D[r.slug] || {}, px = D[r.parent] || {};
+    for (const key of ['l', 'w', 's', 'k', 'f']) {
+      if (x[key] || ((key === 's' || key === 'f') && px[key])) continue;
+      let best = null, bd = Infinity;
+      for (const c of cand[key]) { if (c.slug === r.slug) continue; const d = km(r, c); if (d < bd) { bd = d; best = c; } }
+      if (best) (out[r.slug] ??= {})[key] = [best.slug, Math.round(bd)];
+    }
+  }
+  return out;
 }
 
 /** 「M x,y L x,y … Z」(절대 좌표, 소수 한 자리) → 「M x,y l dx,dy … z」. 점은 그대로(소수 한 자리 차이라 손실 없음) */
