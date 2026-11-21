@@ -1,0 +1,224 @@
+[
+  {
+    "platform": "Baemin (Baedal Minjok) Order Reception PC",
+    "platform_ko": "배민주문접수PC · 배민셀프서비스",
+    "audience": "merchant",
+    "screen": "PC 홈 대시보드 (2026.11 개편)",
+    "file": "baemin-pc-home-dashboard.jpg",
+    "source_url": "https://www.smarttoday.co.kr/ko-kr/articles/113246",
+    "image_url": "https://cdn.www.smarttoday.co.kr/w1800/q80/article-images/2026-10-29/3419ebd6-7234-4013-a847-aec83aab7214.png",
+    "layout": "다크 상단바(영업상태 드롭다운·알림·상담)와 아이콘 좌측 레일(홈/처리중/주문내역/설정) 아래 흰 카드 그리드로 입금예정액·어제 주문금액/건수(증감)·영업임시중지 토글·공지·리뷰(신규/미답변 배지)·추천 액션 카드를 배치한 중간 밀도 화면.",
+    "patterns": [
+      "입금예정액 KPI 카드",
+      "전일 대비 증감 표시",
+      "영업 일시중지 토글",
+      "미답변 리뷰 배지",
+      "추천 액션 CTA 카드",
+      "아이콘 좌측 레일"
+    ],
+    "fit_score": 5,
+    "fit_reason": "파트너 홈에서 정산 예정액·실적·즉시 조치(일시중지, 미답변 리뷰)를 한 화면에 모으는 구조는 홈서비스 파트너 콘솔 홈에 거의 그대로 적용 가능하다."
+  },
+  {
+    "platform": "Baemin Owner app",
+    "platform_ko": "배민사장님 앱",
+    "audience": "merchant",
+    "screen": "셀프서비스 전체 메뉴",
+    "file": "baemin-app-selfservice-menu.jpg",
+    "source_url": "https://apps.apple.com/kr/app/id1042003297",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/04/ea/77/04ea770d-1c29-6183-9c33-b61ffb56ce5f/img_store2.png/1600x0w.jpg",
+    "layout": "상단 영업임시중지 토글 카드 위로 '전체 메뉴' 아이콘 그리드(전체현황·가게관리·가게통계·메뉴판 편집·주문내역·정산내역·부가세 신고내역 등)가 떠 있고 하단 5탭 내비를 둔 모바일 화면.",
+    "patterns": [
+      "아이콘 그리드 전체 메뉴",
+      "하단 탭 내비게이션",
+      "영업 토글 상단 고정",
+      "정산/세금 메뉴 분리"
+    ],
+    "fit_score": 4,
+    "fit_reason": "파트너(기사/업체)용 모바일에서 기능이 많을 때 아이콘 그리드 '전체 메뉴'로 정산·세금·통계를 한 번에 찾게 하는 방식이 유용하다."
+  },
+  {
+    "platform": "Baemin Order Reception",
+    "platform_ko": "배민주문접수 (PC/앱 동시)",
+    "audience": "merchant",
+    "screen": "주문접수 리스트 (PC·모바일 동시)",
+    "file": "baemin-pc-app-order-intake.jpg",
+    "source_url": "https://apps.apple.com/kr/app/id1042003297",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/d0/42/92/d0429248-7454-bc50-ef3d-6ecddb91f4f0/img_store4.png/1600x0w.jpg",
+    "layout": "다크 테마 PC 화면에 좌측 아이콘 레일·주문 리스트(신규/진행) + 우측 상세 패널을 두고, 동일 주문 리스트가 모바일에 동기화되며 각 주문에 남은 조리시간 원형 타이머를 표시하는 구조.",
+    "patterns": [
+      "리스트-상세 분할 뷰",
+      "원형 카운트다운 타이머",
+      "신규/진행 상태 그룹",
+      "PC·모바일 실시간 동기화",
+      "다크 모드 운영 화면"
+    ],
+    "fit_score": 4,
+    "fit_reason": "예약 요청 수락 마감시간·방문 도착 SLA를 원형 타이머로 보여주고 리스트-상세 분할로 처리하는 방식은 매칭/배정 큐 화면에 잘 맞는다."
+  },
+  {
+    "platform": "Coupang Eats Owner app",
+    "platform_ko": "쿠팡이츠 사장님 앱",
+    "audience": "merchant",
+    "screen": "셀프서비스 · 인출 가능 금액",
+    "file": "coupangeats-app-selfservice-payout.jpg",
+    "source_url": "https://apps.apple.com/kr/app/id1459484517",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/27/b6/83/27b683a1-44f2-b24c-47bb-0592c6d62f9d/Screenshot1.jpg/1600x0w.jpg",
+    "layout": "상단 영업상태(초록 점+영업시간+변경) 바 아래 '인출 가능 금액' 큰 숫자와 인출하기 버튼 카드, 이어 품절·숨김/메뉴편집/리뷰/매장정보/영업시간 리스트 메뉴(보조 상태문구 포함)를 둔 화이트 카드형 화면.",
+    "patterns": [
+      "인출 가능 금액 히어로 카드",
+      "즉시 인출 버튼",
+      "상태 문구가 붙은 리스트 메뉴",
+      "영업상태 상단 바"
+    ],
+    "fit_score": 5,
+    "fit_reason": "홈서비스 파트너에게 가장 중요한 '정산 가능 금액→인출'을 첫 화면 히어로로 두는 패턴은 파트너 이탈 방지와 문의 감소에 직접 효과가 있다."
+  },
+  {
+    "platform": "Coupang Eats Owner app",
+    "platform_ko": "쿠팡이츠 사장님 앱",
+    "audience": "merchant",
+    "screen": "주문 관리",
+    "file": "coupangeats-app-order-management.jpg",
+    "source_url": "https://apps.apple.com/kr/app/id1459484517",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/a5/0f/de/a50fde21-b320-f536-85c7-c82393ee26a1/Screenshot3.jpg/1600x0w.jpg",
+    "layout": "'처리 중 N/완료' 필터 칩과 정렬 드롭다운 아래 주문 카드(주문번호·시간·메뉴·금액, 준비완료 버튼, 배차 진행 단계 체크, 우측 '픽업까지 N분' 박스)를 세로로 쌓은 화면.",
+    "patterns": [
+      "상태 필터 칩(건수 포함)",
+      "주문 카드 + 1차 액션 버튼",
+      "진행 단계 체크리스트",
+      "남은 시간 강조 박스"
+    ],
+    "fit_score": 5,
+    "fit_reason": "예약 카드에 '기사 배정 중/이동 중/도착' 단계와 '방문까지 N분'을 붙이는 형태로 그대로 옮길 수 있어 예약·매칭 진행 관리에 매우 적합하다."
+  },
+  {
+    "platform": "Coupang Eats Owner app",
+    "platform_ko": "쿠팡이츠 사장님 앱",
+    "audience": "merchant",
+    "screen": "홈 · 오늘 현황",
+    "file": "coupangeats-app-home-status.jpg",
+    "source_url": "https://apps.apple.com/kr/app/id1459484517",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/ad/e7/89/ade78973-06b6-0e73-c218-532e4375c0a9/Screenshot4.jpg/1600x0w.jpg",
+    "layout": "매장명·공지 배너 아래 프로그램 가입 상태 카드(와우 매장 '적용 중' 배지)와 '오늘 현황'(매출액·주문 수·평균 주문금액, 기준 시각 표기) 카드를 둔 단순한 단일 컬럼 홈.",
+    "patterns": [
+      "프로그램 참여 상태 배지",
+      "오늘 현황 KPI 리스트",
+      "데이터 기준 시각 표기",
+      "공지 배너"
+    ],
+    "fit_score": 4,
+    "fit_reason": "파트너가 플랫폼 프로모션/등급 프로그램 적용 여부와 오늘 실적을 바로 확인하는 구조로, 파트너 등급제·수수료 혜택 안내에 활용하기 좋다."
+  },
+  {
+    "platform": "Yogiyo Owner",
+    "platform_ko": "요기요 사장님",
+    "audience": "merchant",
+    "screen": "가게 관리 대시보드 (태블릿)",
+    "file": "yogiyo-tablet-store-dashboard.jpg",
+    "source_url": "https://apps.apple.com/kr/app/id1303386801",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/0e/ef/12/0eef12c4-db05-8255-7234-ca506d96bb04/ios_12.9_6_U1109_U1166_U1103_U1162_01.jpg/1600x0w.jpg",
+    "layout": "영업중 토글·새 주문 알림 바·가게 선택 드롭다운 아래 마케팅 추천 카드와 주문 성공률·주문 수락 시간·재주문율·리뷰 평점·영업시간 준수 2열 지표 타일, 메뉴 품절 현황 표를 둔 고밀도 화면.",
+    "patterns": [
+      "운영 품질 지표 타일",
+      "다점포 가게 선택",
+      "마케팅 추천 카드",
+      "새 주문 알림 바",
+      "품절 현황 테이블"
+    ],
+    "fit_score": 5,
+    "fit_reason": "수락률·응답시간·평점·시간 준수 같은 품질 지표 타일은 홈서비스 파트너 평가/노출 순위 관리 지표로 바로 대응되어 매우 적합하다."
+  },
+  {
+    "platform": "Yogiyo Order Reception",
+    "platform_ko": "요기요 주문접수",
+    "audience": "merchant",
+    "screen": "주문접수 (PC 동일 화면)",
+    "file": "yogiyo-tablet-order-intake.jpg",
+    "source_url": "https://apps.apple.com/kr/app/id1303386801",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/c1/59/2e/c1592e98-000f-38da-17a5-b7b8ea9ee50b/ios_12.9_6_U1109_U1166_U1103_U1162_02.jpg/1600x0w.jpg",
+    "layout": "상단 로고·영업중 토글·노출 설정, 좌측 처리중/완료 탭과 신규·진행 그룹 주문 리스트(카운트다운 원), 우측 상세(배달 방법·픽업 시간 드롭다운·요청사항)로 구성된 2단 마스터-디테일과 큰 '접수' 버튼.",
+    "patterns": [
+      "마스터-디테일 2단",
+      "처리중/완료 탭",
+      "큰 접수 CTA",
+      "시간 선택 드롭다운",
+      "요청사항 영역"
+    ],
+    "fit_score": 4,
+    "fit_reason": "파트너가 예약 요청을 보고 방문 가능 시간을 선택해 수락하는 흐름과 동일해 견적/예약 수락 화면 설계에 참고하기 좋다."
+  },
+  {
+    "platform": "Yogiyo Owner",
+    "platform_ko": "요기요 사장님",
+    "audience": "merchant",
+    "screen": "오늘 매출 · 마감 현황",
+    "file": "yogiyo-tablet-sales-closing.jpg",
+    "source_url": "https://apps.apple.com/kr/app/id1303386801",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/b3/0d/78/b30d78ea-f762-4a1f-4f92-57920df69d12/ios_12.9_6_U1109_U1166_U1103_U1162_04.jpg/1600x0w.jpg",
+    "layout": "날짜 이동 헤더 아래 완료 금액 합계와 완료/거절/취소/기타 건수 세그먼트 요약 박스, 그 아래 결제수단 태그가 붙은 완료 주문 리스트를 둔 단순 세로 레이아웃.",
+    "patterns": [
+      "일자 이동 내비",
+      "상태별 건수 세그먼트",
+      "합계 금액 요약",
+      "결제수단 태그 리스트"
+    ],
+    "fit_score": 4,
+    "fit_reason": "일 마감 시 완료/취소/거절 건수와 금액을 한눈에 맞춰보는 구조로 파트너 일별 정산 확인·CS 대조에 적합하다."
+  },
+  {
+    "platform": "Yogiyo Owner",
+    "platform_ko": "요기요 사장님",
+    "audience": "merchant",
+    "screen": "주문 상세 · 실시간 상태",
+    "file": "yogiyo-tablet-order-detail.jpg",
+    "source_url": "https://apps.apple.com/kr/app/id1303386801",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/ca/75/cb/ca75cb80-442e-f0bd-4ef4-2c83867e2db4/ios_12.9_6_U1109_U1166_U1103_U1162_05.jpg/1600x0w.jpg",
+    "layout": "노란 경고 배너(픽업까지 N분)와 배달 정보 진행 타임라인(배차·픽업·완료 시각), 요청사항(가게/라이더 구분), 메뉴·결제 금액 내역과 문의 버튼으로 이어지는 상세 페이지.",
+    "patterns": [
+      "상단 경고 배너",
+      "진행 타임라인",
+      "요청사항 대상별 구분",
+      "금액 내역 명세",
+      "문의하기 버튼"
+    ],
+    "fit_score": 5,
+    "fit_reason": "예약 상세에 방문 일정 타임라인·고객 요청사항·결제/할인 내역·CS 문의를 한 페이지로 묶는 구조는 운영자·파트너 모두의 예약 상세 화면에 그대로 맞는다."
+  },
+  {
+    "platform": "Ddangyo Order Reception",
+    "platform_ko": "땡겨요 주문접수",
+    "audience": "merchant",
+    "screen": "정산내역 · 즉시출금",
+    "file": "ddangyo-app-settlement.jpg",
+    "source_url": "https://apps.apple.com/kr/app/id1599008453",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/8b/81/5f/8b815f15-644d-5f32-7618-a4d3e62947eb/iOS_Pad_S-MA-CO-120000_03.png/1600x0w.jpg",
+    "layout": "가게 선택·정산 계좌 표기 아래 입금 완료(예정) 금액과 즉시출금 가능 금액 요약, 강조된 '즉시출금 신청' 버튼, 분기/월/기간 필터와 조회 버튼을 둔 주황 포인트 화면.",
+    "patterns": [
+      "입금예정·즉시출금 가능액 분리",
+      "선정산(즉시출금) CTA",
+      "기간 필터 조회",
+      "정산명세서 다운로드"
+    ],
+    "fit_score": 4,
+    "fit_reason": "'예정 금액'과 '지금 받을 수 있는 금액'을 분리하고 선정산을 제공하는 구조는 홈서비스 파트너 현금흐름 니즈에 잘 맞는다."
+  },
+  {
+    "platform": "Ddangyo Order Reception",
+    "platform_ko": "땡겨요 주문접수",
+    "audience": "merchant",
+    "screen": "고객관리 · 단골손님 검색",
+    "file": "ddangyo-app-customer-crm.jpg",
+    "source_url": "https://apps.apple.com/kr/app/id1599008453",
+    "image_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/39/0f/20/390f200b-4176-9caf-2db5-5e02c2b0235a/iOS_Pad_S-MA-CO-120000_04.png/1600x0w.jpg",
+    "layout": "고객관리 탭(my고객 서비스·간편설정·단골그룹·혜택관리)과 조회 버튼 아래 고객 카드(최근주문·주문횟수·배달지역·찜 여부·소속그룹)를 키-값 목록으로 보여주는 화면.",
+    "patterns": [
+      "고객 세그먼트 그룹",
+      "키-값 고객 프로필 카드",
+      "탭형 CRM 메뉴",
+      "혜택(쿠폰) 연동"
+    ],
+    "fit_score": 3,
+    "fit_reason": "재방문 고객 관리는 정기청소 등 반복 예약에 유용하나, 중개 플랫폼에서 파트너에게 고객 정보를 얼마나 노출할지 정책 판단이 필요해 부분 적용이 적절하다."
+  }
+]
