@@ -1,0 +1,50 @@
+{
+ "response": {
+  "header": {
+   "resultCode": "00",
+   "resultMsg": "NORMAL_SERVICE"
+  },
+  "body": {
+   "items": {
+    "item": [
+     {
+      "obsvtrNm": "영흥도",
+      "lot": 126.4286,
+      "lat": 37.2386,
+      "predcDt": "2026-11-20 05:30",
+      "predcTdlvVl": 102,
+      "extrSe": 2
+     },
+     {
+      "obsvtrNm": "영흥도",
+      "lot": 126.4286,
+      "lat": 37.2386,
+      "predcDt": "2026-11-20 11:44",
+      "predcTdlvVl": 812,
+      "extrSe": 1
+     },
+     {
+      "obsvtrNm": "영흥도",
+      "lot": 126.4286,
+      "lat": 37.2386,
+      "predcDt": "2026-11-20 17:58",
+      "predcTdlvVl": 120,
+      "extrSe": 4
+     },
+     {
+      "obsvtrNm": "영흥도",
+      "lot": 126.4286,
+      "lat": 37.2386,
+      "predcDt": "2026-11-20 23:59",
+      "predcTdlvVl": 790,
+      "extrSe": 3
+     }
+    ]
+   },
+   "pageNo": 1,
+   "numOfRows": 300,
+   "totalCount": 4,
+   "type": "json"
+  }
+ }
+}

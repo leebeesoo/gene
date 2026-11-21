@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+html,body{margin:0;width:1200px;height:630px;background:#FFFBF5;font-family:"Pretendard Variable",Pretendard,sans-serif;color:#16201F}
+.c{position:absolute;inset:0;padding:80px 88px;display:flex;flex-direction:column;justify-content:space-between}
+.k{font-size:28px;font-weight:500;color:#56605F;display:flex;align-items:center;gap:14px}
+.k svg{width:44px;height:44px;color:#0B6474}
+h1{font-size:96px;line-height:1.1;margin:0;font-weight:700;letter-spacing:-.02em}
+p{font-size:34px;margin:18px 0 0;font-weight:500}
+.chips{display:flex;gap:12px;flex-wrap:wrap;max-width:720px}
+.chip{font-size:26px;border:2px solid #E2E4DF;background:#fff;border-radius:999px;padding:8px 22px}
+.chip.on{background:#0B6474;border-color:#0B6474;color:#fff}
+#map{position:absolute;right:70px;top:60px;width:300px;height:510px}
+</style></head><body>
+<svg id="map" viewBox="72 -2 252 428"></svg>
+<div class="c">
+  <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 15c3-3 5-3 7.5 0s5 3 7.5 0 4-2.5 5-1.5"/><path d="M2 19.5c3-3 5-3 7.5 0s5 3 7.5 0 4-2.5 5-1.5"/><circle cx="16.5" cy="6.5" r="3"/></svg>혹시나랩</div>
+  <div><h1 id="t">물때명당</h1><p>오늘 금어기·물때·들어가면 안 되는 곳</p></div>
+  <div class="chips"><span class="chip on">오늘 금어기</span><span class="chip">금지체장</span><span class="chip">물때</span><span class="chip">바다낚시지수</span></div>
+</div>
+<script src="../../wish/data/geo.js"></script>
+<script>
+var q=new URLSearchParams(location.search); if(q.get('name')) document.getElementById('t').textContent=q.get('name');
+var G=window.LM_GEO, pts=JSON.parse(q.get('pts')||'[]'), h='';
+Object.keys(G.regions).forEach(function(k){h+='<path d="'+G.regions[k].d+'" fill="#E7F0F1" stroke="#FFFBF5" stroke-width="1"/>';});
+pts.forEach(function(p){var x=(p[1]-G.proj.lonMin)*G.proj.k*G.proj.s,y=(G.proj.latMax-p[0])*G.proj.s;h+='<circle cx="'+x+'" cy="'+y+'" r="5" fill="#0B6474" stroke="#FFFBF5" stroke-width="1.5"/>';});
+document.getElementById('map').innerHTML=h;
+</script>
+</body></html>

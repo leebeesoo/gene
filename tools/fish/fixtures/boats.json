@@ -1,0 +1,95 @@
+{
+ "response": {
+  "header": {
+   "resultCode": "00",
+   "resultMsg": "NORMAL_SERVICE"
+  },
+  "body": {
+   "items": {
+    "item": [
+     {
+      "fsboNo": "00000000000001",
+      "fsboNm": "예시바다1호",
+      "fshNtNm": "예시 신고확인번호",
+      "fsboTotTons": 9.77,
+      "fshryApvPermNm": "예시 어업허가번호",
+      "shpmHangNm": "전라남도 신안군 가거도항",
+      "maxShcrNum": "2명",
+      "maxPsrNum": "17명",
+      "bsnStEndDt": "2026.03.02 ~ 2027.03.01"
+     },
+     {
+      "fsboNo": "00000000000002",
+      "fsboNm": "예시바다2호",
+      "fshNtNm": "예시 신고확인번호",
+      "fsboTotTons": 7.93,
+      "fshryApvPermNm": "예시 어업허가번호",
+      "shpmHangNm": "전라남도 신안군 가거도항",
+      "maxShcrNum": "2명",
+      "maxPsrNum": "12명",
+      "bsnStEndDt": "2025.01.10 ~ 2026.01.09"
+     },
+     {
+      "fsboNo": "00000000000003",
+      "fsboNm": "예시물결호",
+      "fshNtNm": "예시 신고확인번호",
+      "fsboTotTons": 5.12,
+      "fshryApvPermNm": "예시 어업허가번호",
+      "shpmHangNm": "전라남도 신안군 가거도항",
+      "maxShcrNum": "2명",
+      "maxPsrNum": "9명",
+      "bsnStEndDt": "2024.05.01 ~ 2025.04.30"
+     },
+     {
+      "fsboNo": "00000000000004",
+      "fsboNm": "예시갈매기호",
+      "fshNtNm": "예시 신고확인번호",
+      "fsboTotTons": 9.1,
+      "fshryApvPermNm": "예시 어업허가번호",
+      "shpmHangNm": "전라남도 여수시 거문도항",
+      "maxShcrNum": "2명",
+      "maxPsrNum": "18명",
+      "bsnStEndDt": "2026.06.12 ~ 2027.06.11"
+     },
+     {
+      "fsboNo": "00000000000005",
+      "fsboNm": "예시파도호",
+      "fshNtNm": "예시 신고확인번호",
+      "fsboTotTons": 9.77,
+      "fshryApvPermNm": "예시 어업허가번호",
+      "shpmHangNm": "충청남도 태안군 안흥항",
+      "maxShcrNum": "2명",
+      "maxPsrNum": "20명",
+      "bsnStEndDt": "2026.02.01 ~ 2027.01.31"
+     },
+     {
+      "fsboNo": "00000000000006",
+      "fsboNm": "예시등대호",
+      "fshNtNm": "예시 신고확인번호",
+      "fsboTotTons": 8.55,
+      "fshryApvPermNm": "예시 어업허가번호",
+      "shpmHangNm": "인천광역시 중구 인천항",
+      "maxShcrNum": "2명",
+      "maxPsrNum": "16명",
+      "bsnStEndDt": "2026.07.07 ~ 2027.07.06"
+     },
+     {
+      "fsboNo": "00000000000007",
+      "fsboNm": "예시빈칸호",
+      "fshNtNm": "예시 신고확인번호",
+      "fsboTotTons": 4,
+      "fshryApvPermNm": "예시 어업허가번호",
+      "shpmHangNm": "경상북도 포항시 남구 구룡포항",
+      "maxShcrNum": "2명",
+      "maxPsrNum": "8명",
+      "bsnStEndDt": ""
+     }
+    ]
+   },
+   "pageNo": 1,
+   "numOfRows": 300,
+   "totalCount": 7,
+   "type": "json"
+  }
+ }
+}

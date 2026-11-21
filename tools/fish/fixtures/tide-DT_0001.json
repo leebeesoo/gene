@@ -1,0 +1,50 @@
+{
+ "response": {
+  "header": {
+   "resultCode": "00",
+   "resultMsg": "NORMAL_SERVICE"
+  },
+  "body": {
+   "items": {
+    "item": [
+     {
+      "obsvtrNm": "인천",
+      "lot": 126.5922,
+      "lat": 37.4519,
+      "predcDt": "2026-11-20 05:20",
+      "predcTdlvVl": 98,
+      "extrSe": 2
+     },
+     {
+      "obsvtrNm": "인천",
+      "lot": 126.5922,
+      "lat": 37.4519,
+      "predcDt": "2026-11-20 11:35",
+      "predcTdlvVl": 830,
+      "extrSe": 1
+     },
+     {
+      "obsvtrNm": "인천",
+      "lot": 126.5922,
+      "lat": 37.4519,
+      "predcDt": "2026-11-20 17:50",
+      "predcTdlvVl": 115,
+      "extrSe": 4
+     },
+     {
+      "obsvtrNm": "인천",
+      "lot": 126.5922,
+      "lat": 37.4519,
+      "predcDt": "2026-11-20 23:50",
+      "predcTdlvVl": 801,
+      "extrSe": 3
+     }
+    ]
+   },
+   "pageNo": 1,
+   "numOfRows": 300,
+   "totalCount": 4,
+   "type": "json"
+  }
+ }
+}

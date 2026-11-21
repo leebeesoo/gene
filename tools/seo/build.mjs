@@ -14,7 +14,9 @@ const DIST = path.join(ROOT, 'dist');
 const SITE = 'https://jaemilab.net/';
 
 // 어디에 있든 빼는 폴더 이름
-const SKIP_DIRS = new Set(['.git', '.github', '.claude', 'docs', 'tools', 'workers', 'tests', 'test', 'node_modules', 'dist', '.font-cache']);
+const SKIP_DIRS = new Set(['.git', '.github', '.claude', 'docs', 'tools', 'workers', 'tests', 'test', 'node_modules', 'dist', '.font-cache',
+  'fish',   // 물때명당 초안: 공개 전까지 배포 제외
+]);
 // 어디에 있든 빼는 파일
 const SKIP_FILE = name =>
   name.endsWith('.md') ||
@@ -130,6 +132,8 @@ if (fs.existsSync(FOOTER_JS)) {
 const errors = [];
 for (const f of ['index.html', 'robots.txt', 'sitemap.xml', '_headers', 'ads.txt', 'near/index.json', 'near/map.json', 'near/near.js', 'near/markets/seoul.json', 'near/good/seoul.json']) if (!fs.existsSync(path.join(DIST, f))) errors.push(`없음: ${f}`);
 for (const d of ['docs', 'tools', 'workers', '.git', '.github']) if (fs.existsSync(path.join(DIST, d))) errors.push(`복사되면 안 됨: ${d}/`);
+// 물때명당 초안: 공개 전까지 배포 제외(따로 한 줄로 두어 기본 브랜치와 충돌을 피함)
+if (fs.existsSync(path.join(DIST, 'fish'))) errors.push('복사되면 안 됨: fish/ (물때명당 초안)');
 const walk = (dir, out = []) => { for (const e of fs.readdirSync(dir, { withFileTypes: true })) { const p = path.join(dir, e.name); e.isDirectory() ? walk(p, out) : out.push(p); } return out; };
 const all = walk(DIST);
 for (const p of all) { const n = path.basename(p); if (n.endsWith('.md') || /^package/.test(n) || p.includes(`${path.sep}tests${path.sep}`)) errors.push(`복사되면 안 됨: ${path.relative(DIST, p)}`); }

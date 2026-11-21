@@ -1,0 +1,50 @@
+{
+ "response": {
+  "header": {
+   "resultCode": "00",
+   "resultMsg": "NORMAL_SERVICE"
+  },
+  "body": {
+   "items": {
+    "item": [
+     {
+      "obsvtrNm": "추자도",
+      "lot": 126.3006,
+      "lat": 33.9617,
+      "predcDt": "2026-11-20 03:40",
+      "predcTdlvVl": 51,
+      "extrSe": 2
+     },
+     {
+      "obsvtrNm": "추자도",
+      "lot": 126.3006,
+      "lat": 33.9617,
+      "predcDt": "2026-11-20 09:52",
+      "predcTdlvVl": 255,
+      "extrSe": 1
+     },
+     {
+      "obsvtrNm": "추자도",
+      "lot": 126.3006,
+      "lat": 33.9617,
+      "predcDt": "2026-11-20 16:05",
+      "predcTdlvVl": 60,
+      "extrSe": 4
+     },
+     {
+      "obsvtrNm": "추자도",
+      "lot": 126.3006,
+      "lat": 33.9617,
+      "predcDt": "2026-11-20 22:20",
+      "predcTdlvVl": 247,
+      "extrSe": 3
+     }
+    ]
+   },
+   "pageNo": 1,
+   "numOfRows": 300,
+   "totalCount": 4,
+   "type": "json"
+  }
+ }
+}
